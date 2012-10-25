@@ -31,4 +31,20 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
+    function __construct($id = false, $table = null, $ds = null) { 
+		// Get saved username that is used for the database name 
+		$dbName = Configure::read('Company'); 
+//debug($dbName);exit;
+		// Get common company-specific config (default settings in database.php) 
+		$config = ConnectionManager::getDataSource('default')->config; 
+		// Set correct database name 
+		$config['database'] = $dbName;// echo 'here:'.$dbName;// exit;
+//debug($config); exit();
+		// Add new config to registry 
+		$ret=ConnectionManager::create($dbName, $config); 
+//debug($ret);exit;
+		// Point model to new config 
+		$this->useDbConfig = $dbName; 
+		parent::__construct($id, $table, $ds); 
+	} 
 }

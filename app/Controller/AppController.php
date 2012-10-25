@@ -32,4 +32,13 @@ App::uses('Controller', 'Controller');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+	public $components = array('Auth', 'Session', 'Cookie');
+
+	public function beforeFilter() {
+		//set which database to use
+		$db=$this->Session->read('Company');
+		Configure::write('Company',$db);
+		$this->Auth->authError="Your Session Has Expired";
+//debug($db);exit();
+	}
 }

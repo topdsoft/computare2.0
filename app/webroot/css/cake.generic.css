@@ -23,19 +23,19 @@
 
 /** General Style Info **/
 body {
-	background: #003d4c;
-	color: #fff;
-	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	font-size:90%;
 	margin: 0;
+	background:#fafafa;
+	color:#444;
+	font:0.8em Arial, Helvetica, "bitstream vera sans", sans-serif;
 }
 a {
-	color: #003d4c;
+	color: #00009c;
 	text-decoration: underline;
 	font-weight: bold;
 }
 a:hover {
-	color: #367889;
+	color: #0000ff;
 	text-decoration:none;
 }
 a img {
@@ -51,10 +51,14 @@ h1 {
 	font-size: 100%;
 }
 h2 {
-	background:#fff;
+	/*background:#fff;
 	color: #e32;
 	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
-	font-size: 190%;
+	font-size: 190%;*/
+	font-size: 1.8em;
+	font-weight: bold;
+	border-bottom: 5px solid #eee;
+	line-height: 85%;
 }
 h3 {
 	color: #2c6877;
@@ -76,15 +80,37 @@ p {
 #container {
 	text-align: left;
 }
+#initiallogin {
+	width:500px;
+	margin:0px auto;
+	text-align:left;
+	padding:15px;
+	border:4px solid #ddd;
+	background-color:#fff;
+}
 
 #header{
-	padding: 10px 20px;
+/*	padding: 10px 20px;*/
+	height:80px;
+	margin:0 auto;
+	width:751px;
 }
 #header h1 {
-	line-height:20px;
-	background: #003d4c url('../img/cake.icon.png') no-repeat left;
-	color: #fff;
-	padding: 0px 30px;
+	color:#888;
+	font-size: 300%;
+	letter-spacing: -3px;
+	text-align: right;
+	padding: 5px;
+	margin-bottom: -20px;
+	font-weight: bold;
+}
+#header h2 {
+	color: #ccc;
+	font-size: 200%;
+	letter-spacing: -2px;
+	text-align: right;
+	font-weight: bold;
+	border-bottom: none;
 }
 #header h1 a {
 	color: #fff;
@@ -100,7 +126,7 @@ p {
 #content{
 	background: #fff;
 	clear: both;
-	color: #333;
+	color: #444;
 	padding: 10px 20px 40px 20px;
 	overflow: auto;
 }
@@ -108,6 +134,81 @@ p {
 	clear: both;
 	padding: 6px 10px;
 	text-align: right;
+}
+#footer2 {
+	border-top:1px solid #999; 
+	height:50px;
+	margin:0 auto;
+	padding:10px;
+	text-align:center;
+	width:851px;
+}
+
+#navwrap {
+	position:relative;
+}
+#loginwrap {
+	margin:50px 0px; padding:0px;
+	text-align:center;
+}
+#helpblock {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 180px;
+/*	border:1px dashed #333;*/
+}
+#loginblock {
+/*	position: absolute;  */
+/*	left: 0;*/
+	float: right;
+/*	top: 0;*/
+	width: 250px;
+/*	border:1px dashed #333;*/
+}
+
+#navigation {
+	background:#fafafa;
+/*	border-right:1px solid #999;*/
+	margin:0 auto;
+	width:750px;
+	height:40px;
+	list-style:none;
+/*	border:1px dashed #333;*/
+}
+#navigation li {
+	border-left:1px solid #999;
+	border-right:1px solid #999;
+	border-top:1px solid #999;
+	border-bottom:1px solid #999;
+	float:left;
+	width:148px;
+	list-style:none;
+	margin: 0px;
+}
+#navigation la {
+	border-left:1px solid #999;
+	border-right:1px solid #999;
+	border-top:1px solid #999;
+	border-bottom:1px solid #999;
+	float:left;
+	width:148px;
+	list-style:none;
+}
+#navigation a {
+	color:#555;
+	display:block;
+	line-height:40px;
+	text-align:center;
+	text-decoration: none;
+}
+#navigation a:hover {
+	background:#e3e3e3;
+	color:#555;
+}
+#navigation .active {
+	background:#e3e3e3;
+	color:#777;
 }
 
 /** containers **/
@@ -261,14 +362,17 @@ form {
 	width: 95%;
 }
 fieldset {
-	border: none;
+/*	border: none;*/
+	border: 2px groove threedface;
 	margin-bottom: 1em;
 	padding: 16px 10px;
 }
 fieldset legend {
-	color: #e32;
+/*	color: #e32;*/
 	font-size: 160%;
 	font-weight: bold;
+	border: 2px groove threedface;
+	padding: 2px 10px;
 }
 fieldset fieldset {
 	margin-top: 0;
@@ -284,7 +388,7 @@ fieldset fieldset div {
 }
 form div {
 	clear: both;
-	margin-bottom: 1em;
+/*	margin-bottom: 1em;*/
 	padding: .5em;
 	vertical-align: text-top;
 }
@@ -311,10 +415,11 @@ label {
 }
 input, textarea {
 	clear: both;
-	font-size: 140%;
+	font-size: 130%;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-	padding: 1%;
+	padding: 3px;
 	width:98%;
+	background: #eee;
 }
 select {
 	clear: both;

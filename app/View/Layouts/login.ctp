@@ -17,15 +17,13 @@
  */
 
 $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-$companyName = "Top Drawer Software LLC";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<?php echo $this->Html->charset(); ?>
 	<title>
-		computāre : 
-		<?php echo $title_for_layout; ?>
+		computāre login
 	</title>
 	<?php
 		echo $this->Html->meta('icon');
@@ -40,26 +38,10 @@ $companyName = "Top Drawer Software LLC";
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $companyName; ?></h1>
+			<h1>Please Log In</h1>
 			<h2>computāre</h2>
 		</div>
-		<div id="navwrap">
-			<div id="helpblock">
-				Help
-			</div>
-			<div id="loginblock">
-				<?php
-					echo 'User Id= '.$this->Session->read('Auth.User.username').'<br>';
-					echo $this->Html->link('Logout', array('controller'=>'users','action'=>'logout'));
-				  ?>
-			</div>
-			<div id="navigation">
-				<li><?php echo $this->Html->link('Time Card','/');?></li>
-				<li><?php echo $this->Html->link('Time Card','/');?></li>
-				<li><?php echo $this->Html->link('Users',array('controller'=>'users'));?></li>
-			</div>
-		</div>
-		<div id="content">
+		<div id="initiallogin">
 
 			<?php echo $this->Session->flash(); ?>
 			<?php echo $this->Session->flash('auth'); ?>
@@ -76,9 +58,7 @@ $companyName = "Top Drawer Software LLC";
 		</div>
 		<div id="footer2">
 			Copyright &copy <?php echo date('Y').' '.$this->Html->link('Top Drawer Software LLC','www.topdsoft.com');?>
-			&nbsp | &nbsp Proprietary Data of <?php echo $companyName; ?>
 		</div>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>
