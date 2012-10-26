@@ -75,4 +75,58 @@ class User extends AppModel {
 			),
 		),
 	);
+	
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
+		'Form' => array(
+			'className' => 'Form',
+			'joinTable' => 'forms_users',
+			'foreignKey' => 'user_id',
+			'associationForeignKey' => 'form_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		),
+		'Group' => array(
+			'className' => 'Group',
+			'joinTable' => 'groups_users',
+			'foreignKey' => 'user_id',
+			'associationForeignKey' => 'group_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		),
+		'Menu' => array(
+			'className' => 'Menu',
+			'joinTable' => 'menus_users',
+			'foreignKey' => 'user_id',
+			'associationForeignKey' => 'menu_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		),
+		
+	);
 }

@@ -54,9 +54,9 @@ $companyName = "Top Drawer Software LLC";
 				  ?>
 			</div>
 			<div id="navigation">
-				<li><?php echo $this->Html->link('Time Card','/');?></li>
-				<li><?php echo $this->Html->link('Time Card','/');?></li>
 				<li><?php echo $this->Html->link('Users',array('controller'=>'users'));?></li>
+				<li><?php echo $this->Html->link('Forms',array('controller'=>'forms'));?></li>
+				<li><?php echo $this->Html->link('Menus',array('controller'=>'menus'));?></li>
 			</div>
 		</div>
 		<div id="content">

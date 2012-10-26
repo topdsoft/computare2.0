@@ -44,6 +44,168 @@ LOCK TABLES `categories` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `forms`
+--
+
+DROP TABLE IF EXISTS `forms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `link` varchar(50) NOT NULL,
+  `type` varchar(2) NOT NULL,
+  `helplink` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forms`
+--
+
+LOCK TABLES `forms` WRITE;
+/*!40000 ALTER TABLE `forms` DISABLE KEYS */;
+INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','forms','S',''),(2,'2012-10-26 11:51:38',1,'View Users','users','S',''),(3,'2012-10-26 11:53:32',1,'View Menus','menus','S','');
+/*!40000 ALTER TABLE `forms` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forms_groups`
+--
+
+DROP TABLE IF EXISTS `forms_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms_groups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `form_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `form_id` (`form_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forms_groups`
+--
+
+LOCK TABLES `forms_groups` WRITE;
+/*!40000 ALTER TABLE `forms_groups` DISABLE KEYS */;
+INSERT INTO `forms_groups` VALUES (1,1,1),(2,2,1),(3,3,1);
+/*!40000 ALTER TABLE `forms_groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forms_menus`
+--
+
+DROP TABLE IF EXISTS `forms_menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms_menus` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `form_id` int(10) unsigned NOT NULL,
+  `menu_id` int(10) unsigned NOT NULL,
+  `ordr` float(4,1) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `params` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `menu_id` (`menu_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forms_menus`
+--
+
+LOCK TABLES `forms_menus` WRITE;
+/*!40000 ALTER TABLE `forms_menus` DISABLE KEYS */;
+INSERT INTO `forms_menus` VALUES (1,2,1,1.0,'',''),(7,0,2,1.0,'header','2'),(8,0,2,2.0,'header','2'),(9,2,2,3.0,'VUsers','8'),(10,2,2,4.0,'VUsers','8'),(11,3,2,5.0,'VMenus','16');
+/*!40000 ALTER TABLE `forms_menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `forms_users`
+--
+
+DROP TABLE IF EXISTS `forms_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `form_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `form_id` (`form_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `forms_users`
+--
+
+LOCK TABLES `forms_users` WRITE;
+/*!40000 ALTER TABLE `forms_users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `forms_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups`
+--
+
+DROP TABLE IF EXISTS `groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups`
+--
+
+LOCK TABLES `groups` WRITE;
+/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
+INSERT INTO `groups` VALUES (1,'2012-10-26 11:46:23',1,'Admin');
+/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups_users`
+--
+
+DROP TABLE IF EXISTS `groups_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups_users`
+--
+
+LOCK TABLES `groups_users` WRITE;
+/*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
+INSERT INTO `groups_users` VALUES (1,1,1,'0000-00-00 00:00:00',0);
+/*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `images`
 --
 
@@ -284,6 +446,61 @@ LOCK TABLES `locations` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `menus`
+--
+
+DROP TABLE IF EXISTS `menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menus` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime DEFAULT NULL,
+  `created_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(20) DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menus`
+--
+
+LOCK TABLES `menus` WRITE;
+/*!40000 ALTER TABLE `menus` DISABLE KEYS */;
+INSERT INTO `menus` VALUES (1,'2012-10-26 12:00:34',1,'Users',0),(2,'2012-10-26 12:02:48',1,'Forms',0),(3,'2012-10-26 12:04:20',1,'Menus',0),(4,'2012-10-26 15:59:51',1,'New Menu',1);
+/*!40000 ALTER TABLE `menus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `menus_users`
+--
+
+DROP TABLE IF EXISTS `menus_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menus_users` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `menu_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `ordr` float(4,1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menus_users`
+--
+
+LOCK TABLES `menus_users` WRITE;
+/*!40000 ALTER TABLE `menus_users` DISABLE KEYS */;
+INSERT INTO `menus_users` VALUES (1,1,1,2.0),(2,2,1,1.0),(5,2,2,0.0),(6,4,1,3.0);
+/*!40000 ALTER TABLE `menus_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -299,7 +516,7 @@ CREATE TABLE `users` (
   `homepage` varchar(100) NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,7 +525,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'2012-10-25 15:09:04','KURT','4205017a2d54144c1bb05f3ebbd2dd1a78862815','klakin2003@yahoo.com','',1);
+INSERT INTO `users` VALUES (1,'2012-10-25 15:09:04','KURT','4205017a2d54144c1bb05f3ebbd2dd1a78862815','klakin2003@yahoo.com','',1),(2,'2012-10-26 15:08:07','JBOND','4205017a2d54144c1bb05f3ebbd2dd1a78862815','007@me.com','',1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -321,4 +538,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-10-25 18:01:28
+-- Dump completed on 2012-10-26 18:29:59

@@ -30,6 +30,7 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->set('user', $this->User->read(null, $id));
+debug($this->User->read(null, $id));exit;
 	}
 
 /**

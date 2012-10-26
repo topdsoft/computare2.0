@@ -33,7 +33,7 @@ App::uses('Model', 'Model');
 class AppModel extends Model {
     function __construct($id = false, $table = null, $ds = null) { 
 		// Get saved username that is used for the database name 
-		$dbName = Configure::read('Company'); 
+		$dbName = Configure::read('Company'); //$dbName='computare';
 //debug($dbName);exit;
 		// Get common company-specific config (default settings in database.php) 
 		$config = ConnectionManager::getDataSource('default')->config; 
