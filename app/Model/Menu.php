@@ -16,6 +16,14 @@ class Menu extends AppModel {
 	public $displayField = 'name';
 
 /**
+ * Virtual fields
+ */
+	public $virtualFields = array(
+		'links'=>'select count(*) from forms_menus as FormsMenu where FormsMenu.menu_id=Menu.id',
+		'users'=>'select count(*) from menus_users as MenusUser where MenusUser.menu_id=Menu.id'
+		);
+
+/**
  * Validation rules
  *
  * @var array

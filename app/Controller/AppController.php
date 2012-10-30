@@ -39,6 +39,6 @@ class AppController extends Controller {
 		$db=$this->Session->read('Company');
 		Configure::write('Company',$db);
 		$this->Auth->authError="Your Session Has Expired";
-//debug($db);exit();
+//debug($this->request);exit();
 	}
 }

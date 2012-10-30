@@ -121,6 +121,8 @@ debug($this->User->read(null, $id));exit;
 			if($results) {
 				if ($this->Auth->login()) {
 //debug($this->Auth->user());exit;
+					//user login successfull so load menu structure into session
+					$this->loadMenu();
 					return $this->redirect($this->Auth->redirect());
 				} else {
 					$this->Session->setFlash(__('Your Credentials are incorrect'), 'default', array(), 'auth');
@@ -137,5 +139,37 @@ debug($this->User->read(null, $id));exit;
 	
 	public function logout() {
 		$this->redirect($this->Auth->logout());
+	}
+
+	protected function loadMenu() {
+		//load user menu data into session
+		$user_id=$this->Auth->user('id');
+		$this->User->MenusUser->bindModel(array('belongsTo'=>array('Menu')));
+ 		$menus=$this->User->MenusUser->find('all',array('order'=>'MenusUser.ordr',
+			'recursive'=>1,
+			'conditions'=>array('MenusUser.user_id'=>$user_id)));
+		//parse results and build an array to store in session data
+		$menuArray=array();
+		foreach($menus as $menu) {
+			//loop for each menu
+			$element=array('name'=>$menu['Menu']['name'],
+				'id'=>$menu['Menu']['id'],
+				'Form'=>array());
+			//get menu links(forms) for this menu
+			$this->User->Menu->FormsMenu->bindModel(array('belongsTo'=>array('Form')));
+			$links=$this->User->Menu->FormsMenu->find('all',array('conditions'=>array('FormsMenu.menu_id'=>$menu['Menu']['id'])));
+//debug($links);exit;
+			foreach($links as $link) {
+				//loop for each form (or link) in menu
+				$element['Form'][]=array(
+					'name'=>$link['FormsMenu']['name'],
+					'link'=>$link['Form']['link'],
+					'params'=>$link['FormsMenu']['params']
+					);
+			}//ednforeach link
+			$menuArray[]=$element;
+		}//endforeach menu
+		$this->Session->write('Menu',$menuArray);
+//debug($menuArray);exit;
 	}
 }

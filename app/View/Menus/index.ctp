@@ -6,6 +6,8 @@
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id','Owner'); ?></th>
+			<th><?php echo $this->Paginator->sort('links','#Links'); ?></th>
+			<th><?php echo $this->Paginator->sort('users','#Users'); ?></th>
 			<th></th>
 	</tr>
 	<?php
@@ -15,6 +17,8 @@
 		<td><?php echo h($menu['Menu']['created']); ?>&nbsp;</td>
 		<td><?php echo h($users[$menu['Menu']['created_id']]); ?>&nbsp;</td>
 		<td><?php echo h($users[$menu['Menu']['user_id']]); ?>&nbsp;</td>
+		<td><?php echo h($menu['Menu']['links']); ?>&nbsp;</td>
+		<td><?php echo h($menu['Menu']['users']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php //echo $this->Html->link(__('View'), array('action' => 'view', $menu['Menu']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit Menu'), array('action' => 'edit', $menu['Menu']['id'])); ?>
@@ -23,6 +27,7 @@
 		</td>
 	</tr>
 <?php endforeach; ?>
+	<td class="actions"><?php echo $this->Html->link(__('Create New Menu'), array('controller' => 'menus', 'action' => 'add'), array('class'=>'actions')); ?></td>
 	</table>
 	<p>
 	<?php
@@ -38,14 +43,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Menu'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Forms'), array('controller' => 'forms', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Form'), array('controller' => 'forms', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

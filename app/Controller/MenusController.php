@@ -54,7 +54,11 @@ class MenusController extends AppController {
 		if (!$this->Menu->exists()) {
 			throw new NotFoundException(__('Invalid menu'));
 		}
-		$this->set('menu', $this->Menu->read(null, $id));
+		$this->set('menuName', $this->Menu->field('name', array('id'=>$id)));
+		//get forms for this menu
+		$this->Menu->FormsMenu->bindModel(array('belongsTo'=>array('Form')));
+		$forms=$this->Menu->FormsMenu->find('all',array('conditions'=>array('FormsMenu.menu_id'=>$id),'order'=>'ordr'));
+		$this->set('forms',$forms);
 	}
 
 /**

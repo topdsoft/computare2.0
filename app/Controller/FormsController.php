@@ -15,6 +15,8 @@ class FormsController extends AppController {
 	public function index() {
 		$this->Form->recursive = 0;
 		$this->set('forms', $this->paginate());
+		//get users list
+		$this->set('usersList',$this->Form->User->find('list'));
 	}
 
 /**
@@ -44,7 +46,7 @@ class FormsController extends AppController {
 			$this->request->data['Form']['created_id']=$this->Auth->user('id');
 //debug($this->request->data);exit;
 			if ($this->Form->save($this->request->data)) {
-				$this->Session->setFlash(__('The form has been saved'));
+				$this->Session->setFlash(__('The form has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The form could not be saved. Please, try again.'));
@@ -70,7 +72,7 @@ class FormsController extends AppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Form->save($this->request->data)) {
-				$this->Session->setFlash(__('The form has been saved'));
+				$this->Session->setFlash(__('The form has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The form could not be saved. Please, try again.'));

@@ -129,6 +129,7 @@ p {
 	color: #444;
 	padding: 10px 20px 40px 20px;
 	overflow: auto;
+	z-index: 0;
 }
 #footer {
 	clear: both;
@@ -171,9 +172,12 @@ p {
 	background:#fafafa;
 /*	border-right:1px solid #999;*/
 	margin:0 auto;
-	width:750px;
+/*	width:750px;*/
 	height:40px;
 	list-style:none;
+	display:block;
+	float:right;
+	padding-right: 100px;
 /*	border:1px dashed #333;*/
 }
 #navigation li {
@@ -185,6 +189,8 @@ p {
 	width:148px;
 	list-style:none;
 	margin: 0px;
+	position: relative;
+	background: #fff;
 }
 #navigation la {
 	border-left:1px solid #999;
@@ -210,14 +216,54 @@ p {
 	background:#e3e3e3;
 	color:#777;
 }
+#navigation ul li {
+	position:relative;
+	display: block;
+	float: left;
+/*	padding: 5px;
+	margin: 5px 15px 3px 0px;*/
+	border: none;
+	color: #333;
+	z-index:10;
+}
+#navigation li ul {
+/**	position: relative;**/
+	padding: 0px;
+	margin: 0px; 
+	background: #fff;
+	color: #333;
+	overflow-x: hidden;
+}
+#navigation li ul li{
+	display: block;
+	float: none;
+	margin: 0px;
+	padding: 0px 5px;
+	-moz-box-shadow: none; 
+	-webkit-box-shadow: none;
+	-box-shadow: none; 
+	background: none;
+	font-weight: bold;
+}
+#navigation li ul li a{
+	text-align: left;
+	line-height: normal;
+	padding-left: 5px;
+	font-weight: normal;
+}
+#navigation li ul li a:hover{
+	background: none;
+	color: #0000ff;
+	font-weight: bold;
+}
 
 /** containers **/
 div.form,
 div.index,
 div.view {
-	float:right;
+/*	float:right;
 	width:76%;
-	border-left:1px solid #666;
+	border-left:1px solid #666;*/
 	padding:10px 2%;
 }
 div.actions {
@@ -569,6 +615,7 @@ p.error,
 	background-image: -o-linear-gradient(top, #76BF6B, #3B8230);
 	background-image: linear-gradient(top, #76BF6B, #3B8230);
 	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+	font-weight: bold;
 }
 p.error {
 	font-family: Monaco, Consolas, Courier, monospace;
@@ -586,6 +633,7 @@ p.error em {
 	font-size: 120%;
 	padding: 0.8em;
 	margin: 1em 0;
+	font-weight: bold;
 }
 .success {
 	color: #fff;

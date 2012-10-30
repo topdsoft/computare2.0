@@ -35,6 +35,7 @@ $companyName = "Top Drawer Software LLC";
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
 		echo $this->fetch('script');
+		echo $this->Html->script(array('jquery-1.6.4.min','menu.js','fademessage.js'));
 	?>
 </head>
 <body>
@@ -54,9 +55,7 @@ $companyName = "Top Drawer Software LLC";
 				  ?>
 			</div>
 			<div id="navigation">
-				<li><?php echo $this->Html->link('Users',array('controller'=>'users'));?></li>
-				<li><?php echo $this->Html->link('Forms',array('controller'=>'forms'));?></li>
-				<li><?php echo $this->Html->link('Menus',array('controller'=>'menus'));?></li>
+				<?php echo $this->element('menu') ?>
 			</div>
 		</div>
 		<div id="content">
