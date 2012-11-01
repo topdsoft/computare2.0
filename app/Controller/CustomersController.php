@@ -31,6 +31,9 @@ class CustomersController extends AppController {
 		if (!$this->Customer->exists()) {
 			throw new NotFoundException(__('Invalid customer'));
 		}
+		$this->Customer->bindModel(array('hasMany'=>array('Revisions'=>array(
+			'className'=>'CustomerDetail',
+			'order'=>'Revisions.id desc'))));
 		$this->set('customer', $this->Customer->read(null, $id));
 		//get users list for showing created and deleted id
 		$users=ClassRegistry::init('User')->find('list');

@@ -12,7 +12,10 @@ class CustomerFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
-		'customerDetail_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'index'),
+		'customerDetail_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10, 'key' => 'index'),
+		'created_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10),
+		'deleted_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10),
+		'active' => array('type' => 'boolean', 'null' => true),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'customerDetail_id' => array('column' => 'customerDetail_id', 'unique' => 0)

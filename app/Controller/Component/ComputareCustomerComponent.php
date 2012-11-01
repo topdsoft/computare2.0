@@ -5,7 +5,7 @@
  * Part of computare accounting system used to support customers
  * */
 
-App::uses('component','controller');
+App::uses('Component','Controller');
 class ComputareCustomerComponent extends Component {
 	/**
 	 * save method
@@ -28,8 +28,8 @@ class ComputareCustomerComponent extends Component {
 		} else {
 			//new customer
 			$this->Customer->create();
-			$this->Customer->save(array('id'=>null,'active'=>true,'created_id'=>$data['CustomerDetail']['created_id']));
-			$customer_id=$this->Customer->getLastInsertId();
+			$this->Customer->save(array('active'=>true,'created_id'=>$data['CustomerDetail']['created_id'],'customerDetail_id'=>0));
+			$customer_id=$this->Customer->getInsertId();
 			//save customer details
 			$data['CustomerDetail']['customer_id']=$customer_id;
 			$this->CustomerDetail->create();
@@ -37,6 +37,7 @@ class ComputareCustomerComponent extends Component {
 			$customerDetail_id=$this->CustomerDetail->getLastInsertId();
 			//link new details back to customer
 			$this->Customer->save(array('id'=>$customer_id,'customerDetail_id'=>$customerDetail_id));
+//debug($customer_id);exit;
 		}//endif
 		return true;
 	}//end function save

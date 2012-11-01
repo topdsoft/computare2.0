@@ -86,7 +86,34 @@
 	<?php echo $customer['CustomerDetail']['notes']; ?>
 &nbsp;</dd>
 	</dl>
-</div>
+<?php //debug($customer);
+	if(count($customer['Revisions'])>1) {
+		//show revisions
+		$ignore=array('id','created','created_id');
+		echo'<br><h2>Revisions</h2>';
+		foreach($customer['Revisions'] as $i=>$revision) {
+			//loop for each revision
+			if($i>0) {
+				//skip first revision since it is the current data
+				echo "<p>Made: {$revision['created']} by: ".$users[$revision['created_id']].'</p>';
+				echo '<dl>';
+				foreach($revision as $label=>$value) {
+					//loop for all label => value pair and check for differences
+					if(!in_array($label,$ignore) && $value!=$customer['Revisions'][$i-1][$label]) {
+						//show difference
+						$newValue=$customer['Revisions'][$i-1][$label];
+						if(empty($value)) $value='<i>(empty)</i>';
+						if(empty($newValue)) $newValue='<i>(empty)</i>';
+						echo "<dt>$label from</dt><dd>$value</dd>";
+						echo "<dt>$label to</dt><dd>$newValue</dd>";
+					}//endif
+				}//end foreach $revision
+				echo '</dl><br>';
+			}//endif
+		}//endforeach $customer['Revisions']
+	}//endif
+?>
+</div><br>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
