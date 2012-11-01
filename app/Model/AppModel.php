@@ -45,6 +45,7 @@ class AppModel extends Model {
 //debug($ret);exit;
 		// Point model to new config 
 		$this->useDbConfig = $dbName; 
+//		$this->useDbConfig = 'computare'; 
 		parent::__construct($id, $table, $ds); 
 	} 
 }

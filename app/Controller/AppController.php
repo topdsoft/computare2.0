@@ -37,6 +37,7 @@ class AppController extends Controller {
 	public function beforeFilter() {
 		//set which database to use
 		$db=$this->Session->read('Company');
+//debug($db);
 		Configure::write('Company',$db);
 		$this->Auth->authError="Your Session Has Expired";
 //debug($this->request);exit();

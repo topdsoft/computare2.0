@@ -132,12 +132,14 @@ debug($this->User->read(null, $id));exit;
 				$this->User->useTable=false;
 			}
 		} else {
-			//need to set database name 
+			//user model can't use a database table until someone chooses the company and logs in 
 			$this->User->useTable=false;
 		}
 	}
 	
 	public function logout() {
+		//remove company session data
+		$this->Session->delete('company');
 		$this->redirect($this->Auth->logout());
 	}
 
