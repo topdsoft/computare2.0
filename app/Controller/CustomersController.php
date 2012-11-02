@@ -15,8 +15,22 @@ class CustomersController extends AppController {
  * @return void
  */
 	public function index() {
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//respond to filter requests
+			$this->passedArgs['showDeleted']=$this->request->data['Customer']['showDeleted'];
+			$this->redirect($this->passedArgs);
+//debug($this->request->data);exit;
+		} else {
+			//check passed params
+			if(isset($this->passedArgs['showDeleted'])) $this->request->data['Customer']['showDeleted']=$this->passedArgs['showDeleted'];
+			else $this->request->data['Customer']['showDeleted']=false;
+		}//endif
 		$this->Customer->recursive = 0;
-		$this->set('customers', $this->paginate('Customer',array('Customer.active')));
+		//setup filters
+		$conditions=array();
+		//filter deleted customers
+		if(!$this->request->data['Customer']['showDeleted']) $conditions[]='Customer.active';
+		$this->set('customers', $this->paginate('Customer',$conditions));
 	}
 
 /**

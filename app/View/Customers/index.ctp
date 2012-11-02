@@ -1,22 +1,31 @@
 <div class="customers index">
+<?php echo $this->Form->create('Customer'); ?>
 	<h2><?php echo __('Customers'); ?></h2>
+	<fieldset><legend id="filterTitle" title="Click to hide/show fitlers">Filters</legend>
+	<div id="filters">
+		<?php echo $this->Form->input('showDeleted',array('type'=>'checkbox','label'=>'Show Deleted Customers')); ?>
+		<?php echo $this->Form->end(__('Set Filters')); ?>
+	</div>
+	</fieldset>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('CustomerDetail.companyName','Company'); ?></th>
+			<?php if($this->data['Customer']['showDeleted']) echo '<th>'.$this->Paginator->sort('active','Status').'</th>';?>
 			<th></th>
 	</tr>
-	<?php //debug($customers);
+	<?php //debug($this->data);
 	foreach ($customers as $customer): ?>
 	<tr>
 		<td><?php echo str_pad($customer['Customer']['id'],10,'0',STR_PAD_LEFT); ?>&nbsp;</td>
 		<td><?php echo h($customer['Customer']['name']); ?>&nbsp;</td>
 		<td><?php echo h($customer['CustomerDetail']['companyName']); ?>&nbsp;</td>
+		<?php if($this->data['Customer']['showDeleted']) echo '<td>'.($customer['Customer']['active'] ? 'Active' : 'Deleted').'</td>';  ?>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $customer['Customer']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $customer['Customer']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $customer['Customer']['id']), null, __('Are you sure you want to delete customer: %s?', $customer['Customer']['name'])); ?>
+			<?php if($customer['Customer']['active']) echo $this->Html->link(__('Edit'), array('action' => 'edit', $customer['Customer']['id'])); ?>
+			<?php if($customer['Customer']['active']) echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $customer['Customer']['id']), null, __('Are you sure you want to delete customer: %s?', $customer['Customer']['name'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -44,3 +53,4 @@
 		<li><?php //echo $this->Html->link(__('New Customer Detail'), array('controller' => 'customer_details', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
+<?php echo $this->Html->script('filters.js') ?>

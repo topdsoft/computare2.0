@@ -256,7 +256,9 @@ p {
 	color: #0000ff;
 	font-weight: bold;
 }
-
+#filterTitle{
+	cursor: pointer;
+}
 /** containers **/
 div.form,
 div.index,
