@@ -90,7 +90,7 @@
 	if(count($customer['Revisions'])>1) {
 		//show revisions
 		$ignore=array('id','created','created_id');
-		echo'<br><h2>Revisions</h2>';
+		echo'<br><h3>Revisions</h3>';
 		foreach($customer['Revisions'] as $i=>$revision) {
 			//loop for each revision
 			if($i>0) {

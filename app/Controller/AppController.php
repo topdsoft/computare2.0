@@ -40,6 +40,16 @@ class AppController extends Controller {
 //debug($db);
 		Configure::write('Company',$db);
 		$this->Auth->authError="Your Session Has Expired";
-//debug($this->request);exit();
+	}
+	
+	public function beforeRender() {
+		//get form info for help and user ACL. if not set check for superuser
+		if(isset($this->viewVars['form_id'])) {
+			//get form data
+			$formhelp=ClassRegistry::init('Form')->read(array('helplink'),$this->viewVars['form_id']);
+			$this->set('formhelp',$formhelp['Form']['helplink']);
+//debug($formhelp);exit();
+		}//endif
+		
 	}
 }

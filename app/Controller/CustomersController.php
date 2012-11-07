@@ -15,11 +15,11 @@ class CustomersController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('form_id',6);
 		if ($this->request->is('post') || $this->request->is('put')) {
 			//respond to filter requests
 			$this->passedArgs['showDeleted']=$this->request->data['Customer']['showDeleted'];
 			$this->redirect($this->passedArgs);
-//debug($this->request->data);exit;
 		} else {
 			//check passed params
 			if(isset($this->passedArgs['showDeleted'])) $this->request->data['Customer']['showDeleted']=$this->passedArgs['showDeleted'];

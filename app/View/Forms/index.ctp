@@ -3,6 +3,7 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
+			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','Created By'); ?></th>
 			<th><?php echo $this->Paginator->sort('link'); ?></th>
@@ -14,6 +15,7 @@
 	foreach ($forms as $form): ?>
 	<tr>
 		<td><?php echo h($form['Form']['name']); ?>&nbsp;</td>
+		<td><?php echo h($form['Form']['id']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['created']); ?>&nbsp;</td>
 		<td><?php echo h($usersList[$form['Form']['created_id']]); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['link']); ?>&nbsp;</td>

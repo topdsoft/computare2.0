@@ -15,7 +15,7 @@
 			<?php if($this->data['Customer']['showDeleted']) echo '<th>'.$this->Paginator->sort('active','Status').'</th>';?>
 			<th></th>
 	</tr>
-	<?php //debug($this->data);
+	<?php 
 	foreach ($customers as $customer): ?>
 	<tr>
 		<td><?php echo str_pad($customer['Customer']['id'],10,'0',STR_PAD_LEFT); ?>&nbsp;</td>

@@ -61,9 +61,11 @@ h2 {
 	line-height: 85%;
 }
 h3 {
-	color: #2c6877;
-	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
+/*	color: #2c6877;
+	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;*/
 	font-size: 165%;
+	border-bottom: 3px solid #eee;
+	line-height: 85%;
 }
 h4 {
 	color: #993;
@@ -546,6 +548,20 @@ form .error-message {
 	-o-box-shadow: none;
 	box-shadow: none;
 	text-shadow: none;
+}
+
+.screenshot{
+	border:1px solid black;
+	padding:1px;
+	margin: 10px 0px 10px 0px;
+	color: black;
+	display: block;
+	-moz-box-shadow: 5px 5px 5px 2px #999; 
+	-webkit-box-shadow: 5px 5px 5px 2px #999;
+	-box-shadow: 5px 5px 5px 2px #999; 
+	-moz-border-radius:5px; 
+	-webkit-border-radius:5px; 
+	-border-radius:5px;
 }
 
 /** Notices and Errors **/

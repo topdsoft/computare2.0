@@ -46,7 +46,7 @@ $companyName = "Top Drawer Software LLC";
 		</div>
 		<div id="navwrap">
 			<div id="helpblock">
-				Help
+				<?php echo $this->element('helpblock') ?>
 			</div>
 			<div id="loginblock">
 				<?php

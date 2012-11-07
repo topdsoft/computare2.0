@@ -69,6 +69,15 @@ class PagesController extends AppController {
 		if (!empty($path[$count - 1])) {
 			$title_for_layout = Inflector::humanize($path[$count - 1]);
 		}
+//debug($page);exit;
+		if($page!='home') {
+			//sub page
+			$helpdata=ClassRegistry::init('Help')->get($page);
+		} else {
+			//main index page
+			$helpdata=ClassRegistry::init('Help')->data;
+		}//endif
+		$this->set('helpdata',$helpdata);
 		$this->set(compact('page', 'subpage', 'title_for_layout'));
 		$this->render(implode('/', $path));
 	}
