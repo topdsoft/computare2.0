@@ -67,7 +67,7 @@ CREATE TABLE `customerDetails` (
   `phone` varchar(15) NOT NULL,
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -76,7 +76,7 @@ CREATE TABLE `customerDetails` (
 
 LOCK TABLES `customerDetails` WRITE;
 /*!40000 ALTER TABLE `customerDetails` DISABLE KEYS */;
-INSERT INTO `customerDetails` VALUES (1,1,'2012-10-31 17:43:18',0,'Top Drawer Software LLC','Kurt','Lakin','1705 56th st','unused','Des Moines','Io','50310','klakin2003@yahoo.com','5157701684','first attempt'),(2,1,'2012-10-31 18:00:03',1,'Top Drawer Software LLC','Kurt','Lakin','1705 56th st','unused','Des Moines','IA','50310','klakin2003@yahoo.com','5157701684','first attempt'),(3,2,'2012-10-31 18:09:58',1,'','Another','Customer','a1','a2','Des Moines','IA','50322','','',''),(4,3,'2012-10-31 18:13:36',1,'ABC Corp','','','','','','','','','',''),(5,4,'2012-10-31 18:26:11',1,'','New','Customer','','','','','','','','');
+INSERT INTO `customerDetails` VALUES (1,1,'2012-10-31 17:43:18',1,'Top Drawer Software LLC','Kurt','Lakin','1705 56th st','unused','Des Moines','Io','50310','klakin2003@yahoo.com','5157701684','first attempt'),(2,1,'2012-10-31 18:00:03',1,'Top Drawer Software LLC','Kurt','Lakin','1705 56th st','unused','Des Moines','IA','50310','klakin2003@yahoo.com','5157701684','first attempt'),(3,2,'2012-10-31 18:09:58',1,'','Another','Customer','a1','a2','Des Moines','IA','50322','','',''),(4,3,'2012-10-31 18:13:36',1,'ABC Corp','','','','','','','','','',''),(5,4,'2012-10-31 18:26:11',1,'','New','Customer','','','','','','','',''),(6,2,'2012-11-01 13:36:15',1,'New Company','Another','Customer','a1','a2','Des Moines','IA','50322','','',''),(7,5,'2012-11-01 15:14:50',1,'new comp','Kurt','Lakin','2400 86th st Suite 14','','Des Moines','IA','50322','klakin2003@yahoo.com','5157701684',''),(8,5,'2012-11-01 16:15:35',1,'new comp','Kurt','Lakin','2400 86th st Suite 14','','Des Moines','IA','50322','klakin2003@yahoo.com','5157701684',''),(9,2,'2012-11-01 17:02:19',1,'New Company','Another','Customer','a1xxx','a2xxx','Des Moines','IA','50322','','','made some changes');
 /*!40000 ALTER TABLE `customerDetails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -97,7 +97,7 @@ CREATE TABLE `customers` (
   `deleted_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `customerDetail_id` (`customerDetail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +106,7 @@ CREATE TABLE `customers` (
 
 LOCK TABLES `customers` WRITE;
 /*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,2,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(2,3,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(3,4,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(4,5,0,'2012-10-31 18:26:11',1,'2012-10-31 18:26:11',1);
+INSERT INTO `customers` VALUES (1,2,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(2,9,1,'0000-00-00 00:00:00',1,'2012-11-01 17:02:20',NULL),(3,4,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(4,5,0,'2012-10-31 18:26:11',1,'2012-10-31 18:26:11',1),(5,8,1,'2012-11-01 15:14:50',1,'2012-11-01 16:15:35',NULL);
 /*!40000 ALTER TABLE `customers` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,7 +135,7 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S',''),(6,'2012-10-31 19:06:43',1,'View Customers','/customers','AR',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','');
+INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S',''),(6,'2012-10-31 19:06:43',1,'View Customers','/customers','AR','/pages/customers'),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -217,6 +217,139 @@ CREATE TABLE `forms_users` (
 LOCK TABLES `forms_users` WRITE;
 /*!40000 ALTER TABLE `forms_users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `forms_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glaccountdetails`
+--
+
+DROP TABLE IF EXISTS `glaccountdetails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glaccountdetails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `glaccount_id` int(10) unsigned NOT NULL,
+  `glgroup_id` int(10) unsigned NOT NULL,
+  `name` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glaccountdetails`
+--
+
+LOCK TABLES `glaccountdetails` WRITE;
+/*!40000 ALTER TABLE `glaccountdetails` DISABLE KEYS */;
+/*!40000 ALTER TABLE `glaccountdetails` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glaccounts`
+--
+
+DROP TABLE IF EXISTS `glaccounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glaccounts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `glaccountdetail_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glaccounts`
+--
+
+LOCK TABLES `glaccounts` WRITE;
+/*!40000 ALTER TABLE `glaccounts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `glaccounts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glchecks`
+--
+
+DROP TABLE IF EXISTS `glchecks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glchecks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `checkNumber` int(10) unsigned zerofill NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glchecks`
+--
+
+LOCK TABLES `glchecks` WRITE;
+/*!40000 ALTER TABLE `glchecks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `glchecks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glentries`
+--
+
+DROP TABLE IF EXISTS `glentries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glentries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `postDate` datetime NOT NULL,
+  `glaccount_id` int(10) unsigned NOT NULL,
+  `glcheck_id` int(10) unsigned NOT NULL,
+  `debit` decimal(12,2) NOT NULL,
+  `credit` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `glaccount_id` (`glaccount_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glentries`
+--
+
+LOCK TABLES `glentries` WRITE;
+/*!40000 ALTER TABLE `glentries` DISABLE KEYS */;
+/*!40000 ALTER TABLE `glentries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glgroups`
+--
+
+DROP TABLE IF EXISTS `glgroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glgroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glgroups`
+--
+
+LOCK TABLES `glgroups` WRITE;
+/*!40000 ALTER TABLE `glgroups` DISABLE KEYS */;
+INSERT INTO `glgroups` VALUES (1,'2012-11-08 15:53:57',1,'Assets'),(2,'2012-11-08 15:59:04',1,'Liabilities');
+/*!40000 ALTER TABLE `glgroups` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -605,4 +738,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-10-31 19:09:39
+-- Dump completed on 2012-11-08 16:05:58
