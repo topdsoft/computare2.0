@@ -165,7 +165,8 @@ debug($this->User->read(null, $id));exit;
 				//loop for each form (or link) in menu
 				$element['Form'][]=array(
 					'name'=>$link['FormsMenu']['name'],
-					'link'=>$link['Form']['link'],
+					'controller'=>$link['Form']['controller'],
+					'action'=>$link['Form']['action'],
 					'params'=>$link['FormsMenu']['params']
 					);
 			}//ednforeach link

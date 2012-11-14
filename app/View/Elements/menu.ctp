@@ -9,10 +9,11 @@
 		echo '<ul>';
 		foreach($menu['Form'] as $form) {
 			//loop for each form (or link) and add it to the menu
-			if($form['link']) {
+			if($form['action']) {
 				//this is a link
 				echo '<li>';
-				echo $this->Html->link($form['name'],$form['link'].'/'.$form['params']);
+//				echo $this->Html->link($form['name'],$form['link'].'/'.$form['params']);
+				echo $this->Html->link($form['name'],array('controller'=>$form['controller'],'action'=>$form['action'],$form['params']));
 			} else {
 				//this is not a link
 				echo '<li style="border-bottom: 1px solid #999;">';

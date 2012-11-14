@@ -43,13 +43,29 @@ class AppController extends Controller {
 	}
 	
 	public function beforeRender() {
-		//get form info for help and user ACL. if not set check for superuser
-		if(isset($this->viewVars['form_id'])) {
-			//get form data
-			$formhelp=ClassRegistry::init('Form')->read(array('helplink'),$this->viewVars['form_id']);
-			$this->set('formhelp',$formhelp['Form']['helplink']);
-//debug($formhelp);exit();
+		//no ACL on login
+		if($this->params['action']!='login') {
+			$formOBJ=ClassRegistry::init('Form');
+			//look for controller/action combo in forms table
+			$form=$formOBJ->find('first',array('conditions'=>array('controller'=>$this->params['controller'],'action'=>$this->params['action'])));
+			if(!$form) {
+				//form is not in table, so has never been visited
+				if(isset($this->viewVars['formName'])) $formName=$this->viewVars['formName'];
+				else $formName='**FORM NAME NOT SET';
+				//save new form
+				$form= array(
+					'id'=>null,
+					'created_id'=>$this->Auth->user('id'),
+					'name'=>$formName,
+					'controller'=>$this->params['controller'],
+					'action'=>$this->params['action']
+				);
+				$formOBJ->create();
+				$formOBJ->save($form);
+			}//endif
+			//get help index if set
+			if(isset($form['Form']['helplink']) && !empty($form['Form']['helplink'])) $this->set('formhelp',$form['Form']['helplink']);
 		}//endif
-		
+//debug($form);exit;
 	}
 }

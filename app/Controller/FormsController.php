@@ -13,6 +13,7 @@ class FormsController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('formName','View Forms');
 		$this->Form->recursive = 0;
 		$this->set('forms', $this->paginate());
 		//get users list
@@ -25,7 +26,6 @@ class FormsController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
 	public function view($id = null) {
 		$this->Form->id = $id;
 		if (!$this->Form->exists()) {
@@ -33,12 +33,12 @@ class FormsController extends AppController {
 		}
 		$this->set('form', $this->Form->read(null, $id));
 	}
+ */
 
 /**
  * add method
  *
  * @return void
- */
 	public function add() {
 		if ($this->request->is('post')) {
 			$this->Form->create();
@@ -57,6 +57,7 @@ class FormsController extends AppController {
 		$users = $this->Form->User->find('list');
 		$this->set(compact('groups', 'menus', 'users'));
 	}
+ */
 
 /**
  * edit method
@@ -66,6 +67,7 @@ class FormsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit Form');
 		$this->Form->id = $id;
 		if (!$this->Form->exists()) {
 			throw new NotFoundException(__('Invalid form'));
@@ -95,6 +97,7 @@ class FormsController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+		$this->set('formName','Delete Form');
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}

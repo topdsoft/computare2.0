@@ -15,7 +15,7 @@ class CustomersController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->set('form_id',6);
+		$this->set('formName','List Customers');
 		if ($this->request->is('post') || $this->request->is('put')) {
 			//respond to filter requests
 			$this->passedArgs['showDeleted']=$this->request->data['Customer']['showDeleted'];
@@ -41,6 +41,7 @@ class CustomersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->set('formName','View Customer');
 		$this->Customer->id = $id;
 		if (!$this->Customer->exists()) {
 			throw new NotFoundException(__('Invalid customer'));
@@ -61,6 +62,7 @@ class CustomersController extends AppController {
  */
 	public function add() {
 		//adding customer uses the edit function with null id
+		$this->set('formName','Add New Customer');
 		$this->redirect(array('action' => 'edit'));
 	}
 
@@ -72,6 +74,7 @@ class CustomersController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit Customer');
 		//if $id not set we are adding a new customer
 		if($id) {
 			//validate $id

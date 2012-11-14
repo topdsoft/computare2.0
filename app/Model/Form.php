@@ -15,7 +15,7 @@ class Form extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
-
+	public $order = array('type','controller','action');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

@@ -6,9 +6,11 @@
 		echo $this->Form->input('id');
 //		echo $this->Form->input('created_id');
 		echo $this->Form->input('name');
-		echo $this->Form->input('link');
+		echo $this->Form->input('controller');
+		echo $this->Form->input('action');
 		echo $this->Form->input('type');
 		echo $this->Form->input('helplink');
+		echo $this->Form->input('description');
 //		echo $this->Form->input('Group');
 //		echo $this->Form->input('Menu');
 //		echo $this->Form->input('User');
