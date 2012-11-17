@@ -50,6 +50,7 @@ class MenusController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->set('formName','List Menus');
 		$this->Menu->id = $id;
 		if (!$this->Menu->exists()) {
 			throw new NotFoundException(__('Invalid menu'));
@@ -67,6 +68,7 @@ class MenusController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('formName','Add Menu');
 		if ($this->request->is('post')) {
 			$this->Menu->create();
 			$this->request->data['Menu']['created_id']=$this->Auth->user('id');
@@ -99,6 +101,7 @@ class MenusController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit Menu');
 		$this->Menu->id = $id;
 		if (!$this->Menu->exists()) {
 			throw new NotFoundException(__('Invalid menu'));
@@ -108,20 +111,22 @@ class MenusController extends AppController {
 			if ($this->Menu->save($this->request->data)) {
 				//before saving new links, delete the old
 				$this->Menu->FormsMenu->deleteAll(array('FormsMenu.menu_id'=>$id),false);
-				//loop for link data and save
-				$i=0;
-				foreach($this->request->data['Data'] as $link) {
-					//loop for each row that comes in
-					$i++;
-					$this->Menu->FormsMenu->save(array(
-						'id'=>null,
-						'form_id'=>$link['form_id'],
-						'menu_id'=>$id,
-						'ordr'=>$i,
-						'name'=>$link['label'],
-						'params'=>$link['params']
-					));
-				}
+				if(isset($this->request->data['Data'])){
+					//loop for link data and save
+					$i=0;
+					foreach($this->request->data['Data'] as $link) {
+						//loop for each row that comes in
+						$i++;
+						$this->Menu->FormsMenu->save(array(
+							'id'=>null,
+							'form_id'=>$link['form_id'],
+							'menu_id'=>$id,
+							'ordr'=>$i,
+							'name'=>$link['label'],
+							'params'=>$link['params']
+						));
+					}//end foreach
+				}//endif
 				$this->Session->setFlash(__('Your menu changes have been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -131,6 +136,7 @@ class MenusController extends AppController {
 			$this->Menu->recursive=0;
 			$this->request->data = $this->Menu->read(null, $id);
 			//get list of links on this menu and save to data
+			$this->request->data['Data']=array();
 			$links=$this->Menu->FormsMenu->find('all',array('conditions'=>array('FormsMenu.menu_id'=>$id),'order'=>'ordr'));
 			$i=0;
 			foreach($links as $link) {
@@ -142,10 +148,15 @@ class MenusController extends AppController {
 					'params'=>$link['FormsMenu']['params']
 				);
 			}//end foreach
+//debug($this->request->data);
 		}
 		//get list of ALL forms to use in dropdown list
 		$formlist = $this->Menu->Form->find('list');
-		array_unshift($formlist,'none');
+		//add 'none' value with index of 0 for selecting a heading not a link
+		$formlist=array_reverse($formlist,true);
+		$formlist[0]='(none)';
+		$formlist=array_reverse($formlist,true);
+//debug($formlist);exit;
 		$this->set(compact('formlist'));
 //		$this->set('menu',$this->Menu->read(null, $id));
 	}
@@ -158,6 +169,7 @@ class MenusController extends AppController {
  * @return void
  */
 	public function editusers($id = null) {
+		$this->set('formName','Edit Menu Users');
 		$this->Menu->id = $id;
 		if (!$this->Menu->exists()) {
 			throw new NotFoundException(__('Invalid menu'));
