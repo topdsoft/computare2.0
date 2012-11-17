@@ -131,7 +131,7 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +140,7 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(14,'2012-11-14 17:39:36',1,'**FORM NAME NOT SET','','','','menus','edit','');
+INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','','','menus','editusers',''),(17,'2012-11-17 12:19:51',1,'**FORM NAME NOT SET','','','','pages','display','');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -186,7 +186,7 @@ CREATE TABLE `forms_menus` (
   `params` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `menu_id` (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -195,7 +195,7 @@ CREATE TABLE `forms_menus` (
 
 LOCK TABLES `forms_menus` WRITE;
 /*!40000 ALTER TABLE `forms_menus` DISABLE KEYS */;
-INSERT INTO `forms_menus` VALUES (42,0,2,1.0,'Users',''),(43,2,2,2.0,'List Users',''),(44,4,2,3.0,'Add User',''),(45,0,2,4.0,'Forms',''),(46,1,2,5.0,'List Forms',''),(47,5,2,6.0,'Add Form',''),(48,0,2,7.0,'Menus',''),(49,3,2,8.0,'List Menus',''),(50,6,1,1.0,'List Customers',''),(51,7,1,2.0,'Add Customer','');
+INSERT INTO `forms_menus` VALUES (50,6,1,1.0,'List Customers',''),(51,7,1,2.0,'Add Customer',''),(53,0,2,1.0,'Users',''),(54,2,2,2.0,'List Users',''),(55,4,2,3.0,'Add User',''),(56,0,2,4.0,'Forms',''),(57,1,2,5.0,'List Forms',''),(58,0,2,6.0,'Menus',''),(59,3,2,7.0,'List Menus','');
 /*!40000 ALTER TABLE `forms_menus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -743,4 +743,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-14 17:42:23
+-- Dump completed on 2012-11-17 12:20:08
