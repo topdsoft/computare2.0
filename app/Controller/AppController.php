@@ -43,8 +43,9 @@ class AppController extends Controller {
 	}
 	
 	public function beforeRender() {
-		//no ACL on login
-		if($this->params['action']!='login') {
+		//no ACL on login or help pages
+		$ignore=array('display','login');
+		if(!in_array($this->params['action'],$ignore)) {
 			$formOBJ=ClassRegistry::init('Form');
 			//look for controller/action combo in forms table
 			$form=$formOBJ->find('first',array('conditions'=>array('controller'=>$this->params['controller'],'action'=>$this->params['action'])));

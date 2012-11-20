@@ -1,10 +1,11 @@
 <?php
 /**
- * GlaccountFixture
+ * GlaccountDetailFixture
  *
  */
-class GlaccountFixture extends CakeTestFixture {
+class GlaccountDetailFixture extends CakeTestFixture {
 
+	public $table='glaccountDetails';
 /**
  * Fields
  *
@@ -14,7 +15,9 @@ class GlaccountFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'glaccountDetail_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'glaccount_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'glgroup_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 40, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -29,9 +32,11 @@ class GlaccountFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2012-11-08 15:08:07',
+			'created' => '2012-11-08 15:09:09',
 			'created_id' => 1,
-			'glaccountDetail_id' => 1
+			'glaccount_id' => 1,
+			'glgroup_id' => 1,
+			'name' => 'Lorem ipsum dolor sit amet'
 		),
 	);
 

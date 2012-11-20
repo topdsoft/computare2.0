@@ -1,11 +1,12 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Glgroup Model
+ * Glaccountdetail Model
  *
- * @property Glaccountdetail $Glaccountdetail
+ * @property Glaccount $Glaccount
+ * @property Glgroup $Glgroup
  */
-class Glgroup extends AppModel {
+class GlaccountDetail extends AppModel {
 
 /**
  * Use database config
@@ -14,9 +15,7 @@ class Glgroup extends AppModel {
  */
 	public $useDbConfig = 'computare';
 
-	public $virtualFields=array('numAccounts'=>'select count(*) from glaccounts,glaccountDetails where glaccounts.id=glaccountDetails.glaccount_id and glaccountDetails.glgroup_id=Glgroup.id',
-		);
-	
+	public $useTable='glaccountDetails';
 /**
  * Display field
  *
@@ -33,7 +32,7 @@ class Glgroup extends AppModel {
 		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Please enter a name for the General Ledger group',
+				'message' => 'Enter an account name here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -41,7 +40,7 @@ class Glgroup extends AppModel {
 			),
 			'unique' => array(
 				'rule' => array('isunique'),
-				'message' => 'This name is in use',
+				'message' => 'This account name has been used',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -53,24 +52,24 @@ class Glgroup extends AppModel {
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
- * hasMany associations
+ * belongsTo associations
  *
  * @var array
  */
-	public $hasMany = array(
-		'GlaccountDetail' => array(
-			'className' => 'GlaccountDetail',
-			'foreignKey' => 'glgroup_id',
-			'dependent' => false,
+	public $belongsTo = array(
+		'Glaccount' => array(
+			'className' => 'Glaccount',
+			'foreignKey' => 'glaccount_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
+			'order' => ''
+		),
+		'Glgroup' => array(
+			'className' => 'Glgroup',
+			'foreignKey' => 'glgroup_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
-
 }

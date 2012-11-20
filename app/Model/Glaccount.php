@@ -24,9 +24,9 @@ class Glaccount extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Glaccountdetail' => array(
-			'className' => 'Glaccountdetail',
-			'foreignKey' => 'glaccountdetail_id',
+		'GlaccountDetail' => array(
+			'className' => 'GlaccountDetail',
+			'foreignKey' => 'glaccountDetail_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

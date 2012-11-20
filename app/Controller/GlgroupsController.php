@@ -14,6 +14,7 @@ class GlgroupsController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('formName','List GL Account Groups');
 		$this->Glgroup->recursive = 0;
 		$this->set('glgroups', $this->paginate());
 	}
@@ -26,6 +27,7 @@ class GlgroupsController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->set('formName','View GL Account Group');
 		$this->Glgroup->id = $id;
 		if (!$this->Glgroup->exists()) {
 			throw new NotFoundException(__('Invalid glgroup'));
@@ -39,6 +41,7 @@ class GlgroupsController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('formName','Add GL Account Group');
 		if ($this->request->is('post')) {
 			$this->request->data['Glgroup']['created_id']=$this->Auth->user('id');
 			if ($this->ComputareGL->saveGroup($this->request->data)) {

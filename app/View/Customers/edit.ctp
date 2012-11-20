@@ -5,7 +5,7 @@
 	<?php
 		echo $this->Form->input('id');
 		echo $this->Form->input('CustomerDetail.customer_id',array('type'=>'hidden'));
-		echo $this->Form->input('CustomerDetail.companyName');
+		echo $this->Form->input('CustomerDetail.companyName',array('id'=>'sc'));
 		echo $this->Form->input('CustomerDetail.firstName');
 		echo $this->Form->input('CustomerDetail.lastName');
 		echo $this->Form->input('CustomerDetail.address1');
@@ -21,3 +21,4 @@
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
+<script type='text/javascript'>document.getElementById('sc').focus();</script>

@@ -1,31 +1,28 @@
--- phpMyAdmin SQL Dump
--- version 3.3.2deb1ubuntu1
--- http://www.phpmyadmin.net
+-- MySQL dump 10.13  Distrib 5.5.28, for debian-linux-gnu (x86_64)
 --
--- Host: localhost
--- Generation Time: Nov 09, 2012 at 09:02 AM
--- Server version: 5.1.63
--- PHP Version: 5.3.2-1ubuntu4.18
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
+-- Host: localhost    Database: computare
+-- ------------------------------------------------------
+-- Server version	5.5.28-0ubuntu0.12.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
---
--- Database: `computare`
---
-
--- --------------------------------------------------------
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
 -- Table structure for table `categories`
 --
 
-CREATE TABLE IF NOT EXISTS `categories` (
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categories` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -34,15 +31,17 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `lft` int(10) unsigned NOT NULL,
   `rght` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `customerDetails`
 --
 
-CREATE TABLE IF NOT EXISTS `customerDetails` (
+DROP TABLE IF EXISTS `customerDetails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customerDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
@@ -59,15 +58,17 @@ CREATE TABLE IF NOT EXISTS `customerDetails` (
   `phone` varchar(15) NOT NULL,
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `customers`
 --
 
-CREATE TABLE IF NOT EXISTS `customers` (
+DROP TABLE IF EXISTS `customers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `customers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customerDetail_id` int(10) unsigned NOT NULL,
   `active` tinyint(1) NOT NULL,
@@ -77,46 +78,57 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `deleted_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `customerDetail_id` (`customerDetail_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `forms`
 --
 
-CREATE TABLE IF NOT EXISTS `forms` (
+DROP TABLE IF EXISTS `forms`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `name` varchar(20) NOT NULL,
+  `name` varchar(30) NOT NULL,
   `link` varchar(50) NOT NULL,
   `type` varchar(2) NOT NULL,
   `helplink` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
-
--- --------------------------------------------------------
+  `controller` varchar(30) NOT NULL,
+  `action` varchar(30) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `controller` (`controller`),
+  KEY `action` (`action`)
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `forms_groups`
 --
 
-CREATE TABLE IF NOT EXISTS `forms_groups` (
+DROP TABLE IF EXISTS `forms_groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms_groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `form_id` (`form_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `forms_menus`
 --
 
-CREATE TABLE IF NOT EXISTS `forms_menus` (
+DROP TABLE IF EXISTS `forms_menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms_menus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int(10) unsigned NOT NULL,
   `menu_id` int(10) unsigned NOT NULL,
@@ -125,29 +137,33 @@ CREATE TABLE IF NOT EXISTS `forms_menus` (
   `params` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `menu_id` (`menu_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=52 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `forms_users`
 --
 
-CREATE TABLE IF NOT EXISTS `forms_users` (
+DROP TABLE IF EXISTS `forms_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `forms_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `form_id` (`form_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `glaccountdetails`
+-- Table structure for table `glaccountDetails`
 --
 
-CREATE TABLE IF NOT EXISTS `glaccountdetails` (
+DROP TABLE IF EXISTS `glaccountDetails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glaccountDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -155,43 +171,49 @@ CREATE TABLE IF NOT EXISTS `glaccountdetails` (
   `glgroup_id` int(10) unsigned NOT NULL,
   `name` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `glaccounts`
 --
 
-CREATE TABLE IF NOT EXISTS `glaccounts` (
+DROP TABLE IF EXISTS `glaccounts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glaccounts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `glaccountdetail_id` int(10) unsigned NOT NULL,
+  `glaccountDetail_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `glchecks`
 --
 
-CREATE TABLE IF NOT EXISTS `glchecks` (
+DROP TABLE IF EXISTS `glchecks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glchecks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `checkNumber` int(10) unsigned zerofill NOT NULL,
   `amount` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `glentries`
 --
 
-CREATE TABLE IF NOT EXISTS `glentries` (
+DROP TABLE IF EXISTS `glentries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glentries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -202,86 +224,98 @@ CREATE TABLE IF NOT EXISTS `glentries` (
   `credit` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `glaccount_id` (`glaccount_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `glgroups`
 --
 
-CREATE TABLE IF NOT EXISTS `glgroups` (
+DROP TABLE IF EXISTS `glgroups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glgroups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `groups`
 --
 
-CREATE TABLE IF NOT EXISTS `groups` (
+DROP TABLE IF EXISTS `groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `groups_users`
 --
 
-CREATE TABLE IF NOT EXISTS `groups_users` (
+DROP TABLE IF EXISTS `groups_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `images`
 --
 
-CREATE TABLE IF NOT EXISTS `images` (
+DROP TABLE IF EXISTS `images`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `images` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `filename` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `images_items`
 --
 
-CREATE TABLE IF NOT EXISTS `images_items` (
+DROP TABLE IF EXISTS `images_items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `images_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `image_id` int(10) unsigned NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `image_id` (`image_id`,`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `itemDetails`
 --
 
-CREATE TABLE IF NOT EXISTS `itemDetails` (
+DROP TABLE IF EXISTS `itemDetails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `itemDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -291,45 +325,17 @@ CREATE TABLE IF NOT EXISTS `itemDetails` (
   `item_id` int(10) unsigned NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `items`
---
-
-CREATE TABLE IF NOT EXISTS `items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `itemDetail_id` int(10) unsigned NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  `searialized` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `items_locations`
---
-
-CREATE TABLE IF NOT EXISTS `items_locations` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned NOT NULL,
-  `item_id` int(10) unsigned NOT NULL,
-  `location_id` int(10) unsigned NOT NULL,
-  `qty` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `item_ser_numbers`
 --
 
-CREATE TABLE IF NOT EXISTS `item_ser_numbers` (
+DROP TABLE IF EXISTS `item_ser_numbers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_ser_numbers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -337,15 +343,17 @@ CREATE TABLE IF NOT EXISTS `item_ser_numbers` (
   `item_id` int(10) unsigned NOT NULL,
   `number` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `item_transactions`
 --
 
-CREATE TABLE IF NOT EXISTS `item_transactions` (
+DROP TABLE IF EXISTS `item_transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `item_transactions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -354,15 +362,51 @@ CREATE TABLE IF NOT EXISTS `item_transactions` (
   `qty` int(11) NOT NULL,
   `type` enum('I','R','T') NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- --------------------------------------------------------
+--
+-- Table structure for table `items`
+--
+
+DROP TABLE IF EXISTS `items`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `itemDetail_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `searialized` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `items_locations`
+--
+
+DROP TABLE IF EXISTS `items_locations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `items_locations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `location_id` int(10) unsigned NOT NULL,
+  `qty` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `locationDetails`
 --
 
-CREATE TABLE IF NOT EXISTS `locationDetails` (
+DROP TABLE IF EXISTS `locationDetails`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `locationDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -372,27 +416,31 @@ CREATE TABLE IF NOT EXISTS `locationDetails` (
   `rght` int(10) unsigned NOT NULL,
   `location_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `locations`
 --
 
-CREATE TABLE IF NOT EXISTS `locations` (
+DROP TABLE IF EXISTS `locations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `locations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `locationDetail_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `menus`
 --
 
-CREATE TABLE IF NOT EXISTS `menus` (
+DROP TABLE IF EXISTS `menus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime DEFAULT NULL,
   `created_id` int(10) unsigned DEFAULT NULL,
@@ -400,30 +448,34 @@ CREATE TABLE IF NOT EXISTS `menus` (
   `user_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `menus_users`
 --
 
-CREATE TABLE IF NOT EXISTS `menus_users` (
+DROP TABLE IF EXISTS `menus_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menus_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `menu_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `ordr` float(4,1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
-
--- --------------------------------------------------------
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `username` varchar(20) NOT NULL,
@@ -432,4 +484,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `homepage` varchar(100) NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2012-11-20 16:55:48
