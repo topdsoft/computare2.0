@@ -22,7 +22,7 @@ class Glcheck extends AppModel {
 		'checkNumber' => array(
 			'numeric' => array(
 				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
+				'message' => 'The check number must be a number',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

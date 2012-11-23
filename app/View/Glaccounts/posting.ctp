@@ -12,7 +12,7 @@
 					//show each debit
 					echo'<tr>';
 					echo'<td>'.$glaccountlist[$debitaccount].'</td>';
-					echo'<td>'.$this->Form->input('debit.'.$debitaccount,array('label'=>'','type'=>'text')).'</td>';
+					echo'<td>'.$this->Form->input('debit.'.$debitaccount,array('label'=>'','type'=>'text','class'=>'debit')).'</td>';
 					echo'<td class="actions">'.$this->Html->link(__('Remove'), array_merge($this->passedArgs,array('remdebit'=>$i))).'</td>';
 					echo'</tr>';
 				}//endforeach
@@ -28,7 +28,7 @@
 					//show each credit
 					echo'<tr>';
 					echo'<td>'.$glaccountlist[$creditaccount].'</td>';
-					echo'<td>'.$this->Form->input('credit.'.$creditaccount,array('label'=>'','type'=>'text')).'</td>';
+					echo'<td>'.$this->Form->input('credit.'.$creditaccount,array('label'=>'','type'=>'text','class'=>'credit')).'</td>';
 					echo'<td class="actions">'.$this->Html->link(__('Remove'), array_merge($this->passedArgs,array('remcredit'=>$i))).'</td>';
 					echo'</tr>';
 				}//endforeach
@@ -77,3 +77,39 @@
 	?>
 	</div>
 </div>
+<script type='text/javascript'>
+	function formatCurrency(num) {
+		num = isNaN(num) || num === '' || num === null ? 0.00 : num;
+		return parseFloat(num).toFixed(2);
+	}
+	function calctotals(){
+		//calculate the totals for debit and credit
+		var tdebit=0.00;
+		$('.debit').each(function(){tdebit+=parseFloat(formatCurrency($(this).val()));});
+		$('#dt').text(formatCurrency(tdebit));
+		var tcredit=0.00;
+		$('.credit').each(function(){tcredit+=parseFloat(formatCurrency($(this).val()));});
+		$('#ct').text(formatCurrency(tcredit));
+		//hide or show the submit button
+		if(tdebit==tcredit && tdebit!=0.00) $(".submit").show();
+		else $(".submit").hide();
+	}
+	$(".submit").hide();
+
+	$('.debit').blur(function(){
+		//check debit entries
+		var debit=$(this).val();
+		if(debit<0)debit*=-1;
+		$(this).val(formatCurrency(debit));
+		calctotals();
+	});
+	
+	$('.credit').blur(function(){
+		//check credit entries
+		var credit=$(this).val();
+		if(credit<0)credit*=-1;
+		$(this).val(formatCurrency(credit));
+		calctotals();
+	});
+
+</script>
