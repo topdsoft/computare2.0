@@ -66,6 +66,7 @@ class GlaccountsController extends AppController {
 		}//endif removing credit
 		if ($this->request->is('post') || $this->request->is('put')) {
 			//post
+			$this->request->data['Glentry']['created_id']=$this->Auth->user('id');
 			if($this->ComputareGL->post($this->request->data)) {
 				//saved ok
 				$this->Session->setFlash(__('The GL post has been completed.'),'default',array('class'=>'success'));

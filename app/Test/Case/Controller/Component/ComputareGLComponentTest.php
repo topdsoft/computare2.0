@@ -6,13 +6,16 @@ App::uses('ComponentCollection', 'Controller');
 App::uses('ComputareGLComponent', 'Controller/Component');
 
 class ComputareGLComponentTest extends CakeTestCase {
-	public $fixtures=array('app.glgroup','app.glaccount','app.glaccountDetail');
+	public $fixtures=array('app.glgroup','app.glaccount','app.glaccountDetail','app.glnote','app.glcheck','app.glentry');
 	
 	public function setUp() {
 		parent::setUp();
 		$this->Glgroup=ClassRegistry::init('Glgroup');
 		$this->Glaccount=ClassRegistry::init('Glaccount');
 		$this->GlaccountDetail=ClassRegistry::init('GlaccountDetail');
+		$this->Glentry=ClassRegistry::init('Glentry');
+		$this->Glcheck=ClassRegistry::init('Glcheck');
+		$this->Glnote=ClassRegistry::init('Glnote');
 		$Collection = new ComponentCollection();
 		$this->ComputareGLComponent=new ComputareGLComponent($Collection);
 	}
@@ -58,6 +61,36 @@ class ComputareGLComponentTest extends CakeTestCase {
 		$newAcct['GlaccountDetail']['name']='';
 		$this->assertFalse($this->ComputareGLComponent->saveAccount($newAcct),'* failed to catch empty account name');
 //debug($account);exit;
+	}
+	
+	public function testPost() {
+		//test posting to GL accounts
+		$data=array(
+			'debit'=>array(4=>110.99),
+			'credit'=>array(2=>100,3=>10.99),
+			'Glnote'=>array('text'=>'note data'),
+			'Glcheck'=>array('checkNumber'=>1003),
+			'Glentry'=>array('created_id'=>3)
+		);
+		$this->assertTrue($this->ComputareGLComponent->post($data),'*failed to post data');
+		//verify saved data
+		$this->assertEquals($this->Glentry->field('debit',array('glaccount_id'=>4)),110.99,'*acct4 debit failed');
+		$this->assertEquals($this->Glentry->field('credit',array('glaccount_id'=>3)),10.99,'*acct3 credit failed');
+		$this->assertEquals($this->Glentry->field('credit',array('glaccount_id'=>2)),100,'*acct2 credit failed');
+		$lastEntry=$this->Glentry->read(null);
+		$this->assertEquals($lastEntry['Glcheck']['checkNumber'],1003,'*check number not set');
+		$this->assertEquals($lastEntry['Glcheck']['amount'],110.99,'*check amount not set');
+		$this->assertEquals($lastEntry['Glnote']['text'],'note data','*check number not set');
+		//test invalid check#
+		$data['Glcheck']['checkNumber']='xxx';
+		$this->assertFalse($this->ComputareGLComponent->post($data),'*failed to catch bad check number data');
+		$data['Glcheck']['checkNumber']='';
+		$this->assertTrue($this->ComputareGLComponent->post($data),'*failed to post data without check #');
+		$data['Glnote']['text']='';
+		$this->assertTrue($this->ComputareGLComponent->post($data),'*failed to post data without note');
+		//check for debit-credit unequal
+		$data['debit'][4]=69.69;
+		$this->assertFalse($this->ComputareGLComponent->post($data),'*failed to catch debit!=credit');
 	}
 	
 	public function tearDown() {

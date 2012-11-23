@@ -41,5 +41,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New GL Account'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('GL Posting'), array('action' => 'posting')); ?></li>
 	</ul>
 </div>

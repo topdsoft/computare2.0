@@ -40,7 +40,7 @@
 	</table>
 	<?php
 		echo $this->Form->input('Glnote.text',array('label'=>'Notes (optional)'));
-		echo $this->Form->input('Glcheck.number',array('label'=>'Check Number (optional)'));
+		echo $this->Form->input('Glcheck.checkNumber',array('label'=>'Check Number (optional)'));
 		echo $this->Form->input('Glentry.postDate',array('label'=>'Posting Date (if different)'));
 	?>
 	<?php echo $this->Form->end(__('Submit')); ?>

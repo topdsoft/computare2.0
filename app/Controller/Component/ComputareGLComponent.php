@@ -64,9 +64,78 @@ class ComputareGLComponent extends Component{
 	/**
 	 * post method
 	 * @param $data
+	 * 		debit => array with accountid=>value
+	 * 		credit => array with accountid=>value
+	 * 		Glnote => text optional notes
+	 * 		Glcheck => number optional check number
 	 * used to post to general ledger
 	 */
 	public function post($data){
+		//must have at least one account
+		if(!isset($data['credit']) || count($data['credit'])==0 || !isset($data['debit']) || count($data['debit'])==0 ) return false;
+		//validate created_id
+		if(!isset($data['Glentry']['created_id'])) return false;
+		//total debits and credits
+		$dtotal=$ctotal=0;
+		foreach($data['debit'] as $debit) $dtotal+=$debit;
+		foreach($data['credit'] as $credit) $ctotal+=$credit;
+		if($dtotal!=$ctotal) return false;//debits must equal credits
+		if($dtotal==0) return false;//can't be 0
+		//if post date not set use current
+		if(!isset($data['Glentry']['postDate'])) $data['Glentry']['postDate']=date('Y-m-d');
+		//get models
+		$this->Glentry=ClassRegistry::init('Glentry');
+		$this->Glnote=ClassRegistry::init('Glnote');
+		$this->Glcheck=ClassRegistry::init('Glcheck');
+		$this->Glaccount=ClassRegistry::init('Glaccount');
+		$this->GlaccountDetail=ClassRegistry::init('GlaccountDetail');
+		$ok=true;
+		$dataSource=$this->Glaccount->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		##notes
+		$data['Glentry']['glnote_id']=0;
+		if(!empty($data['Glnote']['text'])) {
+			//save notes
+			$this->Glnote->create();
+			if($ok) $ok=$this->Glnote->save($data);
+			if($ok) $data['Glentry']['glnote_id']=$this->Glnote->getInsertId();
+		}//endif
+		##check
+		$data['Glentry']['glcheck_id']=0;
+		if(!empty($data['Glcheck']['checkNumber'])) {
+			//save check
+			$data['Glcheck']['amount']=$dtotal;
+			if($ok) $ok=$this->Glcheck->save($data);
+			if($ok) $data['Glentry']['glcheck_id']=$this->Glcheck->getInsertId();
+		}//endif
+		##debits
+		foreach($data['debit'] as $account=>$debit) {
+			//loop for all debits
+			$this->Glentry->create();
+			$data['Glentry']['glaccount_id']=$account;
+			$data['Glentry']['debit']=$debit;
+			//verify account
+			###todo
+			if($ok) $ok=$this->Glentry->save($data);
+		}//end foreach debit
+		##credits
+		$data['Glentry']['debit']=0;
+		foreach($data['credit'] as $account=>$credit) {
+			//loop for all credits
+			$this->Glentry->create();
+			$data['Glentry']['glaccount_id']=$account;
+			$data['Glentry']['credit']=$credit;
+			//verify account
+			###todo
+			if($ok) $ok=$this->Glentry->save($data);
+		}//end foreach debit
+//$ok=true;
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		if($ok) return true;
+		else return false;
+//debug($data);exit;
 		
 	}
 }
