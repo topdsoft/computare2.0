@@ -2,8 +2,8 @@
 	<h2><?php echo __('GL Accounts'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th><?php echo $this->Paginator->sort('group'); ?></th>
-			<th><?php echo $this->Paginator->sort('glaccountDetail.name','Name'); ?></th>
+			<th>Group<?php //echo $this->Paginator->sort('group'); ?></th>
+			<th>Name<?php //echo $this->Paginator->sort('glaccountDetail.name','Name'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','Created By'); ?></th>
 			<th></th>

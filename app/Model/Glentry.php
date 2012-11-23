@@ -64,6 +64,13 @@ class Glentry extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Glnote' => array(
+			'className' => 'Glnote',
+			'foreignKey' => 'glnote_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 }

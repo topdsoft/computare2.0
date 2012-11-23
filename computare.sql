@@ -131,7 +131,7 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +140,7 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','','','glaccounts','edit',''),(23,'2012-11-20 15:01:35',1,'**FORM NAME NOT SET','','','','glaccountgroups','index','');
+INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','GL','','glaccounts','edit',''),(24,'2012-11-23 11:05:46',1,'GL Posting','','','','glaccounts','posting','');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -239,7 +239,7 @@ CREATE TABLE `glaccountDetails` (
   `glgroup_id` int(10) unsigned NOT NULL,
   `name` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -248,7 +248,7 @@ CREATE TABLE `glaccountDetails` (
 
 LOCK TABLES `glaccountDetails` WRITE;
 /*!40000 ALTER TABLE `glaccountDetails` DISABLE KEYS */;
-INSERT INTO `glaccountDetails` VALUES (1,'2012-11-20 15:27:59',1,1,1,'test'),(2,'2012-11-20 15:56:54',1,4,1,'test2'),(4,'2012-11-20 16:05:03',1,4,3,'test2changed'),(5,'2012-11-20 16:52:57',1,1,1,'Cash'),(6,'2012-11-20 16:53:13',1,4,3,'Owner Equity');
+INSERT INTO `glaccountDetails` VALUES (1,'2012-11-20 15:27:59',1,1,1,'test'),(2,'2012-11-20 15:56:54',1,4,1,'test2'),(4,'2012-11-20 16:05:03',1,4,3,'test2changed'),(5,'2012-11-20 16:52:57',1,1,1,'Cash'),(6,'2012-11-20 16:53:13',1,4,3,'Owner Equity'),(7,'2012-11-23 12:22:29',1,6,1,'Cash (savings)'),(8,'2012-11-23 12:23:23',1,7,1,'Inventory Assets'),(9,'2012-11-23 12:23:53',1,8,5,'Cost of Goods Sold'),(10,'2012-11-23 12:24:18',1,9,5,'Operating Expenses');
 /*!40000 ALTER TABLE `glaccountDetails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -265,7 +265,7 @@ CREATE TABLE `glaccounts` (
   `created_id` int(10) unsigned NOT NULL,
   `glaccountDetail_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,7 +274,7 @@ CREATE TABLE `glaccounts` (
 
 LOCK TABLES `glaccounts` WRITE;
 /*!40000 ALTER TABLE `glaccounts` DISABLE KEYS */;
-INSERT INTO `glaccounts` VALUES (1,'2012-11-20 15:27:59',1,5),(4,'2012-11-20 15:56:54',1,6);
+INSERT INTO `glaccounts` VALUES (1,'2012-11-20 15:27:59',1,5),(4,'2012-11-20 15:56:54',1,6),(6,'2012-11-23 12:22:29',1,7),(7,'2012-11-23 12:23:23',1,8),(8,'2012-11-23 12:23:53',1,9),(9,'2012-11-23 12:24:18',1,10);
 /*!40000 ALTER TABLE `glaccounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -314,9 +314,10 @@ CREATE TABLE `glentries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `postDate` datetime NOT NULL,
+  `postDate` date NOT NULL,
   `glaccount_id` int(10) unsigned NOT NULL,
   `glcheck_id` int(10) unsigned NOT NULL,
+  `glnote_id` int(10) unsigned NOT NULL,
   `debit` decimal(12,2) NOT NULL,
   `credit` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`),
@@ -357,6 +358,29 @@ LOCK TABLES `glgroups` WRITE;
 /*!40000 ALTER TABLE `glgroups` DISABLE KEYS */;
 INSERT INTO `glgroups` VALUES (1,'2012-11-08 15:53:57',1,'Assets'),(2,'2012-11-08 15:59:04',1,'Liabilities'),(3,'2012-11-20 13:53:42',1,'Owner Equity'),(4,'2012-11-20 13:53:51',1,'Revenue'),(5,'2012-11-20 13:53:59',1,'Expenses'),(6,'2012-11-20 13:54:05',1,'Gains'),(7,'2012-11-20 13:54:20',1,'Losses');
 /*!40000 ALTER TABLE `glgroups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `glnotes`
+--
+
+DROP TABLE IF EXISTS `glnotes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `glnotes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `text` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `glnotes`
+--
+
+LOCK TABLES `glnotes` WRITE;
+/*!40000 ALTER TABLE `glnotes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `glnotes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -745,4 +769,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-20 16:53:58
+-- Dump completed on 2012-11-23 14:16:38

@@ -16,30 +16,32 @@ class ComputareCustomerComponent extends Component {
 		//get models
 		$this->Customer=ClassRegistry::init('Customer');
 		$this->CustomerDetail=ClassRegistry::init('CustomerDetail');
+		$ok=true;
+		$dataSource=$this->Customer->getDataSource();
 		//first check if new customer or saving changes to existing
 		if($data['Customer']['id']) {
-//debug($data);exit;
 			//existing customer
 			$this->CustomerDetail->create();
-			$this->CustomerDetail->save($data['CustomerDetail']);
+			$ok=$this->CustomerDetail->save($data['CustomerDetail']);
 			$customerDetail_id=$this->CustomerDetail->getLastInsertId();
 			//link new details back to customer
-			$this->Customer->save(array('id'=>$data['CustomerDetail']['customer_id'],'customerDetail_id'=>$customerDetail_id));
+			if($ok) $ok=$this->Customer->save(array('id'=>$data['CustomerDetail']['customer_id'],'customerDetail_id'=>$customerDetail_id));
 		} else {
 			//new customer
 			$this->Customer->create();
-			$this->Customer->save(array('active'=>true,'created_id'=>$data['CustomerDetail']['created_id'],'customerDetail_id'=>0));
+			$ok=$this->Customer->save(array('active'=>true,'created_id'=>$data['CustomerDetail']['created_id'],'customerDetail_id'=>0));
 			$customer_id=$this->Customer->getInsertId();
 			//save customer details
 			$data['CustomerDetail']['customer_id']=$customer_id;
 			$this->CustomerDetail->create();
-			$this->CustomerDetail->save($data['CustomerDetail']);
+			if($ok) $ok=$this->CustomerDetail->save($data['CustomerDetail']);
 			$customerDetail_id=$this->CustomerDetail->getLastInsertId();
 			//link new details back to customer
-			$this->Customer->save(array('id'=>$customer_id,'customerDetail_id'=>$customerDetail_id));
-//debug($customer_id);exit;
+			if($ok) $ok=$this->Customer->save(array('id'=>$customer_id,'customerDetail_id'=>$customerDetail_id));
 		}//endif
-		return true;
+		if($ok)$dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
 	}//end function save
 	
 	/**

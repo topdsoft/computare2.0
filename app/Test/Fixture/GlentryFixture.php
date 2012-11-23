@@ -14,9 +14,10 @@ class GlentryFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'postDate' => array('type' => 'datetime', 'null' => false, 'default' => null),
+		'postDate' => array('type' => 'date', 'null' => false, 'default' => null),
 		'glaccount_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'index'),
 		'glcheck_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'glnote_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'debit' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '12,2'),
 		'credit' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '12,2'),
 		'indexes' => array(

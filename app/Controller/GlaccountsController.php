@@ -25,12 +25,73 @@ class GlaccountsController extends AppController {
 	}
 
 /**
+ * posting method
+ */
+	public function posting() {
+		$this->set('formName','GL Posting');
+		if(!isset($this->request->params['named']['credit']))$this->request->params['named']['credit']=array();
+		if(!isset($this->request->params['named']['debit']))$this->request->params['named']['debit']=array();
+		//check for incomming clicks
+		if(isset($this->request->params['named']['adddebit'])) {
+			//add a new debit account
+			$this->request->params['named']['debit'][]=$this->request->params['named']['adddebit'];
+			//unset adddebit to avoid redirect loop
+			unset($this->request->params['named']['adddebit']);
+			//redirect back to page
+			$this->redirect($this->request->params['named']);
+		}//endif adding debit
+		if(isset($this->request->params['named']['addcredit'])) {
+			//add a new credit account
+			$this->request->params['named']['credit'][]=$this->request->params['named']['addcredit'];
+			//unset addcredit to avoid redirect loop
+			unset($this->request->params['named']['addcredit']);
+			//redirect back to page
+			$this->redirect($this->request->params['named']);
+		}//endif adding credit
+		if(isset($this->request->params['named']['remdebit'])) {
+			//remove debit account
+			unset($this->request->params['named']['debit'][$this->request->params['named']['remdebit']]);
+			//unset remdebit to avoid redirect loop
+			unset($this->request->params['named']['remdebit']);
+			//redirect back to page
+			$this->redirect($this->request->params['named']);
+		}//endif removing debit
+		if(isset($this->request->params['named']['remcredit'])) {
+			//remove credit account
+			unset($this->request->params['named']['credit'][$this->request->params['named']['remcredit']]);
+			//unset remcredit to avoid redirect loop
+			unset($this->request->params['named']['remcredit']);
+			//redirect back to page
+			$this->redirect($this->request->params['named']);
+		}//endif removing credit
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//post
+			if($this->ComputareGL->post($this->request->data)) {
+				//saved ok
+				$this->Session->setFlash(__('The GL post has been completed.'),'default',array('class'=>'success'));
+				$this->redirect(array('action'=>'index'));
+			} else {
+				//save failure
+				$this->Session->setFlash(__('The GL post could not be completed. Please, try again.'));
+			}//endif for save ok
+//debug($this->request->data);exit;
+		}//endif for posting
+//debug($this->request->params['named']);exit;
+		$this->Glaccount->recursive = 0;
+		//setup list of accounts to exclude
+		$exclude=array_merge($this->request->params['named']['credit'],$this->request->params['named']['debit']);
+		$this->set('glaccounts', $this->paginate(array('NOT'=>array('Glaccount.id'=>$exclude))));
+		//find lists
+		$glaccountlist= $this->Glaccount->find('list');
+		$this->set(compact('glaccountlist'));
+	}
+
+/**
  * view method
  *
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
 	public function view($id = null) {
 		$this->Glaccount->id = $id;
 		if (!$this->Glaccount->exists()) {
@@ -38,6 +99,7 @@ class GlaccountsController extends AppController {
 		}
 		$this->set('glaccount', $this->Glaccount->read(null, $id));
 	}
+ */
 
 /**
  * add method
@@ -94,7 +156,6 @@ class GlaccountsController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
 	public function delete($id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -110,4 +171,5 @@ class GlaccountsController extends AppController {
 		$this->Session->setFlash(__('Glaccount was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+ */
 }
