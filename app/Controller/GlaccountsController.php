@@ -17,11 +17,12 @@ class GlaccountsController extends AppController {
 	public function index() {
 		$this->set('formName','List GL Accounts');
 		$this->Glaccount->recursive = 0;
+		$this->Glaccount->order=array('group','name');
 		$this->set('glaccounts', $this->paginate());
 		//find lists
-		$glgroups = $this->Glaccount->GlaccountDetail->Glgroup->find('list');
+//		$glgroups = $this->Glaccount->GlaccountDetail->Glgroup->find('list');
 		$users=ClassRegistry::init('User')->find('list');
-		$this->set(compact('glgroups','users'));
+		$this->set(compact('users'));
 	}
 
 /**
@@ -93,14 +94,20 @@ class GlaccountsController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
+ */
 	public function view($id = null) {
+		$this->set('formName','View GL Account');
 		$this->Glaccount->id = $id;
 		if (!$this->Glaccount->exists()) {
 			throw new NotFoundException(__('Invalid glaccount'));
 		}
+		$this->Glaccount->recursive = 2;
 		$this->set('glaccount', $this->Glaccount->read(null, $id));
+		$users=ClassRegistry::init('User')->find('list');
+		$this->set(compact('glgroups','users'));
+		//get account balance
+		$this->set('balance',$this->Glaccount->query('select sum(e.debit) as debit, sum(e.credit) as credit from glentries as e where e.glaccount_id='.$id));
 	}
- */
 
 /**
  * add method

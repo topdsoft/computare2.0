@@ -1,6 +1,11 @@
 <div class="glaccounts view">
-<h2><?php  echo __('Glaccount'); ?></h2>
+<h2><?php  echo __('GL Account: ').$glaccount['Glaccount']['name']; ?></h2>
 	<dl>
+		<dt><?php echo __('Account Group'); ?></dt>
+		<dd>
+			<?php echo h($glaccount['Glaccount']['group']); ?>
+			&nbsp;
+		</dd>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
 			<?php echo h($glaccount['Glaccount']['id']); ?>
@@ -11,71 +16,77 @@
 			<?php echo h($glaccount['Glaccount']['created']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Created Id'); ?></dt>
+		<dt><?php echo __('Created By'); ?></dt>
 		<dd>
-			<?php echo h($glaccount['Glaccount']['created_id']); ?>
+			<?php echo $users[$glaccount['Glaccount']['created_id']]; ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Glaccountdetail'); ?></dt>
+		<dt><?php echo __('Last Modified'); ?></dt>
 		<dd>
-			<?php echo $this->Html->link($glaccount['Glaccountdetail']['name'], array('controller' => 'glaccountdetails', 'action' => 'view', $glaccount['Glaccountdetail']['id'])); ?>
+			<?php echo h($glaccount['GlaccountDetail']['created']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Modified By'); ?></dt>
+		<dd>
+			<?php echo $users[$glaccount['GlaccountDetail']['created_id']]; ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Debit Total'); ?></dt>
+		<dd>
+			<?php echo $balance[0][0]['debit']; ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Credit Total'); ?></dt>
+		<dd>
+			<?php echo $balance[0][0]['credit']; ?>
+			&nbsp;
+		</dd>
+		<?php if($balance[0][0]['debit']>$balance[0][0]['credit']): ?>
+		<dt><?php echo __('Debit Balance'); ?></dt>
+		<dd>
+			<?php echo number_format($balance[0][0]['debit']-$balance[0][0]['credit'],2); ?>
+			&nbsp;
+		</dd>
+		<?php else: ?>
+		<dt><?php echo __('Credit Balance'); ?></dt>
+		<dd>
+			<?php echo number_format($balance[0][0]['credit']-$balance[0][0]['debit'],2); ?>
+			&nbsp;
+		</dd>
+		<?php endif; ?>
 	</dl>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Glaccount'), array('action' => 'edit', $glaccount['Glaccount']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Glaccount'), array('action' => 'delete', $glaccount['Glaccount']['id']), null, __('Are you sure you want to delete # %s?', $glaccount['Glaccount']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Glaccounts'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Glaccount'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Glaccountdetails'), array('controller' => 'glaccountdetails', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Glaccountdetail'), array('controller' => 'glaccountdetails', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Glentries'), array('controller' => 'glentries', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Glentry'), array('controller' => 'glentries', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
 <div class="related">
-	<h3><?php echo __('Related Glentries'); ?></h3>
 	<?php if (!empty($glaccount['Glentry'])): ?>
+	<h3><?php echo __('General Ledger Entries'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('Post Date'); ?></th>
 		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('PostDate'); ?></th>
-		<th><?php echo __('Glaccount Id'); ?></th>
-		<th><?php echo __('Check Id'); ?></th>
+		<th><?php echo __('Created By'); ?></th>
 		<th><?php echo __('Debit'); ?></th>
 		<th><?php echo __('Credit'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Check Num'); ?></th>
+		<th><?php echo __('Notes'); ?></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($glaccount['Glentry'] as $glentry): ?>
 		<tr>
-			<td><?php echo $glentry['id']; ?></td>
-			<td><?php echo $glentry['created']; ?></td>
-			<td><?php echo $glentry['created_id']; ?></td>
 			<td><?php echo $glentry['postDate']; ?></td>
-			<td><?php echo $glentry['glaccount_id']; ?></td>
-			<td><?php echo $glentry['check_id']; ?></td>
+			<td><?php echo $glentry['created']; ?></td>
+			<td><?php echo $users[$glentry['created_id']]; ?></td>
 			<td><?php echo $glentry['debit']; ?></td>
 			<td><?php echo $glentry['credit']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'glentries', 'action' => 'view', $glentry['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'glentries', 'action' => 'edit', $glentry['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'glentries', 'action' => 'delete', $glentry['id']), null, __('Are you sure you want to delete # %s?', $glentry['id'])); ?>
-			</td>
+			<td><?php if($glentry['Glcheck']) echo $glentry['Glcheck']['checkNumber']; ?></td>
+			<td><?php if($glentry['Glnote']) echo '<span title="'.$glentry['Glnote']['text'].'">NOTES</span'; ?></td>
 		</tr>
 	<?php endforeach; ?>
+	<tr><th></th><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+	<tr><th></th><th></th><th>Total</th>
+	<th><?php if($balance[0][0]['debit']>0) echo $balance[0][0]['debit']; ?></th>
+	<th><?php if($balance[0][0]['credit']>0) echo $balance[0][0]['credit']; ?></th>
+	<th></th><th></th></tr>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Glentry'), array('controller' => 'glentries', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>

@@ -2,8 +2,8 @@
 	<h2><?php echo __('GL Accounts'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th>Group<?php //echo $this->Paginator->sort('group'); ?></th>
-			<th>Name<?php //echo $this->Paginator->sort('glaccountDetail.name','Name'); ?></th>
+			<th><?php echo $this->Paginator->sort('group'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','Created By'); ?></th>
 			<th></th>
@@ -11,8 +11,8 @@
 	<?php 
 	foreach ($glaccounts as $glaccount): ?>
 	<tr>
-		<td><?php echo h($glgroups[$glaccount['GlaccountDetail']['glgroup_id']]); ?>&nbsp;</td>
-		<td><?php echo h($glaccount['GlaccountDetail']['name']); ?>&nbsp;</td>
+		<td><?php echo h($glaccount['Glaccount']['group']); ?>&nbsp;</td>
+		<td><?php echo h($glaccount['Glaccount']['name']); ?>&nbsp;</td>
 		<td><?php echo h($glaccount['Glaccount']['created']); ?>&nbsp;</td>
 		<td><?php echo $users[$glaccount['Glaccount']['created_id']]; ?>&nbsp;</td>
 		<td class="actions">
