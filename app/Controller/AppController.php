@@ -69,4 +69,102 @@ class AppController extends Controller {
 		}//endif
 //debug($form);exit;
 	}
+	
+	/**
+	 * _filterRedirect function
+	 * 
+	 * When returning to controller from user clicking 'Set Filter',
+	 * call this function to parse the results of the filter selections.
+	 * it will redirect back to the view with the params set in named variables
+	 * Is called from _useFilter, but can also be used directly for more control
+	 */
+	protected function _filterRedirect() {
+		//get data from request and add it to passedArgs
+		foreach($this->filterData as $filter) {
+			//loop for each filter and set the passedArg to the value returned from the form
+			$this->passedArgs[$filter['passName']]=$this->request->data['Filter'][$filter['passName']];
+		}//end foreach
+//debug($this->request->data);exit;
+		$this->redirect($this->passedArgs);
+	}//end protected function _filterRedirect
+	
+	/**
+	 * _setCondidtions function
+	 * 
+	 * Will set the controllers conditions based on values in named varaibles
+	 * Is called from _useFilter, but can also be used directly for more control
+	 */
+	protected function _setCondidtions() {
+		//setup array of conditions for pagination
+		$this->conditions=array();
+		foreach($this->filterData as $filter) {
+			//loop for each requested filter
+			if($filter['type']==4) {
+				//TF checkbox
+				if(isset($this->passedArgs[$filter['passName']]) && $this->passedArgs[$filter['passName']]) {
+					//true
+					$this->conditions[]=$filter['trueCondition'];
+				} else {
+					//false
+					$this->conditions[]=$filter['falseCondition'];
+				}//endif
+			}//end type==4 TF
+		}//endforeach
+	}
+	
+	/**
+	 * _setData function
+	 * 
+	 * used to set data that is shown in the view filter controls
+	 * Is called from _useFilter, but can also be used directly for more control
+	 */
+	protected function _setData() {
+		//set data for form inputs
+		foreach($this->filterData as $filter) {
+			//loop for each requested filter
+			if(isset($this->passedArgs[$filter['passName']])) $this->request->data['Filter'][$filter['passName']]=$this->passedArgs[$filter['passName']];
+			else $this->request->data['Filter'][$filter['passName']]=null;
+		}//endforeach
+	}
+	
+	/**
+	 * _setFilters function
+	 * 
+	 * used to set up what fitlers will be shown to the user
+	 * @params $filterData  (see _useFilter for details)
+	 * Is called from _useFilter, but can also be used directly for more control
+	 */
+	protected function _setFilters($filterData) {
+		//store filterData
+		$this->filterData=$filterData;
+		//pass array to view (so it can be used when calling element)
+		$this->set('filterData',$filterData);
+	}
+	
+	/**
+	 * _useFilter function
+	 * 
+	 * This function provies an easy interface for filtering pagination results
+	 * it should be called from the controller before the pagination is used in a set
+	 * if $this->request->data is set then it will parse the users request and redirect back to the page with named parameters
+	 * if not set it will use named parameters to setup the conditions array for the desired results
+	 * 
+	 * @params $filterData:
+	 * 
+	 * 
+	 */
+	protected function _useFilter($filterData) {
+		//setup filters
+		$this->_setFilters($filterData);
+		//check for request
+		if($this->request->is('post') || $this->request->is('put')) {
+			//redirect to page using named parameters to set filter data
+			$this->_filterRedirect();
+		} else {
+			//set conditions for pagination
+			$this->_setCondidtions();
+			//set data for view to use
+			$this->_setData();
+		}//endif
+	}//end protected function _useFilter
 }

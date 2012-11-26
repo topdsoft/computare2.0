@@ -16,7 +16,16 @@ class CustomersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Customers');
-		if ($this->request->is('post') || $this->request->is('put')) {
+		//use filters
+		$filters=array();
+		$filters[]=array('type'=>4,
+			'label'=>'Show Deleted Customers',
+			'falseCondition'=>'Customer.active',
+			'trueCondition'=>'',
+			'passName'=>'showDeleted'
+		);
+		$this->_useFilter($filters);
+/*		if ($this->request->is('post') || $this->request->is('put')) {
 			//respond to filter requests
 			$this->passedArgs['showDeleted']=$this->request->data['Customer']['showDeleted'];
 			$this->redirect($this->passedArgs);
@@ -24,13 +33,14 @@ class CustomersController extends AppController {
 			//check passed params
 			if(isset($this->passedArgs['showDeleted'])) $this->request->data['Customer']['showDeleted']=$this->passedArgs['showDeleted'];
 			else $this->request->data['Customer']['showDeleted']=false;
-		}//endif
+		}//endif//*/
 		$this->Customer->recursive = 0;
 		//setup filters
-		$conditions=array();
+//		$conditions=array();
 		//filter deleted customers
-		if(!$this->request->data['Customer']['showDeleted']) $conditions[]='Customer.active';
-		$this->set('customers', $this->paginate('Customer',$conditions));
+//		if(!$this->request->data['Customer']['showDeleted']) $conditions[]='Customer.active';
+//		$this->set('customers', $this->paginate('Customer',$conditions));
+		$this->set('customers', $this->paginate('Customer',$this->conditions));
 	}
 
 /**

@@ -12,7 +12,7 @@
 			<th>Notes</th>
 			<th><?php echo $this->Paginator->sort('glcheck_id','Check#'); ?></th>
 	</tr>
-	<?php //debug($glentries);
+	<?php 
 	foreach ($glentries as $glentry): ?>
 	<tr>
 		<td><?php echo h($glentry['Glaccount']['group']); ?>&nbsp;</td>
