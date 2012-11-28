@@ -7,6 +7,10 @@
 	//filterblock.ctp used to display filter inputs in a view
 	foreach($filterData as $filter) {
 		//loop for all requested filters
+		if($filter['type']==1) {
+			//list
+			echo $this->Form->input('Filter.'.$filter['passName'],array('options'=>$filter['options'],'multiple'=>'true','label'=>$filter['label']));
+		}//endif type==1 list
 		if($filter['type']==4) {
 			//TF checkbox
 			echo $this->Form->input('Filter.'.$filter['passName'],array('type'=>'checkbox','label'=>$filter['label']));
@@ -17,3 +21,4 @@
 </div>
 </fieldset>
 <?php echo $this->Form->end(__('Set Filters')); ?>
+<?php echo $this->Html->script('filters.js') ?>

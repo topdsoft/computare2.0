@@ -99,6 +99,14 @@ class AppController extends Controller {
 		$this->conditions=array();
 		foreach($this->filterData as $filter) {
 			//loop for each requested filter
+			if($filter['type']==1) {
+				//listbox filter
+				if(isset($this->passedArgs[$filter['passName']])) {
+					//has been passed
+					$this->conditions[]=array($filter['field']=>$this->passedArgs[$filter['passName']]);
+//debug($this->conditions);exit;
+				}//endif
+			}//endif
 			if($filter['type']==4) {
 				//TF checkbox
 				if(isset($this->passedArgs[$filter['passName']]) && $this->passedArgs[$filter['passName']]) {
@@ -150,8 +158,24 @@ class AppController extends Controller {
 	 * if not set it will use named parameters to setup the conditions array for the desired results
 	 * 
 	 * @params $filterData:
+	 * 	array of filters to use
+	 * 	each must include:
+	 * 		type=>[1-4]
+	 * 		passName=>name used in url to pass varaibles, must be unique to form
+	 * 		label=>display label
 	 * 
+	 * #types:
+	 * type==1: List (list box with multiple selects):
+	 * 	options=>array of options to use in list box
+	 * 	field=>field for comparison (EX:Customers.group_id)
 	 * 
+	 * type==2: Value (range of numeric values):
+	 * 
+	 * type==3: Date (date range):
+	 * 
+	 * type==4: T/F checkbox (checkbox with conditions for t or f):
+	 * 	trueCondition=>sql logic when box is checked (can be empty)
+	 * 	falseCondition=>sql logic when box is not checked (can be empty)
 	 */
 	protected function _useFilter($filterData) {
 		//setup filters

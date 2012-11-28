@@ -1,5 +1,7 @@
 <div class="glentries index">
+<?php echo $this->Form->create('Filter'); ?>
 	<h2><?php echo __('General Ledger Entries'); ?></h2>
+	<?php echo $this->element('filterblock'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('Glaccount.group','GL Group'); ?></th>

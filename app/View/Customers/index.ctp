@@ -48,4 +48,3 @@
 		<li><?php //echo $this->Html->link(__('New Customer Detail'), array('controller' => 'customer_details', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
-<?php echo $this->Html->script('filters.js') ?>
