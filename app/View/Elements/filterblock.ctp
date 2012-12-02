@@ -13,6 +13,11 @@
 			//list
 			echo $this->Form->input('Filter.'.$filter['passName'],array('options'=>$filter['options'],'multiple'=>'true','label'=>$filter['label']));
 		}//endif type==1 list
+		if($filter['type']==2) {
+			//value range
+			echo $this->Form->input('Filter.'.$filter['passName'].'.min',array('label'=>$filter['label'].' Min'));
+			echo $this->Form->input('Filter.'.$filter['passName'].'.max',array('label'=>$filter['label'].' Max'));
+		}//endif type==2 value range
 		if($filter['type']==4) {
 			//TF checkbox
 			echo $this->Form->input('Filter.'.$filter['passName'],array('type'=>'checkbox','label'=>$filter['label']));

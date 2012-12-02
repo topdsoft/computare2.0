@@ -23,6 +23,9 @@ class GlentriesController extends AppController {
 		//account filter
 		$options=$this->Glentry->Glaccount->find('list');
 		$filter[]=array('type'=>1,'passName'=>'acc','label'=>'Account','options'=>$options,'field'=>'Glaccount.id');
+		//debit-credit filters
+		$filter[]=array('type'=>2,'passName'=>'dbt','label'=>'Debit','field'=>'Glentry.debit');
+		$filter[]=array('type'=>2,'passName'=>'crt','label'=>'Credit','field'=>'Glentry.credit');
 		$this->_useFilter($filter);
 		$this->Glentry->recursive = 0;
 		$this->Glentry->order=array('Glentry.postDate'=>'desc','Glentry.id'=>'desc');

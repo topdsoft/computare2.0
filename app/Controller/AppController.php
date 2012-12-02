@@ -107,6 +107,17 @@ class AppController extends Controller {
 //debug($this->conditions);exit;
 				}//endif
 			}//endif
+			if($filter['type']==2) {
+				//range
+				if(isset($this->passedArgs[$filter['passName']]['min']) && !empty($this->passedArgs[$filter['passName']]['min'])) {
+					//min is set
+					$this->conditions[]=array($filter['field'].' >='=>$this->passedArgs[$filter['passName']]['min']);
+				}//endif
+				if(isset($this->passedArgs[$filter['passName']]['max']) && !empty($this->passedArgs[$filter['passName']]['max'])) {
+					//max is set
+					$this->conditions[]=array($filter['field'].' <='=>$this->passedArgs[$filter['passName']]['max']);
+				}//endif
+			}//endif
 			if($filter['type']==4) {
 				//TF checkbox
 				if(isset($this->passedArgs[$filter['passName']]) && $this->passedArgs[$filter['passName']]) {
@@ -170,6 +181,7 @@ class AppController extends Controller {
 	 * 	field=>field for comparison (EX:Customers.group_id)
 	 * 
 	 * type==2: Value (range of numeric values):
+	 * 	field=>field for comparison (EX:Glentry.debit)
 	 * 
 	 * type==3: Date (date range):
 	 * 
