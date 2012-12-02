@@ -42,7 +42,7 @@ class ComputareGLComponent extends Component{
 			$ok=$this->GlaccountDetail->save($data['GlaccountDetail']);
 			$detail_id=$this->GlaccountDetail->getInsertId();
 			//link new detail back to account
-			if($ok) $ok=$this->Glaccount->save(array('id'=>$data['GlaccountDetail']['glaccount_id'],'glaccountDetail_id'=>$detail_id));
+			if($ok) $ok=$this->Glaccount->save(array('id'=>$data['GlaccountDetail']['glaccount_id'],'glaccountDetail_id'=>$detail_id,'glgroup_id'=>$data['GlaccountDetail']['glgroup_id']));
 		} else {
 			//new account
 			$this->Glaccount->create();
@@ -54,7 +54,7 @@ class ComputareGLComponent extends Component{
 			if($ok) $ok=$this->GlaccountDetail->save($data['GlaccountDetail']);
 			$detail_id=$this->GlaccountDetail->getInsertId();
 			//link new detail back to account
-			if($ok) $ok=$this->Glaccount->save(array('id'=>$account_id,'glaccountDetail_id'=>$detail_id));
+			if($ok) $ok=$this->Glaccount->save(array('id'=>$account_id,'glaccountDetail_id'=>$detail_id,'glgroup_id'=>$data['GlaccountDetail']['glgroup_id']));
 		}//endif
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();

@@ -101,7 +101,7 @@ class AppController extends Controller {
 			//loop for each requested filter
 			if($filter['type']==1) {
 				//listbox filter
-				if(isset($this->passedArgs[$filter['passName']])) {
+				if(isset($this->passedArgs[$filter['passName']]) && !empty($this->passedArgs[$filter['passName']])) {
 					//has been passed
 					$this->conditions[]=array($filter['field']=>$this->passedArgs[$filter['passName']]);
 //debug($this->conditions);exit;

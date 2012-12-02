@@ -18,7 +18,7 @@ class GlentriesController extends AppController {
 		$filter=array();
 		//group filter
 		$options=ClassRegistry::init('Glgroup')->find('list');
-		$filter[]=array('type'=>1,'passName'=>'gp','label'=>'Group','options'=>$options,'field'=>'Glgroup.id');
+		$filter[]=array('type'=>1,'passName'=>'gp','label'=>'Group','options'=>$options,'field'=>'Glaccount.glgroup_id');
 //debug($options);exit;
 		//account filter
 		$options=$this->Glentry->Glaccount->find('list');

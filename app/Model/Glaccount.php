@@ -16,10 +16,13 @@ class Glaccount extends AppModel {
 	public $useDbConfig = 'computare';
 
 	public $displayField='name';
+	
+	public $order='name';
 
 	public $virtualFields=array(
 		'name'=>'select GlaccountDetail.name from glaccountDetails as GlaccountDetail where Glaccount.glaccountDetail_id=GlaccountDetail.id',
 		'group'=>'select Glgroup.name from glgroups as Glgroup,glaccountDetails as GlaccountDetail where Glaccount.glaccountDetail_id=GlaccountDetail.id and Glgroup.id=GlaccountDetail.glgroup_id',
+//		'glgroup_id'=>'select GlaccountDetail.glgroup_id from glaccountDetails as GlaccountDetail where Glaccount.glaccountDetail_id=GlaccountDetail.id',
 		);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

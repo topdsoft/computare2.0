@@ -40,9 +40,11 @@ class ComputareGLComponentTest extends CakeTestCase {
 		$newAcct=array('GlaccountDetail'=>array('created_id'=>3,'glgroup_id'=>1,'name'=>'Cash'),'Glaccount'=>array('id'=>null));
 		$this->assertTrue($this->ComputareGLComponent->saveAccount($newAcct),'*Failed to save new account');
 		//test saved data
+		$account=$this->Glaccount->read(null,$this->Glaccount->getInsertId());
+		$this->assertEquals($account['Glaccount']['glgroup_id'],1,'*glaccounts.glgroup_id not set');
 		$account=$this->GlaccountDetail->find('all',array('conditions'=>array('GlaccountDetail.name'=>'Cash')));
 		$this->assertNotNull($account,'*return is null');
-		$this->assertEquals(count($account),1,'*did not find one record');
+		$this->assertEquals(count($account),1,'*did not find exactly one record');
 		$this->assertEquals($account[0]['Glaccount']['created_id'],3,'*glaccount created_id not set');
 		$this->assertEquals($account[0]['GlaccountDetail']['created_id'],3,'*glaccountDetail created_id not set');
 		$this->assertEquals($account[0]['GlaccountDetail']['glgroup_id'],1,'*glaccountDetail glgroup_id not set');
@@ -53,6 +55,8 @@ class ComputareGLComponentTest extends CakeTestCase {
 		$account=$this->GlaccountDetail->find('all',array('conditions'=>array('GlaccountDetail.name'=>'Cash on Hand')));
 		$this->assertEquals(count($account),1,'*did not find one record');
 		$this->assertEquals($account[0]['GlaccountDetail']['glgroup_id'],2,'*glaccountDetail glgroup_id not changed');
+		$account=$this->Glaccount->read(null,$account[0]['GlaccountDetail']['glaccount_id']);
+		$this->assertEquals($account['Glaccount']['glgroup_id'],2,'*glaccounts.glgroup_id not updated');
 		//test validation
 		$newAcct['GlaccountDetail']['name']='Cash on Hand';
 		$this->assertFalse($this->ComputareGLComponent->saveAccount($newAcct),'* failed to catch duplicate account name');

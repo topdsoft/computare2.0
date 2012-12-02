@@ -1,5 +1,5 @@
 <div class="glentries index">
-<?php echo $this->Form->create('Filter'); ?>
+<?php echo $this->Form->create('Filter'); //debug($glentries);?>
 	<h2><?php echo __('General Ledger Entries'); ?></h2>
 	<?php echo $this->element('filterblock'); ?>
 	<table cellpadding="0" cellspacing="0">

@@ -15,6 +15,7 @@ class GlaccountFixture extends CakeTestFixture {
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'glaccountDetail_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'glgroup_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
