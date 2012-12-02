@@ -102,7 +102,7 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +186,9 @@ CREATE TABLE `glaccounts` (
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `glaccountDetail_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  `glgroup_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `glgroup_id` (`glgroup_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -203,7 +205,7 @@ CREATE TABLE `glchecks` (
   `checkNumber` int(10) unsigned zerofill NOT NULL,
   `amount` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,7 +227,7 @@ CREATE TABLE `glentries` (
   `credit` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `glaccount_id` (`glaccount_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -255,7 +257,7 @@ CREATE TABLE `glnotes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `text` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -511,4 +513,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-11-23 14:16:30
+-- Dump completed on 2012-12-02 13:06:38
