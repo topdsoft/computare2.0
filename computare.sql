@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.28, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: computare
 -- ------------------------------------------------------
--- Server version	5.5.28-0ubuntu0.12.04.2
+-- Server version	5.5.29-0ubuntu0.12.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -131,7 +131,7 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +140,7 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','GL','','glaccounts','edit',''),(24,'2012-11-23 11:05:46',1,'GL Posting','','GL','','glaccounts','posting',''),(25,'2012-11-24 09:34:55',1,'**FORM NAME NOT SET','','','','glaccounts','view',''),(26,'2012-11-24 15:19:00',1,'GL Entries List','','','','glentries','index','');
+INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','GL','','glaccounts','edit',''),(24,'2012-11-23 11:05:46',1,'GL Posting','','GL','','glaccounts','posting',''),(26,'2012-11-24 15:19:00',1,'GL Entries List','','GL','','glentries','index',''),(27,'2012-12-03 15:30:21',1,'View GL Account','','GL','','glaccounts','view',''),(28,'2012-12-03 15:32:57',1,'List Menus','','S','','menus','view',''),(34,'2013-01-23 10:51:35',1,'Program Setting History','','','','programsettings','index','');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -400,6 +400,7 @@ CREATE TABLE `groups` (
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
+  `log_level` smallint(6) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -410,7 +411,7 @@ CREATE TABLE `groups` (
 
 LOCK TABLES `groups` WRITE;
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,'2012-10-26 11:46:23',1,'Admin');
+INSERT INTO `groups` VALUES (1,'2012-10-26 11:46:23',1,'Admin',0);
 /*!40000 ALTER TABLE `groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -737,6 +738,33 @@ INSERT INTO `menus_users` VALUES (1,1,1,2.0),(2,2,1,1.0),(5,2,2,0.0),(6,4,1,3.0)
 UNLOCK TABLES;
 
 --
+-- Table structure for table `programsettings`
+--
+
+DROP TABLE IF EXISTS `programsettings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `programsettings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `dbschema` int(10) unsigned NOT NULL,
+  `full_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `programsettings`
+--
+
+LOCK TABLES `programsettings` WRITE;
+/*!40000 ALTER TABLE `programsettings` DISABLE KEYS */;
+INSERT INTO `programsettings` VALUES (1,'2013-01-22 16:34:58',0,0,'Top Drawer Software LLC'),(2,'2013-01-22 16:37:32',0,0,'Top Drawer Software LLC'),(3,'2013-01-22 16:37:57',1,0,'Top Drawer Software LLC');
+/*!40000 ALTER TABLE `programsettings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `users`
 --
 
@@ -751,6 +779,7 @@ CREATE TABLE `users` (
   `email` varchar(60) NOT NULL,
   `homepage` varchar(100) NOT NULL,
   `active` tinyint(1) NOT NULL,
+  `log_level` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -761,7 +790,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'2012-10-25 15:09:04','KURT','4205017a2d54144c1bb05f3ebbd2dd1a78862815','klakin2003@yahoo.com','',1),(2,'2012-10-26 15:08:07','JBOND','4205017a2d54144c1bb05f3ebbd2dd1a78862815','007@me.com','',1);
+INSERT INTO `users` VALUES (1,'2012-10-25 15:09:04','KURT','4205017a2d54144c1bb05f3ebbd2dd1a78862815','klakin2003@yahoo.com','',1,0),(2,'2012-10-26 15:08:07','JBOND','4205017a2d54144c1bb05f3ebbd2dd1a78862815','007@me.com','',1,0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -774,4 +803,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-02 13:06:14
+-- Dump completed on 2013-01-23 15:30:48
