@@ -18,6 +18,8 @@ class ComputareCustomerComponent extends Component {
 		$this->CustomerDetail=ClassRegistry::init('CustomerDetail');
 		$ok=true;
 		$dataSource=$this->Customer->getDataSource();
+		//start transaction
+		$dataSource->begin();
 		//first check if new customer or saving changes to existing
 		if($data['Customer']['id']) {
 			//existing customer
