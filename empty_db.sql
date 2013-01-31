@@ -82,6 +82,38 @@ CREATE TABLE `customers` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `errorevents`
+--
+
+DROP TABLE IF EXISTS `errorevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `errorevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `message` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `formevents`
+--
+
+DROP TABLE IF EXISTS `formevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `formevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `controller` varchar(40) NOT NULL,
+  `action` varchar(40) NOT NULL,
+  `parameters` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `forms`
 --
 
@@ -102,7 +134,7 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -292,6 +324,21 @@ CREATE TABLE `groups_users` (
   `created_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `htmlevents`
+--
+
+DROP TABLE IF EXISTS `htmlevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `htmlevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `html` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,6 +534,26 @@ CREATE TABLE `menus_users` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `permissionevents`
+--
+
+DROP TABLE IF EXISTS `permissionevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissionevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `controller` varchar(20) NOT NULL,
+  `form_id` int(10) unsigned NOT NULL,
+  `note` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `programsettings`
 --
 
@@ -501,6 +568,27 @@ CREATE TABLE `programsettings` (
   `full_name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sysevents`
+--
+
+DROP TABLE IF EXISTS `sysevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sysevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned DEFAULT NULL,
+  `remoteaddr` varchar(20) NOT NULL,
+  `event_type` smallint(6) NOT NULL,
+  `permissionevent_id` int(10) unsigned DEFAULT NULL,
+  `errorevent_id` int(10) unsigned DEFAULT NULL,
+  `htmlevent_id` int(10) unsigned DEFAULT NULL,
+  `formevent_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -532,4 +620,4 @@ CREATE TABLE `users` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-23 15:30:31
+-- Dump completed on 2013-01-31 15:27:58
