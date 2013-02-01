@@ -30,25 +30,53 @@ class ComputareSyseventComponent extends Component{
 		//start transaction
 		$ok=false;
 		$dataSource->begin();
-		//check error type
+		//check event type
+		if($data['event_type']==1) {
+			/**general error:
+			 */
+		}//endif
+		if($data['event_type']==2) {
+			/**form validation error
+			 */
+		}//endif
 		if($data['event_type']==3) {
 			/**login event:
 			 * requires errorEvent=>array(
-			 * 	'message' (should contain login failure. user:[attempted username])
+			 * 	'message' (should contain login failure. user:[attempted username] or null for successfull login)
 			 * )
 			 */
-			$errorEvent=$data['errorEvent'];
-			//insert errorevent
-			$this->Errorevent->create();
-			$ok=$this->Errorevent->save($errorEvent);
+			if(isset($data['errorEvent'])) {
+				// failed login
+				$errorEvent=$data['errorEvent'];
+				//insert errorevent
+				$this->Errorevent->create();
+				$ok=$this->Errorevent->save($errorEvent);
+				$errorevent_id=$this->Errorevent->getInsertId();
+			} else {
+				// login ok
+				$errorevent_id=null;
+				$ok=true;
+			}//endif
 			//insert sysevent
 			$sysevent=array();
 			$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
 			$sysevent['event_type']=3;
-			$sysevent['errorevent_id']=$this->Errorevent->getInsertId();
+			$sysevent['errorevent_id']=$errorevent_id;
 			if($ok)$ok=$this->Sysevent->save($sysevent);
+		}//endif
+		if($data['event_type']==4) {
+			/**permissions change
+			 */
+		}//endif
+		if($data['event_type']==5) {
+			/**new form available
+			 */
+		}//endif
+		if($data['event_type']==6) {
+			/**DB changes
+			 */
 		}
-		
+			
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);
