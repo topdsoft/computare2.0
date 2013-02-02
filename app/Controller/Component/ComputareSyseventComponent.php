@@ -28,12 +28,33 @@ class ComputareSyseventComponent extends Component{
 		
 		$dataSource=$this->Sysevent->getDataSource();
 		//start transaction
-		$ok=false;
+		$ok=true;
 		$dataSource->begin();
 		//check event type
 		if($data['event_type']==1) {
 			/**general error:
 			 */
+			if(isset($data['errorEvent'])) {
+				//save error data
+				$errorEvent=$data['errorEvent'];
+				$this->Errorevent->create();
+				if($ok)$ok=$this->Errorevent->save($errorEvent);
+				if($ok)$errorevent_id=$this->Errorevent->getInsertId();
+			} else $errorevent_id=null;
+			if(isset($data['formEvent'])) {
+				//save form data
+				$formEvent=$data['formEvent'];
+				$this->Formevent->create();
+				if($ok)$ok=$this->Formevent->save($formEvent);
+				if($ok)$formevent_id=$this->Formevent->getInsertId();
+			} else $formevent_id=null;
+			//insert sysevent
+			$sysevent=array();
+			$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
+			$sysevent['event_type']=1;
+			$sysevent['errorevent_id']=$errorevent_id;
+			$sysevent['formevent_id']=$formevent_id;
+			if($ok)$ok=$this->Sysevent->save($sysevent);
 		}//endif
 		if($data['event_type']==2) {
 			/**form validation error
