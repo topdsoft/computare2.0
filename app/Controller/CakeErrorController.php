@@ -28,6 +28,7 @@
  */
 class CakeErrorController extends AppController {
 
+	public $components=array('ComputareSysevent');
 /**
  * Controller name
  *
