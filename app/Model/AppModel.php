@@ -31,8 +31,8 @@ App::uses('Model', 'Model');
  * @package       app.Model
  */
 class AppModel extends Model {
-    function __construct($id = false, $table = null, $ds = null) { 
-		// Get saved username that is used for the database name 
+	function __construct($id = false, $table = null, $ds = null) { 
+		// Get saved company that is used for the database name 
 		$dbName = Configure::read('Company'); //$dbName='computare';
 //debug($dbName);exit;
 		// Get common company-specific config (default settings in database.php) 
@@ -48,4 +48,32 @@ class AppModel extends Model {
 //		$this->useDbConfig = 'computare'; //uncomment this line to use bake
 		parent::__construct($id, $table, $ds); 
 	} 
+	
+/**
+ * protected function getSechema
+ * pre:none
+ * mods:if schema not set set it to 0
+ * post: return schema
+ */
+	protected function getSechema() {
+		//get schema # from table comments
+		$q=$this->query('show table status where Name="'.$this->table.'"');
+		$schema=$q[0]['TABLES']['Comment'];
+		if($schema==='') {
+			//schema not set
+			$this->setSchema(0);
+		}//endif
+		return $schema;
+	}
+	
+	/**
+	 * protected function setSchema
+	 * pre:int schema to set
+	 * mods:table comment is set to schema #
+	 * post:results
+	 */
+	protected function setSchema($schema) {
+		//set table comment to correct schema
+		return $this->query('alter table '.$this->table.' COMMENT="'.$schema.'"');
+	}
 }

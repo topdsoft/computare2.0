@@ -59,36 +59,7 @@ class Sysevent extends AppModel {
 	
 	function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
-		#check if table exists
-		$q=$this->query('show tables like "sysevents";');
-debug($q);exit;
-		if(!$q) {
-			//create table
-			$q=$this->query("
-CREATE TABLE IF NOT EXISTS `sysevents` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned DEFAULT NULL,
-  `remoteaddr` varchar(20) NOT NULL,
-  `event_type` smallint(6) NOT NULL,
-  `permissionevent_id` int(10) unsigned DEFAULT NULL,
-  `errorevent_id` int(10) unsigned DEFAULT NULL,
-  `htmlevent_id` int(10) unsigned DEFAULT NULL,
-  `formevent_id` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='0' ;
-			");
-		}//endif
 		#check table schema and make adjustments if necessary
-//		$test=$this->query('select table_comment from INFORMATION_SCHEMA.TABLES');
-		$q=$this->query('show table status where Name="sysevents"');
-		$schema=$q[0]['TABLES']['Comment'];
-		if($schema==='') {
-			//schema not set
-			$q=$this->query('alter table sysevents COMMENT="0"');
-//debug($q);
-		}//endif
-//debug($schema);exit;
 	}
 	
 	/**

@@ -111,6 +111,57 @@ INSERT INTO `customers` VALUES (1,2,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:
 UNLOCK TABLES;
 
 --
+-- Table structure for table `errorevents`
+--
+
+DROP TABLE IF EXISTS `errorevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `errorevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `message` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `errorevents`
+--
+
+LOCK TABLES `errorevents` WRITE;
+/*!40000 ALTER TABLE `errorevents` DISABLE KEYS */;
+INSERT INTO `errorevents` VALUES (1,'2013-01-31 15:04:35','Login fail User:KURTa'),(2,'2013-01-31 15:20:55','Login fail User:KURT');
+/*!40000 ALTER TABLE `errorevents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `formevents`
+--
+
+DROP TABLE IF EXISTS `formevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `formevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `controller` varchar(40) NOT NULL,
+  `action` varchar(40) NOT NULL,
+  `parameters` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `formevents`
+--
+
+LOCK TABLES `formevents` WRITE;
+/*!40000 ALTER TABLE `formevents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `formevents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `forms`
 --
 
@@ -131,7 +182,7 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,7 +191,7 @@ CREATE TABLE `forms` (
 
 LOCK TABLES `forms` WRITE;
 /*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','GL','','glaccounts','edit',''),(24,'2012-11-23 11:05:46',1,'GL Posting','','GL','','glaccounts','posting',''),(26,'2012-11-24 15:19:00',1,'GL Entries List','','GL','','glentries','index',''),(27,'2012-12-03 15:30:21',1,'View GL Account','','GL','','glaccounts','view',''),(28,'2012-12-03 15:32:57',1,'List Menus','','S','','menus','view',''),(34,'2013-01-23 10:51:35',1,'Program Setting History','','','','programsettings','index','');
+INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','GL','','glaccounts','edit',''),(24,'2012-11-23 11:05:46',1,'GL Posting','','GL','','glaccounts','posting',''),(26,'2012-11-24 15:19:00',1,'GL Entries List','','GL','','glentries','index',''),(27,'2012-12-03 15:30:21',1,'View GL Account','','GL','','glaccounts','view',''),(28,'2012-12-03 15:32:57',1,'List Menus','','S','','menus','view',''),(34,'2013-01-23 10:51:35',1,'Program Setting History','','','','programsettings','index',''),(35,'2013-01-31 14:13:24',1,'List System Events','','','','sysevents','index',''),(36,'2013-02-01 16:18:50',1,'View System Event','','','','sysevents','view','');
 /*!40000 ALTER TABLE `forms` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,6 +494,30 @@ INSERT INTO `groups_users` VALUES (1,1,1,'0000-00-00 00:00:00',0);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `htmlevents`
+--
+
+DROP TABLE IF EXISTS `htmlevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `htmlevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `html` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `htmlevents`
+--
+
+LOCK TABLES `htmlevents` WRITE;
+/*!40000 ALTER TABLE `htmlevents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `htmlevents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `images`
 --
 
@@ -738,6 +813,35 @@ INSERT INTO `menus_users` VALUES (1,1,1,2.0),(2,2,1,1.0),(5,2,2,0.0),(6,4,1,3.0)
 UNLOCK TABLES;
 
 --
+-- Table structure for table `permissionevents`
+--
+
+DROP TABLE IF EXISTS `permissionevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `permissionevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `controller` varchar(20) NOT NULL,
+  `form_id` int(10) unsigned NOT NULL,
+  `note` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `permissionevents`
+--
+
+LOCK TABLES `permissionevents` WRITE;
+/*!40000 ALTER TABLE `permissionevents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `permissionevents` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `programsettings`
 --
 
@@ -762,6 +866,37 @@ LOCK TABLES `programsettings` WRITE;
 /*!40000 ALTER TABLE `programsettings` DISABLE KEYS */;
 INSERT INTO `programsettings` VALUES (1,'2013-01-22 16:34:58',0,0,'Top Drawer Software LLC'),(2,'2013-01-22 16:37:32',0,0,'Top Drawer Software LLC'),(3,'2013-01-22 16:37:57',1,0,'Top Drawer Software LLC');
 /*!40000 ALTER TABLE `programsettings` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sysevents`
+--
+
+DROP TABLE IF EXISTS `sysevents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sysevents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned DEFAULT NULL,
+  `remoteaddr` varchar(20) NOT NULL,
+  `event_type` smallint(6) NOT NULL,
+  `permissionevent_id` int(10) unsigned DEFAULT NULL,
+  `errorevent_id` int(10) unsigned DEFAULT NULL,
+  `htmlevent_id` int(10) unsigned DEFAULT NULL,
+  `formevent_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='0';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sysevents`
+--
+
+LOCK TABLES `sysevents` WRITE;
+/*!40000 ALTER TABLE `sysevents` DISABLE KEYS */;
+INSERT INTO `sysevents` VALUES (1,'2013-01-31 15:04:35',NULL,'127.0.0.1',3,NULL,1,NULL,NULL),(2,'2013-01-31 15:20:55',NULL,'127.0.0.1',3,NULL,2,NULL,NULL);
+/*!40000 ALTER TABLE `sysevents` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -803,4 +938,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-01-23 15:30:48
+-- Dump completed on 2013-02-06 19:16:06
