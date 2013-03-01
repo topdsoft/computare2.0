@@ -52,6 +52,9 @@ class ProgramsettingsController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The programsetting could not be saved. Please, try again.'));
 			}
+		} else {
+			//read existing settings
+			$this->request->data=$this->Programsetting->find('first');
 		}
 	}
 
