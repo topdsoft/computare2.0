@@ -1,5 +1,5 @@
 <div class="programsettings view">
-<h2><?php  echo __('Programsetting'); ?></h2>
+<h2><?php  echo __('Program Settings'); ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
@@ -26,14 +26,22 @@
 			<?php echo h($programsetting['Programsetting']['full_name']); ?>
 			&nbsp;
 		</dd>
+		<?php if($lastprogramsetting): ?>
+		<h3>Revisions</h3>
+		<?php
+			echo 'On '.$programsetting['Programsetting']['created'].' by '.$userlist[$programsetting['Programsetting']['created_id']];
+			$ignore=array('id','created','created_id');
+			foreach($programsetting['Programsetting'] as $id=>$value) {
+				//loop for all values
+				if(!in_array($id,$ignore) && $lastprogramsetting['Programsetting'][$id]!=$value) {
+					//show difference
+					echo '<dt>'.$id.' from</dt>';
+					echo '<dd>'.$lastprogramsetting['Programsetting'][$id].'</dd>';
+					echo '<dt>'.$id.' to</dt>';
+					echo '<dd>'.$value.'</dd>';
+				}//endif
+			}//endforeach
+			endif;
+		?>
 	</dl>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit Programsetting'), array('action' => 'edit', $programsetting['Programsetting']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Programsetting'), array('action' => 'delete', $programsetting['Programsetting']['id']), null, __('Are you sure you want to delete # %s?', $programsetting['Programsetting']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Programsettings'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Programsetting'), array('action' => 'add')); ?> </li>
-	</ul>
 </div>
