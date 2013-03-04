@@ -29,7 +29,7 @@
 </tr>
 </table>
 <?php echo $this->Html->link(__('Clear All fitlers'),array('action'=>$this->view)); //debug($this)?>
+<?php echo $this->Form->end(__('Set Filters')); ?>
 </div>
 </fieldset>
-<?php echo $this->Form->end(__('Set Filters')); ?>
 <?php echo $this->Html->script('filters.js') ?>

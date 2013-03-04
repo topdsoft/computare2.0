@@ -418,7 +418,7 @@ fieldset {
 /*	border: none;*/
 	border: 2px groove threedface;
 	margin-bottom: 1em;
-	padding: 16px 10px;
+	padding: 10px 10px;
 }
 fieldset legend {
 /*	color: #e32;*/
