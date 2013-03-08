@@ -6,24 +6,33 @@
 
 //debug($filterData);
 	//filterblock.ctp used to display filter inputs in a view
-	foreach($filterData as $filter) {
-		//loop for all requested filters
-		echo '<td>';
-		if($filter['type']==1) {
-			//list
-			echo $this->Form->input('Filter.'.$filter['passName'],array('options'=>$filter['options'],'multiple'=>'true','label'=>$filter['label']));
-		}//endif type==1 list
-		if($filter['type']==2) {
-			//value range
-			echo $this->Form->input('Filter.'.$filter['passName'].'.min',array('label'=>$filter['label'].' Min'));
-			echo $this->Form->input('Filter.'.$filter['passName'].'.max',array('label'=>$filter['label'].' Max'));
-		}//endif type==2 value range
-		if($filter['type']==4) {
-			//TF checkbox
-			echo $this->Form->input('Filter.'.$filter['passName'],array('type'=>'checkbox','label'=>$filter['label']));
-		}//endif type==4 (TF checkbox)
-		echo '</td>';
-	}//end foreach
+	if(isset($filterData)) {
+		//show filters
+		foreach($filterData as $filter) {
+			//loop for all requested filters
+			echo '<td>';
+			if($filter['type']==1) {
+				//list
+				$inputOptions=array();
+				$inputOptions['multiple']='true';
+				if(isset($filter['options'])) $inputOptions['options']=$filter['options'];
+				if(isset($filter['label'])) $inputOptions['label']=$filter['label'];
+				echo $this->Form->input('Filter.'.$filter['passName'],$inputOptions);
+//				echo $this->Form->input('Filter.'.$filter['passName'],array('options'=>$filter['options'],'multiple'=>'true','label'=>$filter['label']));
+//				echo $this->Form->input('Filter.'.$filter['passName'],array('multiple'=>'true','label'=>$filter['label']));
+			}//endif type==1 list
+			if($filter['type']==2) {
+				//value range
+				echo $this->Form->input('Filter.'.$filter['passName'].'.min',array('label'=>$filter['label'].' Min'));
+				echo $this->Form->input('Filter.'.$filter['passName'].'.max',array('label'=>$filter['label'].' Max'));
+			}//endif type==2 value range
+			if($filter['type']==4) {
+				//TF checkbox
+				echo $this->Form->input('Filter.'.$filter['passName'],array('type'=>'checkbox','label'=>$filter['label']));
+			}//endif type==4 (TF checkbox)
+			echo '</td>';
+		}//end foreach
+	}
 	
 ?>
 </tr>
