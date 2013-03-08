@@ -60,6 +60,17 @@ class Sysevent extends AppModel {
 	function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		#check table schema and make adjustments if necessary
+		$dbs=$this->getSechema();
+		$ok=true;
+		if($ok && $dbs<1) {
+			//add title field 2013-03-08
+//NEED ERROR CATCH HERE
+			$this->query("ALTER TABLE  `sysevents` ADD  `title` VARCHAR( 15 ) NOT NULL AFTER  `event_type`");
+//			$ok=$this->query("ALTER TABLE  `sysevents` ADD  `title` VARCHAR( 15 ) NOT NULL AFTER  `event_type`");
+			if($ok) $this->setSchema(1);
+		}//endif
+//$dbs=$this->getSechema();
+//debug($dbs);debug($ok);debug($this->table);exit;
 	}
 	
 	/**

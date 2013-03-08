@@ -50,7 +50,7 @@ class AppModel extends Model {
 	} 
 	
 /**
- * protected function getSechema
+ * protected function getSchema (?sp)
  * pre:none
  * mods:if schema not set set it to 0
  * post: return schema

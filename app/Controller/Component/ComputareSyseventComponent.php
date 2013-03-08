@@ -12,6 +12,7 @@ class ComputareSyseventComponent extends Component{
 	 * save method
 	 * @param data array(
 	 * 	'event_type'=>[1:error, 2:form validation, 3:login, 4:permissions, 5: new form,6: DB],
+	 * 	'title', [shows on lists and index pages]
 	 * 	'errorEvent'=>array(
 	 * 		'message'=>string error message
 	 * 	)
@@ -30,6 +31,7 @@ class ComputareSyseventComponent extends Component{
 		//start transaction
 		$ok=true;
 		$dataSource->begin();
+		$sysevent=array();
 		//check event type
 		if($data['event_type']==1) {
 			/**general error:
@@ -48,13 +50,10 @@ class ComputareSyseventComponent extends Component{
 				if($ok)$ok=$this->Formevent->save($formEvent);
 				if($ok)$formevent_id=$this->Formevent->getInsertId();
 			} else $formevent_id=null;
-			//insert sysevent
-			$sysevent=array();
-			$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
+			//set general sysevent values
 			$sysevent['event_type']=1;
 			$sysevent['errorevent_id']=$errorevent_id;
 			$sysevent['formevent_id']=$formevent_id;
-			if($ok)$ok=$this->Sysevent->save($sysevent);
 		}//endif
 		if($data['event_type']==2) {
 			/**form validation error
@@ -78,12 +77,12 @@ class ComputareSyseventComponent extends Component{
 				$errorevent_id=null;
 				$ok=true;
 			}//endif
-			//insert sysevent
-			$sysevent=array();
-			$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
+			//set general sysevent values
+//			$sysevent=array();
+//			$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
 			$sysevent['event_type']=3;
 			$sysevent['errorevent_id']=$errorevent_id;
-			if($ok)$ok=$this->Sysevent->save($sysevent);
+//			if($ok)$ok=$this->Sysevent->save($sysevent);
 		}//endif
 		if($data['event_type']==4) {
 			/**permissions change
@@ -97,7 +96,11 @@ class ComputareSyseventComponent extends Component{
 			/**DB changes
 			 */
 		}
-			
+		//insert sysevent
+		$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
+		if(isset($data['title'])) $sysevent['title']=$data['title'];
+		if($ok)$ok=$this->Sysevent->save($sysevent);
+		//go-no go
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);

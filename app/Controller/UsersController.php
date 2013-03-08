@@ -129,12 +129,16 @@ debug($this->User->read(null, $id));exit;
 				} else {
 					$this->Session->setFlash(__('Your Credentials are incorrect'), 'default', array(), 'auth');
 					//log failure
-					$logdata=array('event_type'=>3,'errorEvent'=>array('message'=>'Login fail User:'.$this->request->data['User']['username']));
+					$logdata=array('event_type'=>3,
+						'title'=>__('Failed Cred'),
+						'errorEvent'=>array('message'=>__('Login fail User:').$this->request->data['User']['username']));
 					$this->ComputareSysevent->save($logdata);
 				}
 			} else {
 				$this->Session->setFlash(__('Company is incorrect'), 'default', array(), 'auth');
 				$this->User->useTable=false;
+				//log failure
+# LOG to server
 			}
 		} else {
 			//user model can't use a database table until someone chooses the company and logs in 

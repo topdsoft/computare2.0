@@ -33,6 +33,7 @@ class SyseventsController extends AppController {
 			throw new NotFoundException(__('Invalid sysevent'));
 		}
 		$this->set('sysevent', $this->Sysevent->read(null, $id));
+		$this->set('eventTypes', $this->Sysevent->getEventTypes());
 	}
 
 }

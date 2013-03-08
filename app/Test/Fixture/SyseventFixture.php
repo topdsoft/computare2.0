@@ -16,6 +16,7 @@ class SyseventFixture extends CakeTestFixture {
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'remoteaddr' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 20, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'event_type' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6),
+		'title' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 15, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'permissionevent_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'errorevent_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'htmlevent_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),

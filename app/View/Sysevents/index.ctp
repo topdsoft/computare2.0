@@ -1,9 +1,10 @@
-<div class="programsettings index">
+<div class="sysevents index">
 	<h2><?php echo __('System Events History'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('created','Date'); ?></th>
 			<th><?php echo $this->Paginator->sort('event_type'); ?></th>
+			<th><?php echo $this->Paginator->sort('title'); ?></th>
 			<th></th>
 	</tr>
 	<?php
@@ -11,6 +12,7 @@
 	<tr>
 		<td><?php echo h($sysevent['Sysevent']['created']); ?>&nbsp;</td>
 		<td><?php echo $eventTypes[$sysevent['Sysevent']['event_type']]; ?>&nbsp;</td>
+		<td><?php echo $sysevent['Sysevent']['title']; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View Details'), array('action' => 'view', $sysevent['Sysevent']['id'])); ?>
 			<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $programsetting['Programsetting']['id'])); ?>
