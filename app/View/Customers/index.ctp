@@ -2,6 +2,7 @@
 <?php echo $this->Form->create('Customer'); ?>
 	<h2><?php echo __('Customers'); ?></h2>
 	<?php echo $this->element('filterblock'); ?>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>

@@ -95,8 +95,9 @@ class AppController extends Controller {
 	 * Is called from _useFilter, but can also be used directly for more control
 	 */
 	protected function _setCondidtions() {
-		//setup array of conditions for pagination
+		//setup array of conditions for pagination and text to show on report
 		$this->conditions=array();
+		$this->details=array();
 		foreach($this->filterData as $filter) {
 			//loop for each requested filter
 			if($filter['type']==1) {
@@ -104,7 +105,20 @@ class AppController extends Controller {
 				if(isset($this->passedArgs[$filter['passName']]) && !empty($this->passedArgs[$filter['passName']])) {
 					//has been passed
 					$this->conditions[]=array($filter['field']=>$this->passedArgs[$filter['passName']]);
-//debug($this->conditions);exit;
+					//generate report text
+					$t=$filter['label'].' showing only values: ';
+					$comma=false;
+					foreach($this->passedArgs[$filter['passName']] as $v) {
+						//loop forall values
+						if($comma) {
+							//not the first in list
+							$t.=', ';
+						}//endif
+						$comma=true;
+						$t.=$filter['options'][$v];
+					}//end foreach
+					$this->details[]=$t;
+					unset($t);
 				}//endif
 			}//endif
 			if($filter['type']==2) {
@@ -118,17 +132,49 @@ class AppController extends Controller {
 					$this->conditions[]=array($filter['field'].' <='=>$this->passedArgs[$filter['passName']]['max']);
 				}//endif
 			}//endif
+			if($filter['type']==3) {
+				//Date
+				$use=false;
+				$t=$filter['label'].' showing only dates ';
+				if(isset($this->passedArgs[$filter['passName']]['start']) && !empty($this->passedArgs[$filter['passName']]['start'])) {
+					//min is set
+					$this->conditions[]=array($filter['field'].' >='=>$this->passedArgs[$filter['passName']]['start']);
+					$use=true;
+					$t.='after '.$this->passedArgs[$filter['passName']]['start'];
+				}//endif
+				if(isset($this->passedArgs[$filter['passName']]['end']) && !empty($this->passedArgs[$filter['passName']]['end'])) {
+					//max is set
+					$this->conditions[]=array($filter['field'].' <='=>$this->passedArgs[$filter['passName']]['end']);
+					if($use) $t.=' and ';
+					$use=true;
+					$t.='before '.$this->passedArgs[$filter['passName']]['end'];
+				}//endif
+				if($use) {
+					//set report details text
+					$this->details[]=$t;
+				}//endif
+				unset($t);
+			}//endif type==3
 			if($filter['type']==4) {
 				//TF checkbox
 				if(isset($this->passedArgs[$filter['passName']]) && $this->passedArgs[$filter['passName']]) {
 					//true
 					$this->conditions[]=$filter['trueCondition'];
+					//set report details
+					if(isset($filter['trueMessage'])) $this->details[]=$filter['trueMessage'];
+					else $this->details[]='Only records where '.$filter['label'].' is true';
 				} else {
 					//false
 					$this->conditions[]=$filter['falseCondition'];
+					if(isset($filter['falseMessage'])) $this->details[]=$filter['falseMessage'];
+					else $this->details[]='Only records where '.$filter['label'].' is false';
+					//set report details
 				}//endif
+//debug($filter);exit;
 			}//end type==4 TF
 		}//endforeach
+		//send report details to view
+		$this->set('filterDetails',$this->details);
 	}
 	
 	/**
@@ -154,6 +200,11 @@ class AppController extends Controller {
 	 * Is called from _useFilter, but can also be used directly for more control
 	 */
 	protected function _setFilters($filterData) {
+		//validate
+		foreach($filterData as $i=>$fd){
+			//loop for each filter passed in
+			if(!isset($fd['passName']) && isset($fd['field'])) $filterData[$i]['passName']=$fd['field'];
+		}//endforeach
 		//store filterData
 		$this->filterData=$filterData;
 		//pass array to view (so it can be used when calling element)
@@ -184,10 +235,13 @@ class AppController extends Controller {
 	 * 	field=>field for comparison (EX:Glentry.debit)
 	 * 
 	 * type==3: Date (date range):
+	 * 	field=>field for comparison (EX:Glentry.created)
 	 * 
 	 * type==4: T/F checkbox (checkbox with conditions for t or f):
-	 * 	trueCondition=>sql logic when box is checked (can be empty)
-	 * 	falseCondition=>sql logic when box is not checked (can be empty)
+	 * 	trueCondition=>sql logic when box is checked (1 condition can be empty)
+	 * 	falseCondition=>sql logic when box is not checked (1 condition can be empty)
+	 * 	trueMessage=>text shwon to user at top of report (can be empty or null, null will default)
+	 * 	falseMessage=>text shwon to user at top of report (can be empty or null, null will default)
 	 */
 	protected function _useFilter($filterData) {
 		//setup filters

@@ -1,3 +1,4 @@
+<?php  ?>
 <fieldset><legend id="filterTitle" title="Click to hide/show fitlers">Filters</legend>
 <div id="filters">
 <table>
@@ -25,6 +26,11 @@
 				//value range
 				echo $this->Form->input('Filter.'.$filter['passName'].'.min',array('label'=>$filter['label'].' Min'));
 				echo $this->Form->input('Filter.'.$filter['passName'].'.max',array('label'=>$filter['label'].' Max'));
+			}//endif type==2 value range
+			if($filter['type']==3) {
+				//date range
+				echo $this->Form->input('Filter.'.$filter['passName'].'.start',array('label'=>'Start '.$filter['label']));
+				echo $this->Form->input('Filter.'.$filter['passName'].'.end',array('label'=>'End '.$filter['label']));
 			}//endif type==2 value range
 			if($filter['type']==4) {
 				//TF checkbox

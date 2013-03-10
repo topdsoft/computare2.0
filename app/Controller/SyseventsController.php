@@ -20,10 +20,14 @@ class SyseventsController extends AppController {
 		$filters[]=array('type'=>1,
 			'label'=>'Event Type',
 			'passName'=>'eventType',
-			'field'=>'event_type',
+			'field'=>'Sysevent.event_type',
 			'options'=>$eventTypes
 		);
-		$this->_useFilter($filters);
+		$filters[]=array('type'=>3,
+			'label'=>'Date',
+			'passName'=>'created',
+			'field'=>'Sysevent.created');
+		$this->_useFilter($filters);//*/
 		$this->Sysevent->recursive = 0;
 //debug($this->conditions);
 		$this->set('sysevents', $this->paginate('Sysevent',$this->conditions));

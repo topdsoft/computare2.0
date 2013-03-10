@@ -2,9 +2,7 @@
 <?php echo $this->Form->create('Sysevent'); ?>
 	<h2><?php echo __('System Events History'); ?></h2>
 	<?php echo $this->element('filterblock'); ?>
-	<div class="reportheader">
-		<?php echo $this->element('reportdetails'); ?>
-	</div>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('created','Date'); ?></th>

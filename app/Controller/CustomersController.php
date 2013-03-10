@@ -21,7 +21,9 @@ class CustomersController extends AppController {
 		$filters[]=array('type'=>4,
 			'label'=>'Show Deleted Customers',
 			'falseCondition'=>'Customer.active',
+			'falseMessage'=>'',
 			'trueCondition'=>'',
+			'trueMessage'=>'Showing deleted customers',
 			'passName'=>'showDeleted'
 		);
 		$this->_useFilter($filters);
