@@ -14,8 +14,83 @@ class FormsController extends AppController {
  */
 	public function index() {
 		$this->set('formName','View Forms');
+		//use filters
+		$filters=array();
+		//form type filter
+		$options=array();
+		$q=$this->Form->query('select type from '.$this->Form->table.' group by type');
+		foreach($q as $type) {
+			//look at all results
+			if(empty($type['forms']['type'])) {
+				//empty use (Empty)
+				$options['']='(Blank)';
+			} else {
+				//use label
+				$options[$type['forms']['type']]=$type['forms']['type'];
+			}//end if
+		}//endforeach
+		unset($q);
+//debug($q);debug($options);debug($this->conditions);exit;
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Form Type',
+			'passName'=>'formtype',
+			'field'=>'Form.type',
+			'options'=>$options
+			);
+		unset($options);
+		//controller filter
+		$options=array();
+		$q=$this->Form->query('select controller from '.$this->Form->table.' group by controller');
+		foreach($q as $type) $options[$type['forms']['controller']]=$type['forms']['controller'];
+		unset($q);
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Controller',
+			'passName'=>'cont',
+			'field'=>'Form.controller',
+			'options'=>$options
+			);
+		unset($options);
+		//action filter
+		$options=array();
+		$q=$this->Form->query('select action from '.$this->Form->table.' group by action');
+		foreach($q as $type) $options[$type['forms']['action']]=$type['forms']['action'];
+		unset($q);
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Action',
+			'passName'=>'act',
+			'field'=>'Form.action',
+			'options'=>$options
+			);
+		unset($options);
+		//created filter
+		$filters[]=array('type'=>3,
+			'label'=>'Date',
+			'passName'=>'created',
+			'field'=>'Form.created');
+		//Created by filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'User',
+			'passName'=>'user',
+			'field'=>'Form.created_id',
+			'options'=>$this->Form->User->find('list')	);
+		//empty helplink
+		$filters[]=array('type'=>4,
+			'label'=>'Form w/o Help',
+			'trueCondition'=>'Form.helplink=""',
+			'falseMessage'=>'',
+			'falseCondition'=>'',
+			'trueMessage'=>'Showing forms without help link defined',
+			'passName'=>'showDeleted'
+		);
+		//submit filters
+		$this->_useFilter($filters);
+//debug($this->conditions);exit;
 		$this->Form->recursive = 0;
-		$this->set('forms', $this->paginate());
+		$this->set('forms', $this->paginate('Form',$this->conditions));
 		//get users list
 		$this->set('usersList',$this->Form->User->find('list'));
 	}

@@ -1,5 +1,8 @@
 <div class="forms index">
+<?php echo $this->Form->create('Form'); ?>
 	<h2><?php echo __('Forms'); ?></h2>
+	<?php echo $this->element('filterblock'); ?>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
