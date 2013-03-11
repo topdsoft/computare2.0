@@ -265,6 +265,13 @@ p {
 	border-bottom:none;
 	background: none;
 }
+.filtercalendar {
+	border: 5px solid #999;
+	text-align: center;
+	width: 50px;
+	height: 50px;
+	background: #ccc;
+}
 /** containers **/
 div.form,
 div.index,
