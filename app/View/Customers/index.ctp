@@ -15,7 +15,7 @@
 	foreach ($customers as $customer): ?>
 	<tr>
 		<td><?php echo str_pad($customer['Customer']['id'],10,'0',STR_PAD_LEFT); ?>&nbsp;</td>
-		<td><?php echo h($customer['Customer']['name']); ?>&nbsp;</td>
+		<td><?php if($customer['Customer']['name']!=', ') echo h($customer['Customer']['name']);?>&nbsp;</td>
 		<td><?php echo h($customer['CustomerDetail']['companyName']); ?>&nbsp;</td>
 		<?php if($this->data['Filter']['showDeleted']) echo '<td>'.($customer['Customer']['active'] ? 'Active' : 'Deleted').'</td>';  ?>
 		<td class="actions">

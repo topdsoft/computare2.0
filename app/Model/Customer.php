@@ -8,7 +8,7 @@ App::uses('AppModel', 'Model');
 class Customer extends AppModel {
 
 	public $virtualFields=array(
-		'name'=>'CONCAT((select lastName from customerDetails where customerDetails.id=Customer.customerDetail_id),",",(select firstName from customerDetails where customerDetails.id=Customer.customerDetail_id))',
+		'name'=>'CONCAT((select lastName from customerDetails where customerDetails.id=Customer.customerDetail_id),", ",(select firstName from customerDetails where customerDetails.id=Customer.customerDetail_id))',
 	);
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
