@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class ProgramsettingsController extends AppController {
 
+	public $components=array('ComputareProgramsetting');
 /**
  * index method
  *
@@ -49,11 +50,11 @@ class ProgramsettingsController extends AppController {
 			$this->request->data['Programsetting']['created_id']=$this->Auth->user('id');
 			$this->request->data['Programsetting']['dbschema']=0;
 			$this->Programsetting->create();
-			if ($this->Programsetting->save($this->request->data)) {
+			if ($this->ComputareProgramsetting->save($this->request->data)) {
 				$this->Session->setFlash(__('The initial program settings have been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The programsetting could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Your program settings could not be saved. Please, try again.'));
 			}
 		} else {
 			//read existing settings
@@ -71,8 +72,8 @@ class ProgramsettingsController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			//set user id
 			$this->request->data['Programsetting']['created_id']=$this->Auth->user('id');
-			$this->Programsetting->create();
-			if ($this->Programsetting->save($this->request->data)) {
+//			$this->Programsetting->create();
+			if ($this->ComputareProgramsetting->save($this->request->data)) {
 				$this->Session->setFlash(__('Your program settings have been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -83,6 +84,25 @@ class ProgramsettingsController extends AppController {
 			$this->request->data = $this->Programsetting->find('first');
 		}
 	}
+
+/** updatedb method
+ * used to update the OVERALL database schema for adding a NEW table
+ * @return tf
+ */
+	public function updatedb() {
+		$this->set('formName','Update Database');
+		//update the database if needed
+		$ok=$this->ComputareProgramsetting->updatedb($this->Auth->user('id'));
+		if ($ok>=0) {
+			if($ok==0) $this->Session->setFlash(__('The database is already the latest version'),'default',array('class'=>'success'));
+			else $this->Session->setFlash(__('The database has been updated to version '.$ok),'default',array('class'=>'success'));
+			$this->redirect(array('action' => 'index'));
+		} else {
+			$this->Session->setFlash(__('The database could not be updated.'));
+			$this->redirect(array('action' => 'index'));
+		}
+		
+	}//end function
 
 /**
  * delete method
