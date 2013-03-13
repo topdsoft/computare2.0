@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class UsersController extends AppController {
 
-	public $components=array('ComputareSysevent');
+	public $components=array('ComputareSysevent','ComputareUser');
 
 /**
  * index method
@@ -15,6 +15,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('formName','List Users');
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
 	}
@@ -27,6 +28,7 @@ class UsersController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->set('formName','View User');
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
@@ -41,6 +43,7 @@ debug($this->User->read(null, $id));exit;
  * @return void
  */
 	public function add() {
+		$this->set('formName','Add User');
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
@@ -60,13 +63,14 @@ debug($this->User->read(null, $id));exit;
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit User');
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+			if ($this->ComputareUser->saveUser($this->request->data)) {
+				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
@@ -74,6 +78,7 @@ debug($this->User->read(null, $id));exit;
 		} else {
 			$this->request->data = $this->User->read(null, $id);
 		}
+		$this->set('userGroups',$this->User->UserGroup->find('list'));
 	}
 
 /**
@@ -85,6 +90,7 @@ debug($this->User->read(null, $id));exit;
  * @return void
  */
 	public function delete($id = null) {
+		$this->set('formName','Delete User');
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}

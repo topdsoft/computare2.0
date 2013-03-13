@@ -1,11 +1,13 @@
 <?php
 App::uses('AppController', 'Controller');
 /**
- * Groups Controller
+ * UserGroups Controller
  *
  * @property Group $Group
  */
 class UserGroupsController extends AppController {
+
+	public $components=array('ComputareSysevent','ComputareUser');
 
 /**
  * index method
@@ -13,8 +15,10 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function index() {
-		$this->Group->recursive = 0;
+		$this->set('formName','List User Groups');
+		$this->UserGroup->recursive = 0;
 		$this->set('groups', $this->paginate());
+		$this->set('users',$this->UserGroup->User->find('list'));
 	}
 
 /**
@@ -25,11 +29,13 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-		$this->Group->id = $id;
-		if (!$this->Group->exists()) {
+		$this->set('formName','View User Group');
+		$this->UserGroup->id = $id;
+		if (!$this->UserGroup->exists()) {
 			throw new NotFoundException(__('Invalid group'));
 		}
-		$this->set('group', $this->Group->read(null, $id));
+		$this->set('group', $this->UserGroup->read(null, $id));
+		$this->set('users',$this->UserGroup->User->find('list'));
 	}
 
 /**
@@ -38,20 +44,20 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('formName','Add User Group');
 		if ($this->request->is('post')) {
-			$this->Group->create();
-			$this->request->data['Group']['created_id']=$this->Auth->user('id');
+			$this->request->data['UserGroup']['created_id']=$this->Auth->user('id');
 //debug($this->request->data);exit;
-			if ($this->Group->save($this->request->data)) {
+			if ($this->ComputareUser->saveUserGroup($this->request->data)) {
 				$this->Session->setFlash(__('The group has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The group could not be saved. Please, try again.'));
 			}
 		}
-		$forms = $this->Group->Form->find('list');
-		$users = $this->Group->User->find('list');
-		$this->set(compact('forms', 'users'));
+//		$forms = $this->UserGroup->Form->find('list');
+//		$users = $this->UserGroup->User->find('list');
+//		$this->set(compact('forms', 'users'));
 	}
 
 /**
@@ -62,22 +68,24 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		$this->Group->id = $id;
-		if (!$this->Group->exists()) {
+		$this->set('formName','Edit User Group');
+		$this->UserGroup->id = $id;
+		if (!$this->UserGroup->exists()) {
 			throw new NotFoundException(__('Invalid group'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->Group->save($this->request->data)) {
-				$this->Session->setFlash(__('The group has been saved'));
+			$this->request->data['UserGroup']['created_id']=$this->Auth->user('id');
+			if ($this->ComputareUser->saveUserGroup($this->request->data)) {
+				$this->Session->setFlash(__('The group has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The group could not be saved. Please, try again.'));
 			}
 		} else {
-			$this->request->data = $this->Group->read(null, $id);
+			$this->request->data = $this->UserGroup->read(null, $id);
 		}
-		$forms = $this->Group->Form->find('list');
-		$users = $this->Group->User->find('list');
+		$forms = $this->UserGroup->Form->find('list');
+		$users = $this->UserGroup->User->find('list');
 		$this->set(compact('forms', 'users'));
 	}
 
@@ -90,6 +98,7 @@ class UserGroupsController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+		$this->set('formName','Delete User Group');
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}

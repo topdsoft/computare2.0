@@ -86,7 +86,20 @@ class ComputareSyseventComponent extends Component{
 		}//endif
 		if($data['event_type']==4) {
 			/**permissions change
+			 * requires permissionEvent=>array(
+			 * 	'user_id'=>user id who got or lost permission
+			 * 	'group_id'=>group id that got or lost permission
+			 * 	'controller'=>permission given or taken from all of controller
+			 * 	'form_id'=>form where permission given or taken
+			 * )
 			 */
+			if(isset($data['permissionEvent'])) {
+				//save permissionEvent
+				$this->Permissionevent->create();
+				$ok=$this->Permissionevent->save($data['permissionEvent']);
+				if($ok) $sysevent['permissionevent_id']=$this->Permissionevent->getInsertId();
+				$sysevent['event_type']=4;
+			} else $ok=false;
 		}//endif
 		if($data['event_type']==5) {
 			/**new form available

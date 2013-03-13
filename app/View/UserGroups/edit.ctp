@@ -1,26 +1,15 @@
 <div class="groups form">
-<?php echo $this->Form->create('Group'); ?>
+<?php echo $this->Form->create('UserGroup'); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Group'); ?></legend>
+		<legend><?php echo __('Edit Group ID:'.$this->data['UserGroup']['id']); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('created_id');
-		echo $this->Form->input('name');
-		echo $this->Form->input('Form');
-		echo $this->Form->input('User');
+//		echo $this->Form->input('created_id');
+		echo $this->Form->input('name',array('id'=>'sc'));
+		echo $this->Form->input('User',array('label'=>'Group Members'));
+		echo $this->Form->input('Form',array('label'=>'Group Permissions'));
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Group.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Group.id'))); ?></li>
-		<li><?php echo $this->Html->link(__('List Groups'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Forms'), array('controller' => 'forms', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Form'), array('controller' => 'forms', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('controller' => 'users', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
+<script type='text/javascript'>document.getElementById('sc').focus();</script>
