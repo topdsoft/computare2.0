@@ -6,7 +6,7 @@ App::uses('AppModel', 'Model');
  * @property Form $Form
  * @property User $User
  */
-class Group extends AppModel {
+class UserGroup extends AppModel {
 
 /**
  * Display field
@@ -14,6 +14,7 @@ class Group extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
+	public $useTable='userGroups';
 
 /**
  * Validation rules

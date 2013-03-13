@@ -3,7 +3,7 @@
  * GroupFixture
  *
  */
-class GroupFixture extends CakeTestFixture {
+class UserGroupFixture extends CakeTestFixture {
 
 /**
  * Fields

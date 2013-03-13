@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
  *
  * @property Group $Group
  */
-class GroupsController extends AppController {
+class UserGroupsController extends AppController {
 
 /**
  * index method

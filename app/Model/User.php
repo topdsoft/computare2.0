@@ -97,8 +97,8 @@ class User extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		),
-		'Group' => array(
-			'className' => 'Group',
+		'UserGroup' => array(
+			'className' => 'UserGroup',
 			'joinTable' => 'groups_users',
 			'foreignKey' => 'user_id',
 			'associationForeignKey' => 'group_id',

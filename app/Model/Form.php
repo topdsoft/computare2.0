@@ -25,8 +25,8 @@ class Form extends AppModel {
  * @var array
  */
 	public $hasAndBelongsToMany = array(
-		'Group' => array(
-			'className' => 'Group',
+		'UserGroup' => array(
+			'className' => 'UserGroup',
 			'joinTable' => 'forms_groups',
 			'foreignKey' => 'form_id',
 			'associationForeignKey' => 'group_id',
