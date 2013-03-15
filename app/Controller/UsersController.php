@@ -79,6 +79,7 @@ debug($this->User->read(null, $id));exit;
 			$this->request->data = $this->User->read(null, $id);
 		}
 		$this->set('userGroups',$this->User->UserGroup->find('list'));
+		$this->set('forms',$this->User->Form->find('list'));
 	}
 
 /**

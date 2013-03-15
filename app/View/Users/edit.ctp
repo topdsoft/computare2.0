@@ -9,7 +9,8 @@
 		echo $this->Form->input('email');
 		echo $this->Form->input('homepage');
 		echo $this->Form->input('UserGroup',array('label'=>'Set User Groups'));
-//debug($UserGroups);
+		echo $this->Form->input('Form',array('label'=>'Set Individual Forms'));
+debug($this->data);
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

@@ -21,6 +21,9 @@ class ComputareProgramsettingComponent extends Component{
 		$dataSource->begin();
 		//save data
 		$this->Programsetting->create();
+		unset($data['Programsetting']['id']);
+		unset($data['Programsetting']['created']);
+//debug($data);exit;
 		$ok=$this->Programsetting->save($data);
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();
@@ -35,11 +38,33 @@ class ComputareProgramsettingComponent extends Component{
 	 */
 	public function updatedb($uid) {
 		//latest schema
-		$latest=0;
+		$latest=1;
 		//get models
 		$this->Programsetting=ClassRegistry::init('Programsetting');
 		$settings=$this->Programsetting->find('first', array('order'=>array('Programsetting.created'=>'desc')));
 		if($latest==$settings['Programsetting']['dbschema']) return 0;
-debug($settings);exit;
+		$ok=true;
+		#dbschema==1
+		if($settings['Programsetting']['dbschema']<1) {
+			//add formGroups table
+			$this->Programsetting->query(
+				"CREATE TABLE IF NOT EXISTS `formGroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+"
+			);
+//NEED ERROR CATCH HERE
+			if($ok) $settings['Programsetting']['dbschema']=1;
+//NEED LOGGING HERE
+		}//endif 1
+		$settings['Programsetting']['created_id']=$uid;
+		if($ok) $ok=$this->save($settings);
+		if($ok===true) return $settings['Programsetting']['dbschema'];
+		else return -1;
+//debug($settings);exit;
 	}
 }

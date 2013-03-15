@@ -4,9 +4,10 @@
 	<?php echo $this->element('filterblock'); ?>
 	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
+<?php //debug($forms) ?>
 	<tr>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
-			<th><?php echo $this->Paginator->sort('type'); ?></th>
+			<th><?php echo $this->Paginator->sort('FormGroup.name','Group'); ?></th>
 			<th><?php echo $this->Paginator->sort('controller'); ?></th>
 			<th><?php echo $this->Paginator->sort('action'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
@@ -19,7 +20,7 @@
 	foreach ($forms as $form): ?>
 	<tr>
 		<td><?php echo h($form['Form']['name']); ?>&nbsp;</td>
-		<td><?php echo h($form['Form']['type']); ?>&nbsp;</td>
+		<td><?php echo h($form['FormGroup']['name']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['controller']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['action']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['created']); ?>&nbsp;</td>

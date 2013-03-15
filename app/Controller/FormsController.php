@@ -16,29 +16,14 @@ class FormsController extends AppController {
 		$this->set('formName','View Forms');
 		//use filters
 		$filters=array();
-		//form type filter
-		$options=array();
-		$q=$this->Form->query('select type from '.$this->Form->table.' group by type');
-		foreach($q as $type) {
-			//look at all results
-			if(empty($type['forms']['type'])) {
-				//empty use (Empty)
-				$options['']='(Blank)';
-			} else {
-				//use label
-				$options[$type['forms']['type']]=$type['forms']['type'];
-			}//end if
-		}//endforeach
-		unset($q);
-//debug($q);debug($options);debug($this->conditions);exit;
+		//group filter
 		$filters[]=array(
 			'type'=>1,
-			'label'=>'Form Type',
-			'passName'=>'formtype',
-			'field'=>'Form.type',
-			'options'=>$options
+			'label'=>'Group',
+			'passName'=>'grp',
+			'field'=>'Form.formGroup_id',
+			'options'=>$this->Form->FormGroup->find('list')
 			);
-		unset($options);
 		//controller filter
 		$options=array();
 		$q=$this->Form->query('select controller from '.$this->Form->table.' group by controller');
