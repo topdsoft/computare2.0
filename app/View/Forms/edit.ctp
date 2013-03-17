@@ -8,7 +8,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('controller');
 		echo $this->Form->input('action');
-		echo $this->Form->input('type');
+		echo $this->Form->input('formGroup');
 		echo $this->Form->input('helplink');
 		echo $this->Form->input('description');
 //		echo $this->Form->input('Group');

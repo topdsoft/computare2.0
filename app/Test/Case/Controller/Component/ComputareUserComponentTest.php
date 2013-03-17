@@ -19,6 +19,22 @@ class ComputareUserComponentTest extends CakeTestCase {
 	public function testSaveUser() {
 		//test saving a new user
 	}
+
+	public function testSetUserToFormPermission() {
+		
+	}
+	
+	public function testSetUserToFormGroupPermission() {
+		
+	}
+	
+	public function testSetUserGroupToFormPermission() {
+		
+	}
+	
+	public function testSetUserGroupToFormGroupPermission() {
+		
+	}
 	
 	public function tearDown() {
 		parent::tearDown();

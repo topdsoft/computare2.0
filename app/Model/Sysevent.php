@@ -27,8 +27,8 @@ class Sysevent extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Permissionevent' => array(
-			'className' => 'Permissionevent',
+		'PermissionEvent' => array(
+			'className' => 'PermissionEvent',
 			'foreignKey' => 'permissionevent_id',
 			'conditions' => '',
 			'fields' => '',

@@ -22,7 +22,7 @@ class ComputareSyseventComponent extends Component{
 	public function save($data) {
 		//get models
 		$this->Sysevent=ClassRegistry::init('Sysevent');
-		$this->Permissionevent=ClassRegistry::init('Permissionevent');
+		$this->Permissionevent=ClassRegistry::init('PermissionEvent');
 		$this->Errorevent=ClassRegistry::init('Errorevent');
 		$this->Htmlevent=ClassRegistry::init('Htmlevent');
 		$this->Formevent=ClassRegistry::init('Formevent');
@@ -88,11 +88,12 @@ class ComputareSyseventComponent extends Component{
 			/**permissions change
 			 * requires permissionEvent=>array(
 			 * 	'user_id'=>user id who got or lost permission
-			 * 	'group_id'=>group id that got or lost permission
-			 * 	'controller'=>permission given or taken from all of controller
+			 * 	'userGroup_id'=>userGroup id that got or lost permission
 			 * 	'form_id'=>form where permission given or taken
+			 * 	'formGroup_id'=>formGroup that gained or lost permission
 			 * )
 			 */
+// debug($data);exit;
 			if(isset($data['permissionEvent'])) {
 				//save permissionEvent
 				$this->Permissionevent->create();
@@ -112,10 +113,14 @@ class ComputareSyseventComponent extends Component{
 		//insert sysevent
 		$sysevent['remoteaddr']=$_SERVER['REMOTE_ADDR'];
 		if(isset($data['title'])) $sysevent['title']=$data['title'];
+		if(isset($data['created_id'])) $sysevent['created_id']=$data['created_id'];
+		if($ok)$this->Sysevent->create();
 		if($ok)$ok=$this->Sysevent->save($sysevent);
 		//go-no go
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();
+		//cleanup
+		unset($sysevent);
 		return ($ok==true);
 	}
 }

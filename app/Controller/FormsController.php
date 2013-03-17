@@ -142,10 +142,10 @@ class FormsController extends AppController {
 		} else {
 			$this->request->data = $this->Form->read(null, $id);
 		}
-		$groups = $this->Form->Group->find('list');
-		$menus = $this->Form->Menu->find('list');
-		$users = $this->Form->User->find('list');
-		$this->set(compact('groups', 'menus', 'users'));
+		$formGroups = $this->Form->FormGroup->find('list');
+// 		$menus = $this->Form->Menu->find('list');
+// 		$users = $this->Form->User->find('list');
+		$this->set(compact('formGroups'));
 	}
 
 /**

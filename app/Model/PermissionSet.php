@@ -1,14 +1,14 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * Permissionevent Model
+ * PermissionSet Model
  *
  * @property User $User
- * @property Group $Group
+ * @property UserGroup $UserGroup
  * @property Form $Form
- * @property Sysevent $Sysevent
+ * @property FormGroup $FormGroup
  */
-class Permissionevent extends AppModel {
+class PermissionSet extends AppModel {
 
 /**
  * Use database config
@@ -16,6 +16,13 @@ class Permissionevent extends AppModel {
  * @var string
  */
 	public $useDbConfig = 'computare';
+
+/**
+ * Use table
+ *
+ * @var mixed False or table name
+ */
+	public $useTable = 'permissionSets';
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -33,9 +40,9 @@ class Permissionevent extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Group' => array(
-			'className' => 'Group',
-			'foreignKey' => 'group_id',
+		'UserGroup' => array(
+			'className' => 'UserGroup',
+			'foreignKey' => 'userGroup_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -46,28 +53,13 @@ class Permissionevent extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
-	);
-
-/**
- * hasMany associations
- *
- * @var array
- */
-	public $hasMany = array(
-		'Sysevent' => array(
-			'className' => 'Sysevent',
-			'foreignKey' => 'permissionevent_id',
-			'dependent' => false,
+		),
+		'FormGroup' => array(
+			'className' => 'FormGroup',
+			'foreignKey' => 'formGroup_id',
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
+			'order' => ''
 		)
 	);
-
 }
