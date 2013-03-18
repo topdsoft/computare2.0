@@ -23,7 +23,7 @@
 		</dd>
 		<dt><?php echo __('Created Id'); ?></dt>
 		<dd>
-			<?php echo h($sysevent['Sysevent']['created_id']); ?>
+			<?php echo h($users[$sysevent['Sysevent']['created_id']]); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Host IP'); ?></dt>
@@ -81,6 +81,49 @@
 		</tr>
 	<?php endforeach; ?>
 	</table>
+<?php endif; ?>
+
+<?php if (!empty($sysevent['PermissionEvent']['id'])): ?>
+	<div class="related">
+		<h3><?php echo __('Permission Event Details'); ?></h3>
+		<dl>
+			<?php if($sysevent['PermissionEvent']['user_id']): ?>
+				<dt><?php echo __('User'); ?></dt>
+				<dd>
+					<?php echo h($users[$sysevent['PermissionEvent']['user_id']]); ?>
+					&nbsp;
+				</dd>
+			<?php endif; ?>
+			<?php if($sysevent['PermissionEvent']['userGroup_id']): ?>
+				<dt><?php echo __('User Group'); ?></dt>
+				<dd>
+					<?php echo h($userGroups[$sysevent['PermissionEvent']['userGroup_id']]); ?>
+					&nbsp;
+				</dd>
+			<?php endif; ?>
+			<?php if($sysevent['PermissionEvent']['form_id']): ?>
+				<dt><?php echo __('Form'); ?></dt>
+				<dd>
+					<?php echo h($forms[$sysevent['PermissionEvent']['form_id']]); ?>
+					&nbsp;
+				</dd>
+			<?php endif; ?>
+			<?php if($sysevent['PermissionEvent']['formGroup_id']): ?>
+				<dt><?php echo __('Form Group'); ?></dt>
+				<dd>
+					<?php echo h($formGroups[$sysevent['PermissionEvent']['formGroup_id']]); ?>
+					&nbsp;
+				</dd>
+			<?php endif; ?>
+			<?php if($sysevent['PermissionEvent']['note']): ?>
+				<dt><?php echo __('Note'); ?></dt>
+				<dd>
+					<?php echo h($sysevent['PermissionEvent']['note']); ?>
+					&nbsp;
+				</dd>
+			<?php endif; ?>
+		</dl>
+	</div>
 <?php endif; ?>
 
 </div>

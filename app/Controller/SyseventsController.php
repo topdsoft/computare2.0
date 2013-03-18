@@ -49,6 +49,10 @@ class SyseventsController extends AppController {
 		}
 		$this->set('sysevent', $this->Sysevent->read(null, $id));
 		$this->set('eventTypes', $this->Sysevent->getEventTypes());
+		$this->set('users', ClassRegistry::init('User')->find('list'));
+		$this->set('userGroups', ClassRegistry::init('UserGroup')->find('list'));
+		$this->set('forms', ClassRegistry::init('Form')->find('list'));
+		$this->set('formGroups', ClassRegistry::init('FormGroup')->find('list'));
 	}
 
 }
