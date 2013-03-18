@@ -160,30 +160,207 @@ class ComputareUserComponent extends Component{
 	 * @param int $user_id
 	 * @param int $formGroup_id
 	 * @param array $permissions
+	 * @param int $uid
 	 * @return t/f 
 	 */
-	public function setUserToFormGroupPermission($user_id,$formGroup_id,$permissions) {
-		
+	public function setUserToFormGroupPermission($user_id,$formGroup_id,$permissions,$uid) {
+		//get models
+		$this->User=ClassRegistry::init('User');
+		$this->FormGroup=ClassRegistry::init('FormGroup');
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		//check for existing record
+		$data=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('user_id'=>$user_id,'formGroup_id'=>$formGroup_id)));
+//debug($data);exit;
+		if(!$data) $data=array('PermissionSet'=>array('user_id'=>$user_id,'formGroup_id'=>$formGroup_id));
+		//set and record permission adds
+		$added=array();
+		foreach ($permissions as $p) {
+			//loop for all incomming permissions to check if they are new
+			if(!array_key_exists($p,$data['PermissionSet']) || ($data['PermissionSet'][$p]==false)) {
+				//this perm has been added
+				$added[]=$p;
+			}//endif
+			$data['PermissionSet'][$p]=true;
+		}//end foreach
+		if($added) {
+			//log changes
+			$log['event_type']=4;
+			$log['created_id']=$uid;
+			$log['title']='Perm(s) Added';
+			$log['permissionEvent']['user_id']=$user_id;
+			$log['permissionEvent']['formGroup_id']=$formGroup_id;
+			$log['permissionEvent']['note']='ADDED:';
+			foreach($added as $add) $log['permissionEvent']['note'].=$add.' ';
+			$this->ComputareSysevent->save($log);
+			unset($log);
+// debug($added);
+		}//endif
+//debug($data);
+		//record permission removals
+		$removed=array();
+		$permList=$this->getPermissionList();
+		foreach ($permList as $p) {
+			//loop for all available permissions to check if they are missing from incomming set
+			if(!in_array($p,$permissions) && array_key_exists($p,$data['PermissionSet']) && $data['PermissionSet'][$p]==true) {
+				//remove this permission
+				$removed[]=$p;
+				$data['PermissionSet'][$p]=false;
+			}//endif
+		}//end foreach
+		//save
+		if($removed) {
+			//log changes
+			$log['event_type']=4;
+			$log['created_id']=$uid;
+			$log['title']='Perm(s) Removed';
+			$log['permissionEvent']['user_id']=$user_id;
+			$log['permissionEvent']['formGroup_id']=$formGroup_id;
+			$log['permissionEvent']['note']='REMOVED:';
+			foreach($removed as $add) $log['permissionEvent']['note'].=$add.' ';
+			$this->ComputareSysevent->save($log);
+			unset($log);
+// debug($removed);
+		}//endif
+// debug($data);
+		return ($this->PermissionSet->save($data)==true);
 	}//end public function setUserToFormGroupPermission
 
 	/** setUserGroupToFormPermission
 	 * @param int $userGroup_id
 	 * @param int $form_id
 	 * @param array $permissions
+	 * @param int $uid
 	 * @return t/f 
 	 */
-	public function setUserGroupToFormPermission($userGroup_id,$form_id,$permissions) {
-		
+	public function setUserGroupToFormPermission($userGroup_id,$form_id,$permissions,$uid) {
+		//get models
+		$this->User=ClassRegistry::init('UserGroup');
+		$this->Form=ClassRegistry::init('Form');
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		//check for existing record
+		$data=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'form_id'=>$form_id)));
+//debug($data);exit;
+		if(!$data) $data=array('PermissionSet'=>array('userGroup_id'=>$userGroup_id,'form_id'=>$form_id));
+		//set and record permission adds
+		$added=array();
+		foreach ($permissions as $p) {
+			//loop for all incomming permissions to check if they are new
+			if(!array_key_exists($p,$data['PermissionSet']) || ($data['PermissionSet'][$p]==false)) {
+				//this perm has been added
+				$added[]=$p;
+			}//endif
+			$data['PermissionSet'][$p]=true;
+		}//end foreach
+		if($added) {
+			//log changes
+			$log['event_type']=4;
+			$log['created_id']=$uid;
+			$log['title']='Perm(s) Added';
+			$log['permissionEvent']['userGroup_id']=$userGroup_id;
+			$log['permissionEvent']['form_id']=$form_id;
+			$log['permissionEvent']['note']='ADDED:';
+			foreach($added as $add) $log['permissionEvent']['note'].=$add.' ';
+			$this->ComputareSysevent->save($log);
+			unset($log);
+// debug($added);
+		}//endif
+//debug($data);
+		//record permission removals
+		$removed=array();
+		$permList=$this->getPermissionList();
+		foreach ($permList as $p) {
+			//loop for all available permissions to check if they are missing from incomming set
+			if(!in_array($p,$permissions) && array_key_exists($p,$data['PermissionSet']) && $data['PermissionSet'][$p]==true) {
+				//remove this permission
+				$removed[]=$p;
+				$data['PermissionSet'][$p]=false;
+			}//endif
+		}//end foreach
+		//save
+		if($removed) {
+			//log changes
+			$log['event_type']=4;
+			$log['created_id']=$uid;
+			$log['title']='Perm(s) Removed';
+			$log['permissionEvent']['userGroup_id']=$userGroup_id;
+			$log['permissionEvent']['form_id']=$form_id;
+			$log['permissionEvent']['note']='REMOVED:';
+			foreach($removed as $add) $log['permissionEvent']['note'].=$add.' ';
+			$this->ComputareSysevent->save($log);
+			unset($log);
+// debug($removed);
+		}//endif
+// debug($data);
+		return ($this->PermissionSet->save($data)==true);
 	}//end public function setUserGroupToFormPermission
 
 	/** setUserGroupToFormGroupPermission
 	 * @param int $userGroup_id
 	 * @param int $formGroup_id
 	 * @param array $permissions
+	 * @param int $uid
 	 * @return t/f 
 	 */
-	public function setUserGroupToFormGroupPermission($userGroup_id,$formGroup_id,$permissions) {
-		
+	public function setUserGroupToFormGroupPermission($userGroup_id,$formGroup_id,$permissions,$uid) {
+		//get models
+		$this->UserGroup=ClassRegistry::init('UserGroup');
+		$this->FormGroup=ClassRegistry::init('FormGroup');
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		//check for existing record
+		$data=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'formGroup_id'=>$formGroup_id)));
+//debug($data);exit;
+		if(!$data) $data=array('PermissionSet'=>array('userGroup_id'=>$useGroupr_id,'formGroup_id'=>$formGroup_id));
+		//set and record permission adds
+		$added=array();
+		foreach ($permissions as $p) {
+			//loop for all incomming permissions to check if they are new
+			if(!array_key_exists($p,$data['PermissionSet']) || ($data['PermissionSet'][$p]==false)) {
+				//this perm has been added
+				$added[]=$p;
+			}//endif
+			$data['PermissionSet'][$p]=true;
+		}//end foreach
+		if($added) {
+			//log changes
+			$log['event_type']=4;
+			$log['created_id']=$uid;
+			$log['title']='Perm(s) Added';
+			$log['permissionEvent']['userGroup_id']=$userGroup_id;
+			$log['permissionEvent']['formGroup_id']=$formGroup_id;
+			$log['permissionEvent']['note']='ADDED:';
+			foreach($added as $add) $log['permissionEvent']['note'].=$add.' ';
+			$this->ComputareSysevent->save($log);
+			unset($log);
+// debug($added);
+		}//endif
+//debug($data);
+		//record permission removals
+		$removed=array();
+		$permList=$this->getPermissionList();
+		foreach ($permList as $p) {
+			//loop for all available permissions to check if they are missing from incomming set
+			if(!in_array($p,$permissions) && array_key_exists($p,$data['PermissionSet']) && $data['PermissionSet'][$p]==true) {
+				//remove this permission
+				$removed[]=$p;
+				$data['PermissionSet'][$p]=false;
+			}//endif
+		}//end foreach
+		//save
+		if($removed) {
+			//log changes
+			$log['event_type']=4;
+			$log['created_id']=$uid;
+			$log['title']='Perm(s) Removed';
+			$log['permissionEvent']['userGroup_id']=$userGroup_id;
+			$log['permissionEvent']['formGroup_id']=$formGroup_id;
+			$log['permissionEvent']['note']='REMOVED:';
+			foreach($removed as $add) $log['permissionEvent']['note'].=$add.' ';
+			$this->ComputareSysevent->save($log);
+			unset($log);
+// debug($removed);
+		}//endif
+// debug($data);
+		return ($this->PermissionSet->save($data)==true);
 	}//end public function setUserGroupToFormGroupPermission
 
 }
