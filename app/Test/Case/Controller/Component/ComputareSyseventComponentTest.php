@@ -6,7 +6,7 @@ App::uses('ComponentCollection', 'Controller');
 App::uses('ComputareSyseventComponent', 'Controller/Component');
 
 class ComputareSyseventComponentTest extends CakeTestCase {
-	public $fixtures=array('app.sysevent','app.permissionevent','app.errorevent','app.htmlevent');
+	public $fixtures=array('app.sysevent','app.permissionEvent','app.errorevent','app.htmlevent');
 	
 	public function setUp() {
 		parent::setUp();

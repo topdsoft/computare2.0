@@ -66,6 +66,7 @@ debug($this->User->read(null, $id));exit;
 		$this->set('formName','Edit User');
 		$this->User->id = $id;
 //$this->ComputareUser->setUserGroupToFormGroupPermission(2,2,array('view','submit','undoOthers'),1);
+//$this->ComputareUser->authenticate(13,2,'view');exit;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}

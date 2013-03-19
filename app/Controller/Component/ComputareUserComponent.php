@@ -363,4 +363,55 @@ class ComputareUserComponent extends Component{
 		return ($this->PermissionSet->save($data)==true);
 	}//end public function setUserGroupToFormGroupPermission
 
+	/** authenticate method
+	 * @param int $form_id form to check
+	 * @param int $user_id user to check
+	 * @param string $action action user is trying (view, submit, etc)
+	 */
+	public function authenticate($form_id,$user_id,$action) {
+		//get models
+		$this->User=ClassRegistry::init('User');
+		$this->Form=ClassRegistry::init('Form');
+		$this->UserGroup=ClassRegistry::init('UserGroup');
+		$this->FormGroup=ClassRegistry::init('FormGroup');
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		//validate $action
+		if(!in_array($action, $this->getPermissionList())) return false;
+		$ok=false;
+		#userid==1
+		if($user_id==1) $ok=true;
+		#check form_id vs user_id
+		if(!$ok)$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('user_id'=>$user_id,'form_id'=>$form_id)));
+		if(!$ok && $set) $ok=$set['PermissionSet'][$action];
+		#check formGroup_id vs user_id
+		if(!$ok) {
+			//get formGroup_id
+			$formGroup_id=$this->Form->field('formGroup_id',array('id'=>$form_id));
+			$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('user_id'=>$user_id,'formGroup_id'=>$formGroup_id)));
+			if($set) $ok=$set['PermissionSet'][$action];
+		}//endif
+		#check each userGroup_id
+		if(!$ok) {
+			//get user groups
+			$user=$this->User->find('first',array('recursive'=>1,'conditions'=>array('User.id'=>$user_id)));
+			$userGroups=$user['UserGroup'];
+			foreach($userGroups as $userGroup) {
+				//loop for each of the groups the user belongs to
+				$userGroup_id=$userGroup['id'];
+				if(!$ok) {
+					//check userGroup_id and form_id
+					$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'form_id'=>$form_id)));
+					if($set) $ok=$set['PermissionSet'][$action];
+				}//endif
+				if(!$ok) {
+					//check userGroup_id and formGroup_id
+					$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'formGroup_id'=>$formGroup_id)));
+					if($set) $ok=$set['PermissionSet'][$action];
+				}//endif
+			}//end foreach
+// debug($userGroups);exit;
+		}//endif
+		//return
+		return $ok;
+	}//end public function authenticate
 }
