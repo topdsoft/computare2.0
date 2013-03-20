@@ -71,7 +71,7 @@ debug($this->User->read(null, $id));exit;
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->ComputareUser->saveUser($this->request->data)) {
+			if ($this->ComputareUser->saveUser($this->request->data,$this->Auth->User('id'))) {
 				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -81,7 +81,7 @@ debug($this->User->read(null, $id));exit;
 			$this->request->data = $this->User->read(null, $id);
 		}
 		$this->set('userGroups',$this->User->UserGroup->find('list'));
-		$this->set('forms',$this->User->Form->find('list'));
+// 		$this->set('forms',$this->User->Form->find('list'));
 	}
 
 /**

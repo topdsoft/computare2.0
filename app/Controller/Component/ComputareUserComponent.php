@@ -2,7 +2,7 @@
 /**
  * ComputareUserComponent.php
  * 
- * Part of computare accounting system used to modify users and usergroups
+ * Part of computare accounting system used to modify users, usergroups and permissions
  * */
 
 App::uses('Component','Controller');
@@ -11,16 +11,17 @@ class ComputareUserComponent extends Component{
 	/**
 	 * saveUser method
 	 * @param $data
+	 * @param $uid  //user id of current user (who is making changes)
 	 * @return t/f
 	 */
-	public function saveUser($data) {
+	public function saveUser($data,$uid) {
 		//get models
 		$this->User=ClassRegistry::init('User');
 		$this->UserGroup=ClassRegistry::init('UserGroup');
 		$ok=true;
 		$dataSource=$this->User->getDataSource();
 		$oldData=$this->User->read(null,$data['User']['id']);
-//debug($data);debug($oldData);exit;
+// debug($data);debug($oldData);exit;
 		//start transaction
 		$dataSource->begin();
 		$ok=$this->User->save($data);
@@ -34,8 +35,16 @@ class ComputareUserComponent extends Component{
 			$found=false;
 			foreach($oldGroups as $og) if($group==$og['id']) $found=true;
 			if(!$found) {
-				//user is new to this group
-//debug('addedto');debug($group);
+				//user is new to this group - log changes
+				$log['event_type']=4;
+				$log['created_id']=$uid;
+				$log['title']='User + Group';
+				$log['permissionEvent']['user_id']=$data['User']['id'];
+				$log['permissionEvent']['note']='ADDED TO GROUP: '.$this->UserGroup->field('name',array('id'=>$group));
+// debug($log);exit;
+				$this->ComputareSysevent->save($log);
+				unset($log);
+	//debug('addedto');debug($group);
 				
 			}//endif
 		}//end foreach
@@ -43,7 +52,15 @@ class ComputareUserComponent extends Component{
 		foreach($oldGroups as $group) {
 			//loop through all previous groups
 			if(!in_array($group['id'],$newGroups)) {
-				//user has been removed from this group
+				//user has been removed from this group - log changes
+				$log['event_type']=4;
+				$log['created_id']=$uid;
+				$log['title']='User - Group';
+				$log['permissionEvent']['user_id']=$data['User']['id'];
+				$log['permissionEvent']['note']='REMOVED FROM GROUP: '.$this->UserGroup->field('name',array('id'=>$group['id']));
+// debug($log);exit;
+				$this->ComputareSysevent->save($log);
+				unset($log);
 //debug('removed from');debug($group);
 				
 			}//endif
