@@ -50,6 +50,13 @@ class UsersController extends AppController {
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
+		$this->User->Form->FormGroup->bindModel(array(
+			'hasMany'=>array(
+				'Form'=>array(
+					'className'=>'Form',
+				)
+			)
+		));
 		$this->User->bindModel(array(
 			'hasAndBelongsToMany'=>array(
 				'Form'=>array(
@@ -66,6 +73,23 @@ class UsersController extends AppController {
 				)
 			)
 		));
+		$this->User->UserGroup->bindModel(array(
+			'hasAndBelongsToMany'=>array(
+				'Form'=>array(
+					'className'=>'Form',
+					'joinTable'=>'permissionSets',
+					'foreignKey'=>'userGroup_id',
+					'associationForeignKey'=>'form_id'
+				),
+				'FormGroup'=>array(
+					'className'=>'FormGroup',
+					'joinTable'=>'permissionSets',
+					'foreignKey'=>'userGroup_id',
+					'associationForeignKey'=>'formGroup_id'
+				)//*/
+			)
+		));
+		$this->User->recursive=3;
 		$this->set('user', $this->User->read(null, $id));
 		//get list of available permissions 
 		$this->set('permissions', $this->ComputareUser->getPermissionList());
