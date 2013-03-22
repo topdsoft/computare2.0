@@ -99,7 +99,7 @@ class ComputareUserComponent extends Component{
 		return array('view',
 		'submit',
 		'setDefault',
-		'viewLogging',
+		'setLogging',
 		'undoOwn',
 		'undoOthers');
 	}

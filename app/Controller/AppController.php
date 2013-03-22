@@ -63,7 +63,13 @@ class AppController extends Controller {
 				);
 				$formOBJ->create();
 				$formOBJ->save($form);
+				$this->viewVars['form_id']=$formOBJ->GetInsertId();
+			} else {
+				//form found
+				$this->viewVars['form_id']=$form['Form']['id'];
 			}//endif
+			//authenticate
+			
 			//get help index if set
 			if(isset($form['Form']['helplink']) && !empty($form['Form']['helplink'])) $this->set('formhelp',$form['Form']['helplink']);
 		}//endif

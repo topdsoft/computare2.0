@@ -34,7 +34,42 @@ class UsersController extends AppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->set('user', $this->User->read(null, $id));
-debug($this->User->read(null, $id));exit;
+// debug($this->User->read(null, $id));exit;
+	}
+
+/**
+ * viewperm method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function viewperm($id = null) {
+		$this->set('formName','View User');
+		$this->User->id = $id;
+		if (!$this->User->exists()) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		$this->User->bindModel(array(
+			'hasAndBelongsToMany'=>array(
+				'Form'=>array(
+					'className'=>'Form',
+					'joinTable'=>'permissionSets',
+					'foreignKey'=>'user_id',
+					'associationForeignKey'=>'form_id'
+				),
+				'FormGroup'=>array(
+					'className'=>'FormGroup',
+					'joinTable'=>'permissionSets',
+					'foreignKey'=>'user_id',
+					'associationForeignKey'=>'formGroup_id'
+				)
+			)
+		));
+		$this->set('user', $this->User->read(null, $id));
+		//get list of available permissions 
+		$this->set('permissions', $this->ComputareUser->getPermissionList());
+// debug($this->User->read(null, $id));exit;
 	}
 
 /**

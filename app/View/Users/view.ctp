@@ -1,5 +1,5 @@
 <div class="users view">
-<h2><?php  echo __('User'); ?></h2>
+<h2><?php  echo __('User').': '.$user['User']['username']; ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
@@ -14,11 +14,6 @@
 		<dt><?php echo __('Username'); ?></dt>
 		<dd>
 			<?php echo h($user['User']['username']); ?>
-			&nbsp;
-		</dd>
-		<dt><?php echo __('Password'); ?></dt>
-		<dd>
-			<?php echo h($user['User']['password']); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Email'); ?></dt>
@@ -38,12 +33,25 @@
 		</dd>
 	</dl>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Edit User'), array('action' => 'edit', $user['User']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete User'), array('action' => 'delete', $user['User']['id']), null, __('Are you sure you want to delete # %s?', $user['User']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Users'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?> </li>
-	</ul>
-</div>
+
+<?php //debug($user); ?>
+
+<?php if (!empty($user['UserGroup'])): ?>
+	<div class="related">
+		<h3><?php echo __('Groups User Belongs To'); ?></h3>
+		<table cellpadding = "0" cellspacing = "0">
+		<tr>
+			<th><?php echo __('Name'); ?></th>
+		</tr>
+		<?php
+			foreach($user['UserGroup'] as $group) {
+				//loop for all groups
+				echo '<tr>';
+				echo '<td>'.$group['name'].'</td>';
+				echo '</tr>';
+// debug($group);
+			}//end foreach
+		?>
+		</table>
+	</div>
+<?php endif; ?>
