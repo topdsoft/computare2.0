@@ -38,7 +38,8 @@
 		</dd>
 	</dl>
 </div>
-<?php debug($item) ?>
+<?php 
+// debug($item) ?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
@@ -46,8 +47,8 @@
 	</ul>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Item Costs'); ?></h3>
 	<?php if (!empty($item['ItemCost'])): ?>
+	<h3><?php echo __('Related Item Costs'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -77,16 +78,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Item Cost'), array('controller' => 'item_costs', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Item Details'); ?></h3>
-	<?php if (!empty($item['ItemDetail'])): ?>
+	<?php if (!empty($item['Revisions'])): ?>
+	<h3><?php echo __('Revisions'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -101,7 +97,7 @@
 	</tr>
 	<?php
 		$i = 0;
-		foreach ($item['ItemDetail'] as $itemDetail): ?>
+		foreach ($item['Revisions'] as $itemDetail): ?>
 		<tr>
 			<td><?php echo $itemDetail['id']; ?></td>
 			<td><?php echo $itemDetail['created']; ?></td>
@@ -121,15 +117,10 @@
 	</table>
 <?php endif; ?>
 
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Item Detail'), array('controller' => 'item_details', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Item Serial Numbers'); ?></h3>
 	<?php if (!empty($item['ItemSerialNumber'])): ?>
+	<h3><?php echo __('Related Item Serial Numbers'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -162,13 +153,13 @@
 
 	<div class="actions">
 		<ul>
-			<li><?php echo $this->Html->link(__('New Item Serial Number'), array('controller' => 'item_serial_numbers', 'action' => 'add')); ?> </li>
+			<li><?php //echo $this->Html->link(__('New Item Serial Number'), array('controller' => 'item_serial_numbers', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Item Transactions'); ?></h3>
 	<?php if (!empty($item['ItemTransaction'])): ?>
+	<h3><?php echo __('Related Item Transactions'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -202,16 +193,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Item Transaction'), array('controller' => 'item_transactions', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Purchase Order Details'); ?></h3>
 	<?php if (!empty($item['PurchaseOrderDetail'])): ?>
+	<h3><?php echo __('Related Purchase Order Details'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -245,16 +231,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Purchase Order Detail'), array('controller' => 'purchase_order_details', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Receipts'); ?></h3>
 	<?php if (!empty($item['Receipt'])): ?>
+	<h3><?php echo __('Related Receipts'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -284,16 +265,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Receipt'), array('controller' => 'receipts', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Sales'); ?></h3>
 	<?php if (!empty($item['Sale'])): ?>
+	<h3><?php echo __('Related Sales'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -323,16 +299,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Sale'), array('controller' => 'sales', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Sales Order Details'); ?></h3>
 	<?php if (!empty($item['SalesOrderDetail'])): ?>
+	<h3><?php echo __('Related Sales Order Details'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -366,16 +337,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Sales Order Detail'), array('controller' => 'sales_order_details', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Customers'); ?></h3>
 	<?php if (!empty($item['Customer'])): ?>
+	<h3><?php echo __('Related Customers'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -407,16 +373,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Item Groups'); ?></h3>
 	<?php if (!empty($item['ItemGroup'])): ?>
+	<h3><?php echo __('Related Item Groups'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -442,16 +403,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Item Group'), array('controller' => 'item_groups', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Images'); ?></h3>
 	<?php if (!empty($item['Image'])): ?>
+	<h3><?php echo __('Related Images'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -480,13 +436,13 @@
 
 	<div class="actions">
 		<ul>
-			<li><?php echo $this->Html->link(__('New Image'), array('controller' => 'images', 'action' => 'add')); ?> </li>
+			<li><?php //echo $this->Html->link(__('New Image'), array('controller' => 'images', 'action' => 'add')); ?> </li>
 		</ul>
 	</div>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Locations'); ?></h3>
 	<?php if (!empty($item['Location'])): ?>
+	<h3><?php echo __('Related Locations'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -508,16 +464,11 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Location'), array('controller' => 'locations', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
+
 <div class="related">
-	<h3><?php echo __('Related Vendors'); ?></h3>
 	<?php if (!empty($item['Vendor'])): ?>
+	<h3><?php echo __('Related Vendors'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
@@ -543,10 +494,4 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Vendor'), array('controller' => 'vendors', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>

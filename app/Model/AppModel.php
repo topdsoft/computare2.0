@@ -45,7 +45,7 @@ class AppModel extends Model {
 //debug($ret);exit;
 		// Point model to new config 
 		$this->useDbConfig = $dbName; 
-		$this->useDbConfig = 'computare'; //uncomment this line to use bake
+// 		$this->useDbConfig = 'computare'; //uncomment this line to use bake
 		parent::__construct($id, $table, $ds); 
 	} 
 	
