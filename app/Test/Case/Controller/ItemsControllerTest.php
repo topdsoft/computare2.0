@@ -1,11 +1,11 @@
 <?php
-App::uses('Item', 'Model');
+App::uses('ItemsController', 'Controller');
 
 /**
- * Item Test Case
+ * ItemsController Test Case
  *
  */
-class ItemTest extends CakeTestCase {
+class ItemsControllerTest extends ControllerTestCase {
 
 /**
  * Fixtures
@@ -37,24 +37,43 @@ class ItemTest extends CakeTestCase {
 	);
 
 /**
- * setUp method
+ * testIndex method
  *
  * @return void
  */
-	public function setUp() {
-		parent::setUp();
-		$this->Item = ClassRegistry::init('Item');
+	public function testIndex() {
 	}
 
 /**
- * tearDown method
+ * testView method
  *
  * @return void
  */
-	public function tearDown() {
-		unset($this->Item);
+	public function testView() {
+	}
 
-		parent::tearDown();
+/**
+ * testAdd method
+ *
+ * @return void
+ */
+	public function testAdd() {
+	}
+
+/**
+ * testEdit method
+ *
+ * @return void
+ */
+	public function testEdit() {
+	}
+
+/**
+ * testDelete method
+ *
+ * @return void
+ */
+	public function testDelete() {
 	}
 
 }

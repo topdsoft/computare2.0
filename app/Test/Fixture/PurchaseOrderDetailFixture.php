@@ -1,16 +1,16 @@
 <?php
 /**
- * ItemDetailFixture
+ * PurchaseOrderDetailFixture
  *
  */
-class ItemDetailFixture extends CakeTestFixture {
+class PurchaseOrderDetailFixture extends CakeTestFixture {
 
 /**
  * Table name
  *
  * @var string
  */
-	public $table = 'itemDetails';
+	public $table = 'purchaseOrderDetails';
 
 /**
  * Fields
@@ -21,11 +21,11 @@ class ItemDetailFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'sku' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 30, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'upc' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 15, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'salesOrder_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'category_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'shipped' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'price' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '12,2'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -40,13 +40,13 @@ class ItemDetailFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-03-26 15:41:00',
+			'created' => '2013-03-26 15:59:55',
 			'created_id' => 1,
-			'name' => 'Lorem ipsum dolor sit amet',
-			'sku' => 'Lorem ipsum dolor sit amet',
-			'upc' => 'Lorem ipsum d',
+			'salesOrder_id' => 1,
 			'item_id' => 1,
-			'category_id' => 1
+			'qty' => 1,
+			'shipped' => 1,
+			'price' => 1
 		),
 	);
 

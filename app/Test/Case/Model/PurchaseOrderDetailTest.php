@@ -1,11 +1,11 @@
 <?php
-App::uses('ItemDetail', 'Model');
+App::uses('PurchaseOrderDetail', 'Model');
 
 /**
- * ItemDetail Test Case
+ * PurchaseOrderDetail Test Case
  *
  */
-class ItemDetailTest extends CakeTestCase {
+class PurchaseOrderDetailTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,14 +13,17 @@ class ItemDetailTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.item_detail',
+		'app.purchase_order_detail',
+		'app.sales_order',
 		'app.item',
 		'app.item_cost',
+		'app.vendor',
+		'app.item_detail',
 		'app.item_serial_number',
+		'app.item_location',
 		'app.item_transaction',
-		'app.purchase_order_detail',
-		'app.receipt',
 		'app.sale',
+		'app.receipt',
 		'app.sales_order_detail',
 		'app.customer',
 		'app.customer_detail',
@@ -31,9 +34,7 @@ class ItemDetailTest extends CakeTestCase {
 		'app.images_item',
 		'app.location',
 		'app.items_location',
-		'app.vendor',
-		'app.items_vendor',
-		'app.category'
+		'app.items_vendor'
 	);
 
 /**
@@ -43,7 +44,7 @@ class ItemDetailTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->ItemDetail = ClassRegistry::init('ItemDetail');
+		$this->PurchaseOrderDetail = ClassRegistry::init('PurchaseOrderDetail');
 	}
 
 /**
@@ -52,7 +53,7 @@ class ItemDetailTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->ItemDetail);
+		unset($this->PurchaseOrderDetail);
 
 		parent::tearDown();
 	}

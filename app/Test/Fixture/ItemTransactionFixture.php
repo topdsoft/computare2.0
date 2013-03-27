@@ -1,16 +1,16 @@
 <?php
 /**
- * ItemDetailFixture
+ * ItemTransactionFixture
  *
  */
-class ItemDetailFixture extends CakeTestFixture {
+class ItemTransactionFixture extends CakeTestFixture {
 
 /**
  * Table name
  *
  * @var string
  */
-	public $table = 'itemDetails';
+	public $table = 'itemTransactions';
 
 /**
  * Fields
@@ -21,11 +21,11 @@ class ItemDetailFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'sku' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 30, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'upc' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 15, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'category_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'sale_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'receipt_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'type' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 1, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -40,13 +40,13 @@ class ItemDetailFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-03-26 15:41:00',
+			'created' => '2013-03-26 15:45:48',
 			'created_id' => 1,
-			'name' => 'Lorem ipsum dolor sit amet',
-			'sku' => 'Lorem ipsum dolor sit amet',
-			'upc' => 'Lorem ipsum d',
 			'item_id' => 1,
-			'category_id' => 1
+			'sale_id' => 1,
+			'receipt_id' => 1,
+			'qty' => 1,
+			'type' => 'Lorem ipsum dolor sit ame'
 		),
 	);
 

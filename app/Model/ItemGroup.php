@@ -1,11 +1,10 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * ItemDetail Model
+ * ItemGroup Model
  *
- * @property Item $Item
  */
-class ItemDetail extends AppModel {
+class ItemGroup extends AppModel {
 
 /**
  * Use database config
@@ -19,7 +18,7 @@ class ItemDetail extends AppModel {
  *
  * @var mixed False or table name
  */
-	public $useTable = 'itemDetails';
+	public $useTable = 'itemGroups';
 
 /**
  * Display field
@@ -37,29 +36,12 @@ class ItemDetail extends AppModel {
 		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				'message' => 'Please enter an item name here',
+				//'message' => 'Your custom message here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-	);
-
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
-/**
- * belongsTo associations
- *
- * @var array
- */
-	public $belongsTo = array(
-		'Item' => array(
-			'className' => 'Item',
-			'foreignKey' => 'item_id',
-			'conditions' => '',
-			'fields' => '',
-			'order' => ''
-		)
 	);
 }
