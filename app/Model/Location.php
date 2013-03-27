@@ -11,6 +11,15 @@ App::uses('AppModel', 'Model');
  */
 class Location extends AppModel {
     public $actsAs = array('Tree');
+    public $displayField = 'name';
+/*	public $virtualFields = array(
+		'name'=>'select name from locationDetails as LocationDetail where LocationDetail.id=Location.locationDetail_id'
+	);*/
+
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->virtualFields['name'] = 'select name from locationDetails as LocationDetail where LocationDetail.id='.$this->alias.'.locationDetail_id';
+	}
 
 /**
  * Use database config

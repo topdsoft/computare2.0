@@ -1,16 +1,16 @@
 <?php
 /**
- * PurchaseOrderDetailFixture
+ * PurchaseOrderFixture
  *
  */
-class PurchaseOrderDetailFixture extends CakeTestFixture {
+class PurchaseOrderFixture extends CakeTestFixture {
 
 /**
  * Table name
  *
  * @var string
  */
-	public $table = 'purchaseOrderDetails';
+	public $table = 'purchaseOrders';
 
 /**
  * Fields
@@ -21,11 +21,9 @@ class PurchaseOrderDetailFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'purchaseOrder_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),
-		'rec' => array('type' => 'integer', 'null' => false, 'default' => null),
-		'cost' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '12,2'),
+		'vendor_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'status' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 1, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'allowOpen' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -40,13 +38,11 @@ class PurchaseOrderDetailFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-03-27 15:20:29',
+			'created' => '2013-03-27 15:17:58',
 			'created_id' => 1,
-			'purchaseOrder_id' => 1,
-			'item_id' => 1,
-			'qty' => 1,
-			'rec' => 1,
-			'cost' => 1
+			'vendor_id' => 1,
+			'status' => 'Lorem ipsum dolor sit ame',
+			'allowOpen' => 1
 		),
 	);
 

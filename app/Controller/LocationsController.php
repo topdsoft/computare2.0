@@ -7,6 +7,8 @@ App::uses('AppController', 'Controller');
  */
 class LocationsController extends AppController {
 
+	public $components=array('ComputareIC');
+
 /**
  * index method
  *
@@ -26,6 +28,7 @@ class LocationsController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->set('formName','Location Details');
 		$this->Location->id = $id;
 		if (!$this->Location->exists()) {
 			throw new NotFoundException(__('Invalid location'));
@@ -36,22 +39,26 @@ class LocationsController extends AppController {
 /**
  * add method
  *
+ * @param int $defaultParent
  * @return void
  */
-	public function add() {
+	public function add($defaultParent=0) {
+		$this->set('formName','New Location');
 		if ($this->request->is('post')) {
 			$this->Location->create();
-			if ($this->Location->save($this->request->data)) {
-				$this->Session->setFlash(__('The location has been saved'));
+			if ($this->ComputareIC->saveLocation($this->request->data)) {
+				$this->Session->setFlash(__('The location has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The location could not be saved. Please, try again.'));
 			}
-		}
-		$locationDetails = $this->Location->LocationDetail->find('list');
-		$parentLocations = $this->Location->ParentLocation->find('list');
-		$items = $this->Location->Item->find('list');
-		$this->set(compact('locationDetails', 'parentLocations', 'items'));
+		} else $this->request->data['Location']['parent_id']=$defaultParent;
+// 		$locationDetails = $this->Location->LocationDetail->find('list');
+		$parents = $this->Location->ParentLocation->find('list');
+// debug($parents);exit;
+		$parents[0]='(none)';
+// 		$items = $this->Location->Item->find('list');
+		$this->set(compact('parents'));
 	}
 
 /**
@@ -62,6 +69,7 @@ class LocationsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit Location');
 		$this->Location->id = $id;
 		if (!$this->Location->exists()) {
 			throw new NotFoundException(__('Invalid location'));

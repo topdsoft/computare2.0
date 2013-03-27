@@ -96,6 +96,37 @@ class ItemsController extends AppController {
 	}
 
 /**
+ * receive method
+ * @param int $id
+ */
+	public function receive($id = null) {
+		$this->Item->id = $id;
+		if (!$this->Item->exists()) {
+			throw new NotFoundException(__('Invalid item'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+// debug($this->request->data);exit;
+			$data['item_id']=$id;
+			$data['cost']=$this->request->data['Item']['cost'];
+			$data['qty']=$this->request->data['Item']['qty'];
+			$data['location_id']=$this->request->data['Item']['location_id'];
+			$data['purchaseOrder_id']=$this->request->data['Item']['purchaseOrder_id'];
+			if($this->ComputareIC->receive($data)) {
+				//success
+				$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				//fail
+				$this->Session->setFlash(__('The could not be completed. Please, try again.'));
+			}
+		}
+		$this->set('item', $this->Item->read(null, $id));
+		$this->set('locations', $this->Item->Location->find('list'));
+		$this->set('purchaseOrders', ClassRegistry::init('PurchaseOrder')->find('list'));
+//$this->set('purchaseOrders', array(1=>1));
+	}
+
+/**
  * delete method
  *
  * @throws MethodNotAllowedException

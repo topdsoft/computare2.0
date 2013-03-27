@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 /**
  * PurchaseOrderDetail Model
  *
- * @property SalesOrder $SalesOrder
+ * @property PurchaseOrder $PurchaseOrder
  * @property Item $Item
  */
 class PurchaseOrderDetail extends AppModel {
@@ -22,6 +22,33 @@ class PurchaseOrderDetail extends AppModel {
  */
 	public $useTable = 'purchaseOrderDetails';
 
+/**
+ * Validation rules
+ *
+ * @var array
+ */
+	public $validate = array(
+		'qty' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'rec' => array(
+			'numeric' => array(
+				'rule' => array('numeric'),
+				//'message' => 'Your custom message here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -31,9 +58,9 @@ class PurchaseOrderDetail extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'SalesOrder' => array(
-			'className' => 'SalesOrder',
-			'foreignKey' => 'salesOrder_id',
+		'PurchaseOrder' => array(
+			'className' => 'PurchaseOrder',
+			'foreignKey' => 'purchaseOrder_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

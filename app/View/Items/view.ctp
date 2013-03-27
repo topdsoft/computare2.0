@@ -44,6 +44,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Item'), array('action' => 'edit', $item['Item']['id'])); ?> </li>
+		<li><?php echo $this->Html->link(__('Receive Item'), array('action' => 'receive', $item['Item']['id'])); ?> </li>
 	</ul>
 </div>
 <div class="related">
@@ -198,17 +199,17 @@
 <div class="related">
 	<?php if (!empty($item['PurchaseOrderDetail'])): ?>
 	<h3><?php echo __('Related Purchase Order Details'); ?></h3>
+<?php // debug($item['PurchaseOrderDetail']); ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Id'); ?></th>
 		<th><?php echo __('Created'); ?></th>
 		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('SalesOrder Id'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
+		<th><?php echo __('Purchase Order'); ?></th>
 		<th><?php echo __('Qty'); ?></th>
-		<th><?php echo __('Shipped'); ?></th>
-		<th><?php echo __('Price'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Rec'); ?></th>
+		<th><?php echo __('Cost'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
@@ -217,15 +218,14 @@
 			<td><?php echo $purchaseOrderDetail['id']; ?></td>
 			<td><?php echo $purchaseOrderDetail['created']; ?></td>
 			<td><?php echo $purchaseOrderDetail['created_id']; ?></td>
-			<td><?php echo $purchaseOrderDetail['salesOrder_id']; ?></td>
-			<td><?php echo $purchaseOrderDetail['item_id']; ?></td>
+			<td><?php echo $purchaseOrderDetail['purchaseOrder_id']; ?></td>
 			<td><?php echo $purchaseOrderDetail['qty']; ?></td>
-			<td><?php echo $purchaseOrderDetail['shipped']; ?></td>
-			<td><?php echo $purchaseOrderDetail['price']; ?></td>
+			<td><?php echo $purchaseOrderDetail['rec']; ?></td>
+			<td><?php echo $purchaseOrderDetail['cost']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'purchase_order_details', 'action' => 'view', $purchaseOrderDetail['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'purchase_order_details', 'action' => 'edit', $purchaseOrderDetail['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'purchase_order_details', 'action' => 'delete', $purchaseOrderDetail['id']), null, __('Are you sure you want to delete # %s?', $purchaseOrderDetail['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'purchase_order_details', 'action' => 'view', $purchaseOrderDetail['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'purchase_order_details', 'action' => 'edit', $purchaseOrderDetail['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'purchase_order_details', 'action' => 'delete', $purchaseOrderDetail['id']), null, __('Are you sure you want to delete # %s?', $purchaseOrderDetail['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
@@ -442,23 +442,24 @@
 </div>
 <div class="related">
 	<?php if (!empty($item['Location'])): ?>
-	<h3><?php echo __('Related Locations'); ?></h3>
+	<h3><?php echo __('Item is at these Locations'); ?></h3>
+<?php //debug($item['Location']);?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('LocationDetail Id'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Name'); ?></th>
+		<th><?php echo __('Qty'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['Location'] as $location): ?>
 		<tr>
-			<td><?php echo $location['id']; ?></td>
-			<td><?php echo $location['locationDetail_id']; ?></td>
+			<td><?php echo $this->Html->link($location['name'], array('controller' => 'locations', 'action' => 'view', $location['id'])) ; ?></td>
+			<td><?php echo $location['ItemsLocation']['qty']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'locations', 'action' => 'view', $location['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'locations', 'action' => 'edit', $location['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'locations', 'action' => 'delete', $location['id']), null, __('Are you sure you want to delete # %s?', $location['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'locations', 'action' => 'view', $location['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'locations', 'action' => 'edit', $location['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'locations', 'action' => 'delete', $location['id']), null, __('Are you sure you want to delete # %s?', $location['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
