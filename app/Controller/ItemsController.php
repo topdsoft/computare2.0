@@ -108,9 +108,14 @@ class ItemsController extends AppController {
 // debug($this->request->data);exit;
 			$data['item_id']=$id;
 			$data['cost']=$this->request->data['Item']['cost'];
-			$data['qty']=$this->request->data['Item']['qty'];
+			if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
+			else $data['qty']=1;
 			$data['location_id']=$this->request->data['Item']['location_id'];
 			$data['purchaseOrder_id']=$this->request->data['Item']['purchaseOrder_id'];
+			if(isset($this->request->data['ItemSerialNumber'])) {
+				//item is serialized
+				$data['number']=$this->request->data['ItemSerialNumber']['number'];
+			}//endif
 			if($this->ComputareIC->receive($data)) {
 				//success
 				$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));

@@ -99,6 +99,8 @@ class ComputareICComponent extends Component{
 		$purchaseOrder=$this->PurchaseOrder->read(null,$data['purchaseOrder_id']);
 // debug($purchaseOrder);
 		if(!$purchaseOrder) return false;
+		$item=$this->Item->read(null,$data['item_id']);
+		if(!$item) return false;
 		$ok=true;
 		$dataSource=$this->Location->getDataSource();
 		//start transaction
@@ -118,11 +120,23 @@ class ComputareICComponent extends Component{
 		$data['ItemTransaction']['item_id']=$data['item_id'];
 		if($ok) $ok=$this->Item->ItemTransaction->save($data['ItemTransaction']);
 		//create entry in items_locations table
-		$data['Item_Location']['created_id']=$this->Auth->User('id');
-		$data['Item_Location']['item_id']=$data['item_id'];
-		$data['Item_Location']['location_id']=$data['location_id'];
-		$data['Item_Location']['qty']=$data['qty'];
-		if($ok) $ok=$this->Item->ItemsLocation->save($data['Item_Location']);
+		$il=$this->Item->ItemsLocation->find('first',array('conditions'=>array('item_id'=>$data['item_id'],'location_id'=>$data['location_id'])));
+// debug($il);exit;
+		if($il) {
+			//item_location exists
+			$data['ItemsLocation']['id']=$item_location_id=$il['ItemsLocation']['id'];
+			$data['ItemsLocation']['item_id']=$il['ItemsLocation']['item_id'];
+			$data['ItemsLocation']['location_id']=$il['ItemsLocation']['location_id'];
+			$data['ItemsLocation']['qty']=$il['ItemsLocation']['qty']+$data['qty'];
+		} else {
+			//item_location does not exist
+			$data['ItemsLocation']['created_id']=$this->Auth->User('id');
+			$data['ItemsLocation']['item_id']=$data['item_id'];
+			$data['ItemsLocation']['location_id']=$data['location_id'];
+			$data['ItemsLocation']['qty']=$data['qty'];
+		}//endif
+		if($ok) $ok=$this->Item->ItemsLocation->save($data['ItemsLocation']);
+		if($ok && !isset($item_location_id)) $item_location_id=$this->Item->ItemsLocation->getInsertId();
 		//update purchase order details
 		$poDetail=$this->PurchaseOrder->PurchaseOrderDetail->find('first',array('conditions'=>array('purchaseOrder_id'=>$data['purchaseOrder_id'], 'item_id'=>$data['item_id'])));
 		if(!$poDetail) {
@@ -134,19 +148,36 @@ class ComputareICComponent extends Component{
 				$data['PurchaseOrderDetails']['item_id']=$data['item_id'];
 				$data['PurchaseOrderDetails']['rec']=$data['qty'];
 				//??cost
+				$data['PurchaseOrderDetails']['cost']=$data['cost'];
 			} else $ok=false;
 		} else {
 			//item found on po
-			$data['PurchaseOrderDetails']['id']=$poDetail['id'];
-			$data['PurchaseOrderDetails']['rec']=$poDetail['rec']+$data['qty'];
+			$data['PurchaseOrderDetails']['id']=$poDetail['PurchaseOrderDetail']['id'];
+			$data['PurchaseOrderDetails']['rec']=$poDetail['PurchaseOrderDetail']['rec']+$data['qty'];
 		}//endif
 		if($ok) $ok=$this->PurchaseOrder->PurchaseOrderDetail->save($data['PurchaseOrderDetails']);
 		//insert into itemCosts table
-		$data['ItemCosts']['created_id']=$this->Auth->User('id');
-		$data['ItemCosts']['item_id']=$data['item_id'];
-		$data['ItemCosts']['vendor_id']=$purchaseOrder['PurchaseOrder']['vendor_id'];
-		//????cost
-		$data['ItemCosts']['qty']=$data['qty'];
+		$data['ItemCost']['created_id']=$this->Auth->User('id');
+		$data['ItemCost']['item_id']=$data['item_id'];
+		$data['ItemCost']['vendor_id']=$purchaseOrder['PurchaseOrder']['vendor_id'];
+		if($poDetail) {
+			//use cost from PO
+			$data['ItemCost']['cost']=$poDetail['PurchaseOrderDetail']['cost'];
+		} else {
+			//use entered cost
+			$data['ItemCost']['cost']=$data['cost'];
+		}//endif
+		$data['ItemCost']['qty']=$data['qty'];
+		if($ok) $ok=$this->Item->ItemCost->save($data['ItemCost']);
+		//serialNumbers
+		if($item['Item']['serialized']) {
+			//save serial number data
+			$data['ItemSerialNumber']['number']=$data['number'];
+			$data['ItemSerialNumber']['created_id']=$this->Auth->User('id');
+			$data['ItemSerialNumber']['item_id']=$data['item_id'];
+			$data['ItemSerialNumber']['item_location_id']=$item_location_id;
+			if($ok) $ok=$this->Item->ItemSerialNumber->save($data['ItemSerialNumber']);
+		}//endif
 // debug($data);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
