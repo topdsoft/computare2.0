@@ -22,6 +22,7 @@ class ItemTransactionFixture extends CakeTestFixture {
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'location_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'sale_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'receipt_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),

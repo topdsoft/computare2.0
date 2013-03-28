@@ -33,6 +33,8 @@ class ItemsController extends AppController {
 			throw new NotFoundException(__('Invalid item'));
 		}
 		$this->set('item', $this->Item->read(null, $id));
+		$this->set('users', ClassRegistry::init('User')->find('list'));
+		$this->set('locations', $this->Item->Location->find('list'));
 	}
 
 /**

@@ -49,31 +49,29 @@
 </div>
 <div class="related">
 	<?php if (!empty($item['ItemCost'])): ?>
-	<h3><?php echo __('Related Item Costs'); ?></h3>
+	<h3><?php echo __('Item Costs'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
-		<th><?php echo __('Vendor Id'); ?></th>
+		<th><?php echo __('Date'); ?></th>
+		<th><?php echo __('Qty'); ?></th>
 		<th><?php echo __('Cost'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('By'); ?></th>
+		<th><?php echo __('Vendor Id'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['ItemCost'] as $itemCost): ?>
 		<tr>
-			<td><?php echo $itemCost['id']; ?></td>
 			<td><?php echo $itemCost['created']; ?></td>
-			<td><?php echo $itemCost['created_id']; ?></td>
-			<td><?php echo $itemCost['item_id']; ?></td>
-			<td><?php echo $itemCost['vendor_id']; ?></td>
+			<td><?php echo $itemCost['qty']; ?></td>
 			<td><?php echo $itemCost['cost']; ?></td>
+			<td><?php echo $users[$itemCost['created_id']]; ?></td>
+			<td><?php echo $itemCost['vendor_id']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'item_costs', 'action' => 'view', $itemCost['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'item_costs', 'action' => 'edit', $itemCost['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'item_costs', 'action' => 'delete', $itemCost['id']), null, __('Are you sure you want to delete # %s?', $itemCost['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'item_costs', 'action' => 'view', $itemCost['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'item_costs', 'action' => 'edit', $itemCost['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'item_costs', 'action' => 'delete', $itemCost['id']), null, __('Are you sure you want to delete # %s?', $itemCost['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
@@ -86,32 +84,28 @@
 	<h3><?php echo __('Revisions'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
+		<th><?php echo __('Date'); ?></th>
+		<th><?php echo __('By'); ?></th>
 		<th><?php echo __('Name'); ?></th>
 		<th><?php echo __('Sku'); ?></th>
 		<th><?php echo __('Upc'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
 		<th><?php echo __('Category Id'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['Revisions'] as $itemDetail): ?>
 		<tr>
-			<td><?php echo $itemDetail['id']; ?></td>
 			<td><?php echo $itemDetail['created']; ?></td>
-			<td><?php echo $itemDetail['created_id']; ?></td>
+			<td><?php echo $users[$itemDetail['created_id']]; ?></td>
 			<td><?php echo $itemDetail['name']; ?></td>
 			<td><?php echo $itemDetail['sku']; ?></td>
 			<td><?php echo $itemDetail['upc']; ?></td>
-			<td><?php echo $itemDetail['item_id']; ?></td>
 			<td><?php echo $itemDetail['category_id']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'item_details', 'action' => 'view', $itemDetail['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'item_details', 'action' => 'edit', $itemDetail['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'item_details', 'action' => 'delete', $itemDetail['id']), null, __('Are you sure you want to delete # %s?', $itemDetail['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'item_details', 'action' => 'view', $itemDetail['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'item_details', 'action' => 'edit', $itemDetail['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'item_details', 'action' => 'delete', $itemDetail['id']), null, __('Are you sure you want to delete # %s?', $itemDetail['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
@@ -121,31 +115,27 @@
 </div>
 <div class="related">
 	<?php if (!empty($item['ItemSerialNumber'])): ?>
-	<h3><?php echo __('Related Item Serial Numbers'); ?></h3>
+	<h3><?php echo __('Item Serial Numbers'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('Item Location Id'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
 		<th><?php echo __('Number'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('By'); ?></th>
+		<th><?php echo __('Item Location'); ?></th>
+		<th></th>
 	</tr>
 	<?php
-		$i = 0;
+		$i = 0;//debug($item['ItemSerialNumber']);
 		foreach ($item['ItemSerialNumber'] as $itemSerialNumber): ?>
 		<tr>
-			<td><?php echo $itemSerialNumber['id']; ?></td>
-			<td><?php echo $itemSerialNumber['created']; ?></td>
-			<td><?php echo $itemSerialNumber['created_id']; ?></td>
-			<td><?php echo $itemSerialNumber['item_location_id']; ?></td>
-			<td><?php echo $itemSerialNumber['item_id']; ?></td>
 			<td><?php echo $itemSerialNumber['number']; ?></td>
+			<td><?php echo $itemSerialNumber['created']; ?></td>
+			<td><?php echo $users[$itemSerialNumber['created_id']]; ?></td>
+			<td><?php echo $itemSerialNumber['item_location_id']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'item_serial_numbers', 'action' => 'view', $itemSerialNumber['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'item_serial_numbers', 'action' => 'edit', $itemSerialNumber['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'item_serial_numbers', 'action' => 'delete', $itemSerialNumber['id']), null, __('Are you sure you want to delete # %s?', $itemSerialNumber['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'item_serial_numbers', 'action' => 'view', $itemSerialNumber['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'item_serial_numbers', 'action' => 'edit', $itemSerialNumber['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'item_serial_numbers', 'action' => 'delete', $itemSerialNumber['id']), null, __('Are you sure you want to delete # %s?', $itemSerialNumber['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
@@ -160,35 +150,30 @@
 </div>
 <div class="related">
 	<?php if (!empty($item['ItemTransaction'])): ?>
-	<h3><?php echo __('Related Item Transactions'); ?></h3>
+	<h3><?php echo __('Item Transactions'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
-		<th><?php echo __('Sale Id'); ?></th>
-		<th><?php echo __('Receipt Id'); ?></th>
-		<th><?php echo __('Qty'); ?></th>
+		<th><?php echo __('Date'); ?></th>
+		<th><?php echo __('By'); ?></th>
 		<th><?php echo __('Type'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Qty'); ?></th>
+		<th><?php echo __('Location'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
+// debug($item['ItemTransaction']);
 		foreach ($item['ItemTransaction'] as $itemTransaction): ?>
 		<tr>
-			<td><?php echo $itemTransaction['id']; ?></td>
 			<td><?php echo $itemTransaction['created']; ?></td>
-			<td><?php echo $itemTransaction['created_id']; ?></td>
-			<td><?php echo $itemTransaction['item_id']; ?></td>
-			<td><?php echo $itemTransaction['sale_id']; ?></td>
-			<td><?php echo $itemTransaction['receipt_id']; ?></td>
-			<td><?php echo $itemTransaction['qty']; ?></td>
+			<td><?php echo $users[$itemTransaction['created_id']]; ?></td>
 			<td><?php echo $itemTransaction['type']; ?></td>
+			<td><?php echo $itemTransaction['qty']; ?></td>
+			<td><?php echo $this->Html->link($locations[$itemTransaction['location_id']], array('controller'=>'locations','action'=>'view',$itemTransaction['location_id'])); ; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'item_transactions', 'action' => 'view', $itemTransaction['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'item_transactions', 'action' => 'edit', $itemTransaction['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'item_transactions', 'action' => 'delete', $itemTransaction['id']), null, __('Are you sure you want to delete # %s?', $itemTransaction['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'item_transactions', 'action' => 'view', $itemTransaction['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'item_transactions', 'action' => 'edit', $itemTransaction['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'item_transactions', 'action' => 'delete', $itemTransaction['id']), null, __('Are you sure you want to delete # %s?', $itemTransaction['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
@@ -198,14 +183,13 @@
 
 <div class="related">
 	<?php if (!empty($item['PurchaseOrderDetail'])): ?>
-	<h3><?php echo __('Related Purchase Order Details'); ?></h3>
+	<h3><?php echo __('Purchase Order Details'); ?></h3>
 <?php // debug($item['PurchaseOrderDetail']); ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
 		<th><?php echo __('Purchase Order'); ?></th>
+		<th><?php echo __('Date'); ?></th>
+		<th><?php echo __('By'); ?></th>
 		<th><?php echo __('Qty'); ?></th>
 		<th><?php echo __('Rec'); ?></th>
 		<th><?php echo __('Cost'); ?></th>
@@ -215,10 +199,9 @@
 		$i = 0;
 		foreach ($item['PurchaseOrderDetail'] as $purchaseOrderDetail): ?>
 		<tr>
-			<td><?php echo $purchaseOrderDetail['id']; ?></td>
+			<td><?php echo $this->Html->link($purchaseOrderDetail['purchaseOrder_id'],array('controller'=>'purchaseOrders','action'=>'view',$purchaseOrderDetail['purchaseOrder_id'])); ?></td>
 			<td><?php echo $purchaseOrderDetail['created']; ?></td>
-			<td><?php echo $purchaseOrderDetail['created_id']; ?></td>
-			<td><?php echo $purchaseOrderDetail['purchaseOrder_id']; ?></td>
+			<td><?php echo $users[$purchaseOrderDetail['created_id']]; ?></td>
 			<td><?php echo $purchaseOrderDetail['qty']; ?></td>
 			<td><?php echo $purchaseOrderDetail['rec']; ?></td>
 			<td><?php echo $purchaseOrderDetail['cost']; ?></td>
@@ -235,31 +218,29 @@
 
 <div class="related">
 	<?php if (!empty($item['Receipt'])): ?>
-	<h3><?php echo __('Related Receipts'); ?></h3>
+	<h3><?php echo __('Item Receipts'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
-		<th><?php echo __('PurchaseOrder Id'); ?></th>
-		<th><?php echo __('Vendor Id'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Date'); ?></th>
+		<th><?php echo __('By'); ?></th>
+		<th><?php echo __('Qty'); ?></th>
+		<th><?php echo __('Purchase Order'); ?></th>
+		<th><?php echo __('Vendor'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['Receipt'] as $receipt): ?>
 		<tr>
-			<td><?php echo $receipt['id']; ?></td>
 			<td><?php echo $receipt['created']; ?></td>
-			<td><?php echo $receipt['created_id']; ?></td>
-			<td><?php echo $receipt['item_id']; ?></td>
-			<td><?php echo $receipt['purchaseOrder_id']; ?></td>
-			<td><?php echo $receipt['vendor_id']; ?></td>
+			<td><?php echo $users[$receipt['created_id']]; ?></td>
+			<td><?php echo $receipt['qty']; ?></td>
+			<td><?php echo $this->Html->link($receipt['purchaseOrder_id'],array('controller'=>'purchaseOrders','action'=>'view',$receipt['purchaseOrder_id'])); ?></td>
+			<td><?php echo $this->Html->link($receipt['vendor_id'],array('controller'=>'vendors','action'=>'view',$receipt['vendor_id'])); ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'receipts', 'action' => 'view', $receipt['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'receipts', 'action' => 'edit', $receipt['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'receipts', 'action' => 'delete', $receipt['id']), null, __('Are you sure you want to delete # %s?', $receipt['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'receipts', 'action' => 'view', $receipt['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'receipts', 'action' => 'edit', $receipt['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'receipts', 'action' => 'delete', $receipt['id']), null, __('Are you sure you want to delete # %s?', $receipt['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

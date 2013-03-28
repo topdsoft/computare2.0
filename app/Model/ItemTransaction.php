@@ -39,6 +39,13 @@ class ItemTransaction extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
+		'Location' => array(
+			'className' => 'Location',
+			'foreignKey' => 'location_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Sale' => array(
 			'className' => 'Sale',
 			'foreignKey' => 'sale_id',

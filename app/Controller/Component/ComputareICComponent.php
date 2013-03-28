@@ -118,6 +118,7 @@ class ComputareICComponent extends Component{
 		$data['ItemTransaction']['created_id']=$this->Auth->User('id');
 		$data['ItemTransaction']['receipt_id']=$this->Receipts->getInsertId();
 		$data['ItemTransaction']['item_id']=$data['item_id'];
+		$data['ItemTransaction']['location_id']=$data['location_id'];
 		if($ok) $ok=$this->Item->ItemTransaction->save($data['ItemTransaction']);
 		//create entry in items_locations table
 		$il=$this->Item->ItemsLocation->find('first',array('conditions'=>array('item_id'=>$data['item_id'],'location_id'=>$data['location_id'])));
