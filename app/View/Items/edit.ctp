@@ -9,7 +9,8 @@
 		echo $this->Form->input('ItemDetail.name',array('id'=>'sc'));
 		echo $this->Form->input('ItemDetail.sku');
 		echo $this->Form->input('ItemDetail.upc');
-		echo $this->Form->input('ItemGroup');
+		if($itemGroups) echo $this->Form->input('ItemGroup',array('multiple'=>'checkbox','label'=>'Item Groups'));
+		if($categories) echo $this->Form->input('category_id',array('label'=>'Item Category'));
 // debug($this->data);
 	?>
 	<?php echo $this->Form->end(__('Submit')); ?>

@@ -36,6 +36,11 @@
 			<?php echo h($item['ItemDetail']['upc']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Category'); ?></dt>
+		<dd>
+			<?php echo $this->Html->link($item['ItemCategory']['name'],array('controller'=>'itemCategories','action'=>'view',$item['ItemCategory']['id'])); ?>
+			&nbsp;
+		</dd>
 	</dl>
 </div>
 <?php 
@@ -358,27 +363,21 @@
 
 <div class="related">
 	<?php if (!empty($item['ItemGroup'])): ?>
-	<h3><?php echo __('Related Item Groups'); ?></h3>
+	<h3><?php echo __('Item in Groups'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
 		<th><?php echo __('Name'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['ItemGroup'] as $itemGroup): ?>
 		<tr>
-			<td><?php echo $itemGroup['id']; ?></td>
-			<td><?php echo $itemGroup['created']; ?></td>
-			<td><?php echo $itemGroup['created_id']; ?></td>
-			<td><?php echo $itemGroup['name']; ?></td>
+			<td><?php echo $this->Html->link($itemGroup['name'],array('controller'=>'itemGroups','action'=>'view',$itemGroup['id'])) ; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'item_groups', 'action' => 'view', $itemGroup['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'item_groups', 'action' => 'edit', $itemGroup['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'item_groups', 'action' => 'delete', $itemGroup['id']), null, __('Are you sure you want to delete # %s?', $itemGroup['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'item_groups', 'action' => 'view', $itemGroup['id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'item_groups', 'action' => 'edit', $itemGroup['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'item_groups', 'action' => 'delete', $itemGroup['id']), null, __('Are you sure you want to delete # %s?', $itemGroup['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

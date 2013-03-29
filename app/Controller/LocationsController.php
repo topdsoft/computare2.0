@@ -18,6 +18,7 @@ class LocationsController extends AppController {
 		$this->set('formName','List Locations');
 		$this->Location->recursive = 0;
 		$this->set('locations', $this->paginate());
+		$this->set('locationsList',$this->Location->generateTreeList(null,null,null,' - '));
 	}
 
 /**
@@ -75,8 +76,8 @@ class LocationsController extends AppController {
 			throw new NotFoundException(__('Invalid location'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->Location->save($this->request->data)) {
-				$this->Session->setFlash(__('The location has been saved'));
+			if ($this->ComputareIC->saveLocation($this->request->data)) {
+				$this->Session->setFlash(__('The location has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The location could not be saved. Please, try again.'));
@@ -84,10 +85,12 @@ class LocationsController extends AppController {
 		} else {
 			$this->request->data = $this->Location->read(null, $id);
 		}
-		$locationDetails = $this->Location->LocationDetail->find('list');
-		$parentLocations = $this->Location->ParentLocation->find('list');
-		$items = $this->Location->Item->find('list');
-		$this->set(compact('locationDetails', 'parentLocations', 'items'));
+// 		$locationDetails = $this->Location->LocationDetail->find('list');
+// 		$parentLocations = $this->Location->ParentLocation->find('list');
+// 		$items = $this->Location->Item->find('list');
+		$parents = $this->Location->ParentLocation->find('list');
+		$parents[0]='(none)';
+		$this->set(compact('parents'));
 	}
 
 /**

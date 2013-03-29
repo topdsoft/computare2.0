@@ -1,18 +1,16 @@
 <div class="locations index">
-	<h2><?php echo __('Locations'); ?></h2>
+	<h2><?php echo __('All Locations'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('LocationDetail.name','Name'); ?></th>
 			<th><?php echo $this->Paginator->sort('parent_id'); ?></th>
 			<th></th>
 	</tr>
 	<?php 
-// debug($locations);
-	foreach ($locations as $location): ?>
+//  debug($locations);
+	foreach ($locations as $location): //debug($location);?>
 	<tr>
-		<td><?php echo h($location['Location']['id']); ?>&nbsp;</td>
-		<td><?php echo h($location['LocationDetail']['name']); ?></td>
+		<td><?php echo h($locationsList[$location['Location']['id']]); ?></td>
 		<td>
 			<?php echo $this->Html->link($location['ParentLocation']['name'], array('controller' => 'locations', 'action' => 'view', $location['ParentLocation']['id'])); ?>
 		</td>

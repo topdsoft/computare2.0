@@ -89,12 +89,13 @@ class ItemsController extends AppController {
 		} else {
 			$this->request->data = $this->Item->read(null, $id);
 		}
-		$customers = $this->Item->Customer->find('list');
-		$groups = $this->Item->ItemGroup->find('list');
-		$images = $this->Item->Image->find('list');
-		$locations = $this->Item->Location->find('list');
-		$vendors = $this->Item->Vendor->find('list');
-		$this->set(compact('customers', 'groups', 'images', 'locations', 'vendors'));
+		$categories = $this->Item->ItemCategory->find('list');
+		if($categories) $categories[0]='(none)';
+		$itemGroups = $this->Item->ItemGroup->find('list');
+// 		$images = $this->Item->Image->find('list');
+// 		$locations = $this->Item->Location->find('list');
+// 		$vendors = $this->Item->Vendor->find('list');
+		$this->set(compact('categories', 'itemGroups'));
 	}
 
 /**
@@ -102,6 +103,7 @@ class ItemsController extends AppController {
  * @param int $id
  */
 	public function receive($id = null) {
+		$this->set('formName','Receive Item');
 		$this->Item->id = $id;
 		if (!$this->Item->exists()) {
 			throw new NotFoundException(__('Invalid item'));

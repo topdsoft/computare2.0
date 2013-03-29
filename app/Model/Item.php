@@ -40,6 +40,10 @@ class Item extends AppModel {
 			'className' => 'ItemDetail',
 			'foreignKey' => 'itemDetail_id',
 		),
+		'ItemCategory' => array (
+			'className' => 'ItemCategory',
+			'foreignKey' => 'category_id'
+		),
 	);
 /**
  * hasMany associations

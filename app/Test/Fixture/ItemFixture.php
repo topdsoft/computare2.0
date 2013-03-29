@@ -14,6 +14,7 @@ class ItemFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'itemDetail_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'category_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10),
 		'active' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'serialized' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'indexes' => array(

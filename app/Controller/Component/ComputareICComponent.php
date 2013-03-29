@@ -31,13 +31,17 @@ class ComputareICComponent extends Component{
 			if($ok) $ok=$this->Item->save($data['Item']);
 			if($ok) $data['Item']['id']=$this->Item->getInsertId();
 		}//endif
+		$data['ItemDetail']['category_id']=$data['Item']['category_id'];
 		$data['ItemDetail']['item_id']=$data['Item']['id'];
 		$data['ItemDetail']['created_id']=$this->Auth->User('id');
 		//save itemDetails
 		if($ok) $ok=$this->ItemDetail->save($data['ItemDetail']);
 		//update itemDetail_id
 		$data['Item']['itemDetail_id']=$this->ItemDetail->getInsertId();
-		if($ok) $ok=$this->Item->save($data['Item']);
+		//save just Item and ItemGroup data (itemDetail allready saved)
+		unset($data['ItemDetail']);
+// 		if($ok) $ok=$this->Item->save($data['Item']);
+		if($ok) $ok=$this->Item->save($data);
 // debug($data);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
@@ -67,6 +71,7 @@ class ComputareICComponent extends Component{
 		}//endif
 		$data['LocationDetail']['location_id']=$data['Location']['id'];
 		$data['LocationDetail']['created_id']=$this->Auth->User('id');
+		$data['LocationDetail']['parent_id']=$data['Location']['parent_id'];
 		//save locationDetails
 		if($ok) $ok=$this->LocationDetail->save($data['LocationDetail']);
 		//update locationDetail_id
@@ -77,6 +82,46 @@ class ComputareICComponent extends Component{
 		else $dataSource->rollback();
 		return ($ok==true);
 	}//end function saveLocation
+	
+	/**
+	 * saveItemGroup
+	 * @param array $data
+	 * @return t/f
+	 */
+	public function saveItemGroup($data){
+		//save item group data
+		$this->ItemGroup=ClassRegistry::init('ItemGroup');
+		$ok=true;
+		$dataSource=$this->ItemGroup->getDataSource();
+		//start transaction
+		$dataSource->begin();
+// debug($data); exit;
+		$data['ItemGroup']['created_id']=$this->Auth->User('id');
+		if($ok) $ok=$this->ItemGroup->save($data['ItemGroup']);
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}
+	
+	/**
+	 * saveItemCategory method
+	 * @param array $data
+	 * @return t/f
+	 */
+	public function saveItemCategory($data){
+		//save item category
+		$this->ItemCategory=ClassRegistry::init('ItemCategory');
+		$ok=true;
+		$dataSource=$this->ItemCategory->getDataSource();
+		//start transaction
+		$dataSource->begin();
+// debug($data); exit;
+		$data['ItemCategory']['created_id']=$this->Auth->User('id');
+		if($ok) $ok=$this->ItemCategory->save($data['ItemCategory']);
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}
 	
 	/**
 	 * receive method
