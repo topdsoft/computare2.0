@@ -18,6 +18,36 @@ class ItemsController extends AppController {
 		$this->Item->recursive = 0;
 		$this->set('items', $this->paginate());
 	}
+//$this->Item->Location->reorder(array('order'=>'asc','field'=>'name','id'=>3));
+
+/**
+ * bylocation method
+ */
+	public function bylocation() {
+		$this->set('formName','List Items By Location');
+		//create new assoications
+		$this->Item->ItemsLocation->bindModel(
+			array('belongsTo' => array(
+				'Item' => array(
+					'className'=>'Item',
+					'fields'=>array('name')
+					),
+				'Location' => array(
+					'className'=>'Location',
+					'fields'=>array('name','lft')
+					)
+				)
+				
+			)
+		);
+		$items=$this->paginate('ItemsLocation');
+//		$itemsList=$this->Item->find('list');
+//		$locationsList=$this->Item->Location->find('list');
+		//get path
+		foreach($items as $i=>$item) $items[$i]['path']=$this->Item->Location->getPath($item['ItemsLocation']['location_id'],array('id','name'));
+//  debug($items);exit;
+		$this->set(compact('items'));
+	}
 
 /**
  * view method
@@ -43,24 +73,26 @@ class ItemsController extends AppController {
  * @return void
  */
 	public function add() {
-		$this->redirect('edit');
-		
-		if ($this->request->is('post')) {
-			$this->Item->create();
-			$this->request->data['Item']['active']=true;
-			if ($this->Item->save($this->request->data)) {
-				$this->Session->setFlash(__('The item has been created'),'default',array('class'=>'success'));
-				$this->redirect(array('action' => 'edit',$this->Item->getInsertId()));
+		$this->set('formName','Add Item'); 
+		//editing item
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if ($this->ComputareIC->saveItem($this->request->data)) {
+				$this->Session->setFlash(__('The item has been saved'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The item could not be saved. Please, try again.'));
 			}
+		} else {
+			//default
+			$this->request->data['Item']['category_id']=0;
 		}
-		$customers = $this->Item->Customer->find('list');
-		$groups = $this->Item->ItemGroup->find('list');
-		$images = $this->Item->Image->find('list');
-		$locations = $this->Item->Location->find('list');
-		$vendors = $this->Item->Vendor->find('list');
-		$this->set(compact('customers', 'groups', 'images', 'locations', 'vendors'));
+		$categories = $this->Item->ItemCategory->find('list');
+		if($categories) $categories[0]='(none)';
+		$itemGroups = $this->Item->ItemGroup->find('list');
+// 		$images = $this->Item->Image->find('list');
+// 		$locations = $this->Item->Location->find('list');
+// 		$vendors = $this->Item->Vendor->find('list');
+		$this->set(compact('categories', 'itemGroups'));
 	}
 
 /**
@@ -71,14 +103,12 @@ class ItemsController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-		if($id) {
-			//editing item
-			$this->set('formName','Edit Item'); 
-			$this->Item->id = $id;
-			if (!$this->Item->exists()) {
-				throw new NotFoundException(__('Invalid item'));
-			}
-		} else $this->set('formName','New Item');
+		$this->set('formName','Edit Item'); 
+		//editing item
+		$this->Item->id = $id;
+		if (!$this->Item->exists()) {
+			throw new NotFoundException(__('Invalid item'));
+		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->ComputareIC->saveItem($this->request->data)) {
 				$this->Session->setFlash(__('The item has been saved'),'default',array('class'=>'success'));
@@ -101,8 +131,9 @@ class ItemsController extends AppController {
 /**
  * receive method
  * @param int $id
+ * @param int $location_id (default, can be changed)
  */
-	public function receive($id = null) {
+	public function receive($id = null, $location_id = null) {
 		$this->set('formName','Receive Item');
 		$this->Item->id = $id;
 		if (!$this->Item->exists()) {
@@ -128,6 +159,9 @@ class ItemsController extends AppController {
 				//fail
 				$this->Session->setFlash(__('The could not be completed. Please, try again.'));
 			}
+		} else {
+			//use defaults
+			$this->request->data['Item']['location_id']=$location_id;
 		}
 		$this->set('item', $this->Item->read(null, $id));
 		$this->set('locations', $this->Item->Location->find('list'));

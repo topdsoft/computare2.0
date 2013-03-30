@@ -24,7 +24,7 @@ class ComputareICComponent extends Component{
 		//start transaction
 		$dataSource->begin();
 // debug($data['Item']['id']);exit;
-		if($data['Item']['id']) {
+		if(isset($data['Item']['id'])) {
 			//editing existing item
 		} else {
 			//creating new item
@@ -194,7 +194,8 @@ class ComputareICComponent extends Component{
 				$data['PurchaseOrderDetails']['item_id']=$data['item_id'];
 				$data['PurchaseOrderDetails']['rec']=$data['qty'];
 				//??cost
-				$data['PurchaseOrderDetails']['cost']=$data['cost'];
+				if($data['cost']) $data['PurchaseOrderDetails']['cost']=$data['cost'];
+				else $data['PurchaseOrderDetails']['cost']=0;
 			} else $ok=false;
 		} else {
 			//item found on po
@@ -211,7 +212,8 @@ class ComputareICComponent extends Component{
 			$data['ItemCost']['cost']=$poDetail['PurchaseOrderDetail']['cost'];
 		} else {
 			//use entered cost
-			$data['ItemCost']['cost']=$data['cost'];
+			if($data['cost']) $data['ItemCost']['cost']=$data['cost'];
+			else $data['ItemCost']['cost']=0;
 		}//endif
 		$data['ItemCost']['qty']=$data['qty'];
 		if($ok) $ok=$this->Item->ItemCost->save($data['ItemCost']);

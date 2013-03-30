@@ -25,9 +25,11 @@ class Item extends AppModel {
  * @var string
  */
 	public $useDbConfig = 'computare';
+	public $displayField = 'name';
 
 	public $virtualFields = array(
-		'name'=>'select name from itemDetails as ItemDetail where ItemDetail.id=Item.itemDetail_id'
+		'name'=>'select name from itemDetails as ItemDetail where ItemDetail.id=Item.itemDetail_id',
+		'qty'=>'select sum(qty) from items_locations where items_locations.item_id=Item.id'
 	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

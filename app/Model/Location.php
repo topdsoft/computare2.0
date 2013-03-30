@@ -80,7 +80,7 @@ class Location extends AppModel {
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => 'lft',
 			'limit' => '',
 			'offset' => '',
 			'exclusive' => '',
