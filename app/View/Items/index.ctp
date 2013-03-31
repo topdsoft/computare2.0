@@ -14,7 +14,16 @@
 	<tr>
 		<td><?php echo h($item['Item']['name']); ?>&nbsp;</td>
 		<td><?php echo h($item['Item']['qty']); ?>&nbsp;</td>
-		<td><?php echo $this->Html->link($item['ItemCategory']['name'],array('controller'=>'itemCategories','action'=>'view',$item['ItemCategory']['id'])); ?>&nbsp;</td>
+		<td><?php
+//echo $this->Html->link($item['ItemCategory']['name'],array('controller'=>'itemCategories','action'=>'view',$item['ItemCategory']['id'])); 
+			if($item['path']) {
+				foreach($item['path'] as $i=>$path) {
+					//loop for each step of path
+					if($i!=0) echo '->';
+					echo $this->Html->link($path['ItemCategory']['name'],array('controller'=>'itemCategory','action'=>'view',$path['ItemCategory']['id']));
+				}//endforeach
+			}//endif
+		?>&nbsp;</td>
 		<td><?php echo h($item['Item']['created']); ?>&nbsp;</td>
 		<td><?php if($item['Item']['serialized']) echo 'Y'; ?>&nbsp;</td>
 		<td class="actions">

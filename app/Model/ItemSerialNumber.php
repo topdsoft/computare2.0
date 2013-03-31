@@ -31,8 +31,8 @@ class ItemSerialNumber extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'ItemLocation' => array(
-			'className' => 'ItemLocation',
+		'ItemsLocation' => array(
+			'className' => 'ItemsLocation',
 			'foreignKey' => 'item_location_id',
 			'conditions' => '',
 			'fields' => '',

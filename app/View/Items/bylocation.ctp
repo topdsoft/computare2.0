@@ -25,6 +25,7 @@
 			<?php //echo $this->Html->link(__('View'), array('action' => 'view', $item['Item']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $item['ItemsLocation']['item_id'])); ?>
 			<?php echo $this->Html->link(__('Receive'), array('action' => 'receive', $item['ItemsLocation']['item_id'], $item['ItemsLocation']['location_id'])); ?>
+			<?php echo $this->Html->link(__('Transfer'), array('action' => 'transfer', $item['ItemsLocation']['id'])); ?>
 			<?php // echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $item['Item']['id']), null, __('Are you sure you want to delete # %s?', $item['Item']['id'])); ?>
 		</td>
 	</tr>

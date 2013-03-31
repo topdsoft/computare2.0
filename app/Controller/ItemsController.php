@@ -16,7 +16,10 @@ class ItemsController extends AppController {
 	public function index() {
 		$this->set('formName','List Items');
 		$this->Item->recursive = 0;
-		$this->set('items', $this->paginate());
+		$items=$this->paginate();
+		foreach($items as $i=>$item) $items[$i]['path']=$this->Item->ItemCategory->getPath($item['Item']['category_id'],array('id','name'));
+//  debug($items);exit;
+		$this->set(compact('items'));
 	}
 //$this->Item->Location->reorder(array('order'=>'asc','field'=>'name','id'=>3));
 
@@ -40,7 +43,8 @@ class ItemsController extends AppController {
 				
 			)
 		);
-		$items=$this->paginate('ItemsLocation');
+		$this->paginate = array('order'=>'lft');
+		$items=$this->paginate('ItemsLocation'); 
 //		$itemsList=$this->Item->find('list');
 //		$locationsList=$this->Item->Location->find('list');
 		//get path
@@ -86,7 +90,7 @@ class ItemsController extends AppController {
 			//default
 			$this->request->data['Item']['category_id']=0;
 		}
-		$categories = $this->Item->ItemCategory->find('list');
+		$categories = $this->Item->ItemCategory->generateTreeList(null,null,null,' - ');
 		if($categories) $categories[0]='(none)';
 		$itemGroups = $this->Item->ItemGroup->find('list');
 // 		$images = $this->Item->Image->find('list');
@@ -119,7 +123,7 @@ class ItemsController extends AppController {
 		} else {
 			$this->request->data = $this->Item->read(null, $id);
 		}
-		$categories = $this->Item->ItemCategory->find('list');
+		$categories = $this->Item->ItemCategory->generateTreeList(null,null,null,' - ');
 		if($categories) $categories[0]='(none)';
 		$itemGroups = $this->Item->ItemGroup->find('list');
 // 		$images = $this->Item->Image->find('list');
@@ -157,16 +161,68 @@ class ItemsController extends AppController {
 				$this->redirect(array('action' => 'index'));
 			} else {
 				//fail
-				$this->Session->setFlash(__('The could not be completed. Please, try again.'));
+				$this->Session->setFlash(__('The transaction could not be completed. Please, try again.'));
 			}
 		} else {
 			//use defaults
 			$this->request->data['Item']['location_id']=$location_id;
 		}
 		$this->set('item', $this->Item->read(null, $id));
-		$this->set('locations', $this->Item->Location->find('list'));
+		$this->set('locations', $this->Item->Location->generateTreeList(null,null,null,' - '));
 		$this->set('purchaseOrders', ClassRegistry::init('PurchaseOrder')->find('list'));
 //$this->set('purchaseOrders', array(1=>1));
+	}
+
+/**
+ * transfer method
+ * @param int $id items_locations.id for item to be transferred
+ * @param int $location_id where to transfer to (optional)
+ */
+	public function transfer($id=null, $location_id=null) {
+		$this->set('formName','Transfer Item');
+		//setup new assoications
+		$this->Item->ItemsLocation->bindModel(
+			array('belongsTo' => array(
+				'Item' => array(
+					'className'=>'Item',
+					'fields'=>array('name','serialized')
+					),
+				'Location' => array(
+					'className'=>'Location',
+					'fields'=>array('name')
+					)
+				)
+			)
+		);
+		if ($this->request->is('post') || $this->request->is('put')) {
+// debug($this->request->data);exit;
+			$data['item_location_id']=$id;
+			if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
+			$data['location_id']=$this->request->data['Item']['location_id'];
+			if(isset($this->request->data['Item']['serialNumbers'])) $data['serialNumbers']=$this->request->data['Item']['serialNumbers'];
+			if($this->ComputareIC->transfer($data)) {
+				//success
+				$this->Session->setFlash(__('The item has been transferred'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				//fail
+				$this->Session->setFlash(__('The transfer could not be completed. Please, try again.'));
+			}
+		} else {
+			//default
+			$this->request->data['Item']['qty']=1;
+		}//endif
+		$itemLocation=$this->Item->ItemsLocation->read(null,$id);
+		if(!$itemLocation) throw new NotFoundException(__('Invalid Item-Location'));
+		$this->set('itemLocation',$itemLocation);
+		if($itemLocation['Item']['serialized']) {
+			//for serialized items get list of numbers
+			$serialNumbers=$this->Item->ItemSerialNumber->find('list',array('fields'=>array('id','number') ,'conditions'=>array('item_location_id'=>$id)));
+			$this->set('serialNumbers',$serialNumbers);
+// debug($serialNumbers);exit;
+		}//endif
+// debug($itemLocation);exit;
+		$this->set('locations', $this->Item->Location->generateTreeList(null,null,null,' - '));
 	}
 
 /**

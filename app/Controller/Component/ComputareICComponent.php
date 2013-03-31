@@ -231,4 +231,90 @@ class ComputareICComponent extends Component{
 		else $dataSource->rollback();
 		return ($ok==true);
 	}//end public function receive
+	
+	/**
+	 * transfer method
+	 * @param array $data
+		* 'item_location_id'
+		* 'qty'
+		* 'location_id'
+		* 'serialNumbers'=>array of itemSerialNumber.id to be moved
+	 */
+	public function transfer($data) {
+		//transfer inventory
+		$this->Location=ClassRegistry::init('Location');
+		$this->Item=ClassRegistry::init('Item');
+		//validate item_location_id
+		$il=$this->Item->ItemsLocation->read(null,$data['item_location_id']);
+		if(!$il) return false;
+		//check for serialized item
+		if(isset($data['serialNumbers'])) {
+			//set qty
+			$data['qty']=count($data['serialNumbers']);
+		}//endif
+		//validate qty
+		if($data['qty']<1 || $data['qty']>$il['ItemsLocation']['qty']) return false;
+		//validate location_id
+		$newLocation=$this->Location->read(null,$data['location_id']);
+		if(!$newLocation) return false;
+		$ok=true;
+		$dataSource=$this->Location->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		//itemTransactions (from)
+		$trans['created_id']=$this->Auth->User('id');
+		$trans['item_id']=$il['ItemsLocation']['item_id'];
+		$trans['location_id']=$il['ItemsLocation']['location_id'];
+		$trans['qty']=$data['qty']*-1;
+		$trans['type']='T';
+		if($ok) $ok=$this->Item->ItemTransaction->save($trans);
+		//itemTransactions (to)
+		$trans['location_id']=$data['location_id'];
+		$trans['qty']=$data['qty'];
+// 		unset($trans['id']);
+		if($ok) $this->Item->ItemTransaction->create();
+		if($ok) $ok=$this->Item->ItemTransaction->save($trans);
+		unset($trans);
+		//items_locations (from)
+		if($data['qty']==$il['ItemsLocation']['qty']) {
+			//moving all qty from location
+// debug($ok);exit;
+			if($ok) $ok=$this->Item->ItemsLocation->delete($data['item_location_id']);
+		} else {
+			//qty remains at loaction
+			$il['ItemsLocation']['qty']-=$data['qty'];
+			if($ok) $ok=$this->Item->ItemsLocation->save($il);
+		}//endif
+		//items_locations (to)
+		$to=$this->Item->ItemsLocation->find('first',array('conditions'=>array('item_id'=>$il['ItemsLocation']['item_id'],'location_id'=>$data['location_id'])));
+		if($to) {
+			//item already has qty at this location
+			$to['ItemsLocation']['qty']+=$data['qty'];
+			if($ok) $ok=$this->Item->ItemsLocation->save($to);
+			$newIL_id=$to['ItemsLocation']['id'];
+// debug($to);exit;
+		} else {
+			//item new to this location
+			if($ok) $this->Item->ItemsLocation->create();
+			if($ok) $ok=$this->Item->ItemsLocation->save(array(
+				'item_id'=>$il['ItemsLocation']['item_id'],
+				'location_id'=>$data['location_id'],
+				'qty'=>$data['qty'],
+				'created_id'=>$this->Auth->User('id')
+			));
+			if($ok) $newIL_id=$this->Item->ItemsLocation->getInsertId();
+		}//endif
+		//itemSerialNumbers
+		if(isset($data['serialNumbers'])) {
+			//item is serialized
+			foreach($data['serialNumbers'] as $num) {
+				//loop for all serial numbers and update to the new location
+				if($ok) $ok=$this->Item->ItemSerialNumber->save(array('id'=>$num,'item_location_id'=>$newIL_id));
+			}//end foreach
+		}//endif
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}//end public function transfer
+	
 }
