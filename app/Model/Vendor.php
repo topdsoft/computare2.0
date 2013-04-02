@@ -12,6 +12,12 @@ App::uses('AppModel', 'Model');
  */
 class Vendor extends AppModel {
 
+    public $displayField = 'name';
+
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->virtualFields['name'] = 'select name from vendorDetails where vendorDetails.id='.$this->alias.'.vendorDetail_id';
+	}
 /**
  * Use database config
  *

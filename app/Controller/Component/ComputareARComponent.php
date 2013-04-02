@@ -39,4 +39,27 @@ class ComputareARComponent extends Component{
 		else $dataSource->rollback();
 		return ($ok==true);
 	}//end public function saveVendor
+	
+	/**
+	 * method savePO
+	 * @param array data
+	 * @returns t/f
+	 */
+	public function savePO($data) {
+		//save PO data
+		$this->PurchaseOrder=ClassRegistry::init('PurchaseOrder');
+		$ok=true;
+		$dataSource=$this->PurchaseOrder->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		if(!isset($data['PurchaseOrder']['id'])) {
+			//new PO
+			$data['PurchaseOrder']['created_id']=$this->Auth->User('id');
+			if($ok) $this->PurchaseOrder->create();
+		}//endif
+		if($ok) $ok=$this->PurchaseOrder->save($data['PurchaseOrder']);
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}
 }
