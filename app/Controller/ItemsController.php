@@ -226,6 +226,58 @@ class ItemsController extends AppController {
 	}
 
 /**
+ * issue method
+ * @param int $id items_locations.id for item to be transferred
+ */
+	public function issue($id) {
+		//issue inventory item
+		$this->set('formName','Issue Item');
+		//setup new assoications
+		$this->Item->ItemsLocation->bindModel(
+			array('belongsTo' => array(
+				'Item' => array(
+					'className'=>'Item',
+					'fields'=>array('name','serialized')
+					),
+				'Location' => array(
+					'className'=>'Location',
+					'fields'=>array('name')
+					)
+				)
+			)
+		);
+		if ($this->request->is('post') || $this->request->is('put')) {
+debug($this->request->data);exit;
+			if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
+			$data['location_id']=$this->request->data['Item']['location_id'];
+			if(isset($this->request->data['Item']['serialNumbers'])) $data['serialNumbers']=$this->request->data['Item']['serialNumbers'];
+			if($this->ComputareIC->issue($data)) {
+				//success
+				$this->Session->setFlash(__('The item has been issued'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				//fail
+				$this->Session->setFlash(__('The issue could not be completed. Please, try again.'));
+			}
+		} else {
+			//default
+			$this->request->data['Item']['qty']=1;
+		}//endif
+		$itemLocation=$this->Item->ItemsLocation->read(null,$id);
+		if(!$itemLocation) throw new NotFoundException(__('Invalid Item-Location'));
+		$this->set('itemLocation',$itemLocation);
+		if($itemLocation['Item']['serialized']) {
+			//for serialized items get list of numbers
+			$serialNumbers=$this->Item->ItemSerialNumber->find('list',array('fields'=>array('id','number') ,'conditions'=>array('item_location_id'=>$id)));
+			$this->set('serialNumbers',$serialNumbers);
+// debug($serialNumbers);exit;
+		}//endif
+// debug($itemLocation);exit;
+		
+	}//end public function issue
+
+
+/**
  * delete method
  *
  * @throws MethodNotAllowedException

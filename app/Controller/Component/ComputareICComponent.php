@@ -216,6 +216,7 @@ class ComputareICComponent extends Component{
 			else $data['ItemCost']['cost']=0;
 		}//endif
 		$data['ItemCost']['qty']=$data['qty'];
+		$data['ItemCost']['remain']=$data['qty'];
 		if($ok) $ok=$this->Item->ItemCost->save($data['ItemCost']);
 		//serialNumbers
 		if($item['Item']['serialized']) {

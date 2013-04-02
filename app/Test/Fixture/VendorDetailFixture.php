@@ -1,16 +1,16 @@
 <?php
 /**
- * ItemCostFixture
+ * VendorDetailFixture
  *
  */
-class ItemCostFixture extends CakeTestFixture {
+class VendorDetailFixture extends CakeTestFixture {
 
 /**
  * Table name
  *
  * @var string
  */
-	public $table = 'itemCosts';
+	public $table = 'vendorDetails';
 
 /**
  * Fields
@@ -21,11 +21,8 @@ class ItemCostFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'vendor_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'cost' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '10,2'),
-		'qty' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'remain' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 40, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -40,11 +37,10 @@ class ItemCostFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-03-26 15:43:47',
+			'created' => '2013-04-01 17:50:35',
 			'created_id' => 1,
-			'item_id' => 1,
 			'vendor_id' => 1,
-			'cost' => 1
+			'name' => 'Lorem ipsum dolor sit amet'
 		),
 	);
 
