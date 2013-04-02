@@ -47,9 +47,14 @@ class ComputareARComponent extends Component{
 			* $data['PurchaseOrder']['vendor_id']
 			* $data['PurchaseOrder']['status']=>'O'
 			* $data['PurchaseOrder']['allowOpen']
-		*  To close or void a PO pass:
+		*  To void a PO pass:
 			* $data['PurchaseOrder']['id']
-			* $data['PurchaseOrder'] ['status']=>'V' or 'C'
+			* $data['PurchaseOrder']['status']=>'V'
+		*  To close a PO pass:
+			* $data['PurchaseOrder']['id']
+			* $data['PurchaseOrder']['status']=>'C'
+			* $data['PurchaseOrder']['shipping']
+			* $data['PurchaseOrder']['tax']
 		* To add a PO line pass:
 			* $data['PurchaseOrder']['id']
 			* $data['PurchaseOrderDetail']['item_id']

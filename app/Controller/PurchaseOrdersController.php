@@ -134,11 +134,23 @@ class PurchaseOrdersController extends AppController {
 		if (!$this->PurchaseOrder->exists()) {
 			throw new NotFoundException(__('Invalid purchase order'));
 		}
-		$data['PurchaseOrder']['id']=$id;
-		$data['PurchaseOrder']['status']='C';
-		if($this->ComputareAR->savePO($data)) $this->Session->setFlash(__('The PO has been closed'),'default',array('class'=>'success'));
-		else $this->Session->setFlash(__('The PO could not be closed'));
-		$this->redirect(array('action' => 'index'));
+		$this->request->data['PurchaseOrder']['id']=$id;
+		$this->request->data['PurchaseOrder']['status']='C';
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if ($this->ComputareAR->savePO($this->request->data)) {
+				$this->Session->setFlash(__('The purchase order has been closed'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The purchase order could not be closed. Please, try again.'));
+			}
+		} else {
+			$this->request->data = $this->PurchaseOrder->read(null, $id);
+		}
+		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('items',ClassRegistry::init('Item')->find('list'));
+// 		if($this->ComputareAR->savePO($data)) $this->Session->setFlash(__('The PO has been closed'),'default',array('class'=>'success'));
+// 		else $this->Session->setFlash(__('The PO could not be closed'));
+// 		$this->redirect(array('action' => 'index'));
 	}
 
 /**
