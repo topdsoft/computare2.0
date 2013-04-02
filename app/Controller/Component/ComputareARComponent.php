@@ -43,6 +43,19 @@ class ComputareARComponent extends Component{
 	/**
 	 * method savePO
 	 * @param array data
+		* For new PO pass:
+			* $data['PurchaseOrder']['vendor_id']
+			* $data['PurchaseOrder']['status']=>'O'
+			* $data['PurchaseOrder']['allowOpen']
+		*  To close or void a PO pass:
+			* $data['PurchaseOrder']['id']
+			* $data['PurchaseOrder'] ['status']=>'V' or 'C'
+		* To add a PO line pass:
+			* $data['PurchaseOrder']['id']
+			* $data['PurchaseOrderDetail']['item_id']
+			* $data['PurchaseOrderDetail']['qty']
+			* $data['PurchaseOrderDetail']['cost']
+		* To remove a PO line pass: $data['removeLine']=>purchaseOrderDetails.id
 	 * @returns t/f
 	 */
 	public function savePO($data) {
@@ -52,12 +65,45 @@ class ComputareARComponent extends Component{
 		$dataSource=$this->PurchaseOrder->getDataSource();
 		//start transaction
 		$dataSource->begin();
-		if(!isset($data['PurchaseOrder']['id'])) {
-			//new PO
-			$data['PurchaseOrder']['created_id']=$this->Auth->User('id');
-			if($ok) $this->PurchaseOrder->create();
+		if(!isset($data['removeLine'])) {
+			//removing a line does not affect purchaseOrders table
+			if(!isset($data['PurchaseOrder']['id'])) {
+				//new PO
+				$data['PurchaseOrder']['created_id']=$this->Auth->User('id');
+				if($ok) $this->PurchaseOrder->create();
+			}//endif
+			if($data['PurchaseOrder']['status']=='V') {
+				//void
+				$rec=$this->PurchaseOrder->field('rec',array('PurchaseOrder.id'=>$data['PurchaseOrder']['id']));
+				if($rec>0) $ok=false;//can't void PO with qry received
+				unset($rec);
+				$data['PurchaseOrder']['voided']=date('Y-m-d h:m:s');
+				$data['PurchaseOrder']['voided_id']=$this->Auth->User('id');
+			} elseif ($data['PurchaseOrder']['status']=='C') {
+				//close
+				$data['PurchaseOrder']['closed']=date('Y-m-d h:m:s');
+				$data['PurchaseOrder']['closed_id']=$this->Auth->User('id');
+			}//endif
+			if($ok) $ok=$this->PurchaseOrder->save($data['PurchaseOrder']);
 		}//endif
-		if($ok) $ok=$this->PurchaseOrder->save($data['PurchaseOrder']);
+		//check for and save new PO line
+		if(isset($data['PurchaseOrderDetail']['item_id']) && isset($data['PurchaseOrderDetail']['qty']) && isset($data['PurchaseOrderDetail']['cost']) ){
+			//insert new po line
+			$data['PurchaseOrderDetail']['purchaseOrder_id']=$data['PurchaseOrder']['id'];
+			$data['PurchaseOrderDetail']['created_id']=$this->Auth->User('id');
+			$data['PurchaseOrderDetail']['active']=true;
+			if($ok) $this->PurchaseOrder->PurchaseOrderDetail->create();
+			if($ok) $ok=$this->PurchaseOrder->PurchaseOrderDetail->save($data['PurchaseOrderDetail']);
+		}//endif
+		if(isset($data['removeLine'])) {
+			//remove a line
+			$data['PurchaseOrderDetail']['id']=$data['removeLine'];
+			$data['PurchaseOrderDetail']['removed_id']=$this->Auth->User('id');
+			$data['PurchaseOrderDetail']['removed']=date('Y-m-d h:m:s');
+			$data['PurchaseOrderDetail']['active']=false;
+			if($ok) $ok=$this->PurchaseOrder->PurchaseOrderDetail->save($data['PurchaseOrderDetail']);
+// debug($data);exit;
+		}//endif
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);

@@ -21,7 +21,11 @@ class PurchaseOrder extends AppModel {
  * @var mixed False or table name
  */
 	public $useTable = 'purchaseOrders';
-
+	public $virtualFields = array(
+		'lines'=>'select count(*) from purchaseOrderDetails where purchaseOrderDetails.purchaseOrder_id=PurchaseOrder.id and purchaseOrderDetails.active',
+		'rec'=>'select sum(rec) from purchaseOrderDetails where purchaseOrderDetails.purchaseOrder_id=PurchaseOrder.id'
+	);
+	public $order = array('PurchaseOrder.created'=>'desc');
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -50,7 +54,7 @@ class PurchaseOrder extends AppModel {
 			'className' => 'PurchaseOrderDetail',
 			'foreignKey' => 'purchaseOrder_id',
 			'dependent' => false,
-			'conditions' => '',
+			'conditions' => 'PurchaseOrderDetail.active',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',

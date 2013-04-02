@@ -21,6 +21,9 @@ class PurchaseOrderDetailFixture extends CakeTestFixture {
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'removed' => array('type' => 'datetime', 'null' => false, 'default' => null),
+		'removed_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'active' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'purchaseOrder_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),
@@ -40,8 +43,11 @@ class PurchaseOrderDetailFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-03-27 15:20:29',
+			'created' => '2013-04-02 15:51:46',
 			'created_id' => 1,
+			'removed' => '2013-04-02 15:51:46',
+			'removed_id' => 1,
+			'active' => 1,
 			'purchaseOrder_id' => 1,
 			'item_id' => 1,
 			'qty' => 1,

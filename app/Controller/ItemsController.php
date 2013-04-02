@@ -169,7 +169,7 @@ class ItemsController extends AppController {
 		}
 		$this->set('item', $this->Item->read(null, $id));
 		$this->set('locations', $this->Item->Location->generateTreeList(null,null,null,' - '));
-		$this->set('purchaseOrders', ClassRegistry::init('PurchaseOrder')->find('list'));
+		$this->set('purchaseOrders', ClassRegistry::init('PurchaseOrder')->find('list',array('conditions'=>array('PurchaseOrder.status'=>'O'))));
 //$this->set('purchaseOrders', array(1=>1));
 	}
 

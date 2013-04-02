@@ -33,6 +33,15 @@ class PurchaseOrdersController extends AppController {
 		if (!$this->PurchaseOrder->exists()) {
 			throw new NotFoundException(__('Invalid purchase order'));
 		}
+		$this->PurchaseOrder->bindModel(
+			array('hasMany' => array(
+				'RemovedLine' => array(
+					'className'=>'PurchaseOrderDetail',
+					'conditions'=>array('RemovedLine.active'=>false)
+					),
+				)
+			)
+		);
 		$this->set('purchaseOrder', $this->PurchaseOrder->read(null, $id));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 		$this->set('items',ClassRegistry::init('Item')->find('list'));
@@ -60,6 +69,79 @@ class PurchaseOrdersController extends AppController {
 	}
 
 /**
+ * addline method
+ *
+ * @param int $id  (po id)
+ * @return void
+ */
+	public function addline($id=null) {
+		$this->set('formName','Edit Purchase Order');
+		$this->PurchaseOrder->id = $id;
+		if (!$this->PurchaseOrder->exists()) {
+			throw new NotFoundException(__('Invalid purchase order'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+// debug($this->request->data);exit;
+			if ($this->ComputareAR->savePO($this->request->data)) {
+				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'edit',$id));
+			} else {
+				$this->Session->setFlash(__('The purchase order could not be saved. Please, try again.'));
+			}
+		} else {
+			$this->request->data = $this->PurchaseOrder->read(null, $id);
+		}
+		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('items',ClassRegistry::init('Item')->find('list'));
+	}
+
+/** removeline method
+ * @param int $id (purchseOederDetails.id for line to remove)
+ */
+	public function removeline($id) {
+		$this->set('formName','Edit Purchase Order');
+		$podetail=$this->PurchaseOrder->PurchaseOrderDetail->read(null, $id);
+		if (!$podetail) {
+			throw new NotFoundException(__('Invalid purchase order'));
+		}
+		if($this->ComputareAR->savePO(array('removeLine'=>$id))) $this->Session->setFlash(__('The line has been removed'),'default',array('class'=>'success'));
+		else $this->Session->setFlash(__('The line could not be removed'));
+		$this->redirect(array('action' => 'edit',$podetail['PurchaseOrderDetail']['purchaseOrder_id']));
+	}
+
+/** void method
+ * @param int $id
+ */
+	public function void($id) {
+		$this->set('formName','Void Purchase Order');
+		$this->PurchaseOrder->id = $id;
+		if (!$this->PurchaseOrder->exists()) {
+			throw new NotFoundException(__('Invalid purchase order'));
+		}
+		$data['PurchaseOrder']['id']=$id;
+		$data['PurchaseOrder']['status']='V';
+		if($this->ComputareAR->savePO($data)) $this->Session->setFlash(__('The PO has been voided'),'default',array('class'=>'success'));
+		else $this->Session->setFlash(__('The PO could not be voided'));
+		$this->redirect(array('action' => 'index'));
+	}
+
+/** close method
+ * @param int $id
+ */
+	public function close($id) {
+		$this->set('formName','Close Purchase Order');
+		$this->PurchaseOrder->id = $id;
+		if (!$this->PurchaseOrder->exists()) {
+			throw new NotFoundException(__('Invalid purchase order'));
+		}
+		$data['PurchaseOrder']['id']=$id;
+		$data['PurchaseOrder']['status']='C';
+		if($this->ComputareAR->savePO($data)) $this->Session->setFlash(__('The PO has been closed'),'default',array('class'=>'success'));
+		else $this->Session->setFlash(__('The PO could not be closed'));
+		$this->redirect(array('action' => 'index'));
+	}
+
+/**
  * edit method
  *
  * @throws NotFoundException
@@ -73,8 +155,8 @@ class PurchaseOrdersController extends AppController {
 			throw new NotFoundException(__('Invalid purchase order'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->PurchaseOrder->save($this->request->data)) {
-				$this->Session->setFlash(__('The purchase order has been saved'));
+			if ($this->ComputareAR->savePO($this->request->data)) {
+				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The purchase order could not be saved. Please, try again.'));

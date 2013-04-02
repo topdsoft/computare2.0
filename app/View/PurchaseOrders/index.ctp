@@ -7,6 +7,8 @@
 			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
 			<th><?php echo $this->Paginator->sort('vendor_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('status'); ?></th>
+			<th><?php echo $this->Paginator->sort('lines'); ?></th>
+			<th><?php echo $this->Paginator->sort('rec','Qty Rec'); ?></th>
 			<th></th>
 	</tr>
 	<?php
@@ -19,9 +21,13 @@
 			<?php echo $this->Html->link($purchaseOrder['Vendor']['name'], array('controller' => 'vendors', 'action' => 'view', $purchaseOrder['Vendor']['id'])); ?>
 		</td>
 		<td><?php echo h($purchaseOrder['PurchaseOrder']['status']); ?>&nbsp;</td>
+		<td><?php echo h($purchaseOrder['PurchaseOrder']['lines']); ?>&nbsp;</td>
+		<td><?php echo h($purchaseOrder['PurchaseOrder']['rec']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $purchaseOrder['PurchaseOrder']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $purchaseOrder['PurchaseOrder']['id'])); ?>
+			<?php if($purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Edit'), array('action' => 'edit', $purchaseOrder['PurchaseOrder']['id'])); ?>
+			<?php if($purchaseOrder['PurchaseOrder']['rec']>0 && $purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Close'), array('action' => 'close', $purchaseOrder['PurchaseOrder']['id'])); ?>
+			<?php if($purchaseOrder['PurchaseOrder']['rec']==0 && $purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Void'), array('action' => 'void', $purchaseOrder['PurchaseOrder']['id'])); ?>
 			<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $purchaseOrder['PurchaseOrder']['id']), null, __('Are you sure you want to delete # %s?', $purchaseOrder['PurchaseOrder']['id'])); ?>
 		</td>
 	</tr>
@@ -48,7 +54,5 @@
 		<li><?php echo $this->Html->link(__('New Purchase Order'), array('action' => 'add')); ?></li>
 		<li><?php echo $this->Html->link(__('List Vendors'), array('controller' => 'vendors', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Vendor'), array('controller' => 'vendors', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Purchase Order Details'), array('controller' => 'purchase_order_details', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Purchase Order Detail'), array('controller' => 'purchase_order_details', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
