@@ -88,9 +88,8 @@ class PurchaseOrdersController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The purchase order could not be saved. Please, try again.'));
 			}
-		} else {
-			$this->request->data = $this->PurchaseOrder->read(null, $id);
-		}
+		} //endif
+		$this->request->data = $this->PurchaseOrder->read(null, $id);
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 		$this->set('items',ClassRegistry::init('Item')->find('list'));
 	}

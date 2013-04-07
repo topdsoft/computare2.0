@@ -35,6 +35,7 @@ class VendorsController extends AppController {
 		}
 		$this->set('vendor', $this->Vendor->read(null, $id));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('items',$this->Vendor->Item->find('list'));
 	}
 
 /**

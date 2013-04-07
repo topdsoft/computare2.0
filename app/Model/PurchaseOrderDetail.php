@@ -29,9 +29,19 @@ class PurchaseOrderDetail extends AppModel {
  */
 	public $validate = array(
 		'qty' => array(
-			'numeric' => array(
-				'rule' => array('numeric'),
-				//'message' => 'Your custom message here',
+			'multiple' => array(
+				'rule' => array('multiple', array('min'=>1)),
+				'message' => 'Enter a qty greater then 0 here',
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				//'on' => 'create', // Limit validation to 'create' or 'update' operations
+			),
+		),
+		'cost' => array(
+			'money' => array(
+				'rule' => array('money'),
+				'message' => 'Pleae enter item cost here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule

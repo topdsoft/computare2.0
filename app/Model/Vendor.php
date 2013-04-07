@@ -53,7 +53,7 @@ class Vendor extends AppModel {
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => array('ItemCost.created'=>'desc'),
 			'limit' => '',
 			'offset' => '',
 			'exclusive' => '',
