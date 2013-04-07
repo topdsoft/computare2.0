@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class VendorsController extends AppController {
 
-	public $components=array('ComputareAR');
+	public $components=array('ComputareAP');
 /**
  * index method
  *
