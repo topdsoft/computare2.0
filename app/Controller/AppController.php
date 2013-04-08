@@ -70,6 +70,30 @@ class AppController extends Controller {
 			}//endif
 			//authenticate
 			
+			//save user click
+			$clickObj=ClassRegistry::init('Click');
+			$lastclick=$clickObj->find('first',array('order'=>array('Click.created'=>'desc'),'conditions'=>array('user_id'=>$this->Auth->user('id'),'form_id !='=>$this->viewVars['form_id'])));
+			$click=$clickObj->find('first',array('conditions'=>array('user_id'=>$this->Auth->user('id'),'form_id'=>$this->viewVars['form_id'])));
+			if($click) {
+				//found previous visit(s)
+				$click['Click']['qty']+=1;
+			} else {
+				//first visit to this form
+				$click['Click']['user_id']=$this->Auth->user('id');
+				$click['Click']['form_id']=$this->viewVars['form_id'];
+				$click['Click']['qty']=1;
+				$clickObj->create();
+			}//endif
+			$click['Click']['last_url']=$this->request->url;
+			$click['Click']['last_click_id']=$lastclick['Click']['id'];
+// debug($lastclick);exit;
+			$clickObj->save($click);
+			//store previous URL for use in links
+			$this->viewVars['previousURL']=$lastclick['Click']['last_url'];
+			$this->viewVars['previousFormName']=$lastclick['Form']['name'];
+			unset($clickObj);
+			unset($click);
+			unset($lastclick);
 			//get help index if set
 			if(isset($form['Form']['helplink']) && !empty($form['Form']['helplink'])) $this->set('formhelp',$form['Form']['helplink']);
 		}//endif
