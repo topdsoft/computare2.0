@@ -43,9 +43,27 @@ class AppController extends Controller {
 	}
 	
 	public function beforeRender() {
+		#error handling
+		$error=false;
+		if($this->name=='CakeError') {
+			//error has occured
+			$error=true;
+			$errorData['event_type']=1;
+			$errorData['created_id']=$this->Auth->user('id');
+			$errorData['title']='Error:'.$this->viewVars['code'];
+			$errorData['errorEvent']=array('message'=>$this->viewVars['name']);
+			$errorData['formEvent']=array(
+				'controller'=>$this->request->params['controller'],
+				'action'=>$this->request->params['action'],
+				'parameters'=>$this->request->url,
+				'created_id'=>$this->Auth->user('id')
+			);
+// debug($this);exit;
+			$this->ComputareSysevent->save($errorData);
+		}//endif
 		//no ACL on login or help pages
 		$ignore=array('display','login');
-		if(!in_array($this->params['action'],$ignore)) {
+		if(!$error && !in_array($this->params['action'],$ignore)) {
 			$formOBJ=ClassRegistry::init('Form');
 			//look for controller/action combo in forms table
 			$form=$formOBJ->find('first',array('conditions'=>array('controller'=>$this->params['controller'],'action'=>$this->params['action'])));

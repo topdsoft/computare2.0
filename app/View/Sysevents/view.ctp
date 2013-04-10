@@ -48,6 +48,7 @@
 		</dl>
 	</div>
 <?php endif; ?>
+
 <div class="related">
 	<?php if (!empty($group['User'])): ?>
 	<h3><?php echo __('Related Users'); ?></h3>
@@ -125,5 +126,30 @@
 		</dl>
 	</div>
 <?php endif; ?>
+
+<?php if (!empty($sysevent['Formevent']['id'])): ?>
+	<div class="related">
+		<h3><?php echo __('Form Event Details'); ?></h3>
+		<dl>
+			<dt><?php echo __('Controller'); ?></dt>
+			<dd>
+				<?php echo h($sysevent['Formevent']['controller']); ?>
+				&nbsp;
+			</dd>
+			<dt><?php echo __('Action'); ?></dt>
+			<dd>
+				<?php echo h($sysevent['Formevent']['action']); ?>
+				&nbsp;
+			</dd>
+			<dt><?php echo __('Parameters'); ?></dt>
+			<dd>
+				<?php echo h($sysevent['Formevent']['parameters']); ?>
+				&nbsp;
+			</dd>
+		</dl>
+	</div>
+<?php endif; ?>
+
+<?php //debug($sysevent);?>
 
 </div>
