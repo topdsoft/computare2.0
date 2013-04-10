@@ -38,7 +38,7 @@ class Vendor extends AppModel {
 			'className' => 'Address',
 			'foreignKey' => 'vendor_id',
 			'dependent' => false,
-			'conditions' => '',
+			'conditions' => 'Address.active',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',

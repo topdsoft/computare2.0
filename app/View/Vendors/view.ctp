@@ -36,41 +36,27 @@
 	<h3><?php echo __('Vendor Addresses'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
 		<th><?php echo __('Name'); ?></th>
-		<th><?php echo __('Vendor Id'); ?></th>
-		<th><?php echo __('Customer Id'); ?></th>
-		<th><?php echo __('Line1'); ?></th>
-		<th><?php echo __('Line2'); ?></th>
+		<th><?php echo __('Line 1'); ?></th>
+		<th><?php echo __('Line 2'); ?></th>
 		<th><?php echo __('City'); ?></th>
 		<th><?php echo __('State'); ?></th>
 		<th><?php echo __('Zip'); ?></th>
-		<th><?php echo __('Active'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('By'); ?></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($vendor['Address'] as $address): ?>
 		<tr>
-			<td><?php echo $address['id']; ?></td>
-			<td><?php echo $address['created']; ?></td>
-			<td><?php echo $address['created_id']; ?></td>
 			<td><?php echo $address['name']; ?></td>
-			<td><?php echo $address['vendor_id']; ?></td>
-			<td><?php echo $address['customer_id']; ?></td>
 			<td><?php echo $address['line1']; ?></td>
 			<td><?php echo $address['line2']; ?></td>
 			<td><?php echo $address['city']; ?></td>
 			<td><?php echo $address['state']; ?></td>
 			<td><?php echo $address['zip']; ?></td>
-			<td><?php echo $address['active']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'addresses', 'action' => 'view', $address['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'addresses', 'action' => 'edit', $address['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'addresses', 'action' => 'delete', $address['id']), null, __('Are you sure you want to delete # %s?', $address['id'])); ?>
-			</td>
+			<td><?php echo $address['created']; ?></td>
+			<td><?php echo $users[$address['created_id']]; ?></td>
 		</tr>
 	<?php endforeach; ?>
 	</table>

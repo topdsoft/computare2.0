@@ -53,26 +53,6 @@
 		<dd>
 	<?php echo $customer['CustomerDetail']['lastName']; ?>
 &nbsp;</dd>
-		<dt><?php echo __('Address1'); ?></dt>
-		<dd>
-	<?php echo $customer['CustomerDetail']['address1']; ?>
-&nbsp;</dd>
-		<dt><?php echo __('Address2'); ?></dt>
-		<dd>
-	<?php echo $customer['CustomerDetail']['address2']; ?>
-&nbsp;</dd>
-		<dt><?php echo __('City'); ?></dt>
-		<dd>
-	<?php echo $customer['CustomerDetail']['city']; ?>
-&nbsp;</dd>
-		<dt><?php echo __('State'); ?></dt>
-		<dd>
-	<?php echo $customer['CustomerDetail']['state']; ?>
-&nbsp;</dd>
-		<dt><?php echo __('Zip'); ?></dt>
-		<dd>
-	<?php echo $customer['CustomerDetail']['zip']; ?>
-&nbsp;</dd>
 		<dt><?php echo __('Email'); ?></dt>
 		<dd>
 	<?php echo $customer['CustomerDetail']['email']; ?>
@@ -86,6 +66,28 @@
 	<?php echo $customer['CustomerDetail']['notes']; ?>
 &nbsp;</dd>
 	</dl>
+<?php
+	if($customer['Address']) {
+		//list addresses
+		echo '<h3>Adresses</h3>';
+		foreach ($customer['Address'] as $address) {
+			//loop for all addresses
+			echo '<h4>'.$address['name'].'</h4>';
+			echo '<dl>';
+			echo '<dt>'.__('Line1').'</dt>';
+			echo '<dd>'.$address['line1'].'</dd>';
+			echo '<dt>'.__('Line2').'</dt>';
+			echo '<dd>'.$address['line2'].'</dd>';
+			echo '<dt>'.__('City').'</dt>';
+			echo '<dd>'.$address['city'].'</dd>';
+			echo '<dt>'.__('State').'</dt>';
+			echo '<dd>'.$address['state'].'</dd>';
+			echo '<dt>'.__('Zip').'</dt>';
+			echo '<dd>'.$address['zip'].'</dd>';
+			echo '</dl>';
+		}//foreach
+	}//enidf
+?>
 <?php //debug($customer);
 	echo $this->element('revisionblock',array('data'=>$customer,'ignore'=>array('id','created','created_id')));
 ?>
@@ -94,11 +96,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Customer'), array('action' => 'edit', $customer['Customer']['id'])); ?> </li>
-		<li><?php //echo $this->Form->postLink(__('Delete Customer'), array('action' => 'delete', $customer['Customer']['id']), null, __('Are you sure you want to delete # %s?', $customer['Customer']['id'])); ?> </li>
-		<li><?php //echo $this->Html->link(__('List Customers'), array('action' => 'index')); ?> </li>
-		<li><?php //echo $this->Html->link(__('New Customer'), array('action' => 'add')); ?> </li>
-		<li><?php //echo $this->Html->link(__('List Customer Details'), array('controller' => 'customer_details', 'action' => 'index')); ?> </li>
-		<li><?php //echo $this->Html->link(__('New Customer Detail'), array('controller' => 'customer_details', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
 	

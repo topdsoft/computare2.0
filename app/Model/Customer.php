@@ -26,4 +26,14 @@ class Customer extends AppModel {
 			'order' => ''
 		)
 	);
+	
+/**
+ * hasMany associations
+ */
+	public $hasMany = array (
+		'Address' => array (
+			'className' => 'Address',
+			'conditions' => array('Address.active'),
+		)
+	);
 }
