@@ -6,7 +6,7 @@
 // debug($item);
 		if($itemLocation['Item']['serialized']) {
 			//show list of serial numbers
-			echo $this->Form->input('serialNumbers',array('label'=>'Select Items to Transfer','multiple'=>'checkbox'));
+			echo $this->Form->input('serialNumbers',array('label'=>'Select Items to Issue','multiple'=>'checkbox'));
 		} else echo $this->Form->input('qty',array('type'=>'number','id'=>'sc','min'=>1,'max'=>$itemLocation['ItemsLocation']['qty']));
 // 		echo $this->Form->input('cost',array('id'=>'sc'));
 		echo 'From Location: <strong>'.$itemLocation['Location']['name'].'</strong>';
