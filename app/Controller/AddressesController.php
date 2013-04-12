@@ -104,16 +104,16 @@ class AddressesController extends AppController {
 			throw new NotFoundException(__('Invalid address'));
 		}
 		$address=$this->Address->read(null, $id);
-		if($address['Customer']['name']) {
+		if($address['Customer']['id']) {
 			//address id for a customer
 			$controller='customers';
 			$return_id=$address['Customer']['id'];
 		}//endif
-		if($address['Vendor']['name']) {
+		if($address['Vendor']['id']) {
 			$controller='vendors';
 			$return_id=$address['Vendor']['id'];
 		}//endif
-		
+
 		if ($this->Address->save(array('active'=>false))) {
 			$this->Session->setFlash(__('Address deleted'));
 			$this->redirect(array('controller'=>$controller,'action' => 'edit',$return_id));

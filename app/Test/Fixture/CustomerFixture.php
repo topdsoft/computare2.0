@@ -12,10 +12,12 @@ class CustomerFixture extends CakeTestFixture {
  */
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
-		'customerDetail_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10, 'key' => 'index'),
-		'created_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10),
+		'customerDetail_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'index'),
+		'active' => array('type' => 'boolean', 'null' => false, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
+		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'modified' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'deleted_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10),
-		'active' => array('type' => 'boolean', 'null' => true),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'customerDetail_id' => array('column' => 'customerDetail_id', 'unique' => 0)
@@ -31,7 +33,12 @@ class CustomerFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'customerDetail_id' => 1
+			'customerDetail_id' => 1,
+			'active' => 1,
+			'created' => '2013-04-12 10:31:35',
+			'created_id' => 1,
+			'modified' => '2013-04-12 10:31:35',
+			'deleted_id' => 1
 		),
 	);
 

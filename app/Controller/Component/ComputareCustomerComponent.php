@@ -16,22 +16,32 @@ class ComputareCustomerComponent extends Component {
 		//get models
 		$this->Customer=ClassRegistry::init('Customer');
 		$this->CustomerDetail=ClassRegistry::init('CustomerDetail');
+		$this->Address=ClassRegistry::init('Address');
 		$ok=true;
 		$dataSource=$this->Customer->getDataSource();
 		//start transaction
 		$dataSource->begin();
+		//validation
+		if(!isset($data['CustomerDetail']['companyName']) || $data['CustomerDetail']['companyName']=='') {
+			if(!isset($data['CustomerDetail']['firstName']) || $data['CustomerDetail']['firstName']=='') {
+				if(!isset($data['CustomerDetail']['lastName']) || $data['CustomerDetail']['lastName']=='') {
+					//must enter something for a firstName,lastName or companyName
+					$ok=false;
+				}//endif
+			}//endif
+		}//endif
 		//first check if new customer or saving changes to existing
 		if($data['Customer']['id']) {
 			//existing customer
 			$this->CustomerDetail->create();
-			$ok=$this->CustomerDetail->save($data['CustomerDetail']);
+			if($ok)$ok=$this->CustomerDetail->save($data['CustomerDetail']);
 			$customerDetail_id=$this->CustomerDetail->getLastInsertId();
 			//link new details back to customer
 			if($ok) $ok=$this->Customer->save(array('id'=>$data['CustomerDetail']['customer_id'],'customerDetail_id'=>$customerDetail_id));
 		} else {
 			//new customer
 			$this->Customer->create();
-			$ok=$this->Customer->save(array('active'=>true,'created_id'=>$data['CustomerDetail']['created_id'],'customerDetail_id'=>0));
+			if($ok)$ok=$this->Customer->save(array('active'=>true,'created_id'=>$data['CustomerDetail']['created_id'],'customerDetail_id'=>0));
 			$customer_id=$this->Customer->getInsertId();
 			//save customer details
 			$data['CustomerDetail']['customer_id']=$customer_id;

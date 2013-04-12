@@ -5,6 +5,7 @@
  */
 class AddressFixture extends CakeTestFixture {
 
+// 	public $table='addresses';
 /**
  * Fields
  *
@@ -39,16 +40,30 @@ class AddressFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-04-10 11:14:10',
+			'created' => '2013-04-12 10:13:52',
 			'created_id' => 1,
-			'name' => 'Lorem ipsum dolor ',
-			'vendor_id' => 1,
+			'name' => 'Shipping Address',
+			'vendor_id' => 0,
 			'customer_id' => 1,
-			'line1' => 'Lorem ipsum dolor sit amet',
-			'line2' => 'Lorem ipsum dolor sit amet',
-			'city' => 'Lorem ipsum dolor sit amet',
-			'state' => '',
-			'zip' => 'Lorem ip',
+			'line1' => '1234 Main St',
+			'line2' => 'Ste 11',
+			'city' => 'Some City',
+			'state' => 'XX',
+			'zip' => '99999',
+			'active' => 1
+		),
+		array(
+			'id' => 2,
+			'created' => '2013-04-12 10:13:52',
+			'created_id' => 1,
+			'name' => 'Shipping Address',
+			'vendor_id' => 1,
+			'customer_id' => 0,
+			'line1' => '1234 Main St',
+			'line2' => 'Ste 11',
+			'city' => 'Some City',
+			'state' => 'XX',
+			'zip' => '99999',
 			'active' => 1
 		),
 	);
