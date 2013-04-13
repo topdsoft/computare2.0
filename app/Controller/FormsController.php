@@ -133,6 +133,8 @@ class FormsController extends AppController {
 			throw new NotFoundException(__('Invalid form'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			if($this->request->data['Form']['formGroup_id']==0) unset($this->request->data['Form']['formGroup_id']);
+// debug($this->request->data);exit;
 			if ($this->Form->save($this->request->data)) {
 				$this->Session->setFlash(__('The form has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
@@ -141,8 +143,10 @@ class FormsController extends AppController {
 			}
 		} else {
 			$this->request->data = $this->Form->read(null, $id);
+			if(!$this->request->data['Form']['formGroup_id']) $this->request->data['Form']['formGroup_id']=0;
 		}
 		$formGroups = $this->Form->FormGroup->find('list');
+		$formGroups[0]='(none)';
 // 		$menus = $this->Form->Menu->find('list');
 // 		$users = $this->Form->User->find('list');
 		$this->set(compact('formGroups'));
