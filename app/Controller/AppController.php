@@ -89,25 +89,27 @@ class AppController extends Controller {
 			//authenticate
 			
 			//save user click
-			$clickObj=ClassRegistry::init('Click');
-			$lastclick=$clickObj->find('first',array('order'=>array('Click.created'=>'desc'),'conditions'=>array('user_id'=>$this->Auth->user('id'),'form_id !='=>$this->viewVars['form_id'])));
+			$clickObj=ClassRegistry::init('FormsUser');
 			$click=$clickObj->find('first',array('conditions'=>array('user_id'=>$this->Auth->user('id'),'form_id'=>$this->viewVars['form_id'])));
+			//add forms association to get form name
+			$clickObj->bindModel(array('belongsTo'=>array('Form'=>array('className'=>'Form','fields'=>array('name')))));
+			$lastclick=$clickObj->find('first',array('order'=>array('FormsUser.modified'=>'desc'),'conditions'=>array('user_id'=>$this->Auth->user('id'),'form_id !='=>$this->viewVars['form_id'])));
 			if($click) {
 				//found previous visit(s)
-				$click['Click']['qty']+=1;
+				$click['FormsUser']['visits']+=1;
 			} else {
 				//first visit to this form
-				$click['Click']['user_id']=$this->Auth->user('id');
-				$click['Click']['form_id']=$this->viewVars['form_id'];
-				$click['Click']['qty']=1;
+				$click['FormsUser']['user_id']=$this->Auth->user('id');
+				$click['FormsUser']['form_id']=$this->viewVars['form_id'];
+				$click['FormsUser']['visits']=1;
 				$clickObj->create();
 			}//endif
-			$click['Click']['last_url']=$this->request->url;
-			$click['Click']['last_click_id']=$lastclick['Click']['id'];
+			$click['FormsUser']['last_url']=$this->request->url;
+			$click['FormsUser']['last_click_id']=$lastclick['FormsUser']['id'];
 // debug($lastclick);exit;
 			$clickObj->save($click);
 			//store previous URL for use in links
-			$this->viewVars['previousURL']=$lastclick['Click']['last_url'];
+			$this->viewVars['previousURL']=$lastclick['FormsUser']['last_url'];
 			$this->viewVars['previousFormName']=$lastclick['Form']['name'];
 			unset($clickObj);
 			unset($click);
