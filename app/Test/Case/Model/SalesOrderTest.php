@@ -1,11 +1,11 @@
 <?php
-App::uses('SalesOrderDetail', 'Model');
+App::uses('SalesOrder', 'Model');
 
 /**
- * SalesOrderDetail Test Case
+ * SalesOrder Test Case
  *
  */
-class SalesOrderDetailTest extends CakeTestCase {
+class SalesOrderTest extends CakeTestCase {
 
 /**
  * Fixtures
@@ -13,33 +13,34 @@ class SalesOrderDetailTest extends CakeTestCase {
  * @var array
  */
 	public $fixtures = array(
-		'app.sales_order_detail',
 		'app.sales_order',
+		'app.sales_order_type',
+		'app.customer',
+		'app.customer_detail',
+		'app.address',
+		'app.vendor',
+		'app.vendor_detail',
+		'app.item_cost',
 		'app.item',
 		'app.item_detail',
 		'app.item_category',
-		'app.item_cost',
-		'app.vendor',
-		'app.vendor_detail',
-		'app.address',
-		'app.customer',
-		'app.customer_detail',
-		'app.purchase_order',
-		'app.purchase_order_detail',
-		'app.receipt',
-		'app.items_vendor',
 		'app.item_serial_number',
 		'app.items_location',
 		'app.item_transaction',
 		'app.location',
 		'app.location_detail',
 		'app.sale',
+		'app.receipt',
+		'app.purchase_order_detail',
+		'app.purchase_order',
+		'app.sales_order_detail',
+		'app.service',
 		'app.customers_item',
 		'app.item_group',
 		'app.groups_item',
 		'app.image',
 		'app.images_item',
-		'app.service'
+		'app.items_vendor'
 	);
 
 /**
@@ -49,7 +50,7 @@ class SalesOrderDetailTest extends CakeTestCase {
  */
 	public function setUp() {
 		parent::setUp();
-		$this->SalesOrderDetail = ClassRegistry::init('SalesOrderDetail');
+		$this->SalesOrder = ClassRegistry::init('SalesOrder');
 	}
 
 /**
@@ -58,7 +59,7 @@ class SalesOrderDetailTest extends CakeTestCase {
  * @return void
  */
 	public function tearDown() {
-		unset($this->SalesOrderDetail);
+		unset($this->SalesOrder);
 
 		parent::tearDown();
 	}

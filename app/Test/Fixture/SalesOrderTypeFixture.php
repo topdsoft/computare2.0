@@ -1,16 +1,16 @@
 <?php
 /**
- * SalesOrderDetailFixture
+ * SalesOrderTypeFixture
  *
  */
-class SalesOrderDetailFixture extends CakeTestFixture {
+class SalesOrderTypeFixture extends CakeTestFixture {
 
 /**
  * Table name
  *
  * @var string
  */
-	public $table = 'salesOrderDetails';
+	public $table = 'salesOrderTypes';
 
 /**
  * Fields
@@ -24,12 +24,8 @@ class SalesOrderDetailFixture extends CakeTestFixture {
 		'removed' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'removed_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'active' => array('type' => 'boolean', 'null' => false, 'default' => null),
-		'salesOrder_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'item_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'service_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
-		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),
-		'shipped' => array('type' => 'integer', 'null' => false, 'default' => null),
-		'price' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '12,2'),
+		'name' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
+		'shipping' => array('type' => 'boolean', 'null' => false, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
@@ -44,17 +40,13 @@ class SalesOrderDetailFixture extends CakeTestFixture {
 	public $records = array(
 		array(
 			'id' => 1,
-			'created' => '2013-04-13 15:36:51',
+			'created' => '2013-04-13 15:35:45',
 			'created_id' => 1,
-			'removed' => '2013-04-13 15:36:51',
+			'removed' => '2013-04-13 15:35:45',
 			'removed_id' => 1,
 			'active' => 1,
-			'salesOrder_id' => 1,
-			'item_id' => 1,
-			'service_id' => 1,
-			'qty' => 1,
-			'shipped' => 1,
-			'price' => 1
+			'name' => 'Lorem ipsum dolor sit amet',
+			'shipping' => 1
 		),
 	);
 

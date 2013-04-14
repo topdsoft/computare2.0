@@ -3,17 +3,11 @@ App::uses('AppModel', 'Model');
 /**
  * SalesOrderDetail Model
  *
- * @property PurchaseOrder $PurchaseOrder
+ * @property SalesOrder $SalesOrder
  * @property Item $Item
+ * @property Service $Service
  */
 class SalesOrderDetail extends AppModel {
-
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'computare';
 
 /**
  * Use table
@@ -31,9 +25,9 @@ class SalesOrderDetail extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'PurchaseOrder' => array(
-			'className' => 'PurchaseOrder',
-			'foreignKey' => 'purchaseOrder_id',
+		'SalesOrder' => array(
+			'className' => 'SalesOrder',
+			'foreignKey' => 'salesOrder_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
@@ -41,6 +35,13 @@ class SalesOrderDetail extends AppModel {
 		'Item' => array(
 			'className' => 'Item',
 			'foreignKey' => 'item_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Service' => array(
+			'className' => 'Service',
+			'foreignKey' => 'service_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
