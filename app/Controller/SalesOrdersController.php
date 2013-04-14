@@ -7,6 +7,8 @@ App::uses('AppController', 'Controller');
  */
 class SalesOrdersController extends AppController {
 
+	public $components=array('ComputareCustomer','ComputareAR');
+	
 /**
  * index method
  *
@@ -16,6 +18,7 @@ class SalesOrdersController extends AppController {
 		$this->set('formName','List Sales Orders');
 		$this->SalesOrder->recursive = 0;
 		$this->set('salesOrders', $this->paginate());
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
 /**
@@ -45,20 +48,20 @@ class SalesOrdersController extends AppController {
 			$this->SalesOrder->create();
 			$this->request->data['SalesOrder']['created_id']=$this->Auth->user('id');
 			$this->request->data['SalesOrder']['status']='O';
-			if ($this->SalesOrder->save($this->request->data)) {
+			if ($this->ComputareAR->saveSO($this->request->data)) {
 				$this->Session->setFlash(__('The sales order has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The sales order could not be saved. Please, try again.'));
 			}
 		}
-		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list');
+		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list',array('conditions'=>array('active')));
 		if(!$salesOrderTypes) {
 			//must first have SO types
 			$this->Session->setFlash(__('You must define at least one Sales Order Type before creating Sales Orders.'));
 			$this->redirect(array('action' => 'index'));
 		}//endif
-		$customers = $this->SalesOrder->Customer->find('list');
+		$customers = $this->SalesOrder->Customer->find('list',array('conditions'=>array('active')));
 		if(!$customers) {
 			//must first have customers
 			$this->Session->setFlash(__('You must define at least one Customer before creating Sales Orders.'));
@@ -80,19 +83,57 @@ class SalesOrdersController extends AppController {
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));
 		}
+		$SO=$this->SalesOrder->read(null, $id);
+		if($SO['SalesOrder']['status']!='O') {
+			//only open SO can be edited
+			$this->Session->setFlash(__('Only Sales Orders with status of Open can be edited.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->SalesOrder->save($this->request->data)) {
-				$this->Session->setFlash(__('The sales order has been saved'));
-				$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action' => 'index'));
+		} else {
+			$this->request->data = $SO;
+		}
+// 		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list');
+// 		$customers = $this->SalesOrder->Customer->find('list');
+		$items=ClassRegistry::init('Item')->find('list');
+		$this->set(compact('items'));
+	}
+
+/**
+ * addproduct method
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function addproduct($id = null) {
+		$this->set('formName','Add Product SO Line');
+		$this->SalesOrder->id = $id;
+		if (!$this->SalesOrder->exists()) {
+			throw new NotFoundException(__('Invalid sales order'));
+		}
+		$SO=$this->SalesOrder->read(null, $id);
+		if($SO['SalesOrder']['status']!='O') {
+			//only open SO can be edited
+			$this->Session->setFlash(__('Only Sales Orders with status of Open can be edited.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+			$this->request->data['SalesOrderDetail']['created_id']=$this->Auth->user('id');
+			$this->request->data['SalesOrderDetail']['active']=true;
+			$this->request->data['SalesOrderDetail']['salesOrder_id']=$id;
+// debug($this->request->data);exit;
+			if ($this->SalesOrder->ItemDetail->save($this->request->data['SalesOrderDetail'])) {
+				$this->Session->setFlash(__('An Item has been added to your Sales order'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'edit',$id));
 			} else {
-				$this->Session->setFlash(__('The sales order could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The Item could not be added. Please, try again.'));
 			}
 		} else {
-			$this->request->data = $this->SalesOrder->read(null, $id);
+			$this->request->data = $SO;
 		}
-		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list');
-		$customers = $this->SalesOrder->Customer->find('list');
-		$this->set(compact('salesOrderTypes', 'customers'));
+		$items=ClassRegistry::init('Item')->find('list');
+		$this->set(compact('items'));
 	}
 
 /**

@@ -4,7 +4,7 @@
 		<legend><?php echo __('Add Sales Order'); ?></legend>
 	<?php
 		echo $this->Form->input('customer_id',array('id'=>'sc'));
-		echo $this->Form->input('SalesOrderType_id');
+		echo $this->Form->input('salesOrderType_id');
 		echo $this->Form->end(__('Submit'));
 	?>
 	</fieldset>

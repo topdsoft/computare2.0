@@ -39,4 +39,17 @@ class SalesOrder extends AppModel {
 			'order' => ''
 		)
 	);
+	
+	public $hasMany = array(
+		'ItemDetail' => array(
+			'className' => 'SalesOrderDetail',
+			'foreignKey' => 'salesOrder_id',
+			'conditions' => array('ItemDetail.active','ItemDetail.item_id')
+		),
+		'ServiceDetail' => array(
+			'className' => 'SalesOrderDetail',
+			'foreignKey' => 'salesOrder_id',
+			'conditions' => array('ServiceDetail.active','ServiceDetail.service_id')
+		),
+	);
 }

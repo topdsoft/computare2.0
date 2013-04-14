@@ -26,7 +26,7 @@ class SalesOrderFixture extends CakeTestFixture {
 		'voided' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'voided_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'status' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 1, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),
-		'SalesOrderType_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'salesOrderType_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'customer_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)

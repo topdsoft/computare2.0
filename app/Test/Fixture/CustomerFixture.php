@@ -37,6 +37,15 @@ class CustomerFixture extends CakeTestFixture {
 			'active' => 1,
 			'created' => '2013-04-12 10:31:35',
 			'created_id' => 1,
+			'modified' => '',
+			'deleted_id' => 0
+		),
+		array(
+			'id' => 2,
+			'customerDetail_id' => 1,
+			'active' => 0,
+			'created' => '2013-04-12 10:31:35',
+			'created_id' => 1,
 			'modified' => '2013-04-12 10:31:35',
 			'deleted_id' => 1
 		),

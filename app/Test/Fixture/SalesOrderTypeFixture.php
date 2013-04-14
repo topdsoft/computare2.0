@@ -42,11 +42,21 @@ class SalesOrderTypeFixture extends CakeTestFixture {
 			'id' => 1,
 			'created' => '2013-04-13 15:35:45',
 			'created_id' => 1,
+			'removed' => '',
+			'removed_id' => 0,
+			'active' => 1,
+			'name' => 'Type0',
+			'shipping' => 1
+		),
+		array(
+			'id' => 2,
+			'created' => '2013-04-13 15:35:45',
+			'created_id' => 1,
 			'removed' => '2013-04-13 15:35:45',
 			'removed_id' => 1,
-			'active' => 1,
-			'name' => 'Lorem ipsum dolor sit amet',
-			'shipping' => 1
+			'active' => 0,
+			'name' => 'Type1',
+			'shipping' => 2
 		),
 	);
 

@@ -1,5 +1,5 @@
 <div class="salesOrders view">
-<h2><?php  echo __('Sales Order'); ?></h2>
+<h2><?php  echo __('Sales Order: ').$salesOrder['SalesOrder']['id']; ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
@@ -53,16 +53,10 @@
 		</dd>
 	</dl>
 </div>
+<?php debug($salesOrder);?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Sales Order'), array('action' => 'edit', $salesOrder['SalesOrder']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Sales Order'), array('action' => 'delete', $salesOrder['SalesOrder']['id']), null, __('Are you sure you want to delete # %s?', $salesOrder['SalesOrder']['id'])); ?> </li>
-		<li><?php echo $this->Html->link(__('List Sales Orders'), array('action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Sales Order'), array('action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Sales Order Types'), array('controller' => 'sales_order_types', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Sales Order Type'), array('controller' => 'sales_order_types', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Customers'), array('controller' => 'customers', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
