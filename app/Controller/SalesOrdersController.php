@@ -97,7 +97,8 @@ class SalesOrdersController extends AppController {
 // 		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list');
 // 		$customers = $this->SalesOrder->Customer->find('list');
 		$items=ClassRegistry::init('Item')->find('list');
-		$this->set(compact('items'));
+		$services=ClassRegistry::init('Service')->find('list');
+		$this->set(compact('items','services'));
 	}
 
 /**
@@ -134,6 +135,42 @@ class SalesOrdersController extends AppController {
 		}
 		$items=ClassRegistry::init('Item')->find('list');
 		$this->set(compact('items'));
+	}
+
+/**
+ * addservice method
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function addservice($id = null) {
+		$this->set('formName','Add Service SO Line');
+		$this->SalesOrder->id = $id;
+		if (!$this->SalesOrder->exists()) {
+			throw new NotFoundException(__('Invalid sales order'));
+		}
+		$SO=$this->SalesOrder->read(null, $id);
+		if($SO['SalesOrder']['status']!='O') {
+			//only open SO can be edited
+			$this->Session->setFlash(__('Only Sales Orders with status of Open can be edited.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+			$this->request->data['SalesOrderDetail']['created_id']=$this->Auth->user('id');
+			$this->request->data['SalesOrderDetail']['active']=true;
+			$this->request->data['SalesOrderDetail']['salesOrder_id']=$id;
+// debug($this->request->data);exit;
+			if ($this->ComputareAR->saveLine($this->request->data)) {
+				$this->Session->setFlash(__('A Service has been added to your Sales order'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'edit',$id));
+			} else {
+				$this->Session->setFlash(__('The Service could not be added. Please, try again.'));
+			}
+		} else {
+			$this->request->data = $SO;
+		}
+		$services=ClassRegistry::init('Service')->find('list',array('conditions'=>array('active')));
+		$this->set(compact('services'));
 	}
 
 /**

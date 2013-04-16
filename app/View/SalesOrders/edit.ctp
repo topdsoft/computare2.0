@@ -24,6 +24,22 @@
 			echo '</table>';
 		}//endif
 		echo '<h3>Services</h3>';
+		if($this->data['ServiceDetail']) {
+			//show services
+			echo '<table><tr><th>Service</th><th>Qty</th><th></th></tr>';
+			foreach($this->data['ServiceDetail'] as $detail) {
+			    //loop for all service details
+			    echo '<tr>';
+			    echo '<td>'.$services[$detail['service_id']].'</td>';
+			    echo '<td>'.$detail['qty'].'</td>';
+				echo '<td class="actions">';
+					echo $this->Html->link(__('Remove'), array('action' => 'removeline', $detail['id']));
+				echo '</td>';
+			    echo '</tr>';
+			}//endiforeach
+			
+			echo '</table>';
+		}//endif
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Done')); ?>

@@ -82,13 +82,27 @@ class ComputareARComponent extends Component{
 	}//end public function saveSO
 	
 	/**
-	 * method saveline
+	 * method saveLine
+	 * used to add item or service lines to a sales order
 	 * @param array $data
+		* $data['SalesOrderDetail']['service_id'] OR $data['SalesOrderDetail']['item_id']
+		* $data['SalesOrderDetail']['qty']
+		* $data['SalesOrderDetail']['salesOrder_id']
 	 * @returns t/f
 	 */
-	public function saveline($data) {
+	public function saveLine($data) {
 		//save item or service line
-		
+		$this->SalesOrder=ClassRegistry::init('SalesOrder');
+		$this->SalesOrderDetail=ClassRegistry::init('SalesOrderDetail');
+		//validation
+		if(isset($data['SalesOrderDetail']['service_id']) && isset($data['SalesOrderDetail']['item_id'])) return false;
+		if(!isset($data['SalesOrderDetail']['service_id']) && !isset($data['SalesOrderDetail']['item_id'])) return false;
+		$so=$this->SalesOrder->read(null,$data['SalesOrderDetail']['salesOrder_id']);
+		if(!$so) return false;
+		if($so['SalesOrder']['status']!='O') return false;
+		//save line
+		$ok=$this->SalesOrderDetail->save($data);
+		return ($ok==true);
 	}//end public function saveline
 	
 	
