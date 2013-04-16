@@ -13,24 +13,13 @@ class ServicesController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('formName','List Services');
 		$this->Service->recursive = 0;
-		$this->set('services', $this->paginate());
+		$this->set('services', $this->paginate(array('Service.active')));
+		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('pricingOptions',$this->Service->getPricingOptions());
 	}
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
-		$this->Service->id = $id;
-		if (!$this->Service->exists()) {
-			throw new NotFoundException(__('Invalid service'));
-		}
-		$this->set('service', $this->Service->read(null, $id));
-	}
 
 /**
  * add method
@@ -38,15 +27,19 @@ class ServicesController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('formName','Create Service');
 		if ($this->request->is('post')) {
 			$this->Service->create();
+			$this->request->data['Service']['created_id']=$this->Auth->user('id');
+			$this->request->data['Service']['active']=true;
 			if ($this->Service->save($this->request->data)) {
-				$this->Session->setFlash(__('The service has been saved'));
+				$this->Session->setFlash(__('The service has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The service could not be saved. Please, try again.'));
 			}
 		}
+		$this->set('pricingOptions',$this->Service->getPricingOptions());
 	}
 
 /**
@@ -55,7 +48,6 @@ class ServicesController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
 	public function edit($id = null) {
 		$this->Service->id = $id;
 		if (!$this->Service->exists()) {
@@ -72,6 +64,7 @@ class ServicesController extends AppController {
 			$this->request->data = $this->Service->read(null, $id);
 		}
 	}
+ */
 
 /**
  * delete method
@@ -82,6 +75,7 @@ class ServicesController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+		$this->set('formName','Remove Service');
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}
@@ -89,7 +83,7 @@ class ServicesController extends AppController {
 		if (!$this->Service->exists()) {
 			throw new NotFoundException(__('Invalid service'));
 		}
-		if ($this->Service->delete()) {
+		if ($this->Service->save(array('active'=>false))) {
 			$this->Session->setFlash(__('Service deleted'));
 			$this->redirect(array('action' => 'index'));
 		}

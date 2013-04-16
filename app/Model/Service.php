@@ -12,6 +12,7 @@ class Service extends AppModel {
  * @var string
  */
 	public $displayField = 'name';
+	public $order = 'Service.name';
 
 /**
  * Validation rules
@@ -22,7 +23,7 @@ class Service extends AppModel {
 		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Please enter a name here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -32,7 +33,7 @@ class Service extends AppModel {
 		'rate' => array(
 			'money' => array(
 				'rule' => array('money'),
-				//'message' => 'Your custom message here',
+				'message' => 'Pleae enter an amount here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -50,4 +51,12 @@ class Service extends AppModel {
 			),
 		),
 	);
+	
+	/**
+	 * getPricingOptions method
+	 * @return options for pricing field
+	 */
+	public function getPricingOptions() {
+		return array('U'=>'Unit Pricing','H'=>'Hourly Pricing','Q'=>'Quantity Pricing');
+	}
 }
