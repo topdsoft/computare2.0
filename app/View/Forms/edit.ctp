@@ -8,6 +8,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('controller');
 		echo $this->Form->input('action');
+		echo $this->Form->input('add_menu',array('title'=>'Select Add Menu to use this link with automatic menus.'));
 		echo $this->Form->input('formGroup_id');
 		echo $this->Form->input('helplink');
 		echo $this->Form->input('description');

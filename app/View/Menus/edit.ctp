@@ -47,15 +47,15 @@
 		<tr id="trAdd">
 		<td> <?php echo $this->Form->button('Add Link',array('type'=>'button','title'=>'Click Here to add another link','onclick'=>"addRow('trAdd')")); ?> </td><td></td><td></td><td></td><td></td></tr>
 	</table>
+	<?php echo $this->Form->end(__('Submit')); ?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
 </div>
 <div class="actions">
-	<h3><?php //echo __('Actions'); ?></h3>
+	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 
 		<li><?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Menu.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Menu.id'))); ?></li>
-		<li><?php //echo $this->Html->link(__('List Menus'), array('action' => 'index')); ?></li>
+		<li><?php echo $this->Html->link(__('Auto Add Links'), array('action' => 'autoadd',$this->Form->value('Menu.id'))); ?></li>
 		<li><?php //echo $this->Html->link(__('List Forms'), array('controller' => 'forms', 'action' => 'index')); ?> </li>
 		<li><?php //echo $this->Html->link(__('New Form'), array('controller' => 'forms', 'action' => 'add')); ?> </li>
 		<li><?php //echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>

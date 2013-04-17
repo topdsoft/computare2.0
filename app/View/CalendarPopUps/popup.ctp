@@ -68,6 +68,7 @@
 	function selectDay(day) {
 		//user has clicked on a day, return to previous form
 		var toReturn='<?php echo"$year-$month" ?>-'+day;
+		
 alert(toReturn);
 	}
 	

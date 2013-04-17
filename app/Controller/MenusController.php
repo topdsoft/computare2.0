@@ -162,6 +162,35 @@ class MenusController extends AppController {
 	}
 
 /**
+ * autoadd method
+ * @param string $id
+ */
+	public function autoadd($id=null) {
+		$this->set('formName','Auto Add Menu Links');
+		$this->Menu->id = $id;
+		if (!$this->Menu->exists()) {
+			throw new NotFoundException(__('Invalid menu'));
+		}
+		$menu=$this->Menu->read(null);
+		//get forms for this menu
+		$this->Menu->FormsMenu->bindModel(array('belongsTo'=>array('Form')));
+		$forms=$this->Menu->FormsMenu->find('all',array('conditions'=>array('FormsMenu.menu_id'=>$id),'order'=>'ordr'));
+		//if menu is owned by specific user use their visits, if not use current user
+		if($menu['Menu']['user_id']) $uid=$menu["Menu"]['user_id'];
+		else $uid=$this->Auth->user('id');
+		//get list of previous visits
+		$this->FormsUser=ClassRegistry::init('FormsUser');
+		$this->FormsUser->bindModel(array('belongsTo'=>array('Form'=>array('className'=>'Form',
+			'fields'=>array('name','description','add_menu','formGroup_id')))));
+		$visits=$this->FormsUser->find('all',array('order'=>array('FormsUser.visits'=>'desc'),'conditions'=>array('User_id'=>$uid,'Form.add_menu')));
+		//get list of form groups
+		$formGroups=ClassRegistry::init('FormGroup')->find('list');
+		$formGroups[null]='';
+		$this->set(compact('visits','menu','forms','formGroups'));
+// debug($visits);exit;
+	}
+
+/**
  * editusers method
  *
  * @throws NotFoundException

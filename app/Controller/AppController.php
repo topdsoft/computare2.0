@@ -61,8 +61,8 @@ class AppController extends Controller {
 // debug($this);exit;
 			$this->ComputareSysevent->save($errorData);
 		}//endif
-		//no ACL on login or help pages
-		$ignore=array('display','login');
+		//no ACL on login, popup or help pages
+		$ignore=array('display','login','popup');
 		if(!$error && !in_array($this->params['action'],$ignore)) {
 			$formOBJ=ClassRegistry::init('Form');
 			//look for controller/action combo in forms table
@@ -79,6 +79,8 @@ class AppController extends Controller {
 					'controller'=>$this->params['controller'],
 					'action'=>$this->params['action']
 				);
+				if(isset($this->viewVars['helplink'])) $form['helplink']=$this->viewVars['helplink'];
+				if(isset($this->viewVars['add_menu'])) $form['add_menu']=$this->viewVars['add_menu'];
 				$formOBJ->create();
 				$formOBJ->save($form);
 				$this->viewVars['form_id']=$formOBJ->GetInsertId();

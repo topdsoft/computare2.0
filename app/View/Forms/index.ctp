@@ -10,6 +10,7 @@
 			<th><?php echo $this->Paginator->sort('FormGroup.name','Group'); ?></th>
 			<th><?php echo $this->Paginator->sort('controller'); ?></th>
 			<th><?php echo $this->Paginator->sort('action'); ?></th>
+			<th><?php echo $this->Paginator->sort('add_menu'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','Created By'); ?></th>
 			<th><?php //echo $this->Paginator->sort('link'); ?></th>
@@ -23,6 +24,7 @@
 		<td><?php echo h($form['FormGroup']['name']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['controller']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['action']); ?>&nbsp;</td>
+		<td><?php if($form['Form']['add_menu']) echo 'Y'; ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['created']); ?>&nbsp;</td>
 		<td><?php echo h($usersList[$form['Form']['created_id']]); ?>&nbsp;</td>
 		<td><?php //echo h($form['Form']['link']); ?>&nbsp;</td>
@@ -36,4 +38,11 @@
 <?php endforeach; ?>
 	</table>
 	<?php echo $this->element('paginatorblock');?>
+</div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('List Form Groups'), array('controller' => 'formGroups', 'action' => 'index'), array('class'=>'actions')); ?></li>
+		<li><?php echo $this->Html->link(__('New Form Group'), array('controller' => 'formGroups', 'action' => 'add'), array('class'=>'actions')); ?></li>
+	</ul>
 </div>
