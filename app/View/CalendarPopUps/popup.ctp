@@ -31,9 +31,9 @@
 		$dayOfWeek=$firstDay;
 		while($day<=$daysInMonth) {
 			//loop for all days in month
-			$class='';
-			if($day==$today) $class=' class="today" title="Today"';
-			echo "<td$class><a href='#'>$day<a></td>";
+			$class=' class="clickable"';
+			if($day==$today) $class=' class="today clickable" title="Today"';
+			echo "<td$class onclick='selectDay($day)'><a>$day<a></td>";
 			$day++;
 			$dayOfWeek++;
 			if($dayOfWeek>6 && $day<=$daysInMonth) {
@@ -49,21 +49,26 @@
 </table>
 
 <?php
-// debug($this);
+// debug($this->webroot.$this->params['controller'].'/'.$this->params['action']);
 ?>
 
 <script type='text/javascript'>
 	function year() {
+		//set selected year and redirect
 		var year=$("#CalendarYearId").val();
-		var month=<?php echo $month;?>;
-		alert(month);
+		window.location.replace('<?php echo $this->webroot.$this->params['controller'].'/'.$this->params['action'];?>/'+year+'/<?php echo $month;?>');
 	}
 	
 	function month() {
+		//get selected month and redirect
 		var month=$("#CalendarMonthId").val();
-		var year=<?php echo $year;?>;
-// 		alert(month);
-		self.close();
+		window.location.replace('<?php echo $this->webroot.$this->params['controller'].'/'.$this->params['action']."/$year/"; ?>'+month);
+	}
+	
+	function selectDay(day) {
+		//user has clicked on a day, return to previous form
+		var toReturn='<?php echo"$year-$month" ?>-'+day;
+alert(toReturn);
 	}
 	
 </script>

@@ -21,6 +21,11 @@ table td.plain {
 
 table td.today {
 	border: 1px solid black;
+	cursor: pointer;
+}
+
+table td.clickable {
+	cursor: pointer;
 }
 
 table a {
@@ -28,6 +33,6 @@ table a {
 	color: black;
 }
 
-table a:hover {
-	color: blue;
+table td.clickable:hover {
+	background: #ff1;
 }

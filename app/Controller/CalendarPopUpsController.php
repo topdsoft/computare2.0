@@ -13,6 +13,7 @@ class CalendarPopUpsController extends AppController {
  */
 	public function popup($year=null,$month=null) {
 		//show user's popup calendar
+		$this->set('formName','Calendar Pop Up');
 		$calendar=$this->CalendarPopUp->find('first',array('conditions'=>array('user_id'=>$this->Auth->user('id'))));
 		if(!$calendar) {
 			//user has never used this popup before
