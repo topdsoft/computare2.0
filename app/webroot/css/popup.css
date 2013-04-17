@@ -1,0 +1,33 @@
+@charset "utf-8";
+table th {
+	border-bottom: 5px #777 solid;
+}
+
+table td {
+	background: #eee;
+	text-align: center;
+	border: 1px solid #eee;
+}
+
+table td.week {
+	background: #777;
+	color: #fff;
+} 
+
+table td.plain {
+	background: white;
+	border: none;
+}
+
+table td.today {
+	border: 1px solid black;
+}
+
+table a {
+	text-decoration: none;
+	color: black;
+}
+
+table a:hover {
+	color: blue;
+}
