@@ -57,7 +57,7 @@ class PurchaseOrdersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->request->data['PurchaseOrder']['status']='O';
 // debug($this->request->data);exit;
-			if ($this->ComputareAR->savePO($this->request->data)) {
+			if ($this->ComputareAP->savePO($this->request->data)) {
 				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'edit',$this->PurchaseOrder->getInsertId()));
 			} else {
@@ -82,7 +82,7 @@ class PurchaseOrdersController extends AppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 // debug($this->request->data);exit;
-			if ($this->ComputareAR->savePO($this->request->data)) {
+			if ($this->ComputareAP->savePO($this->request->data)) {
 				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'edit',$id));
 			} else {
@@ -103,7 +103,7 @@ class PurchaseOrdersController extends AppController {
 		if (!$podetail) {
 			throw new NotFoundException(__('Invalid purchase order'));
 		}
-		if($this->ComputareAR->savePO(array('removeLine'=>$id))) $this->Session->setFlash(__('The line has been removed'),'default',array('class'=>'success'));
+		if($this->ComputareAP->savePO(array('removeLine'=>$id))) $this->Session->setFlash(__('The line has been removed'),'default',array('class'=>'success'));
 		else $this->Session->setFlash(__('The line could not be removed'));
 		$this->redirect(array('action' => 'edit',$podetail['PurchaseOrderDetail']['purchaseOrder_id']));
 	}
@@ -119,7 +119,7 @@ class PurchaseOrdersController extends AppController {
 		}
 		$data['PurchaseOrder']['id']=$id;
 		$data['PurchaseOrder']['status']='V';
-		if($this->ComputareAR->savePO($data)) $this->Session->setFlash(__('The PO has been voided'),'default',array('class'=>'success'));
+		if($this->ComputareAP->savePO($data)) $this->Session->setFlash(__('The PO has been voided'),'default',array('class'=>'success'));
 		else $this->Session->setFlash(__('The PO could not be voided'));
 		$this->redirect(array('action' => 'index'));
 	}
@@ -136,7 +136,7 @@ class PurchaseOrdersController extends AppController {
 		$this->request->data['PurchaseOrder']['id']=$id;
 		$this->request->data['PurchaseOrder']['status']='C';
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->ComputareAR->savePO($this->request->data)) {
+			if ($this->ComputareAP->savePO($this->request->data)) {
 				$this->Session->setFlash(__('The purchase order has been closed'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -166,7 +166,7 @@ class PurchaseOrdersController extends AppController {
 			throw new NotFoundException(__('Invalid purchase order'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->ComputareAR->savePO($this->request->data)) {
+			if ($this->ComputareAP->savePO($this->request->data)) {
 				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
@@ -186,7 +186,6 @@ class PurchaseOrdersController extends AppController {
  * @throws NotFoundException
  * @param string $id
  * @return void
- */
 	public function delete($id = null) {
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
@@ -202,4 +201,5 @@ class PurchaseOrdersController extends AppController {
 		$this->Session->setFlash(__('Purchase order was not deleted'));
 		$this->redirect(array('action' => 'index'));
 	}
+ */
 }
