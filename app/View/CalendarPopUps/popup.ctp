@@ -1,4 +1,5 @@
-<?php echo $this->Form->create('Calendar'); ?>
+<?php echo $this->Form->create('Calendar'); 
+echo $this->Html->css('popup')?>
 <table>
 <?php
 // debug($this->request->params['named']);

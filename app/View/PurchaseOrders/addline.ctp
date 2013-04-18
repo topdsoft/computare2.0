@@ -8,7 +8,7 @@
 		echo 'Vendor: '.$this->Html->link($this->data['Vendor']['name'],array('controller'=>'vendors','action'=>'view',$this->data['Vendor']['id']));
 	?><br><br>
 	<?php
-		echo $this->Form->input('PurchaseOrderDetail.item_id');
+		echo $this->Form->input('PurchaseOrderDetail.item_id',array('after'=>$this->element('itemPopUp',array('inputId'=>'PurchaseOrderDetailItemId'))));
 		echo $this->Form->input('PurchaseOrderDetail.qty');
 		echo $this->Form->input('PurchaseOrderDetail.cost');
 	?>

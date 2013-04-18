@@ -10,7 +10,7 @@
 	<?php
 		echo $this->Html->meta('icon');
 
-		echo $this->Html->css('popup');
+//		echo $this->Html->css('popup');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
