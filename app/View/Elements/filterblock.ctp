@@ -30,8 +30,10 @@
 			if($filter['type']==3) {
 				//date range
 //				echo '<table><tr><td>';
-				echo $this->Form->input('Filter.'.$filter['passName'].'.start',array('label'=>'Start '.$filter['label'],'style'=>'width:75%;','after'=>$this->element('calendarPopUp')));
-				echo $this->Form->input('Filter.'.$filter['passName'].'.end',array('label'=>'End '.$filter['label'],'style'=>'width:75%;','after'=>$this->element('calendarPopUp')));
+				echo $this->Form->input('Filter.'.$filter['passName'].'.start',array('label'=>'Start '.$filter['label'],'style'=>'width:75%;',
+					'after'=>$this->element('calendarPopUp',array('inputId'=>'Filter'.ucfirst($filter['passName']).'Start'))));
+				echo $this->Form->input('Filter.'.$filter['passName'].'.end',array('label'=>'End '.$filter['label'],'style'=>'width:75%;',
+					'after'=>$this->element('calendarPopUp',array('inputId'=>'Filter'.ucfirst($filter['passName']).'End'))));
 //				echo '</td><a href="#" title="Calendar Pop-Up"><td class="filtercalendar">Today<br>';
 //				echo '<span style="font-size:1.8em;font-weight:bold;color:red; ">'.date('d').'</span></td></a>';
 //				echo '</tr></table>';

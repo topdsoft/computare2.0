@@ -9,10 +9,11 @@ class CalendarPopUpsController extends AppController {
 
 /** popup method
  * 
- * 
+ *  should only be called from the calendarPopUp element
  */
 	public function popup($year=null,$month=null) {
 		//show user's popup calendar
+// debug($this->passedArgs);exit;
 		$this->set('formName','Calendar Pop Up');
 		$calendar=$this->CalendarPopUp->find('first',array('conditions'=>array('user_id'=>$this->Auth->user('id'))));
 		if(!$calendar) {
@@ -20,6 +21,8 @@ class CalendarPopUpsController extends AppController {
 			$this->CalendarPopUp->save(array('user_id'=>$this->Auth->user('id')));
 			$calendar=$this->CalendarPopUp->read(null);
 		}//endif
+		//parse passed args
+		
 		if(!$month) $month=date('m');
 		if(!$year) $year=date('Y');
 		//get list of years

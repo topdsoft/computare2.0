@@ -1,10 +1,11 @@
 <?php echo $this->Form->create('Calendar'); ?>
 <table>
 <?php
+// debug($this->request->params['named']);
 	echo '<tr><td class="plain" colspan="8">'.$this->Form->input('year_id',array(
 		'label'=>'',
-		'before'=>$this->Html->link('<',array($year-1,$month)),
-		'after'=>$this->Html->link('>',array($year+1,$month)),
+		'before'=>$this->Html->link('<',array_merge(array($year-1,$month),$this->request->params['named'])),
+		'after'=>$this->Html->link('>',array_merge(array($year+1,$month),$this->request->params['named'])),
 		'onclick'=>'year()',
 	)).'</td></tr>';
 	if($month==1)$back=array($year-1,12);
@@ -13,8 +14,8 @@
 	else $forward=array($year,$month+1);
 	echo '<tr><td class="plain" colspan="8">'.$this->Form->input('month_id',array(
 		'label'=>'',
-		'before'=>$this->Html->link('<',$back),
-		'after'=>$this->Html->link('>',$forward),
+		'before'=>$this->Html->link('<',array_merge($back,$this->request->params['named'])),
+		'after'=>$this->Html->link('>',array_merge($forward, $this->request->params['named'])),
 		'onclick'=>'month()',
 	)).'</td></tr>';
 ?>
@@ -56,20 +57,28 @@
 	function year() {
 		//set selected year and redirect
 		var year=$("#CalendarYearId").val();
-		window.location.replace('<?php echo $this->webroot.$this->params['controller'].'/'.$this->params['action'];?>/'+year+'/<?php echo $month;?>');
+		window.location.replace('<?php echo $this->webroot.$this->params['controller'].'/'.$this->params['action'];?>/'+year+'/<?php 
+				echo $month;
+				foreach($this->request->params['named'] as $i=>$a) echo "/$i:$a";
+			?>');
 	}
 	
 	function month() {
 		//get selected month and redirect
 		var month=$("#CalendarMonthId").val();
-		window.location.replace('<?php echo $this->webroot.$this->params['controller'].'/'.$this->params['action']."/$year/"; ?>'+month);
+		window.location.replace('<?php echo $this->webroot.$this->params['controller'].'/'.$this->params['action']."/$year/"; ?>'+month
+			+'<?php
+				foreach($this->request->params['named'] as $i=>$a) echo "/$i:$a";
+			?>');
 	}
 	
 	function selectDay(day) {
 		//user has clicked on a day, return to previous form
 		var toReturn='<?php echo"$year-$month" ?>-'+day;
+		opener.document.getElementById('<?php echo $this->request->params['named']['inputId']; ?>').value=toReturn;
+		self.close();
 		
-alert(toReturn);
+// alert(toReturn);
 	}
 	
 </script>
