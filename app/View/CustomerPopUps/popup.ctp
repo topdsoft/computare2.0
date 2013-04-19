@@ -7,7 +7,7 @@
 <?php
 	echo $this->Form->input('lastName',array('id'=>'sc'));
 	echo $this->Form->input('firstName');
-	echo $this->Form->input('company');
+	echo $this->Form->input('companyName',array('label'=>'Company'));
 	
 	echo $this->Form->end(__('Find'));
 ?>

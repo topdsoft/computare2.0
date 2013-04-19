@@ -13,7 +13,7 @@ class CustomerPopUpsController extends AppController {
 		$conditions=array('Customer.active');
 		if ($this->request->is('post') || $this->request->is('put')) {
 			//filter customers
-			$search=array('lastName','firstName','company');
+			$search=array('lastName','firstName','companyName');
 			foreach($search as $s) {
 				//loop for all search items
 				if(!empty($this->request->data['Customer'][$s])) $conditions["CustomerDetail.$s LIKE"]='%'.$this->request->data['Customer'][$s].'%';
