@@ -51,7 +51,7 @@ class Form extends AppModel {
  * @var array
  */
 	public $hasAndBelongsToMany = array(
-		'UserGroup' => array(
+/*		'UserGroup' => array(
 			'className' => 'UserGroup',
 			'joinTable' => 'forms_groups',
 			'foreignKey' => 'form_id',
@@ -65,7 +65,7 @@ class Form extends AppModel {
 			'finderQuery' => '',
 			'deleteQuery' => '',
 			'insertQuery' => ''
-		),
+		),*/
 		'Menu' => array(
 			'className' => 'Menu',
 			'joinTable' => 'forms_menus',
