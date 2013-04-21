@@ -45,11 +45,15 @@ class UsersController extends AppController {
  * @return void
  */
 	public function viewperm($id = null) {
-		$this->set('formName','View User');
+		$this->set('formName','View User Permissions');
 		$this->User->id = $id;
 		if (!$this->User->exists()) {
 			throw new NotFoundException(__('Invalid user'));
 		}
+		if($id==1) $this->Session->setFlash(__('The Root User has permissions to all forms'),'default',array('class'=>'notice'));
+// debug($this->ComputareUser->getToken(12,$id));exit;
+		
+		$this->User->unbindModel(array('hasAndBelongsToMany'=>array('Menu')));
 		$this->User->Form->FormGroup->bindModel(array(
 			'hasMany'=>array(
 				'Form'=>array(
@@ -106,7 +110,7 @@ class UsersController extends AppController {
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));

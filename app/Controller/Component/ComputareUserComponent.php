@@ -403,7 +403,7 @@ class ComputareUserComponent extends Component{
 		#check formGroup_id vs user_id
 		if(!$ok) {
 			//get formGroup_id
-			$formGroup_id=$this->Form->field('formGroup_id',array('id'=>$form_id));
+			$formGroup_id=$this->Form->field('formGroup_id',array('Form.id'=>$form_id));
 			$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('user_id'=>$user_id,'formGroup_id'=>$formGroup_id)));
 			if($set) $ok=$set['PermissionSet'][$action];
 		}//endif
@@ -431,4 +431,80 @@ class ComputareUserComponent extends Component{
 		//return
 		return $ok;
 	}//end public function authenticate
+	
+	/**
+	 * getToken method
+	 * @param int $form_id
+	 * @param int $user_id
+	 * @return array(
+		* [form_id] (probably not needed)
+		* [user_id] (ditto)
+		* [{each action as returned by $this->getPermissionList()}]=>t/f if this user has permissions
+	 * )
+	 */
+	public function getToken($form_id,$user_id) {
+		//get models
+		$this->User=ClassRegistry::init('User');
+		$this->Form=ClassRegistry::init('Form');
+		$this->UserGroup=ClassRegistry::init('UserGroup');
+		$this->FormGroup=ClassRegistry::init('FormGroup');
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		//validation
+#TO DO
+		$toReturn=array('user_id'=>$user_id,'form_id'=>$form_id);//array to return
+		$toCheck=$this->getPermissionList();//remove from list when checked
+		//start with all true for uid==1 (and return here), all false for everyone else
+		foreach($toCheck as $i=>$p) {
+			//loop for all perms
+			$toReturn[$p]=($user_id==1);
+			if($user_id==1) unset($toCheck[$i]);
+		}//endforeach
+		if(empty($toCheck)) return $toReturn;
+		//check individual user to individual form
+		$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('user_id'=>$user_id,'form_id'=>$form_id)));
+		if($set)$toReturn=$this->checkSet($toCheck,$set,$toReturn);
+		if(empty($toCheck)) return $toReturn;
+		#check formGroup_id vs user_id
+		$formGroup_id=$this->Form->field('formGroup_id',array('Form.id'=>$form_id));
+		$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('user_id'=>$user_id,'formGroup_id'=>$formGroup_id)));
+		if($set)$toReturn=$this->checkSet($toCheck,$set,$toReturn);
+		if(empty($toCheck)) return $toReturn;
+		#check each userGroup_id
+		$user=$this->User->find('first',array('recursive'=>1,'conditions'=>array('User.id'=>$user_id)));
+		//get user groups
+		$userGroups=$user['UserGroup'];
+		foreach($userGroups as $userGroup) {
+			//loop for each of the groups the user belongs to
+			$userGroup_id=$userGroup['id'];
+			//check userGroup_id and form_id
+			$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'form_id'=>$form_id)));
+			if($set)$toReturn=$this->checkSet($toCheck,$set,$toReturn);
+			if(empty($toCheck)) return $toReturn;
+			//check userGroup_id and formGroup_id
+			$set=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'formGroup_id'=>$formGroup_id)));
+			if($set)$toReturn=$this->checkSet($toCheck,$set,$toReturn);
+			if(empty($toCheck)) return $toReturn;
+		}//end foreach
+
+		return $toReturn;
+	}
+	
+	/**
+	 * checkSet method
+	 * @param array $toCheck
+	 * @param array $set
+	 * @param array $toReturn
+	 * used as a helper for getToken: checks list in toCheck against $set.  If true it sets $toReturn =true and removes from $toCheck
+	 */
+	private function checkSet($toCheck,$set,$toReturn) {
+		foreach($toCheck as $i=>$p) {
+			//loop for all remaining perms and check
+			if($set['PermissionSet'][$p]) {
+				//user has this permission
+				$toReturn[$p]=true;
+				unset($toCheck[$i]);//no need to check again
+			}//endif
+		}//endforeach
+		return $toReturn;
+	}
 }

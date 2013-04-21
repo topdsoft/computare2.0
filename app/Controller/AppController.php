@@ -32,7 +32,7 @@ App::uses('Controller', 'Controller');
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('Auth', 'Session', 'Cookie');
+	public $components = array('Auth', 'Session', 'Cookie','ComputareUser');
 
 	public function beforeFilter() {
 		//set which database to use
@@ -89,7 +89,20 @@ class AppController extends Controller {
 				$this->viewVars['form_id']=$form['Form']['id'];
 			}//endif
 			//authenticate
-			
+			$this->viewVars['ACLtoken']=$this->ComputareUser->getToken($this->viewVars['form_id'],$this->Auth->user('id'));
+			if(!$this->viewVars['ACLtoken']['view']) {
+				//user does not have view permissions on this form
+				$this->Session->setFlash(__('You do not have permissions to view this form.'));
+				$this->redirect($this->referer());
+			}//endif
+			if ($this->request->is('post') || $this->request->is('put')) {
+				//check for user post permissions
+				if(!$this->viewVars['ACLtoken']['submit'])  {
+					//ACL check failed
+					$this->Session->setFlash(__('You do not have permissions to submit this form.'));
+					$this->redirect($this->referer());
+				}//endif
+			}//endif
 			//save user click
 			$clickObj=ClassRegistry::init('FormsUser');
 			$click=$clickObj->find('first',array('conditions'=>array('user_id'=>$this->Auth->user('id'),'form_id'=>$this->viewVars['form_id'])));
