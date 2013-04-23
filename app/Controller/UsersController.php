@@ -144,7 +144,10 @@ class UsersController extends AppController {
 			$this->request->data = $this->User->read(null, $id);
 		}
 		$this->set('userGroups',$this->User->UserGroup->find('list'));
-// 		$this->set('forms',$this->User->Form->find('list'));
+		//get permission sets
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		$this->set('perms',$this->PermissionSet->find('all',array('conditions'=>array('user_id'=>$id))));
+		$this->set('permList',$this->ComputareUser->getPermissionList());
 	}
 
 /**

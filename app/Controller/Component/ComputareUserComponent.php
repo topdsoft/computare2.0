@@ -107,7 +107,7 @@ class ComputareUserComponent extends Component{
 	/** setUserToFormPermission
 	 * @param int $user_id
 	 * @param int $form_id
-	 * @param array $permissions => array of perms to add
+	 * @param array $permissions => array of perms to add (perms not in array will be removed)
 	 * @param int $uid => current user
 	 * @return t/f 
 	 */
