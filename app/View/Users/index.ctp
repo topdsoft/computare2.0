@@ -48,5 +48,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New User'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List User Groups'), array('controller'=>'userGroups','action' => 'index')); ?></li>
 	</ul>
 </div>

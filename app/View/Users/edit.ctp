@@ -5,7 +5,7 @@
 		<fieldset><legend>General User Settings</legend>
 		<?php
 			echo $this->Form->input('id');
-			echo $this->Form->input('username');
+			echo $this->Form->input('username',array('id'=>'sc'));
 	//		echo $this->Form->input('password');
 			echo $this->Form->input('email');
 			echo $this->Form->input('homepage');
@@ -57,3 +57,4 @@
 			'controller'=>'users','action'=>'edit',$this->data['User']['id']))); ?></li>
 	</ul>
 </div>
+<script type='text/javascript'>document.getElementById('sc').focus();</script>

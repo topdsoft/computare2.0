@@ -325,8 +325,8 @@ class ComputareUserComponent extends Component{
 		$this->PermissionSet=ClassRegistry::init('PermissionSet');
 		//check for existing record
 		$data=$this->PermissionSet->find('first',array('recursive'=>-1,'conditions'=>array('userGroup_id'=>$userGroup_id,'formGroup_id'=>$formGroup_id)));
-//debug($data);exit;
-		if(!$data) $data=array('PermissionSet'=>array('userGroup_id'=>$useGroupr_id,'formGroup_id'=>$formGroup_id));
+// debug($data);exit;
+		if(!$data) $data=array('PermissionSet'=>array('userGroup_id'=>$userGroup_id,'formGroup_id'=>$formGroup_id));
 		//set and record permission adds
 		$added=array();
 		foreach ($permissions as $p) {

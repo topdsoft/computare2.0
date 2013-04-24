@@ -57,8 +57,8 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
 </div>
+
 <div class="related">
 	<?php if (!empty($group['User'])): ?>
 	<h3><?php echo __('Group Members'); ?></h3>
@@ -86,4 +86,33 @@
 	</table>
 <?php endif; ?>
 
+</div>
+
+<div class="related">
+	<?php if (!empty($permissions)): ?>
+	<h3><?php echo __('Group Permissions'); ?></h3>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Form'); ?></th>
+		<th><?php echo __('Form Group'); ?></th>
+		<?php foreach($permissionsList as $p) echo "<th>$p</th>"; ?>
+	</tr>
+	<?php
+		$i = 0;
+		foreach ($permissions as $permission): ?>
+		<tr>
+			<td><?php echo $permission['Form']['name']; ?></td>
+			<td><?php echo $permission['FormGroup']['name']; ?></td>
+			<?php
+				foreach ($permissionsList as $p) {
+					//loop for all permsissions
+					echo '<td>';
+					if($permission['PermissionSet'][$p]) echo 'Y';
+					echo '</td>';
+				}//end foreach
+			?>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+<?php endif; //debug($permissions);?>
 </div>

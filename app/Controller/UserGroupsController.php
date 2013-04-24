@@ -37,6 +37,10 @@ class UserGroupsController extends AppController {
 		}
 		$this->set('group', $this->UserGroup->read(null, $id));
 		$this->set('users',$this->UserGroup->User->find('list'));
+		//get permissions
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		$this->set('permissions',$this->PermissionSet->find('all',array('conditions'=>array('userGroup_id'=>$id))));
+		$this->set('permissionsList',$this->ComputareUser->getPermissionList());
 	}
 
 /**
@@ -86,9 +90,11 @@ class UserGroupsController extends AppController {
 		} else {
 			$this->request->data = $this->UserGroup->read(null, $id);
 		}
-		$forms = $this->UserGroup->Form->find('list');
+		$this->PermissionSet=ClassRegistry::init('PermissionSet');
+		$permissions=$this->PermissionSet->find('all',array('conditions'=>array('userGroup_id'=>$id)));
+		$permissionsList=$this->ComputareUser->getPermissionList();
 		$users = $this->UserGroup->User->find('list');
-		$this->set(compact('forms', 'users'));
+		$this->set(compact('permissions','permissionsList', 'users'));
 	}
 
 /**
