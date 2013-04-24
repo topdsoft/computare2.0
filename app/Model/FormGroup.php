@@ -13,6 +13,7 @@ class FormGroup extends AppModel {
  * @var mixed False or table name
  */
 	public $useTable = 'formGroups';
+	public $order=array('name');
 
 /**
  * Display field

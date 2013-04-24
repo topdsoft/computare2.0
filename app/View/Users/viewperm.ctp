@@ -18,7 +18,14 @@
 				//loop for all groups
 				echo '<tr>';
 				echo '<td>'.$form['name'].'</td>';
-				foreach($permissions as $p) echo "<td>".$form['PermissionSet'][$p]."</td>";
+				foreach($permissions as $p) {
+					//loop for all forms
+					echo "<td>";
+					if($form['PermissionSet'][$p]) echo 'Y';
+					elseif($form['Token'][$p]) echo '*';
+					echo "</td>";
+					
+				}//endforeach
 				echo '</tr>';
 // debug($form);
 			}//end foreach
@@ -44,8 +51,14 @@
 					echo '<tr>';
 					echo '<td>'.$group['name'].'</td>';
 					echo '<td>'.$form['name'].'</td>';
-					foreach($permissions as $p) echo "<td>".$group['PermissionSet'][$p]."</td>";
-					echo '</tr>';
+					foreach($permissions as $p) {
+						//check each permission vs token
+						echo "<td>";
+						if($group['PermissionSet'][$p]) echo 'Y';
+						elseif($form['Token'][$p]) echo '*';
+						echo "</td>";
+					}//endforeach
+					echo '</tr>';//debug($form);
 				}//end foreach
 //  debug($group);
 			}//end foreach
@@ -71,7 +84,13 @@
 					echo '<tr>';
 					echo '<td>'.$group['name'].'</td>';
 					echo '<td>'.$form['name'].'</td>';
-					foreach($permissions as $p) echo "<td>".$form['PermissionSet'][$p]."</td>";
+					foreach($permissions as $p) {
+						//loop and check each permission vs. token
+						echo "<td>";
+						if($form['PermissionSet'][$p]) echo 'Y';
+						elseif($form['Token'][$p]) echo '*';
+						echo "</td>";
+					}//endforeach
 					echo '</tr>';
 				}//end foreach
 //  debug($group);
@@ -102,7 +121,13 @@
 						echo '<td>'.$userGroup['name'].'</td>';
 						echo '<td>'.$formGroup['name'].'</td>';
 						echo '<td>'.$form['name'].'</td>';
-						foreach($permissions as $p) echo "<td>".$formGroup['PermissionSet'][$p]."</td>";
+						foreach($permissions as $p) {
+							//loop and check against token
+							echo "<td>";
+							if($formGroup['PermissionSet'][$p]) echo 'Y';
+							elseif($form['Token'][$p]) echo '*';
+							echo "</td>";
+						}//endforeach
 						echo '</tr>';
 					}//end foreach
 				}//end foreach
@@ -110,5 +135,6 @@
 			}//end foreach
 		?>
 		</table>
+		"*" Means the user has this permission, but granted by another permission set.
 	</div>
 <?php endif; ?>

@@ -46,3 +46,14 @@
 	</table>
 	</fieldset>
 </div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('New Form Permission'), array('controller'=>'permissionSets',
+			'action' => 'addFormToUser',$this->data['User']['id'],'redirect'=>array(
+			'controller'=>'users','action'=>'edit',$this->data['User']['id']))); ?></li>
+		<li><?php echo $this->Html->link(__('New Form Group Permission'), array('controller'=>'permissionSets',
+			'action' => 'addFormGroupToUser',$this->data['User']['id'],'redirect'=>array(
+			'controller'=>'users','action'=>'edit',$this->data['User']['id']))); ?></li>
+	</ul>
+</div>

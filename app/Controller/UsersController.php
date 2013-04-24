@@ -94,7 +94,37 @@ class UsersController extends AppController {
 			)
 		));
 		$this->User->recursive=3;
-		$this->set('user', $this->User->read(null, $id));
+		$user=$this->User->read(null, $id);
+		//loop for all forms found and get ACL token for form
+		foreach($user['Form'] as $i=>$form) {
+			//loop for all individually assigned forms
+			$user['Form'][$i]['Token']=$this->ComputareUser->getToken($form['id'],$id);
+		}//end foreach
+		foreach($user['FormGroup'] as $i=>$group) {
+			//loop for all formgroups assigned to this user
+			foreach($group['Form'] as $j=>$form) {
+				//loop for each form in this group
+				$user['FormGroup'][$i]['Form'][$j]['Token']=$this->ComputareUser->getToken($form['id'],$id);
+			}//endforeach
+		}//endforeach
+		foreach($user['UserGroup'] as $i=>$group) {
+			//loop for all groups
+			foreach($group['Form'] as $j=>$form) {
+				//loop for each form in the group
+				$user['UserGroup'][$i]['Form'][$j]['Token']=$this->ComputareUser->getToken($form['id'],$id);
+			}//end foreach
+		}//end foreach
+		foreach($user['UserGroup'] as $i=>$userGroup) {
+			//loop for all user groups
+			foreach($userGroup['FormGroup'] as $j=>$formGroup) {
+				//loop for each form group
+				foreach($formGroup['Form'] as $k=>$form) {
+					//loop for each form in the group
+					$user['UserGroup'][$i]['FormGroup'][$j]['Form'][$k]['Token']=$this->ComputareUser->getToken($form['id'],$id);
+				}//end foreach
+			}//end foreach
+		}//end foreach
+		$this->set('user', $user);
 		//get list of available permissions 
 		$this->set('permissions', $this->ComputareUser->getPermissionList());
 // debug($this->User->read(null, $id));exit;

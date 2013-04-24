@@ -169,9 +169,10 @@ class FormsController extends AppController {
 		if (!$this->Form->exists()) {
 			throw new NotFoundException(__('Invalid form'));
 		}
+// debug($this);exit;
 		if ($this->Form->delete()) {
 			$this->Session->setFlash(__('Form deleted'));
-			$this->redirect(array('action' => 'index'));
+			$this->redirect(array('action'=>'index'));
 		}
 		$this->Session->setFlash(__('Form was not deleted'));
 		$this->redirect(array('action' => 'index'));

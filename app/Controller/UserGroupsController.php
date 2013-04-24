@@ -16,6 +16,7 @@ class UserGroupsController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List User Groups');
+		$this->set('add_menu',true);
 		$this->UserGroup->recursive = 0;
 		$this->set('groups', $this->paginate());
 		$this->set('users',$this->UserGroup->User->find('list'));
@@ -45,6 +46,7 @@ class UserGroupsController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Add User Group');
+		$this->set('add_menu',true);
 		if ($this->request->is('post')) {
 			$this->request->data['UserGroup']['created_id']=$this->Auth->user('id');
 //debug($this->request->data);exit;

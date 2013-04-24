@@ -52,4 +52,56 @@ class PermissionSetsController extends AppController{
 // debug($set);exit;
 		$this->set(compact('permissionSet','permissionList'));
 	}
+	
+	/**
+	 * addFormToUser method
+	 * @param int $user_id
+	 * @param redirect=>array('controller'=>controller,'action'=>action,id)
+	 */
+	public function addFormToUser($user_id) {
+		$this->set('formName','Add Form Permission to User');
+		$this->User=ClassRegistry::init('User');
+		$this->Form=ClassRegistry::init('Form');
+		$this->User->id=$user_id;
+		if(!$this->User->exists()) throw new NotFoundException(__('Invalid user'));
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//check if there is a record allready
+			$set_id=$this->PermissionSet->field('id',array('form_id'=>$this->request->data['PermissionSet']['form_id'],'user_id'=>$user_id));
+			if($set_id) $this->redirect(array('action'=>'edit',$set_id,'redirect'=>$this->params->named['redirect']));
+			else {
+				//create perm set but add no permissions
+				$this->ComputareUser->setUserToFormPermission($user_id,$this->request->data['PermissionSet']['form_id'],array(),$this->Auth->user('id'));
+				$this->redirect(array('action'=>'edit',$this->PermissionSet->getInsertId(),'redirect'=>$this->params->named['redirect']));
+			}//endif
+		}//endif
+		$userName=$this->User->field('username',array('User.id'=>$user_id));
+		$forms=$this->Form->find('list');
+		$this->set(compact('forms','userName'));
+	}
+	
+	/**
+	 * addFormGroupToUser method
+	 * @param int $user_id
+	 * @param redirect=>array('controller'=>controller,'action'=>action,id)
+	 */
+	public function addFormGroupToUser($user_id) {
+		$this->set('formName','Add Form Group Permission to User');
+		$this->User=ClassRegistry::init('User');
+		$this->FormGroup=ClassRegistry::init('FormGroup');
+		$this->User->id=$user_id;
+		if(!$this->User->exists()) throw new NotFoundException(__('Invalid user'));
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//check if there is a record allready
+			$set_id=$this->PermissionSet->field('id',array('formGroup_id'=>$this->request->data['PermissionSet']['formGroup_id'],'user_id'=>$user_id));
+			if($set_id) $this->redirect(array('action'=>'edit',$set_id,'redirect'=>$this->params->named['redirect']));
+			else {
+				//create perm set but add no permissions
+				$this->ComputareUser->setUserToFormGroupPermission($user_id,$this->request->data['PermissionSet']['formGroup_id'],array(),$this->Auth->user('id'));
+				$this->redirect(array('action'=>'edit',$this->PermissionSet->getInsertId(),'redirect'=>$this->params->named['redirect']));
+			}//endif
+		}//endif
+		$userName=$this->User->field('username',array('User.id'=>$user_id));
+		$formGroups=$this->FormGroup->find('list');
+		$this->set(compact('formGroups','userName'));
+	}
 }
