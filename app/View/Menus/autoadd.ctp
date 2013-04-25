@@ -1,4 +1,5 @@
 <div class="menus view">
+<?php echo $this->Form->create('Menu'); ?>
 <h2><?php  echo __('Menu: ').h($menu['Menu']['name']); ?></h2>
 <h3>Current Forms in Menu</h3>
 <?php 
@@ -13,7 +14,7 @@
 		}//endif
 	}//endforeach
 	//show most visited
-	echo '<br><h3>Most Visited Forms</h3>';
+/*	echo '<br><h3>Most Visited Forms</h3>';
 	echo '<table>';
 	echo '<tr>';
 	echo '<th>Name</th><th>Group</th><th>Visits</th><th>Last Visit</th><th></th>';
@@ -28,6 +29,8 @@
 		echo '</tr>';
 	}//endforeach
 	echo '</table>';
-// debug($visits);
+// debug($visits);*/
+	echo $this->Form->input('formGroup_id');
+	echo $this->Form->end('Submit');
 ?>
 </div>

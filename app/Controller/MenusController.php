@@ -13,6 +13,7 @@ class MenusController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('formName','List Menus');
 		$this->Menu->recursive = 0;
 		$this->set('menus', $this->paginate());
 		$users = $this->Menu->User->find('list');
@@ -172,6 +173,43 @@ class MenusController extends AppController {
 			throw new NotFoundException(__('Invalid menu'));
 		}
 		$menu=$this->Menu->read(null);
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//build new menu
+			$forms=$this->Menu->Form->find('all',array('order'=>array('controller'),
+				'conditions'=>array('formGroup_id'=>$this->request->data['Menu']['formGroup_id'],'Form.add_menu')));
+			//delete existing menu
+			$this->Menu->FormsMenu->deleteAll(array('FormsMenu.menu_id'=>$id),false);
+			//create new menu
+			$lastController='';
+			$count=0;
+			foreach($forms as $form) {
+				//loop for all forms in group that have add_menu set
+				$count++;
+				if($form['Form']['controller']!=$lastController) {
+					//add a title line
+					$this->Menu->FormsMenu->save(array(
+						'id'=>null,
+						'form_id'=>0,
+						'menu_id'=>$id,
+						'ordr'=>$count,
+						'name'=>$form['Form']['controller'],
+						'params'=>''
+					));
+					$count++;
+					$lastController=$form['Form']['controller'];
+				}//endif
+				$this->Menu->FormsMenu->save(array(
+					'id'=>null,
+					'form_id'=>$form['Form']['id'],
+					'menu_id'=>$id,
+					'ordr'=>$count,
+					'name'=>$form['Form']['name'],
+					'params'=>''
+				));
+			}//endforeach
+			$this->redirect(array('action'=>'edit',$id));
+// debug($forms);exit;
+		}//endif
 		//get forms for this menu
 		$this->Menu->FormsMenu->bindModel(array('belongsTo'=>array('Form')));
 		$forms=$this->Menu->FormsMenu->find('all',array('conditions'=>array('FormsMenu.menu_id'=>$id),'order'=>'ordr'));
@@ -185,7 +223,7 @@ class MenusController extends AppController {
 		$visits=$this->FormsUser->find('all',array('order'=>array('FormsUser.visits'=>'desc'),'conditions'=>array('User_id'=>$uid,'Form.add_menu')));
 		//get list of form groups
 		$formGroups=ClassRegistry::init('FormGroup')->find('list');
-		$formGroups[null]='';
+// 		$formGroups[null]='';
 		$this->set(compact('visits','menu','forms','formGroups'));
 // debug($visits);exit;
 	}
