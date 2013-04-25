@@ -7,7 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class ItemsController extends AppController {
 
-	public $components=array('ComputareIC');
+	public $components=array('ComputareIC','ComputareAR');
 /**
  * index method
  *
@@ -135,6 +135,48 @@ class ItemsController extends AppController {
 // 		$locations = $this->Item->Location->find('list');
 // 		$vendors = $this->Item->Vendor->find('list');
 		$this->set(compact('categories', 'itemGroups'));
+	}
+
+/**
+ * editPricing method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @param named customer_id (optional)
+ * @param named customerGroup_id (optional)
+ * @return void
+ */
+	public function editPricing($id=null){
+		$this->set('formName','Edit Item Pricing'); 
+		//editing item
+		$this->Item->id = $id;
+		if (!$this->Item->exists()) {
+			throw new NotFoundException(__('Invalid item'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+// debug($this->request->data);exit;
+// 			$data['item_id']=$this->request->data['Item']['id'];
+// 			if ($this->ComputareAR->setItemPrice($data)) {
+			if ($this->ComputareAR->setItemPrice($this->request->data)) {
+				$this->Session->setFlash(__('The item price has been saved'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The item could not be saved. Please, try again.'));
+			}
+		} else {
+			$this->request->data = $this->Item->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$id)));
+			//get pricing
+			$defaultPricing=ClassRegistry::init('CustomerGroupsItem')->find('all',array('order'=>'qty','conditions'=>
+				array('item_id'=>$id,'customerGroup_id'=>null,'CustomerGroupsItem.active')));
+			foreach($defaultPricing as $i=>$p) {
+				//loop for all default prices and add to data
+				$this->request->data['Default'][$i]['price']=$p['CustomerGroupsItem']['price'];
+				$this->request->data['Default'][$i]['id']=$p['CustomerGroupsItem']['id'];
+				$this->request->data['Default'][$i]['qty']=$p['CustomerGroupsItem']['qty'];
+			}//end foreach
+		}
+		//get current pricing
+// 		$this->set(compact('defaultPricing'));
 	}
 
 /**

@@ -25,6 +25,10 @@ class Customer extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'CustomerGroup' => array(
+			'className' => 'CustomerGroup',
+			'foreignKey' => 'customerGroup_id'
 		)
 	);
 	

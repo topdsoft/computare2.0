@@ -8,6 +8,7 @@
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
 			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('CustomerDetail.companyName','Company'); ?></th>
+			<th><?php echo $this->Paginator->sort('CustomerGroup.name','Group'); ?></th>
 			<?php if($this->data['Filter']['showDeleted']) echo '<th>'.$this->Paginator->sort('active','Status').'</th>';?>
 			<th></th>
 	</tr>
@@ -17,6 +18,7 @@
 		<td><?php echo str_pad($customer['Customer']['id'],10,'0',STR_PAD_LEFT); ?>&nbsp;</td>
 		<td><?php if($customer['Customer']['name']!=', ') echo h($customer['Customer']['name']);?>&nbsp;</td>
 		<td><?php echo h($customer['CustomerDetail']['companyName']); ?>&nbsp;</td>
+		<td><?php echo $this->Html->link($customer['CustomerGroup']['name'],array('controller'=>'customerGroups','action'=>'view',$customer['CustomerGroup']['id'])); ?>&nbsp;</td>
 		<?php if($this->data['Filter']['showDeleted']) echo '<td>'.($customer['Customer']['active'] ? 'Active' : 'Deleted').'</td>';  ?>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $customer['Customer']['id'])); ?>
@@ -45,7 +47,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Customer'), array('action' => 'add')); ?></li>
-		<li><?php //echo $this->Html->link(__('List Customer Details'), array('controller' => 'customer_details', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Customer Groups'), array('controller' => 'customerGroups', 'action' => 'index')); ?> </li>
 		<li><?php //echo $this->Html->link(__('New Customer Detail'), array('controller' => 'customer_details', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

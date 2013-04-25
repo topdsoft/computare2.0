@@ -105,6 +105,75 @@ class ComputareARComponent extends Component{
 		return ($ok==true);
 	}//end public function saveline
 	
-	
+	/**
+	 * method setItemPrice
+	 * used to setup pricing on items to be sold
+	 * @param arary $data
+		* $data['Item']['id'] => item to change (required)
+		* $data['Default'] => array(x => array('price','qty','id'))
+		* $data['Customer'] => array(customer_id => array('price','qty','id'))
+		* $data['CustomerGroup'] => array(customerGroup_id => array('price','qty','id'))
+	* @return t/f
+	*/
+	public function setItemPrice($data){
+		//save price
+		$this->Item=ClassRegistry::init('Item');
+		$this->CustomersItem=ClassRegistry::init('CustomersItem');
+		$this->CustomerGroupsItem=ClassRegistry::init('CustomerGroupsItem');
+		$this->Customer=ClassRegistry::init('Customer');
+		$this->CustomerGroup=ClassRegistry::init('CustomerGroup');
+		//validation
+		if(!isset($data['Item']['id'])) return false;
+		$this->Item->id=$data['Item']['id'];
+		if(!$this->Item->exists()) return false;
+		$ok=true;
+		$dataSource=$this->Customer->getDataSource();
+		//start transaction
+		$dataSource->begin();
+// debug($data);exit;
+		if(isset($data['Customer'])) {
+			//price for customer
+		}//endif
+		if(isset($data['CustomerGroup'])) {
+			//price for group
+		}//endif
+		if(isset($data['Default'])) {
+			//default pricing
+			foreach($data['Default'] as $p) {
+				//loop for all default prices
+				if($p['qty']!='' && $p['price']!='') {
+					//ignore empty records
+					if($p['id']) {
+						//record exists so check if it has changed
+						$record=$this->CustomerGroupsItem->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$p['id'])));
+						if($p['qty']!=$record['CustomerGroupsItem']['qty']  || $p['price']!= $record['CustomerGroupsItem']['price']){
+							//need to remove old record and add new
+							$record['CustomerGroupsItem']['active']=false;
+							$record['CustomerGroupsItem']['deleted']=date('Y-m-d h:m:s');
+							$record['CustomerGroupsItem']['deleted_id']=$this->Auth->user('id');
+							if($ok) $ok=$this->CustomerGroupsItem->save($record);
+							//create new record
+							$p['item_id']=$data['Item']['id'];
+							$p['active']=true;
+							$p['created_id']=$this->Auth->user('id');
+							unset($p['id']);
+							if($ok) $this->CustomerGroupsItem->create();
+							if($ok) $ok=$this->CustomerGroupsItem->save($p);
+// debug($record);exit;
+						}//endif
+					} else {
+						//create new record
+						$p['item_id']=$data['Item']['id'];
+						$p['active']=true;
+						$p['created_id']=$this->Auth->user('id');
+						if($ok) $ok=$this->CustomerGroupsItem->save($p);
+					}//endif
+				}//endif
+			}//end foreach
+		}//endif
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}//end function
 	
 }

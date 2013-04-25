@@ -6,7 +6,7 @@ App::uses('ComponentCollection', 'Controller');
 App::uses('ComputareCustomerComponent', 'Controller/Component');
 
 class ComputareCustomerComponentTest extends CakeTestCase {
-	public $fixtures=array('app.customer','app.customerDetail','app.address');
+	public $fixtures=array('app.customer','app.customerDetail','app.address','app.customerGroup');
 	
 	public function setUp() {
 		parent::setUp();

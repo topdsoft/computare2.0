@@ -437,7 +437,7 @@ fieldset legend {
 }
 fieldset fieldset {
 	margin-top: 0;
-	padding: 10px 0 0;
+	/*padding: 10px 0 0;*/
 }
 fieldset fieldset legend {
 	font-size: 120%;

@@ -20,6 +20,7 @@ class CustomerDetailFixture extends CakeTestFixture {
 	public $fields = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10, 'key' => 'primary'),
 		'customer_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'customerGroup_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
 		'created_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'companyName' => array('type' => 'string', 'null' => false, 'default' => null, 'length' => 50, 'collate' => 'latin1_swedish_ci', 'charset' => 'latin1'),

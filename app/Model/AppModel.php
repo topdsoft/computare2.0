@@ -34,15 +34,12 @@ class AppModel extends Model {
 	function __construct($id = false, $table = null, $ds = null) { 
 		// Get saved company that is used for the database name 
 		$dbName = Configure::read('Company'); //$dbName='computare';
-//debug($dbName);exit;
 		// Get common company-specific config (default settings in database.php) 
 		$config = ConnectionManager::getDataSource('default')->config; 
 		// Set correct database name 
 		$config['database'] = $dbName;// echo 'here:'.$dbName;// exit;
-//debug($config); exit();
 		// Add new config to registry 
 		$ret=ConnectionManager::create($dbName, $config); 
-//debug($ret);exit;
 		// Point model to new config 
 		$this->useDbConfig = $dbName; 
 // 		$this->useDbConfig = 'default'; //uncomment this line to use bake

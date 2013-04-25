@@ -31,13 +31,17 @@ class ComputareCustomerComponent extends Component {
 			}//endif
 		}//endif
 		//first check if new customer or saving changes to existing
+// debug($data);exit;
 		if($data['Customer']['id']) {
 			//existing customer
 			$this->CustomerDetail->create();
 			if($ok)$ok=$this->CustomerDetail->save($data['CustomerDetail']);
 			$customerDetail_id=$this->CustomerDetail->getLastInsertId();
 			//link new details back to customer
-			if($ok) $ok=$this->Customer->save(array('id'=>$data['CustomerDetail']['customer_id'],'customerDetail_id'=>$customerDetail_id));
+			$toSave['id']=$data['CustomerDetail']['customer_id'];
+			$toSave['customerDetail_id']=$customerDetail_id;
+			if(isset($data['CustomerDetail']['customerGroup_id'])) $toSave['customerGroup_id']=$data['CustomerDetail']['customerGroup_id'];
+			if($ok) $ok=$this->Customer->save($toSave);
 		} else {
 			//new customer
 			$this->Customer->create();
@@ -49,7 +53,10 @@ class ComputareCustomerComponent extends Component {
 			if($ok) $ok=$this->CustomerDetail->save($data['CustomerDetail']);
 			$customerDetail_id=$this->CustomerDetail->getLastInsertId();
 			//link new details back to customer
-			if($ok) $ok=$this->Customer->save(array('id'=>$customer_id,'customerDetail_id'=>$customerDetail_id));
+			$toSave['id']=$customer_id;
+			$toSave['customerDetail_id']=$customerDetail_id;
+			if(isset($data['CustomerDetail']['customerGroup_id'])) $toSave['customerGroup_id']=$data['CustomerDetail']['customerGroup_id'];
+			if($ok) $ok=$this->Customer->save($toSave);
 		}//endif
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();

@@ -16,8 +16,20 @@ class CustomersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Customers');
+		//get customerGroups
+		$groups=$this->Customer->CustomerGroup->find('list');
 		//use filters
 		$filters=array();
+		if($groups){
+			//only add groups filter if there are groups defined
+			$filters[]=array(
+				'type'=>1,
+				'label'=>'Group',
+				'field'=>'Customer.customerGroup_id',
+				'options'=>$groups,
+				'passName'=>'group'
+			);
+		}//endif
 		$filters[]=array('type'=>4,
 			'label'=>'Show Deleted Customers',
 			'falseCondition'=>'Customer.active',
@@ -93,6 +105,9 @@ class CustomersController extends AppController {
 		} else {
 			$this->request->data = $this->Customer->read(null, $id);
 		}
+		$customerGroups=$this->Customer->CustomerGroup->find('list');
+		$customerGroups[0]='(none)';
+		$this->set('customerGroups',$customerGroups);
 	}
 
 /**

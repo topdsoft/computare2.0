@@ -8,6 +8,7 @@
 		echo $this->Form->input('CustomerDetail.companyName',array('id'=>'sc'));
 		echo $this->Form->input('CustomerDetail.firstName');
 		echo $this->Form->input('CustomerDetail.lastName');
+		echo $this->Form->input('CustomerDetail.customerGroup_id');
 // 		echo $this->Form->input('CustomerDetail.address1');
 // 		echo $this->Form->input('CustomerDetail.address2');
 // 		echo $this->Form->input('CustomerDetail.city');
