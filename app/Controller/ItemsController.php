@@ -154,9 +154,14 @@ class ItemsController extends AppController {
 			throw new NotFoundException(__('Invalid item'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			if(isset($this->request->data['CustomerGroup']['customerGroup_id']) && $this->request->data['CustomerGroup']['price']!='') {
+				//modify format of data from new group
+				$group_id=$this->request->data['CustomerGroup']['customerGroup_id'];
+				$this->request->data['CustomerGroup'][$group_id][0]=array('price'=>$this->request->data['CustomerGroup']['price'],'qty'=>'0','id'=>'');
+				unset($group_id);
+			}//endif
+			unset($this->request->data['CustomerGroup']['customerGroup_id'],$this->request->data['CustomerGroup']['price']);
 // debug($this->request->data);exit;
-// 			$data['item_id']=$this->request->data['Item']['id'];
-// 			if ($this->ComputareAR->setItemPrice($data)) {
 			if ($this->ComputareAR->setItemPrice($this->request->data)) {
 				$this->Session->setFlash(__('The item price has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
@@ -165,18 +170,39 @@ class ItemsController extends AppController {
 			}
 		} else {
 			$this->request->data = $this->Item->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$id)));
+			$this->request->data['Default'] = array();
+			$this->request->data['CustomerGroup'] = array();
+			$this->request->data['Customer'] = array();
 			//get pricing
-			$defaultPricing=ClassRegistry::init('CustomerGroupsItem')->find('all',array('order'=>'qty','conditions'=>
-				array('item_id'=>$id,'customerGroup_id'=>null,'CustomerGroupsItem.active')));
+			$this->CustomerGroupsItem=ClassRegistry::init('CustomerGroupsItem');
+			$defaultPricing=$this->CustomerGroupsItem->find('all',array('order'=>'qty','conditions'=>	array('item_id'=>$id,'customerGroup_id'=>null,'CustomerGroupsItem.active')));
 			foreach($defaultPricing as $i=>$p) {
 				//loop for all default prices and add to data
 				$this->request->data['Default'][$i]['price']=$p['CustomerGroupsItem']['price'];
 				$this->request->data['Default'][$i]['id']=$p['CustomerGroupsItem']['id'];
 				$this->request->data['Default'][$i]['qty']=$p['CustomerGroupsItem']['qty'];
 			}//end foreach
-		}
-		//get current pricing
-// 		$this->set(compact('defaultPricing'));
+			//get group pricing
+			$activeGroups=array();
+			$groupPricing=$this->CustomerGroupsItem->find('all',array(
+				'recursive'=>0,'order'=>'qty','conditions'=>array('item_id'=>$id,'customerGroup_id not'=>null,'CustomerGroupsItem.active'),
+				'fields'=>array('id','qty','price','customerGroup_id','CustomerGroup.name')
+			));
+			foreach($groupPricing as $p) {
+				//loop for all group set prices
+				$this->request->data['CustomerGroup'][$p['CustomerGroupsItem']['customerGroup_id']][]=array(
+					'price'=>$p['CustomerGroupsItem']['price'],
+					'id'=>$p['CustomerGroupsItem']['id'],
+					'qty'=>$p['CustomerGroupsItem']['qty'],
+					'name'=>$p['CustomerGroup']['name']
+				);
+				$activeGroups[$p['CustomerGroupsItem']['customerGroup_id']]=$p['CustomerGroupsItem']['customerGroup_id'];
+			}//end foreach
+// debug($this->request->data);debug($groupPricing);debug($activeGroups);exit;
+		}//endif
+		$customerGroups=ClassRegistry::init('CustomerGroup')->find('list',array('conditions'=>array('NOT'=>array('id'=>$activeGroups))));
+		$customers=$this->Item->Customer->find('list');
+		$this->set(compact('customerGroups','customers'));
 	}
 
 /**

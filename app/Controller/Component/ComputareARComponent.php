@@ -136,6 +136,42 @@ class ComputareARComponent extends Component{
 		}//endif
 		if(isset($data['CustomerGroup'])) {
 			//price for group
+			foreach($data['CustomerGroup'] as $customerGroup_id=>$custData) {
+				//loop for each different customer group
+				foreach($custData as $p) {
+					//loop for each price point for this group
+					if($p['qty']!='' && $p['price']!='') {
+						//ignore empty records
+						if($p['id']) {
+							//record exists- check for changes
+							$record=$this->CustomerGroupsItem->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$p['id'])));
+							if($p['qty']!=$record['CustomerGroupsItem']['qty']  || $p['price']!= $record['CustomerGroupsItem']['price']){
+								//need to remove old record and add new
+								$record['CustomerGroupsItem']['active']=false;
+								$record['CustomerGroupsItem']['deleted']=date('Y-m-d h:m:s');
+								$record['CustomerGroupsItem']['deleted_id']=$this->Auth->user('id');
+								if($ok) $ok=$this->CustomerGroupsItem->save($record);
+								//create new record
+								$p['item_id']=$data['Item']['id'];
+								$p['customerGroup_id']=$customerGroup_id;
+								$p['active']=true;
+								$p['created_id']=$this->Auth->user('id');
+								unset($p['id']);
+								if($ok) $this->CustomerGroupsItem->create();
+								if($ok) $ok=$this->CustomerGroupsItem->save($p);
+// debug($record);exit;
+							}//endif
+						} else {
+							//create new record
+							$p['item_id']=$data['Item']['id'];
+							$p['customerGroup_id']=$customerGroup_id;
+							$p['active']=true;
+							$p['created_id']=$this->Auth->user('id');
+							if($ok) $ok=$this->CustomerGroupsItem->save($p);
+						}//endif
+					}//endif
+				}//end foreach
+			}//end foreach
 		}//endif
 		if(isset($data['Default'])) {
 			//default pricing
