@@ -16,6 +16,7 @@ class CustomersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Customers');
+		$this->set('add_menu',true);
 		//get customerGroups
 		$groups=$this->Customer->CustomerGroup->find('list');
 		//use filters
@@ -73,6 +74,7 @@ class CustomersController extends AppController {
 	public function add() {
 		//adding customer uses the edit function with null id
 		$this->set('formName','Add New Customer');
+		$this->set('add_menu',true);
 		$this->redirect(array('action' => 'edit'));
 	}
 
@@ -108,6 +110,50 @@ class CustomersController extends AppController {
 		$customerGroups=$this->Customer->CustomerGroup->find('list');
 		$customerGroups[0]='(none)';
 		$this->set('customerGroups',$customerGroups);
+	}
+
+/**
+ * editPricing method
+ * @param int $id
+ */
+	public function editPricing($id=null) {
+		$this->set('formName','Edit Pricing');
+		$this->Customer->id = $id;
+		if (!$this->Customer->exists()) {
+			throw new NotFoundException(__('Invalid customer'));
+		}
+		if ($this->request->is('post') || $this->request->is('put')) {
+			
+		} else {
+// 			$this->Customer->bindModel(array('hasAndBelongsToMany'=>array('Item'=>array(
+// 				'className'=>'Item',
+// 				'joinTable'=>'customers_items',
+// 				'foreignKey' => 'customer_id',
+// 				'associationForeignKey' => 'item_id',
+// 				'unique' => 'keepExisting',
+// 				'conditions' => 'CustomersItem.active',
+// 				'order'=>'item_id,qty'
+// 			))));
+			$this->request->data = $this->Customer->read(null, $id);
+			//get pricing data
+			$this->CustomersItem=ClassRegistry::init('CustomersItem');
+			$this->CustomersItem->bindModel(array('belongsTo'=>array('Item'=>array('fields'=>array('name','id')))));
+			$pricingData=$this->CustomersItem->find('all',array('conditions'=>array('CustomersItem.active','customer_id'=>$id),'order'=>'item_id,qty'));
+			$this->request->data['Item']=array();
+			$activeItems=array();
+			foreach($pricingData as $p){
+				//loop for all price points
+				$this->request->data['Item'][$p['Item']['id']][]=array(
+					'name'=>$p['Item']['name'],
+					'id'=>$p['CustomersItem']['id'],
+					'qty'=>$p['CustomersItem']['qty'],
+					'price'=>$p['CustomersItem']['price']
+				);
+				$activeItems[$p['Item']['id']]=$p['Item']['id'];
+			}//end foreach
+// debug($pricingData);exit;
+		}
+		$this->set('items',ClassRegistry::init('Item')->find('list',array('conditions'=>array('NOT'=>array('Item.id'=>$activeItems)))));
 	}
 
 /**

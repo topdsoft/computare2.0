@@ -15,6 +15,7 @@ class ItemsController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Items');
+		$this->set('add_menu',true);
 		$this->Item->recursive = 0;
 		$items=$this->paginate();
 		foreach($items as $i=>$item) $items[$i]['path']=$this->Item->ItemCategory->getPath($item['Item']['category_id'],array('id','name'));
@@ -28,6 +29,7 @@ class ItemsController extends AppController {
  */
 	public function bylocation() {
 		$this->set('formName','List Items By Location');
+		$this->set('add_menu',true);
 		//create new assoications
 		$this->Item->ItemsLocation->bindModel(
 			array('belongsTo' => array(
@@ -83,6 +85,7 @@ class ItemsController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Add Item'); 
+		$this->set('add_menu',true);
 		//editing item
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->ComputareIC->saveItem($this->request->data)) {

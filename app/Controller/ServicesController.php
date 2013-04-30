@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class ServicesController extends AppController {
 
+	public $components=array('ComputareAR');
 /**
  * index method
  *
@@ -14,6 +15,7 @@ class ServicesController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Services');
+		$this->set('add_menu',true);
 		$this->Service->recursive = 0;
 		$this->set('services', $this->paginate(array('Service.active')));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
@@ -28,6 +30,7 @@ class ServicesController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Create Service');
+		$this->set('add_menu',true);
 		if ($this->request->is('post')) {
 			$this->Service->create();
 			$this->request->data['Service']['created_id']=$this->Auth->user('id');

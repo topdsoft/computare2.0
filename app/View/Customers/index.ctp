@@ -23,6 +23,7 @@
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $customer['Customer']['id'])); ?>
 			<?php if($customer['Customer']['active']) echo $this->Html->link(__('Edit'), array('action' => 'edit', $customer['Customer']['id'])); ?>
+			<?php if($customer['Customer']['active']) echo $this->Html->link(__('Edit Pricing'), array('action' => 'editPricing', $customer['Customer']['id'])); ?>
 			<?php if($customer['Customer']['active']) echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $customer['Customer']['id']), null, __('Are you sure you want to delete customer: %s?', $customer['Customer']['name'])); ?>
 		</td>
 	</tr>
