@@ -161,6 +161,13 @@ class ItemsController extends AppController {
 				unset($group_id);
 			}//endif
 			unset($this->request->data['CustomerGroup']['customerGroup_id'],$this->request->data['CustomerGroup']['price']);
+			if(isset($this->request->data['Customer']['customer_id']) && $this->request->data['Customer']['price']!='') {
+				//modify format of data from new group
+				$customer_id=$this->request->data['Customer']['customer_id'];
+				$this->request->data['Customer'][$customer_id][0]=array('price'=>$this->request->data['Customer']['price'],'qty'=>'0','id'=>'');
+				unset($customer_id);
+			}//endif
+			unset($this->request->data['Customer']['customer_id'],$this->request->data['Customer']['price']);
 // debug($this->request->data);exit;
 			if ($this->ComputareAR->setItemPrice($this->request->data)) {
 				$this->Session->setFlash(__('The item price has been saved'),'default',array('class'=>'success'));
@@ -198,10 +205,27 @@ class ItemsController extends AppController {
 				);
 				$activeGroups[$p['CustomerGroupsItem']['customerGroup_id']]=$p['CustomerGroupsItem']['customerGroup_id'];
 			}//end foreach
-// debug($this->request->data);debug($groupPricing);debug($activeGroups);exit;
+			//get individual customer pricing
+			$activeCustomers=array();
+			$this->Item->CustomersItem->bindModel(array('belongsTo'=>array('Customer')));
+			$individualPricing=$this->Item->CustomersItem->find('all',array(
+				'recursive'=>0,'order'=>'qty','conditions'=>array('item_id'=>$id,'customer_id not'=>null,'CustomersItem.active'),
+// 				'fields'=>array('id','qty','price','customer_id','Customer.id','Customer.name')
+			));
+			foreach($individualPricing as $p) {
+				//loop for all individual customer price points
+				$this->request->data['Customer'][$p['Customer']['id']][]=array(
+					'price'=>$p['CustomersItem']['price'],
+					'id'=>$p['CustomersItem']['id'],
+					'qty'=>$p['CustomersItem']['qty'],
+					'name'=>$p['Customer']['name']
+				);
+				$activeCustomers[$p['Customer']['id']]=$p['Customer']['id'];
+			}//end foreach
+// debug($this->request->data);debug($individualPricing);debug($activeGroups);exit;
 		}//endif
 		$customerGroups=ClassRegistry::init('CustomerGroup')->find('list',array('conditions'=>array('NOT'=>array('id'=>$activeGroups))));
-		$customers=$this->Item->Customer->find('list');
+		$customers=$this->Item->Customer->find('list',array('conditions'=>array('Customer.active',array('NOT'=>array('id'=>$activeCustomers)))));
 		$this->set(compact('customerGroups','customers'));
 	}
 
