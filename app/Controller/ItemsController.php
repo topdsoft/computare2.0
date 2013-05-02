@@ -230,6 +230,7 @@ class ItemsController extends AppController {
 		$customerGroups=ClassRegistry::init('CustomerGroup')->find('list',array('conditions'=>array('NOT'=>array('id'=>$activeGroups))));
 		$customers=$this->Item->Customer->find('list',array('conditions'=>array('Customer.active',array('NOT'=>array('id'=>$activeCustomers)))));
 		$this->set(compact('customerGroups','customers'));
+		$this->Session->setFlash(__('Changes made on this form are not saved until you click Submit'),'default',array('class'=>'notice'));
 	}
 
 /**

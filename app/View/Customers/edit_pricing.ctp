@@ -34,7 +34,8 @@
 				if($items) {
 					//show option to add new item pricing only if unused item(s) are available
 					echo '<tr>';
-					echo '<td>'.$this->Form->input('Item.item_id',array('label'=>'Select a New Item')).'</td>';
+					echo '<td>'.$this->Form->input('Item.item_id',array('label'=>'Select a New Item',
+						'after'=>$this->element('itemPopUp',array('inputId'=>'ItemItemId')))).'</td>';
 					echo '<td>0</td><td>'.$this->Form->input('Item.price',array('label'=>'')).'</td>';
 					echo '</tr>';
 				}//endif
@@ -43,4 +44,5 @@
 	<?php echo $this->Form->end(__('Submit')); ?>
 	</fieldset>
 </div>
-<script type='text/javascript'>document.getElementById('sc').focus();</script>
+<script type='text/javascript'>document.getElementById('ItemItemId').focus();</script>
+<?php echo $this->Html->script('formInputs.js'); ?>

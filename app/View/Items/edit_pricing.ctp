@@ -99,3 +99,4 @@
 <?php
 // debug($this->request->data)  ?>
 <script type='text/javascript'>document.getElementById('sc').focus();</script>
+<?php echo $this->Html->script('formInputs.js'); ?>

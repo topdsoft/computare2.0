@@ -8,7 +8,7 @@ App::uses('AppController', 'Controller');
 class CustomersController extends AppController {
 
 	
-	public $components=array('ComputareCustomer');
+	public $components=array('ComputareCustomer','ComputareAR');
 /**
  * index method
  *
@@ -123,6 +123,28 @@ class CustomersController extends AppController {
 			throw new NotFoundException(__('Invalid customer'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			if(isset($this->request->data['Item']['item_id']) && $this->request->data['Item']['price']!='') {
+				//modify format of data from new item
+				$item_id=$this->request->data['Item']['item_id'];
+				$this->request->data['Item'][$item_id][0]=array('price'=>$this->request->data['Item']['price'],'qty'=>'0','id'=>'');
+				unset($item_id);
+			}//endif
+			unset($this->request->data['Item']['item_id'],$this->request->data['Item']['price']);
+			$ok=true;
+			foreach($this->request->data['Item'] as $item_id => $p) {
+				//loop for each different item
+				$priceData=array('Item'=>array('id'=>$item_id),'Customer'=>array($id=>$p));
+				if($ok)$ok=$this->ComputareAR->setItemPrice($priceData);
+// debug($priceData);//exit;
+				
+			}//end foreach
+// debug($this->request->data);exit;
+			if ($ok) {
+				$this->Session->setFlash(__('The item price has been saved'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The item could not be saved. Please, try again.'));
+			}
 			
 		} else {
 // 			$this->Customer->bindModel(array('hasAndBelongsToMany'=>array('Item'=>array(
@@ -153,6 +175,7 @@ class CustomersController extends AppController {
 			}//end foreach
 // debug($pricingData);exit;
 		}
+		$this->Session->setFlash(__('Changes made on this form are not saved until you click Submit'),'default',array('class'=>'notice'));
 		$this->set('items',ClassRegistry::init('Item')->find('list',array('conditions'=>array('NOT'=>array('Item.id'=>$activeItems)))));
 	}
 

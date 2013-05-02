@@ -144,9 +144,9 @@ class ComputareARComponent extends Component{
 							$record=$this->CustomersItem->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$p['id'])));
 							if($p['qty']!=$record['CustomersItem']['qty']  || $p['price']!= $record['CustomersItem']['price']){
 								//need to remove old record and add new
-								$record['CustomerGroupsItem']['active']=false;
-								$record['CustomerGroupsItem']['deleted']=date('Y-m-d h:m:s');
-								$record['CustomerGroupsItem']['deleted_id']=$this->Auth->user('id');
+								$record['CustomersItem']['active']=false;
+								$record['CustomersItem']['deleted']=date('Y-m-d h:m:s');
+								$record['CustomersItem']['deleted_id']=$this->Auth->user('id');
 								if($ok) $ok=$this->CustomersItem->save($record);
 								//create new record
 								$p['item_id']=$data['Item']['id'];
