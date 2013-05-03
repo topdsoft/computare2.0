@@ -16,6 +16,19 @@ class SalesOrderDetail extends AppModel {
  */
 	public $useTable = 'salesOrderDetails';
 
+/**
+ * Validation rules
+ *
+ * @var array
+ */
+	public $validate = array(
+		'qty' => array(
+			'comparison' => array(
+				'rule' => array('comparison','>',0),
+				'message' => 'Please enter a qty greather than 0 here',
+			),
+		),
+	);
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

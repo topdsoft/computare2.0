@@ -30,6 +30,7 @@ class SalesOrderDetailFixture extends CakeTestFixture {
 		'qty' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'shipped' => array('type' => 'integer', 'null' => false, 'default' => null),
 		'price' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '12,2'),
+		'tax' => array('type' => 'float', 'null' => false, 'default' => null, 'length' => '8,2'),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),

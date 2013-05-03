@@ -103,7 +103,32 @@ class ComputareARComponent extends Component{
 		//save line
 		$ok=$this->SalesOrderDetail->save($data);
 		return ($ok==true);
+// debug($data);exit;
 	}//end public function saveline
+	
+	/**
+	 * method removeLine
+	 * used to remove a line from an open SO
+	 * @param $id  => the salesOrderDetails.id to be removed
+	 * @return t/f
+	 */
+	public function removeLine($id) {
+		//remove a line from SO
+		$this->SalesOrder=ClassRegistry::init('SalesOrder');
+		$this->SalesOrderDetail=ClassRegistry::init('SalesOrderDetail');
+		//validation
+		$this->SalesOrderDetail->id=$id;
+		if(!$this->SalesOrderDetail->exists()) return false;
+		$data=$this->SalesOrderDetail->read();
+		if($data['SalesOrderDetail']['active']==false) return false;
+		if($data['SalesOrder']['status']!='O') return false;
+		//remove line
+		$saveData=array('id'=>$id);
+		$saveData['active']=false;
+		$saveData['removed']=date('Y-m-d h:m:s');
+		$saveData['removed_id']=$this->Auth->user('id');
+		return $this->SalesOrderDetail->save($saveData);
+	}
 	
 	/**
 	 * method setItemPrice
@@ -248,4 +273,42 @@ class ComputareARComponent extends Component{
 		return ($ok==true);
 	}//end function
 	
+	/**
+	 * method getPrice
+	 * @return each price of item for customer
+	 * @param int $customer_id
+	 * @param int $item_id
+	 * @param int $qty
+	 */
+	public function getPrice($customer_id,$item_id,$qty) {
+		//setup
+		$this->Customer=ClassRegistry::init('Customer');
+		$this->Item=ClassRegistry::init('Item');
+		$this->CustomersItem=ClassRegistry::init('CustomersItem');
+		$this->CustomerGroupsItem=ClassRegistry::init('CustomerGroupsItem');
+		//validation
+		$this->Customer->id=$customer_id;
+		if(!$this->Customer->exists()) return false;
+		$this->Item->id=$item_id;
+		if(!$this->Item->exists()) return false;
+		$price=false;
+		//get default price
+		$p=$this->CustomerGroupsItem->find('first',array('recursive'=>-1,'order'=>'qty desc','conditions'=>array('item_id'=>$item_id,'customerGroup_id'=>null,'CustomerGroupsItem.active','qty <'=>$qty)));
+		if($p) $price=$p['CustomerGroupsItem']['price'];
+		//get individual customer price
+		$p=$this->CustomersItem->find('first',array('recursive'=>-1,'order'=>'qty desc','conditions'=>array('item_id'=>$item_id,'customer_id'=>$customer_id,'active','qty <'=>$qty)));
+		if($p && $p['CustomersItem']['price']<$price) $price=$p['CustomersItem']['price'];
+		if($p && $price==false) $price=$p['CustomersItem']['price'];
+		//get customer group pricing
+		$customer=$this->Customer->read();
+		if($customer['Customer']['customerGroup_id']) {
+			//get group pricing
+			$p=$this->CustomerGroupsItem->find('first',array('recursive'=>-1,'order'=>'qty desc','conditions'=>array('item_id'=>$item_id,'customerGroup_id'=>$customer['Customer']['customerGroup_id'],'CustomerGroupsItem.active','qty <'=>$qty)));
+			if($p && $p['CustomerGroupsItem']['price']<$price) $price=$p['CustomerGroupsItem']['price'];
+			if($p && $price==false) $price=$p['CustomerGroupsItem']['price'];
+		}//endif
+// debug($p);debug($price);debug($qty);exit;
+		unset($p,$customer);
+		return $price;
+	}
 }

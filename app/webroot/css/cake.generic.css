@@ -307,6 +307,9 @@ th {
 	text-align: left;
 	padding:4px;
 }
+tr.total th {
+	border-top:2px solid #555;
+}
 th a {
 	display: block;
 	padding: 2px 4px;
