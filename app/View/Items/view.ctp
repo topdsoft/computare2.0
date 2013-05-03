@@ -477,3 +477,4 @@
 	</table>
 <?php endif; ?>
 </div>
+<?php echo $this->Html->script('sliderelated.js') ?>
