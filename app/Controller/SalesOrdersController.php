@@ -16,8 +16,56 @@ class SalesOrdersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Sales Orders');
+		//setup filters
+		$filters=array();
+		//id filter
+		$filters[]=array(
+			'type'=>2,
+			'label'=>'SO#',
+			'passName'=>'soid',
+			'field'=>'SalesOrder.id',
+		);
+		//customer filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Customer',
+			'passName'=>'cst',
+			'field'=>'SalesOrder.customer_id',
+			'options'=>$this->SalesOrder->Customer->find('list',array('conditions'=>array('active')))
+		);
+		//status filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Status',
+			'passName'=>'status',
+			'field'=>'SalesOrder.status',
+			'options'=>array('O'=>'Open','V'=>'Void','C'=>'Closed'),
+		);
+		//type filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Type',
+			'passName'=>'type',
+			'field'=>'SalesOrder.salesOrderType_id',
+			'options'=>$this->SalesOrder->SalesOrderType->find('list',array('conditions'=>array('active')))
+		);
+		//created filter
+		$filters[]=array('type'=>3,
+			'label'=>'Date',
+			'passName'=>'created',
+			'field'=>'SalesOrder.created');
+		//Created by filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'User',
+			'passName'=>'user',
+			'field'=>'SalesOrder.created_id',
+			'options'=>ClassRegistry::init('User')->find('list')
+		);
+		//submit filters
+		$this->_useFilter($filters);
 		$this->SalesOrder->recursive = 0;
-		$this->set('salesOrders', $this->paginate());
+		$this->set('salesOrders', $this->paginate('SalesOrder',$this->conditions));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
@@ -34,7 +82,9 @@ class SalesOrdersController extends AppController {
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));
 		}
+		$this->SalesOrder->recursive=2;
 		$this->set('salesOrder', $this->SalesOrder->read(null, $id));
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
 /**

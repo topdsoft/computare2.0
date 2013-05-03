@@ -188,14 +188,20 @@ class AppController extends Controller {
 			}//endif
 			if($filter['type']==2) {
 				//range
+				$t=null;
 				if(isset($this->passedArgs[$filter['passName']]['min']) && !empty($this->passedArgs[$filter['passName']]['min'])) {
 					//min is set
 					$this->conditions[]=array($filter['field'].' >='=>$this->passedArgs[$filter['passName']]['min']);
+					$t=' greater than or equal to '.$this->passedArgs[$filter['passName']]['min'];
 				}//endif
 				if(isset($this->passedArgs[$filter['passName']]['max']) && !empty($this->passedArgs[$filter['passName']]['max'])) {
 					//max is set
 					$this->conditions[]=array($filter['field'].' <='=>$this->passedArgs[$filter['passName']]['max']);
+					if($t)$t.=' and';
+					$t.=' less than or equal to '.$this->passedArgs[$filter['passName']]['max'];
 				}//endif
+				//generate report text
+				if($t)$this->details[]=$filter['label'].' showing only values'.$t;
 			}//endif
 			if($filter['type']==3) {
 				//Date
