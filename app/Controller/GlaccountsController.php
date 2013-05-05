@@ -16,6 +16,7 @@ class GlaccountsController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List GL Accounts');
+		$this->set('add_menu',true);
 		$this->Glaccount->recursive = 0;
 		$this->Glaccount->order=array('group','name');
 		$this->set('glaccounts', $this->paginate());
@@ -30,6 +31,7 @@ class GlaccountsController extends AppController {
  */
 	public function posting() {
 		$this->set('formName','GL Posting');
+		$this->set('add_menu',true);
 		if(!isset($this->request->params['named']['credit']))$this->request->params['named']['credit']=array();
 		if(!isset($this->request->params['named']['debit']))$this->request->params['named']['debit']=array();
 		//check for incomming clicks
