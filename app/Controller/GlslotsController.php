@@ -26,7 +26,7 @@ class GlslotsController extends AppController {
 				//loop for all slots returned
 				if($glaccount>0) {
 					//set account
-					$this->Glslot->save(array('active'=>true,'slot'=>$slot,'glaccount_id'=>$glaccount));
+// 					$this->Glslot->save(array('active'=>true,'slot'=>$slot,'glaccount_id'=>$glaccount));
 				}//endif
 			}//end foreach
 // debug($this->request->data);exit;

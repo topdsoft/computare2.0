@@ -138,4 +138,39 @@ class ComputareGLComponent extends Component{
 //debug($data);exit;
 		
 	}
+	
+	/**
+	 * saveSlot method
+	 * @param $slot
+	 * @param $glAccount_id
+	 * @returns t/f
+	 */
+	public function saveSlot($slot,$glAccount_id) {
+		//validate
+		$this->Glaccount=ClassRegistry::init('Glaccount');
+		$this->Glslot=ClassRegistry::init('Glslot');
+		$this->Glaccount->id=$glAccount_id;
+		$ok=true;
+		$dataSource=$this->Glaccount->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		if(!$this->Glaccount->exists()) return false;
+		//check for existing setting
+		$oldSlot=$this->Glslot->find('first',array('conditions'=>array('Glslot.slot'=>$slot,'Glslot.active')));
+		if($oldSlot){
+			//remove old setting
+			$oldSlot['Glslot']['removed_id']=$this->Auth->user('id');
+			$oldSlot['Glslot']['removed']=date('Y-m_d h:m:s');
+			$oldSlot['Glslot']['active']=false;
+			$ok=$this->Glslot->save($oldSlot);
+		}//endif
+		//set new slot
+		$newSlot=array('created_id'=>$this->Auth->user('id'),'slot'=>$slot,'glaccount_id'=>$glAccount_id,'active'=>true);
+		if($ok)$this->Glslot->create();
+		if($ok)$ok=$this->Glslot->save($newSlot);
+		
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}//end saveSlot
 }
