@@ -25,11 +25,10 @@ class GlslotsController extends AppController {
 			//returning from form
 			foreach($this->request->data['Glslot'] as $slot=>$glaccount) {
 				//loop for all slots returned
-				if($glaccount>0) {
-					//set account
-// 					$this->Glslot->save(array('active'=>true,'slot'=>$slot,'glaccount_id'=>$glaccount));
-				}//endif
+				$this->ComputareGL->saveSlot($slot,$glaccount);
 			}//end foreach
+			$this->Session->setFlash(__('Account settings have been saved'),'default',array('class'=>'success'));
+			$this->redirect(array('controller'=>'glaccounts'));
 // debug($this->request->data);exit;
 		} else {
 			//setup data for form

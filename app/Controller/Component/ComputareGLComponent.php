@@ -7,6 +7,7 @@
 
 App::uses('Component','Controller');
 class ComputareGLComponent extends Component{
+	public $components = array('Auth', 'Session', 'Cookie');
 	/**
 	 * saveGroup method
 	 * @param $data
@@ -149,26 +150,38 @@ class ComputareGLComponent extends Component{
 		//validate
 		$this->Glaccount=ClassRegistry::init('Glaccount');
 		$this->Glslot=ClassRegistry::init('Glslot');
-		$this->Glaccount->id=$glAccount_id;
+		if($glAccount_id>0) {
+			//ignore (none)
+			$this->Glaccount->id=$glAccount_id;
+			if(!$this->Glaccount->exists()) return false;
+		}//endif
 		$ok=true;
 		$dataSource=$this->Glaccount->getDataSource();
 		//start transaction
 		$dataSource->begin();
-		if(!$this->Glaccount->exists()) return false;
 		//check for existing setting
 		$oldSlot=$this->Glslot->find('first',array('conditions'=>array('Glslot.slot'=>$slot,'Glslot.active')));
 		if($oldSlot){
-			//remove old setting
-			$oldSlot['Glslot']['removed_id']=$this->Auth->user('id');
-			$oldSlot['Glslot']['removed']=date('Y-m_d h:m:s');
-			$oldSlot['Glslot']['active']=false;
-			$ok=$this->Glslot->save($oldSlot);
+			//slot is set so check if it has changed
+			if($oldSlot['Glslot']['glaccount_id']==$glAccount_id) {
+				//has not changed so leave alone
+				$glAccount_id=0;
+			} else {
+				//remove old setting
+				$oldSlot['Glslot']['removed_id']=$this->Auth->user('id');
+				$oldSlot['Glslot']['removed']=date('Y-m_d h:m:s');
+				$oldSlot['Glslot']['active']=false;
+				$ok=$this->Glslot->save($oldSlot);
+			}//endif
 		}//endif
-		//set new slot
-		$newSlot=array('created_id'=>$this->Auth->user('id'),'slot'=>$slot,'glaccount_id'=>$glAccount_id,'active'=>true);
-		if($ok)$this->Glslot->create();
-		if($ok)$ok=$this->Glslot->save($newSlot);
-		
+		if($glAccount_id>0) {
+			//set new slot
+			$newSlot=array('created_id'=>$this->Auth->user('id'),'slot'=>$slot,'glaccount_id'=>$glAccount_id,'active'=>true);
+			if(substr($slot,-5)=='debit') $newSlot['debit']=true;
+			else $newSlot['credit']=true;
+			if($ok)$this->Glslot->create();
+			if($ok)$ok=$this->Glslot->save($newSlot);
+		}//endif
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);

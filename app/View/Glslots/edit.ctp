@@ -43,7 +43,7 @@
 		echo '<tr><th colspan="3">Issue Inventory</th></tr>';
 		echo '<tr><td title="Cost of the inventory issued">Cost of Inventory <br>(default if no issue account)</td>';
 		echo '<td>'.$this->Form->input('issuedebitDef',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by the issue type GL account">Note</span>')).'</td>';
-		echo '<td>'.$this->Form->input('issuecreditDef',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by the issue type GL account">Note</span>')).'</td>';
+		echo '<td>'.$this->Form->input('issuecreditDef',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Cost of the inventory issued">Cost of Inventory <br>(never overridden)</td>';
 		echo '<td>'.$this->Form->input('issuedebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
@@ -54,9 +54,9 @@
 		echo '<tr><th colspan="3">Sale on Account</th></tr>';
 		echo '<tr><td title="Merchandise+Service+Tax+Shipping">Total Amount <br>(default if no AR account for customer)</td>';
 		echo '<td>'.$this->Form->input('saletotaldebit',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by customers AR account">Note</span>')).'</td>';
-		echo '<td>'.$this->Form->input('saletotalcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by customers AR account">Note</span>')).'</td>';
+		echo '<td>'.$this->Form->input('saletotalcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
-		echo '<tr><td title="Just merchandise and service">Merchandise&Service</td>';
+		echo '<tr><td title="Just merchandise and service">Merchandise & Service</td>';
 		echo '<td>'.$this->Form->input('saleamountdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '<td>'.$this->Form->input('saleamountcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
@@ -69,7 +69,7 @@
 		echo '<td>'.$this->Form->input('saleshippingcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Amount paid by customer">Customer Payment <br>(default if no AR account for customer)</td>';
-		echo '<td>'.$this->Form->input('salepaymentdebitDefault',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by customers AR account">Note</span>')).'</td>';
+		echo '<td>'.$this->Form->input('salepaymentdebitDefault',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '<td>'.$this->Form->input('salepaymentcreditDefault',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by customers AR account">Note</span>')).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Amount paid by customer. This account is never replaced by the customers account">Customer Payment <br>(Never overridden)</td>';
@@ -83,7 +83,7 @@
 		echo '<td>'.$this->Form->input('cashsaletotaldebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '<td>'.$this->Form->input('cashsaletotalcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
-		echo '<tr><td title="Just merchandise and service">Merchandise&Service</td>';
+		echo '<tr><td title="Just merchandise and service">Merchandise & Service</td>';
 		echo '<td>'.$this->Form->input('cashsalemerchdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '<td>'.$this->Form->input('cashsalemerchcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
@@ -105,4 +105,12 @@
 </div>
 <?php
 // debug($glaccounts);?>
-<script type='text/javascript'>document.getElementById('sc').focus();</script>
+<script type='text/javascript'>//<!--
+$(function(){
+	$("select").change( function(){
+		$(this).attr('style','background:#ffcc00');
+	});
+})
+
+
+//--></script>
