@@ -17,6 +17,7 @@ class GlslotsController extends AppController {
 
 	public function edit(){
 		$this->set('formName','Connect GL Accounts');
+		$this->set('helplink','/pages/glslots');
 		$this->Glaccount=ClassRegistry::init('Glaccount');
 		//get slot data
 		$slots=$this->Glslot->find('all',array('conditions'=>array('Glslot.active')));

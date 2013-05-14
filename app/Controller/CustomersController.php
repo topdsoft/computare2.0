@@ -16,6 +16,7 @@ class CustomersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Customers');
+		$this->set('helplink','/pages/customers');
 		$this->set('add_menu',true);
 		//get customerGroups
 		$groups=$this->Customer->CustomerGroup->find('list');

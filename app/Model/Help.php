@@ -24,6 +24,8 @@ class Help extends AppModel{
 	public $data= array(
 		array('id'=>'customers','name'=>'Customers','anchors'=>array(
 			'Adding a New Customer','Editing a Customer','Deleting a Customer')),
+		array('id'=>'glslots','name'=>'Edit GL Account Conections','anchors'=>array(
+			'Receive Inventory','Pay Invoice','Issue Inventory','Sale on Account','Cash Sale','All Sales')),
 	);
 	
 /**

@@ -97,6 +97,11 @@ class ComputareGLComponentTest extends CakeTestCase {
 		$this->assertFalse($this->ComputareGLComponent->post($data),'*failed to catch debit!=credit');
 	}
 	
+	public function testSaveSlot() {
+		//test saving slot data
+		
+	}
+	
 	public function tearDown() {
 		parent::tearDown();
 	}
