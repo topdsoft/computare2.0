@@ -4,9 +4,11 @@ App::uses('CakeRequest', 'Network');
 App::uses('CakeResponse', 'Network');
 App::uses('ComponentCollection', 'Controller');
 App::uses('ComputareGLComponent', 'Controller/Component');
+// App::uses('Session', 'Controller/Component');
 
 class ComputareGLComponentTest extends CakeTestCase {
-	public $fixtures=array('app.glgroup','app.glaccount','app.glaccountDetail','app.glnote','app.glcheck','app.glentry');
+	public $fixtures=array('app.glgroup','app.glaccount','app.glaccountDetail','app.glnote','app.glcheck','app.glentry','app.glslot');
+// 	public $components=array('Session');
 	
 	public function setUp() {
 		parent::setUp();
@@ -16,6 +18,7 @@ class ComputareGLComponentTest extends CakeTestCase {
 		$this->Glentry=ClassRegistry::init('Glentry');
 		$this->Glcheck=ClassRegistry::init('Glcheck');
 		$this->Glnote=ClassRegistry::init('Glnote');
+		$this->Glslot=ClassRegistry::init('Glslot');
 		$Collection = new ComponentCollection();
 		$this->ComputareGLComponent=new ComputareGLComponent($Collection);
 	}
@@ -98,8 +101,31 @@ class ComputareGLComponentTest extends CakeTestCase {
 	}
 	
 	public function testSaveSlot() {
-		//test saving slot data
-		
+		//setup mock auth component
+		$this->ComputareGLComponent->Auth = $this->getMock('Auth', array('user'));
+		$this->ComputareGLComponent->Auth->expects($this->any())->method('user')->with('id')->will($this->returnValue(8));
+		//set slot
+ 		$this->assertTrue($this->ComputareGLComponent->saveSlot('testSlotcredit',1),'*failed to save testSlotcredit');
+ 		$result=$this->Glslot->find('first',array('conditions'=>array('slot'=>'testSlotcredit')));
+ 		$this->assertEquals($result['Glslot']['created_id'],8,'*failed to set created id');
+ 		$this->assertEquals($result['Glslot']['slot'],'testSlotcredit','*failed to set created id');
+ 		$this->assertEquals($result['Glslot']['glaccount_id'],1,'*failed to set glaccount_id');
+ 		$this->assertTrue($result['Glslot']['credit'],'*failed to set credit flag');
+ 		//mod slot (non existing account)
+ 		$this->assertFalse($this->ComputareGLComponent->saveSlot('testSlotcredit',2),'*failed to catch bad acct id');
+ 		//create account
+		$newAcct=array('GlaccountDetail'=>array('created_id'=>3,'glgroup_id'=>1,'name'=>'Cash'),'Glaccount'=>array('id'=>null));
+		$this->ComputareGLComponent->saveAccount($newAcct);
+		//mod slot
+		$acct_id=$this->Glaccount->getInsertId();
+		$this->assertTrue($this->ComputareGLComponent->saveSlot('testSlotcredit',$acct_id),'*failed to mod testSlotcredit');
+ 		$result=$this->Glslot->find('first',array('conditions'=>array('slot'=>'testSlotcredit','active')));
+ 		$this->assertEquals($result['Glslot']['glaccount_id'],$acct_id,'*failed to mod glaccount_id');
+ 		//re save but make no changes
+		$this->assertTrue($this->ComputareGLComponent->saveSlot('testSlotcredit',$acct_id),'*failed to re save testSlotcredit');
+ 		$result2=$this->Glslot->find('first',array('conditions'=>array('slot'=>'testSlotcredit','active')));
+ 		$this->assertTrue(($result==$result2),'*failed to re save testslot without changes');
+//   		debug($result);exit;
 	}
 	
 	public function tearDown() {

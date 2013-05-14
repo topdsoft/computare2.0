@@ -150,12 +150,12 @@ class ComputareGLComponent extends Component{
 		//validate
 		$this->Glaccount=ClassRegistry::init('Glaccount');
 		$this->Glslot=ClassRegistry::init('Glslot');
+		$ok=true;
 		if($glAccount_id>0) {
 			//ignore (none)
 			$this->Glaccount->id=$glAccount_id;
-			if(!$this->Glaccount->exists()) return false;
-		}//endif
-		$ok=true;
+			if(!$this->Glaccount->exists()) $ok= false;
+		}//endif 
 		$dataSource=$this->Glaccount->getDataSource();
 		//start transaction
 		$dataSource->begin();
@@ -171,7 +171,7 @@ class ComputareGLComponent extends Component{
 				$oldSlot['Glslot']['removed_id']=$this->Auth->user('id');
 				$oldSlot['Glslot']['removed']=date('Y-m_d h:m:s');
 				$oldSlot['Glslot']['active']=false;
-				$ok=$this->Glslot->save($oldSlot);
+				if($ok)$ok=$this->Glslot->save($oldSlot);
 			}//endif
 		}//endif
 		if($glAccount_id>0) {
