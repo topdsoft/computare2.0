@@ -287,6 +287,8 @@ class UsersController extends AppController {
 			$menuArray[]=$element;
 		}//endforeach menu
 		$this->Session->write('Menu',$menuArray);
+		//also find and save company name for header
+		$this->Session->write('CompanyName',ClassRegistry::init('Programsetting')->field('full_name'));
 //debug($menuArray);exit;
 	}
 }
