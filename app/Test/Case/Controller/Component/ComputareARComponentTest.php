@@ -22,6 +22,9 @@ class ComputareARComponentTest extends CakeTestCase {
 //		$this->CustomerDetail=ClassRegistry::init('CustomerDetail');
 		$Collection = new ComponentCollection();
 		$this->ComputareARComponent=new ComputareARComponent($Collection);
+		//setup mock auth component
+		$this->ComputareARComponent->Auth = $this->getMock('Auth', array('user'));
+		$this->ComputareARComponent->Auth->expects($this->any())->method('user')->with('id')->will($this->returnValue(14));
 	}
 	
 	public function testSaveSO() {
