@@ -186,4 +186,15 @@ class ComputareGLComponent extends Component{
 		else $dataSource->rollback();
 		return ($ok==true);
 	}//end saveSlot
+	
+	/**
+	 * getSlot method
+	 * @param $slot name of slot to fetch
+	 * @return GL account for slot or null
+	 */
+	public function getSlot($slot) {
+		//setup
+		$this->Glslot=ClassRegistry::init('Glslot');
+		return $this->Glslot->field('glaccount_id',array('slot'=>$slot,'active'));
+	}
 }

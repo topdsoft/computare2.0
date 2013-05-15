@@ -8,7 +8,7 @@
 App::uses('Component','Controller');
 class ComputareICComponent extends Component{
 	
-	public $components = array('Auth', 'Session', 'Cookie');
+	public $components = array('Auth', 'Session', 'Cookie','ComputareGL');
 	
 	/**
 	 * saveItem method
@@ -140,6 +140,7 @@ class ComputareICComponent extends Component{
 		$this->ItemCosts=ClassRegistry::init('ItemCosts');
 		$this->Receipts=ClassRegistry::init('Receipts');
 		$this->PurchaseOrder=ClassRegistry::init('PurchaseOrder');
+		$this->VendorDetail=ClassRegistry::init('VendorDetail');
 		//get purchase order
 		$purchaseOrder=$this->PurchaseOrder->read(null,$data['purchaseOrder_id']);
 // debug($purchaseOrder);
@@ -218,6 +219,23 @@ class ComputareICComponent extends Component{
 		$data['ItemCost']['qty']=$data['qty'];
 		$data['ItemCost']['remain']=$data['qty'];
 		if($ok) $ok=$this->Item->ItemCost->save($data['ItemCost']);
+		//GL posting
+		if($data['ItemCost']['cost']>0) {
+			//only post to GL if there is a cost
+			$vendorGL_id=$this->VendorDetail->field('glAccount_id',array('vendor_id'=>$data['Receipts']['vendor_id'],'active'));
+			if(!$vendorGL_id) {
+				//vendor has no specific gl account set so use default
+				$vendorGL_id=$this->ComputareGL->getSlot('recAPcredit');
+				if(!$vendorGL_id) {
+					//slot "recAPcredit" must be set
+					$ok=false;
+					throw new NotFoundException(__('The credit slot is not set for Accounts Payable in Recieve Inventory group.'));
+// 					$this->Session->setFlash(__('The credit slot is not set forAccounts Payable in Recieve Inventory group.'));
+				}//endif
+			}//endif
+debug($vendorGL_id);debug($data);exit;
+			
+		}//endif
 		//serialNumbers
 		if($item['Item']['serialized']) {
 			//save serial number data
