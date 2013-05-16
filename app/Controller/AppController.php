@@ -50,7 +50,9 @@ class AppController extends Controller {
 			$error=true;
 			$errorData['event_type']=1;
 			$errorData['created_id']=$this->Auth->user('id');
-			$errorData['title']='Error:'.$this->viewVars['code'];
+			if(isset($this->viewVars['code']))$errorData['title']='Error:'.$this->viewVars['code'];
+			else $errorData['title']='Error:'.$this->viewVars['name'];
+// debug($this->viewVars);exit;
 			$errorData['errorEvent']=array('message'=>$this->viewVars['name']);
 			$errorData['formEvent']=array(
 				'controller'=>$this->request->params['controller'],

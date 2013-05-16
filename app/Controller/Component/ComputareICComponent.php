@@ -229,6 +229,7 @@ class ComputareICComponent extends Component{
 				if(!$vendorGL_id) {
 					//slot "recAPcredit" must be set
 					$ok=false;
+					$dataSource->rollback();
 					throw new NotFoundException(__('The credit slot is not set for Accounts Payable in Recieve Inventory group.'));
 // 					$this->Session->setFlash(__('The credit slot is not set forAccounts Payable in Recieve Inventory group.'));
 				}//endif
