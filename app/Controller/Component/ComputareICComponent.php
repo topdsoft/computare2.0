@@ -247,7 +247,7 @@ class ComputareICComponent extends Component{
 			}//endif
 			//do GL posting
 // debug($ok==true);
-			$ok=$this->ComputareGL->post(array(
+			if($ok) $ok=$this->ComputareGL->post(array(
 				'Glentry'=>array('created_id'=>$this->Auth->user('id')),
 				'debit'=>array($assetGL_id=>$data['ItemCost']['cost']*$data['ItemCost']['qty']),
 				'credit'=>array($vendorGL_id=>$data['ItemCost']['cost']*$data['ItemCost']['qty']),
@@ -354,4 +354,158 @@ class ComputareICComponent extends Component{
 		return ($ok==true);
 	}//end public function transfer
 	
+	/**
+	 * issue method
+	 * @param $data
+		* 'item_location_id' => where issued from  (REQUIRED)
+		* 'issueType_id' => type of issue (REQUIRED)
+		* 'note' not to add to GL posting (optional)
+		* 'serialNumbners'=>array of SN being issued
+		*    (OR)
+		* 'Item'=>'qty'
+	* @return t/f
+	*/
+	public function issue($data) {
+		$this->Location=ClassRegistry::init('Location');
+		$this->Item=ClassRegistry::init('Item');
+		$this->IssueType=ClassRegistry::init('IssueType');
+		//validate item_location_id
+		$il=$this->Item->ItemsLocation->read(null,$data['item_location_id']);
+		if(!$il) return false;
+		//check for serialized item
+		if(isset($data['serialNumbers'])) {
+			//set qty
+			$data['qty']=count($data['serialNumbers']);
+		}//endif
+		//validate qty
+		if($data['qty']<1 || $data['qty']>$il['ItemsLocation']['qty']) return false;
+		$ok=true;
+		$dataSource=$this->Location->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		$trans['created_id']=$this->Auth->User('id');
+		$trans['item_id']=$il['ItemsLocation']['item_id'];
+		$trans['location_id']=$il['ItemsLocation']['location_id'];
+		$trans['qty']=$data['qty']*-1;
+		$trans['type']='I';
+		if($ok) $ok=$this->Item->ItemTransaction->save($trans);
+		unset($trans);
+		//items_locations
+		if($data['qty']==$il['ItemsLocation']['qty']) {
+			//issuing all qty from location
+// debug($ok);exit;
+			if($ok) $ok=$this->Item->ItemsLocation->delete($data['item_location_id']);
+		} else {
+			//qty remains at loaction
+			$il['ItemsLocation']['qty']-=$data['qty'];
+			if($ok) $ok=$this->Item->ItemsLocation->save($il);
+		}//endif
+		if(isset($data['serialNumbers'])) {
+			//item is serialized
+			foreach($data['serialNumbers'] as $num) {
+				//loop for all serial numbers and update location to 0
+				if($ok) $ok=$this->Item->ItemSerialNumber->save(array('id'=>$num,'item_location_id'=>0));
+			}//end foreach
+		}//endif
+		//GL posting
+// debug($data);exit;
+		$itemCost=$this->getCost($il['ItemsLocation']['item_id'],$data['qty'],true);
+		if($itemCost>0) {
+			//only post if there is a cost
+			$debitAcct_id=$this->IssueType->field('glAccount_id',array('IssueType.id'=>$data['issueType_id'],'IssueType.active'));
+			if(!$debitAcct_id) {
+				//no specific account for this issue type so get default
+				$debitAcct_id=$this->ComputareGL->getSlot('issuedebitDef');
+				if(!$debitAcct_id) {
+					//default not set
+					$dataSource->rollback();
+					throw new NotFoundException(__('The debit slot is not set for Cost of Inventory in Issue Inventory group.'));
+				}//endif
+			}//endif
+			$creditAcct_id=$this->ComputareGL->getSlot('issuecredit');
+			if(!$creditAcct_id) {
+				//account not set
+				$dataSource->rollback();
+				throw new NotFoundException(__('The credit slot is not set for Cost of Inventory in Issue Inventory group.'));
+			}//endif
+			//do GL posting
+			if(isset($data['note'])) $note=$data['note'];
+			else $note=null;
+			if($ok) $ok=$this->ComputareGL->post(array(
+				'Glentry'=>array('created_id'=>$this->Auth->user('id')),
+				'debit'=>array($debitAcct_id=>$itemCost),
+				'credit'=>array($creditAcct_id=>$itemCost),
+				'Glnote'=>array('text'=>$note),
+			));
+			
+		}//endif
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}
+	
+	/**
+	 * getCost method
+	 * @param $item_id
+	 * @param $qty
+	 * @param $remove => used when issuing items
+	 * @returns total item cost based on cost method
+	 */
+	public function getCost($item_id, $qty=1, $remove=false) {
+		//returns item cost or 0 if not found
+		$costMethod=ClassRegistry::init('Programsetting')->field('cost_method');
+		$itemCostOBJ=ClassRegistry::init('ItemCost');
+		if($costMethod=='L') {
+			//LIFO method
+			$costs=$itemCostOBJ->find('all',array(
+				'conditions'=>array('ItemCost.item_id'=>$item_id,'ItemCost.remain > 0'),
+				'recursive'=>-1,
+				'order'=>'created desc'
+			));
+		}//endif
+		if($costMethod=='F') {
+			//FIFO method
+			$costs=$itemCostOBJ->find('all',array(
+				'conditions'=>array('ItemCost.item_id'=>$item_id,'ItemCost.remain > 0'),
+				'recursive'=>-1,
+				'order'=>'created'
+			));
+		}// endif
+		if($costMethod=='F' || $costMethod=='L') {
+			$qtyRemain=$qty;
+			$totalCost=0;
+			foreach($costs as $cost) {
+				//loop through list
+				if($qtyRemain>0) {
+					//continue finding costs
+					if($qtyRemain>$cost['ItemCost']['remain']) {
+						//we need more than just this qty
+						$totalCost+=$cost['ItemCost']['remain']*$cost['ItemCost']['cost'];
+						if($remove) {
+							//remove remaining qty
+							$cost['ItemCost']['remain']=0;
+							$itemCostOBJ->save($cost);
+						}//endif
+						$qtyRemain-=$cost['ItemCost']['remain'];
+					} else {
+						//this is enough
+						$totalCost+=$qtyRemain*$cost['ItemCost']['cost'];
+						if($remove) {
+							//remove partial qty
+							$cost['ItemCost']['remain']-=$qtyRemain;
+							$itemCostOBJ->save($cost);
+						}//endif
+						$qtyRemain=0;
+					}//endif
+				}//endif
+			}//end foreach
+// debug($totalCost);debug($costs);exit;
+		}//endif
+		if($costMethod=='A') {
+			//average cost method
+#TODO finish this
+		}//endif
+		unset($itemCostOBJ);
+		return $totalCost;
+	}//endif
 }

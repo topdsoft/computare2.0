@@ -46,7 +46,7 @@
 		echo '<td>'.$this->Form->input('issuecreditDef',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Cost of the inventory issued">Cost of Inventory <br>(never overridden)</td>';
-		echo '<td>'.$this->Form->input('issuedebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
+		echo '<td>'.$this->Form->input('issuedebit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '<td>'.$this->Form->input('issuecredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
 		

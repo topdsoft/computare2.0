@@ -367,14 +367,16 @@ class ItemsController extends AppController {
 			)
 		);
 		if ($this->request->is('post') || $this->request->is('put')) {
-debug($this->request->data);exit;
 			if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
-			$data['location_id']=$this->request->data['Item']['location_id'];
+			$data['item_location_id']=$id;
+			$data['issueType_id']=$this->request->data['Item']['issueType_id'];
+			$data['note']=$this->request->data['Item']['note'];
 			if(isset($this->request->data['Item']['serialNumbers'])) $data['serialNumbers']=$this->request->data['Item']['serialNumbers'];
+// debug($this->request->data);debug($data);exit;
 			if($this->ComputareIC->issue($data)) {
 				//success
 				$this->Session->setFlash(__('The item has been issued'),'default',array('class'=>'success'));
-				$this->redirect(array('action' => 'index'));
+				$this->redirect(array('action' => 'bylocation'));
 			} else {
 				//fail
 				$this->Session->setFlash(__('The issue could not be completed. Please, try again.'));
@@ -386,6 +388,7 @@ debug($this->request->data);exit;
 		$itemLocation=$this->Item->ItemsLocation->read(null,$id);
 		if(!$itemLocation) throw new NotFoundException(__('Invalid Item-Location'));
 		$this->set('itemLocation',$itemLocation);
+		$this->set('issueTypes',ClassRegistry::init('IssueType')->find('list',array('conditions'=>array('IssueType.active'))));
 		if($itemLocation['Item']['serialized']) {
 			//for serialized items get list of numbers
 			$serialNumbers=$this->Item->ItemSerialNumber->find('list',array('fields'=>array('id','number') ,'conditions'=>array('item_location_id'=>$id)));

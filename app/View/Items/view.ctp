@@ -223,7 +223,7 @@
 			<td><?php echo $itemSerialNumber['number']; ?></td>
 			<td><?php echo $itemSerialNumber['created']; ?></td>
 			<td><?php echo $users[$itemSerialNumber['created_id']]; ?></td>
-			<td><?php echo $this->Html->link($locations[$itemlocations[$itemSerialNumber['item_location_id']]],array('controller'=>'locations','action'=>'view',$itemlocations[$itemSerialNumber['item_location_id']])); ?></td>
+			<td><?php if($itemSerialNumber['item_location_id']) echo $this->Html->link($locations[$itemlocations[$itemSerialNumber['item_location_id']]],array('controller'=>'locations','action'=>'view',$itemlocations[$itemSerialNumber['item_location_id']])); ?></td>
 			<td class="actions">
 				<?php //echo $this->Html->link(__('View'), array('controller' => 'item_serial_numbers', 'action' => 'view', $itemSerialNumber['id'])); ?>
 				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'item_serial_numbers', 'action' => 'edit', $itemSerialNumber['id'])); ?>

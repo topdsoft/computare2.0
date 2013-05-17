@@ -10,8 +10,8 @@
 		} else echo $this->Form->input('qty',array('type'=>'number','id'=>'sc','min'=>1,'max'=>$itemLocation['ItemsLocation']['qty']));
 // 		echo $this->Form->input('cost',array('id'=>'sc'));
 		echo 'From Location: <strong>'.$itemLocation['Location']['name'].'</strong>';
-// 		echo $this->Form->input('location_id');
-// 		echo $this->Form->input('purchaseOrder_id');
+		echo $this->Form->input('issueType_id');
+		echo $this->Form->input('note',array('label'=>'Note (optional)'));
 // 		if($item['Item']['serialized']) echo $this->Form->input('ItemSerialNumber.number',array('label'=>'Serial Number'));
 // debug($this->data);
 	?>
