@@ -141,6 +141,7 @@ class ComputareICComponent extends Component{
 		$this->Receipts=ClassRegistry::init('Receipts');
 		$this->PurchaseOrder=ClassRegistry::init('PurchaseOrder');
 		$this->VendorDetail=ClassRegistry::init('VendorDetail');
+		$this->ReceiptType=ClassRegistry::init('ReceiptType');
 		//get purchase order
 		$purchaseOrder=$this->PurchaseOrder->read(null,$data['purchaseOrder_id']);
 // debug($purchaseOrder);
@@ -185,7 +186,7 @@ class ComputareICComponent extends Component{
 		if($ok) $ok=$this->Item->ItemsLocation->save($data['ItemsLocation']);
 		if($ok && !isset($item_location_id)) $item_location_id=$this->Item->ItemsLocation->getInsertId();
 		//update purchase order details
-		$poDetail=$this->PurchaseOrder->PurchaseOrderDetail->find('first',array('conditions'=>array('purchaseOrder_id'=>$data['purchaseOrder_id'], 'item_id'=>$data['item_id'])));
+		$poDetail=$this->PurchaseOrder->PurchaseOrderDetail->find('first',array('conditions'=>array('PurchaseOrderDetail.active','purchaseOrder_id'=>$data['purchaseOrder_id'], 'item_id'=>$data['item_id'])));
 		if(!$poDetail) {
 			//item not found on this po
 			if($purchaseOrder['PurchaseOrder']['allowOpen']) {
@@ -220,7 +221,7 @@ class ComputareICComponent extends Component{
 		$data['ItemCost']['remain']=$data['qty'];
 		if($ok) $ok=$this->Item->ItemCost->save($data['ItemCost']);
 		//GL posting
-		if($data['ItemCost']['cost']>0) {
+		if($ok && $data['ItemCost']['cost']>0) {
 			//only post to GL if there is a cost
 			$vendorGL_id=$this->VendorDetail->field('glAccount_id',array('vendor_id'=>$data['Receipts']['vendor_id'],'active'));
 			if(!$vendorGL_id) {
@@ -234,8 +235,24 @@ class ComputareICComponent extends Component{
 // 					$this->Session->setFlash(__('The credit slot is not set forAccounts Payable in Recieve Inventory group.'));
 				}//endif
 			}//endif
-debug($vendorGL_id);debug($data);exit;
-			
+			$assetGL_id=$this->ReceiptType->field('glAccount_id',array('ReceiptType.id'=>$data['receiptType_id']));
+			if(!$assetGL_id) {
+				//receipt tpe has no assigned GL account so use default
+				$assetGL_id=$this->ComputareGL->getSlot('recInvdebit');
+				if(!$assetGL_id) {
+					//slot "recInvdebit" must be set
+					$dataSource->rollback();
+					throw new NotFoundException(__('The debit slot is not set for Inventory Assets in Recieve Inventory group.'));
+				}//endif
+			}//endif
+			//do GL posting
+// debug($ok==true);
+			$ok=$this->ComputareGL->post(array(
+				'Glentry'=>array('created_id'=>$this->Auth->user('id')),
+				'debit'=>array($assetGL_id=>$data['ItemCost']['cost']*$data['ItemCost']['qty']),
+				'credit'=>array($vendorGL_id=>$data['ItemCost']['cost']*$data['ItemCost']['qty']),
+			));
+// debug($assetGL_id);debug($ok);exit;
 		}//endif
 		//serialNumbers
 		if($item['Item']['serialized']) {

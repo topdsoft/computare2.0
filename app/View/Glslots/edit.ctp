@@ -12,8 +12,8 @@
 		echo '<td>'.$this->Form->input('recAPcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by the vendors GL account">Note</span>')).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Only cost of the merchandise or service">Inventory Assets</td>';
-		echo '<td>'.$this->Form->input('recInvdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
-		echo '<td>'.$this->Form->input('recInvcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
+		echo '<td>'.$this->Form->input('recInvdebit',array('label'=>'','type'=>'select','options'=>$glaccounts,'after'=>' <span title="This account will be overridden by the receipt type GL account">Note</span>')).'</td>';
+		echo '<td>'.$this->Form->input('recInvcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Only shipping cots">Shipping</td>';
 		echo '<td>'.$this->Form->input('recShipdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';

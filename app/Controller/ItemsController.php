@@ -245,32 +245,51 @@ class ItemsController extends AppController {
 			throw new NotFoundException(__('Invalid item'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-// debug($this->request->data);exit;
-			$data['item_id']=$id;
-			$data['cost']=$this->request->data['Item']['cost'];
-			if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
-			else $data['qty']=1;
-			$data['location_id']=$this->request->data['Item']['location_id'];
-			$data['purchaseOrder_id']=$this->request->data['Item']['purchaseOrder_id'];
-			if(isset($this->request->data['ItemSerialNumber'])) {
-				//item is serialized
-				$data['number']=$this->request->data['ItemSerialNumber']['number'];
+			if($this->request->data['Item']['step']>=1) {
+				//step 1 is to get a purchase order
+				$purchaseOrder=ClassRegistry::init('PurchaseOrder')->find('first',array('conditions'=>array('PurchaseOrder.id'=>$this->request->data['Item']['purchaseOrder_id'])));
+				$this->set('purchaseOrder',$purchaseOrder);
+				$purchaseOrderDetail=ClassRegistry::init('PurchaseOrderDetail')->find('first',array('conditions'=>array('purchaseOrder_id'=>$this->request->data['Item']['purchaseOrder_id'],'item_id'=>$id,'PurchaseOrderDetail.active')));
+				if($purchaseOrderDetail) {
+					//item is on PO allready
+					$this->request->data['Item']['qty']=$purchaseOrderDetail['PurchaseOrderDetail']['qty'];
+					$this->request->data['Item']['cost']=$purchaseOrderDetail['PurchaseOrderDetail']['cost'];
+				}//endif
+// debug($purchaseOrderDetail);exit;
 			}//endif
-			if($this->ComputareIC->receive($data)) {
-				//success
-				$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				//fail
-				$this->Session->setFlash(__('The transaction could not be completed. Please, try again.'));
-			}
+			if($this->request->data['Item']['step']==2) {
+				//setp 2 get rest of data and save
+				$data['item_id']=$id;
+				$data['cost']=$this->request->data['Item']['cost'];
+				if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
+				else $data['qty']=1;
+				$data['location_id']=$this->request->data['Item']['location_id'];
+				$data['purchaseOrder_id']=$this->request->data['Item']['purchaseOrder_id'];
+				$data['receiptType_id']=$this->request->data['Item']['receiptType_id'];
+				if(isset($this->request->data['ItemSerialNumber'])) {
+					//item is serialized
+					$data['number']=$this->request->data['ItemSerialNumber']['number'];
+				}//endif
+// debug($data);exit;
+				if($this->ComputareIC->receive($data)) {
+					//success
+					$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));
+					$this->redirect(array('action' => 'index'));
+				} else {
+					//fail
+					$this->Session->setFlash(__('The transaction could not be completed. Please, try again.'));
+				}
+			}//endif
+			if($this->request->data['Item']['step']==1) $this->request->data['Item']['step']=2;
 		} else {
 			//use defaults
 			$this->request->data['Item']['location_id']=$location_id;
+			$this->request->data['Item']['step']=1;
 		}
 		$this->set('item', $this->Item->read(null, $id));
 		$this->set('locations', $this->Item->Location->generateTreeList(null,null,null,' - '));
 		$this->set('purchaseOrders', ClassRegistry::init('PurchaseOrder')->find('list',array('conditions'=>array('PurchaseOrder.status'=>'O'))));
+		$this->set('receiptTypes', ClassRegistry::init('ReceiptType')->find('list',array('conditions'=>array('ReceiptType.active'))));
 //$this->set('purchaseOrders', array(1=>1));
 	}
 

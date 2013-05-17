@@ -69,11 +69,13 @@ class ComputareGLComponent extends Component{
 	 * 		credit => array with accountid=>value
 	 * 		Glnote => text optional notes
 	 * 		Glcheck => number optional check number
+	 * 		Glentry => created_id => user id (required)
 	 * used to post to general ledger
 	 */
 	public function post($data){
 		//must have at least one account
 		if(!isset($data['credit']) || count($data['credit'])==0 || !isset($data['debit']) || count($data['debit'])==0 ) return false;
+// debug($data);exit;
 		//validate created_id
 		if(!isset($data['Glentry']['created_id'])) return false;
 		//total debits and credits
@@ -136,7 +138,6 @@ class ComputareGLComponent extends Component{
 		else $dataSource->rollback();
 		if($ok) return true;
 		else return false;
-//debug($data);exit;
 		
 	}
 	
