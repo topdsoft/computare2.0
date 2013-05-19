@@ -13,6 +13,9 @@ class ComputareAPComponent extends Component{
 	/**
 	 * method saveVendor
 	 * @param array $data
+		* $data['Vendor']['id'] (optional for editing existing vendor)
+		* $data['VendorDetail']['name'] (required)
+		* $data['VendorDetail']['glAccount_id'] (optional)
 	 * @returns t/f
 	 */
 	public function saveVendor($data) {
@@ -27,9 +30,22 @@ class ComputareAPComponent extends Component{
 			if($ok) $this->Vendor->create();
 			if($ok) $ok=$this->Vendor->save(array('created_id'=>$this->Auth->User('id'),'active'=>true));
 			if($ok) $data['Vendor']['id']=$this->Vendor->getInsertId();
+		} else {
+			//existing vendor
+			$vendorDetail_id=$this->Vendor->field('vendorDetail_id',array('Vendor.id'=>$data['Vendor']['id']));
+			if($vendorDetail_id) {
+				//found existing vendor ok
+				$oldVendorDetail=$this->Vendor->VendorDetail->find('first',array('conditions'=>array('VendorDetail.id'=>$vendorDetail_id),'recursive'=>-1));
+				$oldVendorDetail['VendorDetail']['active']=false;
+				$oldVendorDetail['VendorDetail']['removed']=date('Y-m-d h:m:s');
+				$oldVendorDetail['VendorDetail']['removed_id']=$this->Auth->user('id');
+				if($ok) $ok=$this->Vendor->VendorDetail->save($oldVendorDetail);
+				unset($oldVendorDetail);
+			} else $ok=false;
 		}//endif
 		$data['VendorDetail']['vendor_id']=$data['Vendor']['id'];
 		$data['VendorDetail']['created_id']=$this->Auth->User('id');
+		$data['VendorDetail']['active']=true;
 		if($ok) $this->Vendor->VendorDetail->create();
 		if($ok) $ok=$this->Vendor->VendorDetail->save($data['VendorDetail']);
 		//save new vendorDetail_id

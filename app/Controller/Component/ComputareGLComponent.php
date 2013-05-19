@@ -70,6 +70,7 @@ class ComputareGLComponent extends Component{
 	 * 		Glnote => text optional notes
 	 * 		Glcheck => number optional check number
 	 * 		Glentry => created_id => user id (required)
+	 * 		Glentry => postDate => date (optional, defaults to current date)
 	 * used to post to general ledger
 	 */
 	public function post($data){

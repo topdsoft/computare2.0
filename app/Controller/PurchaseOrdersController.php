@@ -51,8 +51,9 @@ class PurchaseOrdersController extends AppController {
  * add method
  *
  * @return void
+ * @param $vendor_id (optional)
  */
-	public function add() {
+	public function add($vendor_id=null) {
 		$this->set('formName','New Purchase Order');
 		if ($this->request->is('post')) {
 			$this->request->data['PurchaseOrder']['status']='O';
@@ -63,7 +64,10 @@ class PurchaseOrdersController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The purchase order could not be saved. Please, try again.'));
 			}
-		}
+		} else {
+			//default
+			$this->request->data['PurchaseOrder']['vendor_id']=$vendor_id;
+		}//endif
 		$vendors = $this->PurchaseOrder->Vendor->find('list');
 		$this->set(compact('vendors'));
 	}

@@ -47,15 +47,30 @@ class VendorsController extends AppController {
 		$this->set('formName','New Vendor');
 		if ($this->request->is('post')) {
 			$this->Vendor->create();
-			if ($this->ComputareAR->saveVendor($this->request->data)) {
+// debug($this->request->data);exit;
+			if ($this->ComputareAP->saveVendor($this->request->data)) {
 				$this->Session->setFlash(__('The vendor has been saved'),'default',array('class'=>'success'));
+				if(isset($this->params->named['redirect'])) {
+					//will redirect back to calling form
+					$redirect=$this->params->named['redirect'];
+					if(isset($redirect['id']) && $redirect['id']=='NEW') $redirect['id']=$this->Vendor->getInsertId();
+					if(isset($redirect['id'])) {
+						//fix id
+						$ret_id=$redirect['id'];
+						unset($redirect['id']);
+						$redirect+=array($ret_id);
+// debug($redirect);debug($ret_id);exit;
+						unset($ret_id);
+					}//endif
+					$this->redirect($redirect);
+				}//endif
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The vendor could not be saved. Please, try again.'));
 			}
 		}
-// 		$items = $this->Vendor->Item->find('list');
-// 		$this->set(compact('items'));
+		$glAccounts=array(null=>'(none, use default)')+ClassRegistry::init('Glaccount')->find('list');
+		$this->set(compact('glAccounts'));
 	}
 
 /**
