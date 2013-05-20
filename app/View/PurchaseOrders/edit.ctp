@@ -37,7 +37,8 @@
 		</tr>
 	<?php endforeach; ?>
 	</table>
-
+	<?php echo $this->Form->input('shipping',array('id'=>'sc')); ?>
+	<?php echo $this->Form->input('tax'); ?>
 
 <?php echo $this->Form->end(__('Submit')); ?>
 	</fieldset>
@@ -48,3 +49,4 @@
 		<li><?php echo $this->Html->link(__('Add Line'), array('controller' => 'purchaseOrders', 'action' => 'addline',$this->data['PurchaseOrder']['id'])); ?> </li>
 	</ul>
 </div>
+<script type='text/javascript'>document.getElementById('sc').focus();</script>

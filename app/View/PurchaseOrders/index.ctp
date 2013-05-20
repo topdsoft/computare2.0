@@ -26,6 +26,7 @@
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $purchaseOrder['PurchaseOrder']['id'])); ?>
 			<?php if($purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Edit'), array('action' => 'edit', $purchaseOrder['PurchaseOrder']['id'])); ?>
+			<?php if($purchaseOrder['PurchaseOrder']['status']=='O' && $purchaseOrder['PurchaseOrder']['lines']>0) echo $this->Html->link(__('Receive'), array('action' => 'receive', $purchaseOrder['PurchaseOrder']['id'])); ?>
 			<?php if($purchaseOrder['PurchaseOrder']['rec']>0 && $purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Close'), array('action' => 'close', $purchaseOrder['PurchaseOrder']['id'])); ?>
 			<?php if($purchaseOrder['PurchaseOrder']['rec']==0 && $purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Void'), array('action' => 'void', $purchaseOrder['PurchaseOrder']['id'])); ?>
 			<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $purchaseOrder['PurchaseOrder']['id']), null, __('Are you sure you want to delete # %s?', $purchaseOrder['PurchaseOrder']['id'])); ?>

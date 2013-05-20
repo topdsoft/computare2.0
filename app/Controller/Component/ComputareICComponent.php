@@ -126,11 +126,12 @@ class ComputareICComponent extends Component{
 	/**
 	 * receive method
 	 * @param array $data
-		* $item_id
-		* $location_id
-		* $purchaseOrder_id
-		* $qty
-		* $serialNumbers (optional) array
+		* $data['item_id']
+		* $data['location_id']
+		* $data['purchaseOrder_id']
+		* $data[qty]
+		* $data['receiptType_id']
+		* $data['serialNumbers'] (optional) array
 	 * @return t/f
 	 */
 	public function receive($data) {
@@ -144,7 +145,7 @@ class ComputareICComponent extends Component{
 		$this->ReceiptType=ClassRegistry::init('ReceiptType');
 		//get purchase order
 		$purchaseOrder=$this->PurchaseOrder->read(null,$data['purchaseOrder_id']);
-// debug($purchaseOrder);
+// debug($data);exit;
 		if(!$purchaseOrder) return false;
 		$item=$this->Item->read(null,$data['item_id']);
 		if(!$item) return false;
@@ -166,6 +167,7 @@ class ComputareICComponent extends Component{
 		$data['ItemTransaction']['receipt_id']=$this->Receipts->getInsertId();
 		$data['ItemTransaction']['item_id']=$data['item_id'];
 		$data['ItemTransaction']['location_id']=$data['location_id'];
+		if($ok) $this->Item->ItemTransaction->create();
 		if($ok) $ok=$this->Item->ItemTransaction->save($data['ItemTransaction']);
 		//create entry in items_locations table
 		$il=$this->Item->ItemsLocation->find('first',array('conditions'=>array('item_id'=>$data['item_id'],'location_id'=>$data['location_id'])));
@@ -182,6 +184,7 @@ class ComputareICComponent extends Component{
 			$data['ItemsLocation']['item_id']=$data['item_id'];
 			$data['ItemsLocation']['location_id']=$data['location_id'];
 			$data['ItemsLocation']['qty']=$data['qty'];
+			if($ok) $this->Item->ItemsLocation->create();
 		}//endif
 		if($ok) $ok=$this->Item->ItemsLocation->save($data['ItemsLocation']);
 		if($ok && !isset($item_location_id)) $item_location_id=$this->Item->ItemsLocation->getInsertId();
@@ -219,6 +222,7 @@ class ComputareICComponent extends Component{
 		}//endif
 		$data['ItemCost']['qty']=$data['qty'];
 		$data['ItemCost']['remain']=$data['qty'];
+		if($ok) $this->Item->ItemCost->create();
 		if($ok) $ok=$this->Item->ItemCost->save($data['ItemCost']);
 		//GL posting
 		if($ok && $data['ItemCost']['cost']>0) {
@@ -257,13 +261,18 @@ class ComputareICComponent extends Component{
 		//serialNumbers
 		if($item['Item']['serialized']) {
 			//save serial number data
-			$data['ItemSerialNumber']['number']=$data['number'];
-			$data['ItemSerialNumber']['created_id']=$this->Auth->User('id');
-			$data['ItemSerialNumber']['item_id']=$data['item_id'];
-			$data['ItemSerialNumber']['item_location_id']=$item_location_id;
-			if($ok) $ok=$this->Item->ItemSerialNumber->save($data['ItemSerialNumber']);
+			foreach($data['serialNumbers'] as $num) {
+				//loop for all serial numbers and update to the new location
+				unset($data['ItemSerialNumber']['id']);
+				$data['ItemSerialNumber']['number']=$num;
+				$data['ItemSerialNumber']['created_id']=$this->Auth->User('id');
+				$data['ItemSerialNumber']['item_id']=$data['item_id'];
+				$data['ItemSerialNumber']['item_location_id']=$item_location_id;
+				if($ok) $this->Item->ItemSerialNumber->create();
+				if($ok) $ok=$this->Item->ItemSerialNumber->save($data['ItemSerialNumber']);
+			}//end foreach
 		}//endif
-// debug($data);exit;
+// debug($data['ItemSerialNumber']);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);

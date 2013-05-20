@@ -268,7 +268,7 @@ class ItemsController extends AppController {
 				$data['receiptType_id']=$this->request->data['Item']['receiptType_id'];
 				if(isset($this->request->data['ItemSerialNumber'])) {
 					//item is serialized
-					$data['number']=$this->request->data['ItemSerialNumber']['number'];
+					$data['serialNumbers']=array($this->request->data['ItemSerialNumber']['number']);
 				}//endif
 // debug($data);exit;
 				if($this->ComputareIC->receive($data)) {

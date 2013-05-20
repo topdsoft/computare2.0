@@ -169,7 +169,15 @@ class PurchaseOrdersController extends AppController {
 		if (!$this->PurchaseOrder->exists()) {
 			throw new NotFoundException(__('Invalid purchase order'));
 		}
+		if($this->PurchaseOrder->field('status')!='O') {
+			//must be status => O
+			$this->Session->setFlash(__('The purchase order must be status of Open to edit.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
 		if ($this->request->is('post') || $this->request->is('put')) {
+// 			$this->redirect(array('action' => 'index'));
+			$this->request->data['PurchaseOrder']['status']='O';
+// debug($this->request->data);exit;
 			if ($this->ComputareAP->savePO($this->request->data)) {
 				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
@@ -181,6 +189,86 @@ class PurchaseOrdersController extends AppController {
 		}
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 		$this->set('items',ClassRegistry::init('Item')->find('list'));
+	}
+
+/**
+ * receive method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function receive($id = null) {
+		$this->set('formName','Receive Purchase Order');
+		$this->PurchaseOrder->id = $id;
+		if (!$this->PurchaseOrder->exists()) {
+			throw new NotFoundException(__('Invalid purchase order'));
+		}
+		if($this->PurchaseOrder->field('status')!='O') {
+			//must be status => O
+			$this->Session->setFlash(__('The purchase order must be status of Open to receive.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//returning data from form
+			if($this->request->data['PurchaseOrder']['pass']==2) {
+				//validate serial numbers
+				
+				if ($this->ComputareAP->receivePO($this->request->data)) {
+					$this->Session->setFlash(__('The purchase order has been received'),'default',array('class'=>'success'));
+					$this->redirect(array('action' => 'index'));
+				} else {
+					$this->Session->setFlash(__('The purchase order could not be received. Please, try again.'));
+				}
+			}//endif
+			//check for serialized items
+			$serialized=false;
+			foreach($this->request->data['PurchaseOrderDetail'] as $i=>$detail) {
+				//loop for all lines
+				if($detail['recQty'] && !$serialized) {
+					//only check if qty was entered and serialized item not allready found
+					$item_id=$this->PurchaseOrder->PurchaseOrderDetail->field('item_id',array('PurchaseOrderDetail.id'=>$detail['id']));
+					if($this->PurchaseOrder->PurchaseOrderDetail->Item->field('serialized',array('Item.id'=>$item_id))) {
+						//this item is serialized
+						$this->request->data['PurchaseOrderDetail'][$i]['serialized']=true;
+						$serialized=true;
+					}//endif
+					unset($item_id);
+				}//endif
+			}//end foreach
+// debug($this->request->data);exit;
+			$this->request->data['PurchaseOrder']['status']='O';
+			if($this->request->data['PurchaseOrder']['pass']==1 && !$serialized) {
+				//not serialized, just save
+				if ($this->ComputareAP->receivePO($this->request->data)) {
+					$this->Session->setFlash(__('The purchase order has been received'),'default',array('class'=>'success'));
+					$this->redirect(array('action' => 'index'));
+				} else {
+					$this->Session->setFlash(__('The purchase order could not be received. Please, try again.'));
+				}
+			} else {
+				//go to pass 2
+				$userData=$this->request->data;
+				$this->request->data = $this->PurchaseOrder->read(null, $id);
+				$this->request->data['PurchaseOrder']['pass']=2;
+				//preserve user entered Data
+				$this->request->data['PurchaseOrder']['shipping']=$userData['PurchaseOrder']['shipping'];
+				$this->request->data['PurchaseOrder']['tax']=$userData['PurchaseOrder']['tax'];
+				foreach($userData['PurchaseOrderDetail'] as $i=>$d) {
+					//loop for all user entered data and save to new array
+					$this->request->data['PurchaseOrderDetail'][$i]['recQty']=$d['recQty'];
+					if(isset($d['serialized'])) $this->request->data['PurchaseOrderDetail'][$i]['serialized']=true;
+				}//end foreach
+				unset($userData);
+			}//endif 
+		} else {
+			$this->request->data = $this->PurchaseOrder->read(null, $id);
+			$this->request->data['PurchaseOrder']['pass']=1;
+		}
+		$this->set('locations',ClassRegistry::init('Location')->find('list'));
+		$this->set('receiptTypes',ClassRegistry::init('ReceiptType')->find('list'));
+		$this->set('items',ClassRegistry::init('Item')->find('list'));
+		$this->Session->setFlash(__('Changes made on this form are not saved until you click Submit'),'default',array('class'=>'notice'));
 	}
 
 /**

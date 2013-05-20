@@ -8,7 +8,7 @@
 App::uses('Component','Controller');
 class ComputareAPComponent extends Component{
 	
-	public $components = array('Auth', 'Session', 'Cookie');
+	public $components = array('Auth', 'Session', 'Cookie','ComputareIC');
 	
 	/**
 	 * method saveVendor
@@ -129,4 +129,62 @@ class ComputareAPComponent extends Component{
 		else $dataSource->rollback();
 		return ($ok==true);
 	}
+	
+	/** method receivePO
+	 * @param array $data
+		* $data['PurchaseOrder']['shipping']  (optional)
+		* $data['PurchaseOrder']['tax']  (optional)
+		* $data['PurchaseOrderDetail']=>array
+			* ['id']  (required)
+			* ['recQty']  (required) Amount to receive this time
+	* @return t/f
+	*/
+	public function receivePO($data) {
+		//recieve items on po
+		$this->PurchaseOrder=ClassRegistry::init('PurchaseOrder');
+		$ok=true;
+		$dataSource=$this->PurchaseOrder->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		foreach($data['PurchaseOrderDetail'] as $detail) {
+			//loop for all items on po
+			if($detail['recQty']) {
+				//amount has been entered
+/*  move to ComputareICComponent
+				$newDetail=$oldDetail=$this->PurchaseOrder->PurchaseOrderDetail->find('first',array('recursive'=>-1,'conditions'=>array('PurchaseOrderDetail.id'=>$detail['PurchaseOrderDetail']['id'])));
+				if($oldDetail['PurchaseOrderDetail']['rec']>0) {
+					//allready has some rec on this line
+					unset($newDetail['PurchaseOrderDetail']['qty']);
+					unset($newDetail['PurchaseOrderDetail']['cost']);
+				} else {
+					//line has not yet had any qty received so remove old detail
+					$oldDetail['PurchaseOrderDetail']['active']=false;
+					$oldDetail['PurchaseOrderDetail']['removed']=date('Y-m-d h:m:s');
+					$oldDetail['PurchaseOrderDetail']['removed_id']=$this->Auth->user('id');
+					if($ok)$ok=$this->PurchaseOrder->PurchaseOrderDetail->save($oldDetail);
+					unset($oldDetail);
+				}//endif
+				//create new detail
+				$newDetail['PurchaseOrderDetail']['rec']=$detail['recQty'];
+				unset($newDetail['PurchaseOrderDetail']['id']);
+				if($ok)$this->PurchaseOrder->PurchaseOrderDetail->create();
+				if($ok)$ok=$this->PurchaseOrder->PurchaseOrderDetail->save($newDetail);
+				unset($newDetail);//*/
+				$saveData=array(
+					'item_id'=>$this->PurchaseOrder->PurchaseOrderDetail->field('item_id',array('PurchaseOrderDetail.id'=>$detail['id'])),
+					'location_id'=>$data['PurchaseOrder']['location_id'],
+					'purchaseOrder_id'=>$data['PurchaseOrder']['id'],
+					'qty'=>$detail['recQty'],
+					'receiptType_id'=>$data['PurchaseOrder']['receiptType_id'],
+				);
+				if(isset($detail['serialNumbers'])) $saveData['serialNumbers']=$detail['serialNumbers'];
+				if($ok) $ok=$this->ComputareIC->receive($saveData);
+			}//endif
+		}//endforeach
+		//save tax and shipping
+#TODO
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}//end function receivePO
 }

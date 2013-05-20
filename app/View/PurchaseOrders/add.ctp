@@ -5,6 +5,7 @@
 	<?php
 		echo $this->Form->input('vendor_id',array('id'=>'sc'));
 		echo $this->Form->input('allowOpen');
+		echo $this->Form->input('onAccount');
 	?>
 <?php echo $this->Form->end(__('Submit')); ?>
 	</fieldset>
