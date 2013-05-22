@@ -44,12 +44,14 @@ class BackupsController extends AppController {
 // debug($out);debug($dbName);exit;
 			$this->request->data['Backup']['created_id']=$this->Auth->user('id');
 			$this->request->data['Backup']['filename']=$path.'/'.$filename;
+			//verify file
+			$ok=file_exists($this->request->data['Backup']['filename']);
 			$this->Backup->create();
-			if ($this->Backup->save($this->request->data)) {
+			if ($ok && $this->Backup->save($this->request->data)) {
 				$this->Session->setFlash(__('The backup has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The backup could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The backup failed. Please, try again.'));
 			}
 		}
 	}
