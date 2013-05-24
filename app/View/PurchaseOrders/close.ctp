@@ -9,6 +9,7 @@
 		echo'<br><br>';
 		echo $this->Form->input('shipping');
 		echo $this->Form->input('tax');
+		if($this->data['PurchaseOrder']['onAccount']) echo $this->Form->input('number',array('label'=>'Vendor PO Number'));
 	?>
 
 	<h3><?php echo __('Purchase Order Details'); ?></h3>

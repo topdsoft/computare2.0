@@ -45,9 +45,14 @@
 			<?php echo h($purchaseOrder['PurchaseOrder']['status']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('AllowOpen'); ?></dt>
+		<dt><?php echo __('Allow Open'); ?></dt>
 		<dd>
-			<?php echo h($purchaseOrder['PurchaseOrder']['allowOpen']); ?>
+			<?php if($purchaseOrder['PurchaseOrder']['allowOpen']) echo 'YES'; ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('On Account'); ?></dt>
+		<dd>
+			<?php if($purchaseOrder['PurchaseOrder']['onAccount']) echo 'YES'; ?>
 			&nbsp;
 		</dd>
 	</dl>

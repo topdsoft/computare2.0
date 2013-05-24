@@ -32,10 +32,10 @@
 		echo '</tr>';
 		echo '<tr><td title="If there is interest to be paid on invoice">Interest</td>';
 		echo '<td>'.$this->Form->input('payIntdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
-		echo '<td>'.$this->Form->input('payIntcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
+		echo '<td>'.$this->Form->input('payIntcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
 		echo '<tr><td title="Total amount owed on invoice">Cash</td>';
-		echo '<td>'.$this->Form->input('payCashdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
+		echo '<td>'.$this->Form->input('payCashdebit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '<td>'.$this->Form->input('payCashcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
 		

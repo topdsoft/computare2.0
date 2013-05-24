@@ -169,6 +169,39 @@ class ComputareAPComponent extends Component{
 					));
 					unset($debit);
 					unset($credit);
+					if(isset($vendor_id)) {
+						//create invoice
+						$this->Invoice=ClassRegistry::init('Invoice');
+						if($ok) $this->Invoice->create();
+						if($ok) $ok=$this->Invoice->save(array(
+							'number'=>$data['PurchaseOrder']['number'],
+							'vendor_id'=>$vendor_id,
+							'purchaseOrder_id'=>$data['PurchaseOrder']['id'],
+							'created_id'=>$this->Auth->user('id'),
+							'status'=>'O'
+						));
+						if($ok)$invoice_id=$this->Invoice->getInsertId();
+						if($ok) {
+							//sum total for invoice
+							$sum=$data['PurchaseOrder']['tax']+$data['PurchaseOrder']['shipping'];
+							$POsum=$this->PurchaseOrder->PurchaseOrderDetail->find('all',array(
+								'conditions'=>array('PurchaseOrderDetail.purchaseOrder_id'=>$data['PurchaseOrder']['id'],'PurchaseOrderDetail.active'),
+								'fields'=>array('sum(PurchaseOrderDetail.rec * PurchaseOrderDetail.cost) as sum')
+							));
+							$sum+=$POsum[0][0]['sum'];
+							if($ok)$this->Invoice->InvoiceDetail->create();
+							if($ok)$ok=$this->Invoice->InvoiceDetail->save(array(
+								'invoice_id'=>$invoice_id,
+								'created_id'=>$this->Auth->user('id'),
+								'active'=>true,
+								'text'=>"Vendor Invoice: ".$data['PurchaseOrder']['number'],
+								'amount'=>$sum,
+							));
+							unset($sum);
+							unset($POsum);
+						}//endif
+// debug($sum);exit;
+					}//endif
 				}//endif
 			}//endif
 			if($ok) $ok=$this->PurchaseOrder->save($data['PurchaseOrder']);
