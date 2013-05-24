@@ -227,16 +227,28 @@ class ComputareICComponent extends Component{
 		//GL posting
 		if($ok && $data['ItemCost']['cost']>0) {
 			//only post to GL if there is a cost
-			$vendorGL_id=$this->VendorDetail->field('glAccount_id',array('vendor_id'=>$data['Receipts']['vendor_id'],'active'));
-			if(!$vendorGL_id) {
-				//vendor has no specific gl account set so use default
-				$vendorGL_id=$this->ComputareGL->getSlot('recAPcredit');
+			if($purchaseOrder['PurchaseOrder']['onAccount']) {
+				//credit accounts payable or specific vendor account
+				$vendorGL_id=$this->VendorDetail->field('glAccount_id',array('vendor_id'=>$data['Receipts']['vendor_id'],'active'));
+				if(!$vendorGL_id) {
+					//vendor has no specific gl account set so use default
+					$vendorGL_id=$this->ComputareGL->getSlot('recAPcredit');
+					if(!$vendorGL_id) {
+						//slot "recAPcredit" must be set
+						$ok=false;
+						$dataSource->rollback();
+						throw new NotFoundException(__('The credit slot is not set for Accounts Payable in Recieve Inventory group.'));
+	// 					$this->Session->setFlash(__('The credit slot is not set forAccounts Payable in Recieve Inventory group.'));
+					}//endif
+				}//endif
+			} else {
+				//credit cash account
+				$vendorGL_id=$this->ComputareGL->getSlot('payCashcredit');
 				if(!$vendorGL_id) {
 					//slot "recAPcredit" must be set
 					$ok=false;
 					$dataSource->rollback();
-					throw new NotFoundException(__('The credit slot is not set for Accounts Payable in Recieve Inventory group.'));
-// 					$this->Session->setFlash(__('The credit slot is not set forAccounts Payable in Recieve Inventory group.'));
+					throw new NotFoundException(__('The credit slot is not set for Cash in Pay Invoice group.'));
 				}//endif
 			}//endif
 			$assetGL_id=$this->ReceiptType->field('glAccount_id',array('ReceiptType.id'=>$data['receiptType_id']));

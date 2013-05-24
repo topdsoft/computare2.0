@@ -8,7 +8,7 @@
 App::uses('Component','Controller');
 class ComputareAPComponent extends Component{
 	
-	public $components = array('Auth', 'Session', 'Cookie','ComputareIC');
+	public $components = array('Auth', 'Session', 'Cookie','ComputareIC','ComputareGL');
 	
 	/**
 	 * method saveVendor
@@ -104,6 +104,72 @@ class ComputareAPComponent extends Component{
 				//close
 				$data['PurchaseOrder']['closed']=date('Y-m-d h:m:s');
 				$data['PurchaseOrder']['closed_id']=$this->Auth->User('id');
+				//do GL posting
+				$credit=0;
+				$debit=array();
+				if($data['PurchaseOrder']['shipping']>0) {
+					//post shipping
+					$shippingAcct_id=$this->ComputareGL->getSlot('recShipdebit');
+					if(!$shippingAcct_id) {
+						//slot "recShipdebit" must be set
+						$ok=false;
+						$dataSource->rollback();
+						throw new NotFoundException(__('The debit slot is not set for Shipping in Recieve Inventory group.'));
+					}//endif
+					$credit+=$data['PurchaseOrder']['shipping'];
+					$debit[$shippingAcct_id]=$data['PurchaseOrder']['shipping'];
+					unset($shippingAcct_id);
+				}//endif
+				if($data['PurchaseOrder']['tax']>0) {
+					//post tax paid
+					$taxAcct_id=$this->ComputareGL->getSlot('recTaxdebit');
+					if(!$taxAcct_id) {
+						//slot "recTaxdebit" must be set
+						$ok=false;
+						$dataSource->rollback();
+						throw new NotFoundException(__('The debit slot is not set for Tax paid in Recieve Inventory group.'));
+					}//endif
+					$credit+=$data['PurchaseOrder']['tax'];
+					$debit[$taxAcct_id]=$data['PurchaseOrder']['tax'];
+					unset($taxAcct_id);
+				}//endif
+				if($credit>0){
+					//find what credit account to use
+					if($this->PurchaseOrder->field('onAccount',array('PurchaseOrder.id'=>$data['PurchaseOrder']['id']))) {
+						//on account so use an accounts payable or vendor credit account
+						$vendor_id=$this->PurchaseOrder->field('vendor_id',array('PurchaseOrder.id'=>$data['PurchaseOrder']['id']));
+						$creditAcct_id=ClassRegistry::init('VendorDetail')->field('glAccount_id',array('vendor_id'=>$vendor_id,'active'));
+						if(!$creditAcct_id) {
+							//use default account
+							$creditAcct_id=$this->ComputareGL->getSlot('recAPcredit');
+							if(!$creditAcct_id) {
+								//slot must be set
+								$ok=false;
+								$dataSource->rollback();
+								throw new NotFoundException(__('The credit slot is not set for Accounts Payable in Recieve Inventory group.'));
+							}//endif
+						}//endif
+					} else {
+						//not on account so use cash account
+						$creditAcct_id=$this->ComputareGL->getSlot('payCashcredit');
+						if(!$creditAcct_id) {
+							//slot must be set
+							$ok=false;
+							$dataSource->rollback();
+							throw new NotFoundException(__('The credit slot is not set for Cash in Pay Invoice group.'));
+						}//endif
+					}//endif
+					$credit=array($creditAcct_id=>$credit);
+					unset($creditAcct_id);
+					//post to GL
+					if($ok) $ok=$this->ComputareGL->post(array(
+						'Glentry'=>array('created_id'=>$this->Auth->user('id')),
+						'debit'=>$debit,
+						'credit'=>$credit,
+					));
+					unset($debit);
+					unset($credit);
+				}//endif
 			}//endif
 			if($ok) $ok=$this->PurchaseOrder->save($data['PurchaseOrder']);
 		}//endif

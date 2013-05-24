@@ -17,11 +17,11 @@
 		echo '</tr>';
 		echo '<tr><td title="Only shipping cots">Shipping</td>';
 		echo '<td>'.$this->Form->input('recShipdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
-		echo '<td>'.$this->Form->input('recShipcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
+		echo '<td>'.$this->Form->input('recShipcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
-		echo '<tr><td title="Only taxes owed">Tax</td>';
+		echo '<tr><td title="Only taxes owed">Tax (paid)</td>';
 		echo '<td>'.$this->Form->input('recTaxdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
-		echo '<td>'.$this->Form->input('recTaxcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
+		echo '<td>'.$this->Form->input('recTaxcredit',array('label'=>'','type'=>'select','options'=>$glaccounts,'disabled'=>true)).'</td>';
 		echo '</tr>';
 		
 		//pay invoice
@@ -60,7 +60,7 @@
 		echo '<td>'.$this->Form->input('saleamountdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '<td>'.$this->Form->input('saleamountcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
-		echo '<tr><td title="Just tax amount">Tax</td>';
+		echo '<tr><td title="Just tax amount">Tax (collected)</td>';
 		echo '<td>'.$this->Form->input('saletaxdebit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '<td>'.$this->Form->input('saletaxcredit',array('label'=>'','type'=>'select','options'=>$glaccounts)).'</td>';
 		echo '</tr>';
