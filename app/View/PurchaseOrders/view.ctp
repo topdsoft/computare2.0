@@ -55,6 +55,13 @@
 			<?php if($purchaseOrder['PurchaseOrder']['onAccount']) echo 'YES'; ?>
 			&nbsp;
 		</dd>
+		<?php if(isset($invoice)): ?>
+			<dt><?php echo __('Invoice'); ?></dt>
+			<dd>
+				<?php echo $this->Html->link($invoice['Invoice']['id'],array('controller'=>'invoices','action'=>'view',$invoice['Invoice']['id'])); ?>
+				&nbsp;
+			</dd>
+		<?php endif; ?>
 	</dl>
 </div>
 <?php //debug($purchaseOrder); ?>

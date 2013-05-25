@@ -17,6 +17,7 @@ class InvoicesController extends AppController {
 		$this->set('menu_add',true);
 		$this->Invoice->recursive = 0;
 		$this->set('invoices', $this->paginate());
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
 /**
@@ -33,6 +34,23 @@ class InvoicesController extends AppController {
 			throw new NotFoundException(__('Invalid invoice'));
 		}
 		$this->set('invoice', $this->Invoice->read(null, $id));
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
+/** 
+ * payment method
+ * 
+ * @param $id
+ */
+	public function payment($id = null) {
+		//record payment on Invoice
+		$this->set('formName','Invoice Payment');
+		$this->Invoice->id = $id;
+		if (!$this->Invoice->exists()) {
+			throw new NotFoundException(__('Invalid invoice'));
+		}
+		$this->set('invoice', $this->Invoice->read(null, $id));
+		
+	}//end function payment
+	
 }

@@ -42,9 +42,15 @@ class PurchaseOrdersController extends AppController {
 				)
 			)
 		);
-		$this->set('purchaseOrder', $this->PurchaseOrder->read(null, $id));
+		$po=$this->PurchaseOrder->read(null, $id);
+		$this->set('purchaseOrder', $po);
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 		$this->set('items',ClassRegistry::init('Item')->find('list'));
+		//check for invoice
+		if($po['PurchaseOrder']['status']=='C' && $po['PurchaseOrder']['onAccount']) {
+			//get invoice
+			$this->set('invoice',ClassRegistry::init('Invoice')->find('first',array('conditions'=>array('Invoice.purchaseOrder_id'=>$id))));
+		}//endif
 	}
 
 /**

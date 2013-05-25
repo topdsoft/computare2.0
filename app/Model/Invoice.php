@@ -11,7 +11,10 @@ App::uses('AppModel', 'Model');
  */
 class Invoice extends AppModel {
 
-
+	public function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		$this->virtualFields['total'] = 'select sum(amount) from invoiceDetails where invoice_id='.$this->alias.'.id';
+	}
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
