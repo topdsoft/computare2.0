@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class InvoicesController extends AppController {
 
+	public $components=array('ComputareAP');
 /**
  * index method
  *
@@ -53,6 +54,13 @@ class InvoicesController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if($invoice['Vendor']['id']) {
 				//AP
+				$this->request->data['Invoice']['invoice_id']=$this->request->data['Invoice']['id'];
+				if($this->ComputareAP->invoicePayment($this->request->data['Invoice'])) {
+					$this->Session->setFlash(__('Payment on Invoice saved'),'default',array('class'=>'success'));
+					$this->redirect(array('action' => 'index'));
+				} else {
+					$this->Session->setFlash(__('Payment could not be saved.'));
+				}//endif
 			} else {
 				//AR
 			}//endif

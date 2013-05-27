@@ -86,10 +86,12 @@
 	</table>
 <?php endif; ?>
 
+<?php if($invoice['Invoice']['status']=='O'): ?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Make Payment'), array('action' => 'payment',$invoice['Invoice']['id'])); ?> </li>
 	</ul>
 </div>
+<?php endif; ?>
 </div>

@@ -24,7 +24,7 @@
 		<td><?php echo h($invoice['Invoice']['created']); ?>&nbsp;</td>
 		<td><?php echo $users[$invoice['Invoice']['created_id']]; ?>&nbsp;</td>
 		<td><?php echo h($invoice['Invoice']['closed']); ?>&nbsp;</td>
-		<td><?php echo h($invoice['Invoice']['closed_id']); ?>&nbsp;</td>
+		<td><?php echo $users[$invoice['Invoice']['closed_id']]; ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($invoice['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $invoice['Customer']['id'])); ?>
 		</td>
@@ -39,7 +39,7 @@
 		</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $invoice['Invoice']['id'])); ?>
-			<?php echo $this->Html->link(__('Payment'), array('action' => 'payment', $invoice['Invoice']['id'])); ?>
+			<?php if($invoice['Invoice']['status']=='O')echo $this->Html->link(__('Payment'), array('action' => 'payment', $invoice['Invoice']['id'])); ?>
 			<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $invoice['Invoice']['id']), null, __('Are you sure you want to delete # %s?', $invoice['Invoice']['id'])); ?>
 		</td>
 	</tr>

@@ -309,5 +309,66 @@ class ComputareAPComponent extends Component{
 		$dataSource=$this->Invoice->getDataSource();
 		//start transaction
 		$dataSource->begin();
+		$vendor_id=$this->Invoice->field('vendor_id',array('Invoice.id'=>$data['invoice_id']));
+		$vendorAcct_id=ClassRegistry::init('VendorDetail')->field('glAccount_id',array('vendor_id'=>$vendor_id,'active'));
+		if(!$vendorAcct_id) {
+			//use default account
+			$vendorAcct_id=$this->ComputareGL->getSlot('payAPdebit');
+			if(!$vendorAcct_id) {
+				//slot must be set
+				$ok=false;
+				$dataSource->rollback();
+				throw new NotFoundException(__('The debit slot is not set for Accounts Payable in Pay Invoice Group.'));
+			}//endif
+		}//endif
+		$creditAcct_id=$this->ComputareGL->getSlot('payCashcredit');
+		if(!$creditAcct_id) {
+			//slot must be set
+			$ok=false;
+			$dataSource->rollback();
+			throw new NotFoundException(__('The credit slot is not set for Cash in Pay Invoice Group.'));
+		}//endif
+		$debit=array($vendorAcct_id=>$data['payment']);
+		$credit=array($creditAcct_id=>$data['payment']);
+		if(isset($data['interest']) && $data['interest']>0) {
+			//get interest debit account
+			$interestAcct_id=$this->ComputareGL->getSlot('payIntdebit');
+			if(!$interestAcct_id) {
+				//slot must be set
+				$ok=false;
+				$dataSource->rollback();
+				throw new NotFoundException(__('The debit slot is not set for Interest in Pay Invoice Group.'));
+			}//endif
+			$debit[$interestAcct_id]=$data['interest'];
+			$credit[$creditAcct_id]+=$data['interest'];
+		}//endif
+		if($ok) $ok=$this->ComputareGL->post(array(
+			'Glentry'=>array('created_id'=>$this->Auth->user('id')),
+			'debit'=>$debit,
+			'credit'=>$credit,
+		));
+		unset($debit);
+		unset($credit);
+		//add invoiceDetail line
+		if($ok) $this->Invoice->InvoiceDetail->create();
+		if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+			'invoice_id'=>$data['invoice_id'],
+			'created_id'=>$this->Auth->user('id'),
+			'active'=>true,
+			'text'=>'Payment',
+			'amount'=>($data['payment']*-1)
+		));
+		//check remaining balance
+		if($this->Invoice->InvoiceDetail->field('sum(amount) as balance',array('invoice_id'=>$data['invoice_id'],'active'))==0) {
+			//mark as closed
+			if($ok) $ok=$this->Invoice->save(array(
+				'status'=>'C',
+				'closed'=>date('Y-m-d h:m:s'),
+				'closed_id'=>$this->Auth->user('id')
+			));
+		}//endif
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
 	}//end function invoicePayment
 }
