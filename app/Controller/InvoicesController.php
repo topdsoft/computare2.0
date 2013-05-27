@@ -49,8 +49,22 @@ class InvoicesController extends AppController {
 		if (!$this->Invoice->exists()) {
 			throw new NotFoundException(__('Invalid invoice'));
 		}
-		$this->set('invoice', $this->Invoice->read(null, $id));
-		
+		$invoice=$this->Invoice->read(null, $id);
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if($invoice['Vendor']['id']) {
+				//AP
+			} else {
+				//AR
+			}//endif
+debug($this->request->data);exit;
+
+		} else {
+			$this->request->data=$invoice;
+			$this->request->data['Invoice']['payment']=$invoice['Invoice']['total'];
+// 			exit;
+		}//endif
+		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('invoice', $invoice);
 	}//end function payment
 	
 }

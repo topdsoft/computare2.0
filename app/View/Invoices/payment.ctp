@@ -1,5 +1,7 @@
-<div class="invoices view">
-<h2><?php  echo __('Invoice: ').$invoice['Invoice']['id']; ?></h2>
+<div class="invoices form">
+<?php echo $this->Form->create('Invoice'); ?>
+	<fieldset>
+		<legend><?php echo __('Make Payment on Invoice: '),$this->data['Invoice']['id']; ?></legend>
 	<dl>
 		<dt><?php echo __('Total'); ?></dt>
 		<dd>
@@ -63,9 +65,17 @@
 			</dd>
 		<?php endif; ?>
 	</dl>
+	<?php
+		echo $this->Form->input('id');
+		echo $this->Form->input('payment',array('id'=>'sc'));
+		echo $this->Form->input('interest',array('label'=>'Interest (optional)'));
+		echo $this->Form->end(__('Submit'));
+	?>
+	</fieldset>
 </div>
 <div class="related">
 	<?php if (!empty($invoice['InvoiceDetail'])): ?>
+	<h3>Invoice History</h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Description'); ?></th>
@@ -85,11 +95,8 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
+	<?php
+// debug($this->data);?>
 
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('Make Payment'), array('action' => 'payment',$invoice['Invoice']['id'])); ?> </li>
-	</ul>
 </div>
-</div>
+<script type='text/javascript'>document.getElementById('sc').focus();</script>

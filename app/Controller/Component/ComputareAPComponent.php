@@ -286,4 +286,28 @@ class ComputareAPComponent extends Component{
 		else $dataSource->rollback();
 		return ($ok==true);
 	}//end function receivePO
+	
+	/**
+	 * invoicePayment method
+	 * @param array $data
+		* $data['invoice_id']  required
+		* $data['payment'] =>total payment (required)
+		* $data['interest'] => intrest paid (optional)
+	 * @returns t/f
+	 */
+	public function invoicePayment($data) {
+		//save payment
+		$this->Invoice=ClassRegistry::init('Invoice');
+		$this->Invoice->id=$data['invoice_id'];
+		$invoice=$this->Invoice->read();
+		if(!$invoice) return false;
+		if($invoice['Invoice']['status']!='O' && $invoice['Invoice']['status']!='P') return false;
+		//validate
+		if(!isset($data['payment'])) return false;
+		if($data['payment']<0) $data['payment']*=-1;
+		$ok=true;
+		$dataSource=$this->Invoice->getDataSource();
+		//start transaction
+		$dataSource->begin();
+	}//end function invoicePayment
 }
