@@ -34,7 +34,16 @@ class LocationsController extends AppController {
 		if (!$this->Location->exists()) {
 			throw new NotFoundException(__('Invalid location'));
 		}
-		$this->set('location', $this->Location->read(null, $id));
+		//get location data
+		$location=$this->Location->read(null, $id);
+		$this->set('location', $location);
+		//get items at location
+		$this->Location->ItemsLocation->bindModel(array('belongsTo'=>array('Location'=>array('foreignKey'=>'location_id','fields'=>array('id','name')),'Item'=>array('foreignKey'=>'item_id','fields'=>array('id','name')))));
+		$il=$this->Location->ItemsLocation->find('all',array('conditions'=>array('location_id >='=>$location['Location']['lft'],'location_id <='=>$location['Location']['rght'])));
+// debug($il);exit;
+		$this->set('items',$il);
+		//get path
+		$this->set('path',$this->Location->getPath());
 	}
 
 /**
