@@ -328,6 +328,7 @@ class ComputareAPComponent extends Component{
 			$dataSource->rollback();
 			throw new NotFoundException(__('The credit slot is not set for Cash in Pay Invoice Group.'));
 		}//endif
+		//do GL posting
 		$debit=array($vendorAcct_id=>$data['payment']);
 		$credit=array($creditAcct_id=>$data['payment']);
 		if(isset($data['interest']) && $data['interest']>0) {
@@ -339,6 +340,7 @@ class ComputareAPComponent extends Component{
 				$dataSource->rollback();
 				throw new NotFoundException(__('The debit slot is not set for Interest in Pay Invoice Group.'));
 			}//endif
+			//add interest
 			$debit[$interestAcct_id]=$data['interest'];
 			$credit[$creditAcct_id]+=$data['interest'];
 		}//endif

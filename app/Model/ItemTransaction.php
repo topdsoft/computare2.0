@@ -15,6 +15,7 @@ class ItemTransaction extends AppModel {
  * @var string
  */
 	public $useDbConfig = 'computare';
+	public $order = 'ItemTransaction.id desc';
 
 /**
  * Use table
