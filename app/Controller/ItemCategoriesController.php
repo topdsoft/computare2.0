@@ -16,6 +16,7 @@ class ItemCategoriesController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Item Categories');
+		$this->set('add_menu',true);
 		$this->ItemCategory->recursive = 0;
 		$this->set('itemCategories', $this->paginate());
 		$this->set('users', ClassRegistry::init('User')->find('list'));
@@ -34,8 +35,19 @@ class ItemCategoriesController extends AppController {
 		if (!$this->ItemCategory->exists()) {
 			throw new NotFoundException(__('Invalid item category'));
 		}
-		$this->set('itemCategory', $this->ItemCategory->read(null, $id));
+		$itemCategory=$this->ItemCategory->read(null, $id);
+		$this->set('itemCategory', $itemCategory);
+		//get users list
 		$this->set('users', ClassRegistry::init('User')->find('list'));
+		//get categories list
+		$this->set('categories',$this->ItemCategory->find('list'));
+		//get path
+		$this->set('path',$this->ItemCategory->getPath());
+		//find all items in category
+		$this->set('items',$this->ItemCategory->Item->find('all',array('conditions'=>array(
+			'Item.category_id >='=>$itemCategory['ItemCategory']['lft'],
+			'Item.category_id <='=>$itemCategory['ItemCategory']['rght']
+		),'fields'=> array('Item.name','Item.id','Item.category_id'),'recursive'=>0)));
 	}
 
 /**

@@ -20,7 +20,7 @@
 				foreach($item['path'] as $i=>$path) {
 					//loop for each step of path
 					if($i!=0) echo '->';
-					echo $this->Html->link($path['ItemCategory']['name'],array('controller'=>'itemCategory','action'=>'view',$path['ItemCategory']['id']));
+					echo $this->Html->link($path['ItemCategory']['name'],array('controller'=>'itemCategories','action'=>'view',$path['ItemCategory']['id']));
 				}//endforeach
 			}//endif
 		?>&nbsp;</td>

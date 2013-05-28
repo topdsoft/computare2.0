@@ -26,6 +26,18 @@
 			<?php echo $this->Html->link($itemCategory['ParentItemCategory']['name'], array('controller' => 'item_categories', 'action' => 'view', $itemCategory['ParentItemCategory']['id'])); ?>
 			&nbsp;
 		</dd>
+		<?php if($path): ?>
+			<dt><?php echo __('Category Path'); ?></dt>
+			<dd>
+				<?php 
+					foreach ($path as $i=>$p) {
+						//loop for all categories in path
+						if($i) echo '->';
+						echo $this->Html->link($p['ItemCategory']['name'], array('controller'=>'itemCategories','action'=>'view',$p['ItemCategory']['id']));
+					}//end foreach
+				?>
+			</dd>
+		<?php endif; ?>
 	</dl>
 </div>
 <div class="actions">
@@ -58,20 +70,22 @@
 	</table>
 <?php endif; ?>
 </div>
-
+<?php //debug($path);?>
 <div class="related">
-	<?php if (!empty($itemCategory['Item'])): ?>
+	<?php if (!empty($items)): ?>
 	<h3><?php echo __('Items in Category'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Name'); ?></th>
+		<th><?php echo __('Sub Category'); ?></th>
 		<th></th>
 	</tr>
 	<?php
 		$i = 0;
-		foreach ($itemCategory['Item'] as $item): ?>
+		foreach ($items as $item): ?>
 		<tr>
-			<td><?php echo $this->Html->link($item['name'], array('controller' => 'items', 'action' => 'view', $item['id'])); ?></td>
+			<td><?php echo $this->Html->link($item['Item']['name'], array('controller' => 'items', 'action' => 'view', $item['Item']['id'])); ?></td>
+			<td><?php echo $this->Html->link($categories[$item['Item']['category_id']], array('controller' => 'itemCategories', 'action' => 'view', $item['Item']['category_id'])); ?></td>
 			<td class="actions">
 				<?php //echo $this->Html->link(__('View'), array('controller' => 'items', 'action' => 'view', $item['id'])); ?>
 				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'items', 'action' => 'edit', $item['id'])); ?>
