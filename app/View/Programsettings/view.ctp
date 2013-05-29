@@ -11,9 +11,9 @@
 			<?php echo h($programsetting['Programsetting']['created']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Created Id'); ?></dt>
+		<dt><?php echo __('By'); ?></dt>
 		<dd>
-			<?php echo h($programsetting['Programsetting']['created_id']); ?>
+			<?php echo $userlist[$programsetting['Programsetting']['created_id']]; ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Dbschema'); ?></dt>
@@ -26,6 +26,11 @@
 			<?php echo h($programsetting['Programsetting']['full_name']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Backup File Directory'); ?></dt>
+		<dd>
+			<?php echo h($programsetting['Programsetting']['backup_file_dir']); ?>
+			&nbsp;
+		</dd>
 		<?php if($lastprogramsetting): ?>
 		<h3>Revisions</h3>
 		<?php
@@ -36,7 +41,7 @@
 				if(!in_array($id,$ignore) && $lastprogramsetting['Programsetting'][$id]!=$value) {
 					//show difference
 					echo '<dt>'.$id.' from</dt>';
-					echo '<dd>'.$lastprogramsetting['Programsetting'][$id].'</dd>';
+					echo '<dd>'.$lastprogramsetting['Programsetting'][$id].'&nbsp; </dd>';
 					echo '<dt>'.$id.' to</dt>';
 					echo '<dd>'.$value.'</dd>';
 				}//endif

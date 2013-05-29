@@ -36,7 +36,8 @@ class BackupsController extends AppController {
 			$dbName = Configure::read('Company');
 			$filename=date('Y-m-d_hms').'.sql';
 			//check for correct folder
-			$path='files/'.$dbName;
+//			$path='files/'.$dbName;
+			$path='files/'.$dbName.'/'.ClassRegistry::init('Programsetting')->field('backup_file_dir');
 			if(!is_dir($path)) debug(mkdir($path));
 			//create file
 			$cmd="mysqldump --user $username -p$password $dbName > $path/$filename";
