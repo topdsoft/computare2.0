@@ -4,6 +4,7 @@
 		<legend><?php echo __('Add Image Setting'); ?></legend>
 	<?php
 		echo $this->Form->input('image_dir',array('id'=>'sc'));
+		echo $this->Form->input('max_image_size',array('label'=>'Max Image Dimension (x or y) in Pixels'));
 	?>
 <?php echo $this->Form->end(__('Submit')); ?>
 	</fieldset>

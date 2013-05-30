@@ -47,8 +47,13 @@ class ImagesController extends AppController {
 		
 		if ($this->request->is('post')) {
 			//save image(s)
-
-$imgDir='img/'.Configure::read('Company').'/';
+			$imgDir='img/'.Configure::read('Company').'/';
+			//check directory setting in imageSettings
+			$image_dir=ClassRegistry::init('ImageSetting')->field('image_dir',array('active'));
+			//if set then add to working directory
+			if($image_dir!='') $imgDir.=$image_dir.'/';
+			unset($image_dir);
+debug($this->request->data);exit;
 			$imageSuccess=$imageFail=0;
 			$failList=array();
 			foreach($this->request->data['Images'] as $image) {
@@ -100,8 +105,11 @@ $imgDir='img/'.Configure::read('Company').'/';
 						if($ext=='.jpg')imagejpeg($cropped,$path.'thumbnails/'.$filename.$ext,80);
 						else if($ext=='.png')imagepng($cropped,$path.'thumbnails/'.$filename.$ext);
 						else imagegif($cropped,$path.'thumbnails/'.$filename.$ext);
+						//get file size from imageSettings
+						$max_image_size=ClassRegistry::init('ImageSetting')->field('max_image_size',array('active'));
+						if($max_image_size>0) $size=$max_image_size;
+						else $size=1200;
 						//check size of file
-$size=1200;
 						if($width>$size || $height>$size) {
 							//resize image
 							$true_width = imagesx($img_src);
@@ -127,7 +135,7 @@ $size=1200;
 						$this->request->data['Image']['filename']=$filename.$ext;
 						$this->request->data['Image']['id']=null;
 						$this->request->data['Image']['created_id']=$this->Auth->user('id');
-//debug($this->request->data);//debug($filename);exit;
+debug($this->request->data);debug($filename);exit;
 						$this->Image->create();
 						if ($this->Image->save($this->request->data)) {
 							$imageSuccess++;
