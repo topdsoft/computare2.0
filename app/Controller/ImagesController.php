@@ -43,6 +43,8 @@ class ImagesController extends AppController {
 	public function add() {
 		$this->set('formName','Upload Image');
 		$this->set('add_menu',true);
+		//check if imageTypes are set up
+		
 		if ($this->request->is('post')) {
 			//save image(s)
 

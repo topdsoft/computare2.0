@@ -42,7 +42,7 @@ class AppModel extends Model {
 		$ret=ConnectionManager::create($dbName, $config); 
 		// Point model to new config 
 		$this->useDbConfig = $dbName; 
-// 		$this->useDbConfig = 'default'; //uncomment this line to use bake
+		$this->useDbConfig = 'default'; //uncomment this line to use bake
 		parent::__construct($id, $table, $ds); 
 	} 
 	
