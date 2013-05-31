@@ -13,6 +13,7 @@ class ComputareICComponent extends Component{
 	/**
 	 * saveItem method
 	 * @param $data
+		* 'removeImage'=>array(image_id=>t/f) if set to t image will be removed
 	 * used to save item data
 	 */
 	public function saveItem($data){
@@ -42,6 +43,19 @@ class ComputareICComponent extends Component{
 		unset($data['ItemDetail']);
 // 		if($ok) $ok=$this->Item->save($data['Item']);
 		if($ok) $ok=$this->Item->save($data);
+		//check for removed images
+		if($ok && isset($data['removeImage'])) {
+			//parse list of removed images
+			foreach($data['removeImage'] as $image_id=>$remove) {
+				//loop for all images
+				if($ok && $remove) {
+					//find images_items id
+					$ii_id=$this->Item->ImagesItem->field('id',array('item_id'=>$data['Item']['id'],'image_id'=>$image_id));
+					if($ii_id) $ok=$this->Item->ImagesItem->delete($ii_id);
+					unset($ii_id);
+				}//endif
+			}//end foreach
+		}//endif
 // debug($data);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();

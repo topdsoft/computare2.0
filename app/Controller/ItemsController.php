@@ -122,6 +122,7 @@ class ItemsController extends AppController {
 			throw new NotFoundException(__('Invalid item'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+// debug($this->request->data);exit;
 			if ($this->ComputareIC->saveItem($this->request->data)) {
 				$this->Session->setFlash(__('The item has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));

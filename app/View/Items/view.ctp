@@ -42,6 +42,12 @@
 			&nbsp;
 		</dd>
 	</dl>
+	<?php
+		if(!empty($item['Image'])) {
+			//show item images
+			foreach($item['Image'] as $image) echo $this->Html->image($image['thumbnail'],array('url'=>array('controller'=>'images','action'=>'view',$image['id']))).' ';
+		}//endif
+	?>
 </div>
 <?php 
 // debug($item) ?>
@@ -79,27 +85,23 @@
 
 <div class="related">
 	<?php if (!empty($item['Image'])): ?>
-	<h3><?php echo __('Related Images'); ?></h3>
+	<h3><?php echo __('Images'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
+		<th></th>
 		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('Filename'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('By'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['Image'] as $image): ?>
 		<tr>
-			<td><?php echo $image['id']; ?></td>
+			<td><?php echo $this->Html->image($image['thumbnail']); ?></td>
 			<td><?php echo $image['created']; ?></td>
-			<td><?php echo $image['created_id']; ?></td>
-			<td><?php echo $image['filename']; ?></td>
+			<td><?php echo $users[$image['created_id']]; ?></td>
 			<td class="actions">
 				<?php echo $this->Html->link(__('View'), array('controller' => 'images', 'action' => 'view', $image['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'images', 'action' => 'edit', $image['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'images', 'action' => 'delete', $image['id']), null, __('Are you sure you want to delete # %s?', $image['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

@@ -17,6 +17,7 @@ class ImagesController extends AppController {
 		$this->set('add_menu',true);
 		$this->Image->recursive = 0;
 		$this->set('images', $this->paginate());
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
 /**
@@ -33,6 +34,7 @@ class ImagesController extends AppController {
 			throw new NotFoundException(__('Invalid image'));
 		}
 		$this->set('image', $this->Image->read(null, $id));
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
 /**
@@ -48,12 +50,13 @@ class ImagesController extends AppController {
 		if ($this->request->is('post')) {
 			//save image(s)
 			$imgDir='img/'.Configure::read('Company').'/';
+			if(!is_dir($imgDir)) mkdir($imgDir,0770);
 			//check directory setting in imageSettings
 			$image_dir=ClassRegistry::init('ImageSetting')->field('image_dir',array('active'));
 			//if set then add to working directory
 			if($image_dir!='') $imgDir.=$image_dir.'/';
 			unset($image_dir);
-debug($this->request->data);exit;
+// debug($this->request->data);debug($this->passedArgs);exit;
 			$imageSuccess=$imageFail=0;
 			$failList=array();
 			foreach($this->request->data['Images'] as $image) {
@@ -132,17 +135,28 @@ debug($this->request->data);exit;
 							//no need to resize
 							copy($tmpFile,$path.$filename.$ext);
 						}//endif 
-						$this->request->data['Image']['filename']=$filename.$ext;
+						//to use cake HTML helper that adds 'img/' we want to remove that directory from the filenames
+						$shortPath=substr($path,4);
+						$this->request->data['Image']['filename']=$shortPath.$filename.$ext;
+						$this->request->data['Image']['thumbnail']=$shortPath.'thumbnails/'.$filename.$ext;
 						$this->request->data['Image']['id']=null;
 						$this->request->data['Image']['created_id']=$this->Auth->user('id');
-debug($this->request->data);debug($filename);exit;
+// debug($this->request->data);debug($filename);exit;
 						$this->Image->create();
 						if ($this->Image->save($this->request->data)) {
+							//saved ok
 							$imageSuccess++;
+							//check for adding image to item
+							if(isset($this->passedArgs['item_id'])) {
+								//set item to use this image
+								$this->Image->ImagesItem->create();
+								$this->Image->ImagesItem->save(array('item_id'=>$this->passedArgs['item_id'],'image_id'=>$this->Image->getInsertId()));
+							}//endif
 						} else {
+							//record failed to save
 							$imageFail++;
 							$failList[]=$image['name'];
-						}
+						}//endif
 					} else {
 						//not uploaded file
 						$imageFail++;
@@ -168,7 +182,8 @@ debug($this->request->data);debug($filename);exit;
 				if($imageSuccess!=1) $msg.='s';
 				$msg.=' Uploaded Successfully';
 				$this->Session->setFlash($msg,'default',array('class'=>'success'));
-// 				if(isset($this->request->data['in']['redirect'])) $this->redirect($this->request->data['in']['redirect']);
+				//check for redirect
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('controller'=>'images','action' => 'index'));
 			}
 		} else {

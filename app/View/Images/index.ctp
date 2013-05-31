@@ -11,7 +11,7 @@
 	<?php
 	foreach ($images as $image): ?>
 	<tr>
-		<td><?php echo $this->Html->image(''.Configure::read('Company').'/thumbnails/'.$image['Image']['filename']); ?>&nbsp;</td>
+		<td><?php echo $this->Html->image($image['Image']['thumbnail']); ?>&nbsp;</td>
 		<td><?php echo h($image['Image']['created']); ?>&nbsp;</td>
 		<td><?php echo h($image['Image']['created_id']); ?>&nbsp;</td>
 		<td><?php echo h($image['Image']['filename']); ?>&nbsp;</td>
