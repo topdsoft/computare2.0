@@ -86,6 +86,12 @@ class Location extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
+		),
+		'InventoryLock' => array(
+			'className' => 'InventoryLock',
+			'foreignKey' => 'location_id',
+			'dependent' => false,
+			'conditions' => 'InventoryLock.active'
 		)
 	);
 

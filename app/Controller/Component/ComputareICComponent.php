@@ -543,4 +543,78 @@ class ComputareICComponent extends Component{
 		unset($itemCostOBJ);
 		return $totalCost;
 	}//endif
+	
+	/**
+	 * lockLocation method
+	 * @param $data
+		* $data['location_id'] (required)
+		* $data['notes'] (optional)
+	*  @returns t/f
+	* used to se a lock on a location and all children that will not allow any item movement
+	*/
+	public function lockLocation($data) {
+		//validate location
+		$this->InventoryLock=ClassRegistry::init('InventoryLock');
+		$ok=true;
+		if($this->checkLock($data['location_id'])) {
+			//allready locked
+			$ok=false;
+		}//endif
+		$data['created_id']=$this->Auth->user('id');
+		$data['active']=true;
+		if($ok) $this->InventoryLock->create();
+		if($ok) $ok=$this->InventoryLock->save($data);
+		return ($ok==true);
+	}//end function lockLocation
+	
+	/**
+	 * unlockLocation method
+	 * @param $data
+		* $data['inventoryLock_id'] (required)
+		* $data['notes'] (optional)
+	*  @returns t/f
+	* used to se a lock on a location and all children that will not allow any item movement
+	*/
+	public function unlockLocation($data) {
+		//validate location
+		$this->InventoryLock=ClassRegistry::init('InventoryLock');
+		$ok=true;
+		$lock=$this->InventoryLock->find('first',array('conditions'=>array('InventoryLock.id'=>$data['inventoryLock_id'],'InventoryLock.active')));
+		if($lock) {
+			//lock found-check ownership
+			if($lock['InventoryLock']['created_id']!=$this->Auth->user('id') && $this->Auth->user('id')!=1) $ok=false;
+			if($ok) {
+				//close lock
+				$lock['InventoryLock']['removed']=date('Y-m-d h:m:s');
+				$lock['InventoryLock']['removed_id']=$this->Auth->user('id');
+				$lock['InventoryLock']['active']=false;
+				if(isset($data['notes'])) $lock['InventoryLock']['notes']=$data['notes'];
+				$ok=$this->InventoryLock->save($lock);
+			}//endif
+		} else $ok=false;
+		return ($ok==true);
+	}//end function lockLocation
+	
+	/**
+	 * checkLock method
+	 * @param $location_id
+	 * @returns inventoryLocks.id or false
+	 */
+	public function checkLock($location_id) {
+		//check all active locks
+		$this->InventoryLock=ClassRegistry::init('InventoryLock');
+		$isLocked=false;
+		$locks=$this->InventoryLock->find('all',array('conditions'=>'InventoryLock.active'));
+		//get lft for $location_id
+		if($locks) {
+			//lock(s) found
+			$lft=$this->InventoryLock->Location->field('lft',array('Location.id'=>$location_id));
+			if(!$lft) return false;
+			foreach($locks as $lock) {
+				//loop for all locks
+				if($lft>=$lock['Location']['lft'] && $lft<=$lock['Location']['rght']) $isLocked=true;
+			}//end foreach
+		}//endif
+		return $isLocked;
+	}//end function checkLock
 }
