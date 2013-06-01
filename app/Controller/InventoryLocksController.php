@@ -17,7 +17,7 @@ class InventoryLocksController extends AppController {
 		$this->set('formName','Inventory Locks');
 		$this->set('menu_add',true);
 		$this->InventoryLock->recursive = 0;
-		$this->set('inventoryLocks', $this->paginate());
+		$this->set('inventoryLocks', $this->paginate('InventoryLock',array('InventoryLock.active')));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
@@ -34,7 +34,11 @@ class InventoryLocksController extends AppController {
 		if (!$this->InventoryLock->exists()) {
 			throw new NotFoundException(__('Invalid inventory lock'));
 		}
-		$this->set('inventoryLock', $this->InventoryLock->read(null, $id));
+		//get lock data
+		$lock=$this->InventoryLock->read(null, $id);
+		$this->set('inventoryLock', $lock);
+		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('canUnlock', ($this->Auth->user('id')==1 || $lock['InventoryLock']['created_id']==$this->Auth->user('id')));
 	}
 
 /**
@@ -47,7 +51,7 @@ class InventoryLocksController extends AppController {
 		if ($this->request->is('post')) {
 			$this->InventoryLock->create();
 			//setup data
-			if($this->request->data['InventoryLock']['notes']=='')unset($this->request->data['InventoryLock']['notes']);
+			if($this->request->data['InventoryLock']['notes']=='') unset($this->request->data['InventoryLock']['notes']);
 			if ($this->ComputareIC->lockLocation($this->request->data['InventoryLock'])) {
 				//saved ok
 				$this->Session->setFlash(__('The inventory lock has been saved'),'default',array('class'=>'success'));
@@ -62,26 +66,23 @@ class InventoryLocksController extends AppController {
 	}
 
 /**
- * delete method
+ * release method
  *
  * @throws MethodNotAllowedException
  * @throws NotFoundException
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
-		if (!$this->request->is('post')) {
-			throw new MethodNotAllowedException();
-		}
+	public function release($id = null) {
 		$this->InventoryLock->id = $id;
 		if (!$this->InventoryLock->exists()) {
 			throw new NotFoundException(__('Invalid inventory lock'));
 		}
-		if ($this->InventoryLock->delete()) {
-			$this->Session->setFlash(__('Inventory lock deleted'));
+		if ($this->ComputareIC->unlockLocation(array('inventoryLock_id'=>$id))) {
+			$this->Session->setFlash(__('Inventory lock released'));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Inventory lock was not deleted'));
+		$this->Session->setFlash(__('Inventory lock was not released'));
 		$this->redirect(array('action' => 'index'));
 	}
 }
