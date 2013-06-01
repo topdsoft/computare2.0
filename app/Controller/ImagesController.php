@@ -224,16 +224,30 @@ class ImagesController extends AppController {
 			throw new NotFoundException(__('Invalid image'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->Image->save($this->request->data)) {
-				$this->Session->setFlash(__('The image has been saved'));
+// debug($this->request->data);exit;
+			//add image to item
+			if(!$this->request->data['Image']['item_id']) {
+				//item_id has not been set
+				$this->redirect(array('action' => 'index'));
+			}//endif
+			//check for existing item-image pair
+			if($this->Image->ImagesItem->field('id',array(array('image_id'=>$this->request->data['Image']['id'],'item_id'=>$this->request->data['Image']['item_id'])))) {
+				//pair-found
+				$this->redirect(array('action' => 'index'));
+			}//endif
+			if ($this->Image->ImagesItem->save(array('image_id'=>$this->request->data['Image']['id'],'item_id'=>$this->request->data['Image']['item_id']))) {
+				//saved ok
+				$this->Session->setFlash(__('The image has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//failed save (usually due to existing item-image pair)
 				$this->Session->setFlash(__('The image could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//get defaults
 			$this->request->data = $this->Image->read(null, $id);
-		}
-		$items = $this->Image->Item->find('list');
+		}//endif
+		$items = array(null=>'')+$this->Image->Item->find('list');
 		$this->set(compact('items'));
 	}
 
@@ -254,7 +268,12 @@ class ImagesController extends AppController {
 		if (!$this->Image->exists()) {
 			throw new NotFoundException(__('Invalid image'));
 		}
+		//get image data
+		$image=$this->Image->read();
 		if ($this->Image->delete()) {
+			//unlink files
+			unlink('img/'.$image['Image']['filename']);
+			unlink('img/'.$image['Image']['thumbnail']);
 			$this->Session->setFlash(__('Image deleted'));
 			$this->redirect(array('action' => 'index'));
 		}

@@ -4,7 +4,7 @@
 	<tr>
 			<th></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('created_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
 			<th><?php echo $this->Paginator->sort('filename'); ?></th>
 			<th></th>
 	</tr>
@@ -13,12 +13,12 @@
 	<tr>
 		<td><?php echo $this->Html->image($image['Image']['thumbnail']); ?>&nbsp;</td>
 		<td><?php echo h($image['Image']['created']); ?>&nbsp;</td>
-		<td><?php echo h($image['Image']['created_id']); ?>&nbsp;</td>
+		<td><?php echo $users[$image['Image']['created_id']]; ?>&nbsp;</td>
 		<td><?php echo h($image['Image']['filename']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $image['Image']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $image['Image']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $image['Image']['id']), null, __('Are you sure you want to delete # %s?', $image['Image']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $image['Image']['id']), null, __('Are you sure you want to delete the image? (there is no undo)')); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

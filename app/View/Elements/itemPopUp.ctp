@@ -3,7 +3,7 @@
  * itemPopUp.ctp
  * Used to show the item finder popup
  * should be passed:
-	* imputId=>the id of input element that will get the item.id user selects from the pop up
+	* inputId=>the id of input element that will get the item.id user selects from the pop up
  */
 ?>
 <span>
