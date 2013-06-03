@@ -14,6 +14,9 @@ class ComputareICComponentTest extends CakeTestCase {
 //		$this->CustomerDetail=ClassRegistry::init('CustomerDetail');
 		$Collection = new ComponentCollection();
 		$this->ComputareICComponent=new ComputareICComponent($Collection);
+		//setup mock auth component
+		$this->ComputareICComponent->Auth = $this->getMock('Auth', array('user'));
+		$this->ComputareICComponent->Auth->expects($this->any())->method('user')->with('id')->will($this->returnValue(14));
 	}
 	
 	public function testSaveItem() {

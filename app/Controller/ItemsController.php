@@ -272,14 +272,21 @@ class ItemsController extends AppController {
 					$data['serialNumbers']=array($this->request->data['ItemSerialNumber']['number']);
 				}//endif
 // debug($data);exit;
-				if($this->ComputareIC->receive($data)) {
-					//success
-					$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));
-					$this->redirect(array('action' => 'index'));
+				//check for lock
+				if($this->ComputareIC->checkLock($this->request->data['Item']['location_id'])) {
+					//lock exists
+					$this->Session->setFlash(__('The location you selected is locked.'));
 				} else {
-					//fail
-					$this->Session->setFlash(__('The transaction could not be completed. Please, try again.'));
-				}
+					//not locked
+					if($this->ComputareIC->receive($data)) {
+						//success
+						$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));
+						$this->redirect(array('action' => 'index'));
+					} else {
+						//fail
+						$this->Session->setFlash(__('The transaction could not be completed. Please, try again.'));
+					}//endif
+				}//endif
 			}//endif
 			if($this->request->data['Item']['step']==1) $this->request->data['Item']['step']=2;
 		} else {
@@ -317,18 +324,25 @@ class ItemsController extends AppController {
 		);
 		if ($this->request->is('post') || $this->request->is('put')) {
 // debug($this->request->data);exit;
-			$data['item_location_id']=$id;
-			if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
-			$data['location_id']=$this->request->data['Item']['location_id'];
-			if(isset($this->request->data['Item']['serialNumbers'])) $data['serialNumbers']=$this->request->data['Item']['serialNumbers'];
-			if($this->ComputareIC->transfer($data)) {
-				//success
-				$this->Session->setFlash(__('The item has been transferred'),'default',array('class'=>'success'));
-				$this->redirect(array('action' => 'index'));
+			//check for locks
+			if($this->ComputareIC->checkLock($location_id) || $this->ComputareIC->checkLock($this->request->data['Item']['location_id'])) {
+				//lock
+				$this->Session->setFlash(__('The location you selected is locked.'));
 			} else {
-				//fail
-				$this->Session->setFlash(__('The transfer could not be completed. Please, try again.'));
-			}
+				//no locks
+				$data['item_location_id']=$id;
+				if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
+				$data['location_id']=$this->request->data['Item']['location_id'];
+				if(isset($this->request->data['Item']['serialNumbers'])) $data['serialNumbers']=$this->request->data['Item']['serialNumbers'];
+				if($this->ComputareIC->transfer($data)) {
+					//success
+					$this->Session->setFlash(__('The item has been transferred'),'default',array('class'=>'success'));
+					$this->redirect(array('action' => 'index'));
+				} else {
+					//fail
+					$this->Session->setFlash(__('The transfer could not be completed. Please, try again.'));
+				}//endif
+			}//endif
 		} else {
 			//default
 			$this->request->data['Item']['qty']=1;

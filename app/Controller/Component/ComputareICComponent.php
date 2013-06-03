@@ -167,6 +167,8 @@ class ComputareICComponent extends Component{
 		$dataSource=$this->Location->getDataSource();
 		//start transaction
 		$dataSource->begin();
+		//check for lock
+		if($this->checkLock($data['location_id'])) $ok=false;
 		//create entry in receipts table
 		$data['Receipts']['created_id']=$this->Auth->User('id');
 		$data['Receipts']['item_id']=$data['item_id'];
@@ -333,6 +335,8 @@ class ComputareICComponent extends Component{
 		$dataSource=$this->Location->getDataSource();
 		//start transaction
 		$dataSource->begin();
+		//check locks
+		if($this->checkLock($il['ItemsLocation']['location_id']) || $this->checkLock($data['location_id'])) $ok=false;
 		//itemTransactions (from)
 		$trans['created_id']=$this->Auth->User('id');
 		$trans['item_id']=$il['ItemsLocation']['item_id'];
@@ -418,6 +422,9 @@ class ComputareICComponent extends Component{
 		$dataSource=$this->Location->getDataSource();
 		//start transaction
 		$dataSource->begin();
+		//check for locks
+		if($this->checkLock($il['ItemsLocation']['location_id'])) $ok=false;
+		//create transaction
 		$trans['created_id']=$this->Auth->User('id');
 		$trans['item_id']=$il['ItemsLocation']['item_id'];
 		$trans['location_id']=$il['ItemsLocation']['location_id'];
