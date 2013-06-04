@@ -29,6 +29,7 @@
 		<?php endif; ?>
 	</dl>
 </div>
+<?php //debug($location);exit?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>

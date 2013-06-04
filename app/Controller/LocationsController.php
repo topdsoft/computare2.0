@@ -44,6 +44,11 @@ class LocationsController extends AppController {
 		$this->set('items',$il);
 		//get path
 		$this->set('path',$this->Location->getPath());
+		//check for locks
+		if($this->ComputareIC->checklock($id)) {
+			//location is locked
+			$this->Session->setFlash(__('This location is locked'),'default',array('class'=>'notice'));
+		}//endif
 	}
 
 /**

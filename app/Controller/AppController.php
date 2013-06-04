@@ -83,6 +83,8 @@ class AppController extends Controller {
 				);
 				if(isset($this->viewVars['helplink'])) $form['helplink']=$this->viewVars['helplink'];
 				if(isset($this->viewVars['add_menu'])) $form['add_menu']=$this->viewVars['add_menu'];
+				//this should catch either
+				if(isset($this->viewVars['menu_add'])) $form['add_menu']=$this->viewVars['menu_add'];
 				$formOBJ->create();
 				$formOBJ->save($form);
 				$this->viewVars['form_id']=$formOBJ->GetInsertId();
