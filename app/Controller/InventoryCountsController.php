@@ -128,6 +128,142 @@ class InventoryCountsController extends AppController {
 	}
 
 /**
+ * count method
+ * 
+ * @param $id inventoryCount_id
+ */
+	public function count($id) {
+		//validate id
+		$this->InventoryCount->id = $id;
+		$count=$this->InventoryCount->read();
+		if(!$count) {
+			//not found
+			$this->Session->setFlash(__('The count could not be found'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if($count['InventoryCount']['finished']) {
+			//count allrady completed
+			$this->Session->setFlash(__('The count is marked as completed'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//check return data
+			if(isset($this->request->data['InventoryCount']['item_id'])) {
+				//add an item
+// debug($this->request->data);exit;
+				$itemCount=$this->InventoryCount->ItemCount->find('first',array('recursive'=>-1,'conditions'=>array(
+					'item_id'=>$this->request->data['InventoryCount']['item_id'],
+					'location_id'=>$this->request->data['InventoryCount']['location_id'],
+					'inventoryCount_id'=>$id
+				)));
+				if($itemCount){
+					//item has been counted here before so add results
+					$itemCount['ItemCount']['qty']+=$this->request->data['InventoryCount']['qty'];
+					if($this->InventoryCount->ItemCount->save($itemCount)) {
+						//saved ok
+						$this->Session->setFlash(__('The item qty has been updated'),'default',array('class'=>'success'));
+						unset($this->request->data['InventoryCount']['qty']);
+						unset($this->request->data['InventoryCount']['item_id']);
+					} else {
+						//fail?
+						$this->Session->setFlash(__('The item qty could not be updated'));
+					}//endif
+					unset($itemCount);
+				} else {
+					//first time for item counting here
+					if($this->InventoryCount->ItemCount->save(array(
+						'created_id'=>$this->Auth->user('id'),
+						'item_id'=>$this->request->data['InventoryCount']['item_id'],
+						'location_id'=>$this->request->data['InventoryCount']['location_id'],
+						'inventoryCount_id'=>$id,
+						'qty'=>$this->request->data['InventoryCount']['qty'],
+					))) {
+						//saved ok
+						$this->Session->setFlash(__('The item qty has been updated'),'default',array('class'=>'success'));
+						unset($this->request->data['InventoryCount']['qty']);
+						unset($this->request->data['InventoryCount']['item_id']);
+					} else {
+						//not saved ok
+						$this->Session->setFlash(__('The item qty could not be updated'));
+					}//endif
+				}//endif
+			}//endif
+		}//endif
+		//get count locations
+		$this->set('locations',$this->InventoryCount->Location->find('list',array('conditions'=>array('id'=>$this->InventoryCount->InventoryCountsLocation->find('list',array('fields'=>array('location_id'),'conditions'=>array('inventoryCount_id'=>$id,'finished'=>null)))))));
+		if(isset($this->request->data['InventoryCount']['location_id'])) {
+			//get count qtys
+			$this->set('counts',$this->InventoryCount->ItemCount->find('all',array('conditions'=>array('inventoryCount_id'=>$id,'location_id'=>$this->request->data['InventoryCount']['location_id']))));
+			//get item list
+			$this->set('items',ClassRegistry::init('Item')->find('list'));
+			//get inventoryCountsLocation_id
+			$this->set('inventoryCountsLocation_id',$this->InventoryCount->InventoryCountsLocation->field('id',array('inventoryCount_id'=>$id,'location_id'=>$this->request->data['InventoryCount']['location_id'])));
+		}//endif
+		$this->set('inventoryCount',$count);
+	}//endif
+
+/**
+ * finish method
+ * 
+ * @param $inventoryCountsLocation_id  to finish
+ */
+	public function finish($inventoryCountsLocation_id) {
+		//validate
+		$icl=$this->InventoryCount->InventoryCountsLocation->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$inventoryCountsLocation_id)));
+		if(!$icl) {
+			//invalid
+			$this->Session->setFlash(__('The count could not be found'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if($icl['InventoryCountsLocation']['finished']) {
+			//allready finished
+			$this->Session->setFlash(__('This location is allready marked as finsihed'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+// debug($icl);exit;
+		$icl['InventoryCountsLocation']['finished']=date('Y-m-d h:m:s');
+		$icl['InventoryCountsLocation']['finished_id']=$this->Auth->user('id');
+		if($this->InventoryCount->InventoryCountsLocation->save($icl)) {
+			//saved ok
+			$this->Session->setFlash(__('The location has been marked as finsihed'),'default',array('class'=>'success'));
+			$this->redirect(array('action'=>'count',$icl['InventoryCountsLocation']['inventoryCount_id']));
+		} else {
+			//not saved
+			$this->Session->setFlash(__('The location could not be marked finsihed'));
+			$this->redirect(array('action'=>'count',$icl['InventoryCountsLocation']['inventoryCount_id']));
+		}//endif
+	}
+	
+/**
+ * recount method
+ * 
+ * @param $inventoryCountsLocation_id  to recount
+ * will delete record and force recount of location
+ */
+	public function recount($inventoryCountsLocation_id) {
+		//validate
+		$icl=$this->InventoryCount->InventoryCountsLocation->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$inventoryCountsLocation_id)));
+		if(!$icl) {
+			//invalid
+			$this->Session->setFlash(__('The count could not be found'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if(!$icl['InventoryCountsLocation']['finished']) {
+			//not finished
+			$this->Session->setFlash(__('This location is not marked as finished'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		//clear finished fields
+		$icl['InventoryCountsLocation']['finished']=null;
+		$icl['InventoryCountsLocation']['finished_id']=null;
+		$this->InventoryCount->InventoryCountsLocation->save($icl);
+		//delete itemCount records
+		$this->InventoryCount->ItemCount->deleteAll(array('inventoryCount_id'=>$icl['InventoryCountsLocation']['inventoryCount_id'],'location_id'=>$icl['InventoryCountsLocation']['location_id']));
+		$this->Session->setFlash(__('This location is marked for recount'));
+		$this->redirect(array('action' => 'view',$icl['InventoryCountsLocation']['inventoryCount_id']));
+	}
+	
+/**
  * delete method
  *
  * @throws MethodNotAllowedException
