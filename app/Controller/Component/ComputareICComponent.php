@@ -487,6 +487,118 @@ class ComputareICComponent extends Component{
 	}
 	
 	/**
+	 * adjust method
+	 * @param $data
+		* $data['item_id']
+		* $data['qty'] 
+		* $data['cost'] (only used for + qty, - qty uses cost from table)
+		* $data['vendor_id'] (required for +qty)
+		* $data['location_id']
+		* $data['glAccount_id']
+		* $data['serialNumbers']=>array of SN (optional, only used for serialized items. if qty+ array of numbers, if qty- array of ids)
+		* $data['note'] (optional note for GL posting)
+	* @return t/f
+	* 
+	* used to adjust inventory levels after an inventory count
+	* NOES NOT respect locks
+	* qty can be +/-
+	* item costs will be updated
+	*/
+	public function adjust($data) {
+		$this->Location=ClassRegistry::init('Location');
+		$this->Item=ClassRegistry::init('Item');
+		$ok=true;
+		$dataSource=$this->Location->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		//create transaction
+		$trans['created_id']=$this->Auth->User('id');
+		$trans['item_id']=$data['item_id'];
+		$trans['location_id']=$data['location_id'];
+		$trans['qty']=$data['qty'];
+		$trans['type']='A';
+		if($ok) $ok=$this->Item->ItemTransaction->save($trans);
+		unset($trans);
+		//items_locations data
+		$il=$this->Location->ItemsLocation->find('first',array('conditions'=>array('location_id'=>$data['location_id'],'item_id'=>$data['item_id'])));
+		if(!$il && $data['qty']<0) $ok=false;
+		if(!$il) {
+			//item not at location
+			if($ok) $this->Location->ItemsLocation->create();
+			if($ok) $ok=$this->Location->ItemsLocation->save(array(
+				'item_id'=>$data['item_id'],
+				'location_id'=>$data['location_id'],
+				'qty'=>$data['qty'],
+				'creted_id'=>$this->Auth->user('id')
+			));
+		} else {
+			//item at location
+			$il['ItemsLocation']['qty']+=$data['qty'];
+			if($ok) $ok=$this->Location->ItemsLocation->save($il);
+		}//endif
+		//serial numbers
+		if($data['qty']>0) {
+			//qty+
+			foreach($data['serialNumbers'] as $num) {
+				//loop for all serial numbers and add
+				if($ok) $this->Item->ItemSerialNumber->create();
+				if($ok) $ok=$this->Item->ItemSerialNumber->save(array(
+					'number'=>$num,
+					'created_id'=>$this->Auth->user('id'),
+					'item_id'=>$data['item_id'],
+					'item_location_id'=>$il['ItemsLocation']['id']
+				));
+			}//end foreach
+		} else {
+			//qty-
+			foreach($data['serialNumbers'] as $serial_id) {
+				//loop for all serial numbers and update location to 0
+				if($ok) $ok=$this->Item->ItemSerialNumber->save(array('id'=>$serial_id,'item_location_id'=>0));
+			}//end foreach
+		}//endif
+		//item cost update
+		if($data['qty']>0) {
+			//positive qty requires $data['cost'] passed in
+			if($ok) $this->Item->ItemCost->create();
+			if($ok) $ok=$this->Item->ItemCost->save(array(
+				'created_id'=>$this->Auth->user('id'),
+				'item_id'=>$data['item_id'],
+				'vendor_id'=>$data['vendor_id'],
+				'cost'=>$data['cost'],
+				'qty'=>$data['qty'],
+				'remain'=>$data['qty']
+			));
+			//from now on use total cost of all qty
+			$totalCost=$data['cost']*$data['qty'];
+		} else {
+			//negative qty so use cost method and remove qty
+			if($ok) $totalCost=$this->getCost($data['item_id'],$data['qty'],true);
+		}//endif
+		//GL posting
+		if($totalCost>0 and $ok) {
+			//only post if cost is >0
+			$invAssetAcct_id=$this->ComputareGL->getSlot('issuecredit');
+			if(!$invAssetAcct_id) {
+				//account not set
+				$dataSource->rollback();
+				throw new NotFoundException(__('The credit slot is not set for Cost of Inventory in Issue Inventory group.'));
+			}//endif
+			$glPost=array('Glentry'=>array('created_id'=>$this->Auth->user('id')));
+			if(isset($data['note']) && $data['note']!='') $glPost['Glnote']=$data['note'];
+			if($data['qty']>0) {
+				//qty+
+				$glPost['debit']=array($invAssetAcct_id=>$totalCost);
+				$glPost['credit']=array($data['glAccount_id']=>$totalCost);
+			} else {
+				//qty-
+				$glPost['debit']=array($data['glAccount_id']=>$totalCost);
+				$glPost['credit']=array($invAssetAcct_id=>$totalCost);
+			}//endif
+			if($ok) $ok=$this->ComputareGL->post($glPost);
+		}//endif
+	}//end public function afjust
+	
+	/**
 	 * getCost method
 	 * @param $item_id
 	 * @param $qty
