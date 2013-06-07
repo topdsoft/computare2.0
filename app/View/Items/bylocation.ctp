@@ -5,6 +5,7 @@
 			<th><?php echo $this->Paginator->sort('Location.lft','Location'); ?></th>
 			<th><?php echo $this->Paginator->sort('Item.name','Item'); ?></th>
 			<th><?php echo $this->Paginator->sort('qty'); ?></th>
+			<th><?php echo $this->Paginator->sort('stockQty'); ?></th>
 			<th></th>
 	</tr>
 	<?php  
@@ -21,12 +22,14 @@
 		?>&nbsp;</td>
 		<td><?php echo $this->Html->link($item['Item']['name'],array('controller'=>'items','action'=>'view',$item['ItemsLocation']['item_id'])); ?>&nbsp;</td>
 		<td><?php echo h($item['ItemsLocation']['qty']); ?>&nbsp;</td>
+		<td><?php echo h($item['stockQty']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php //echo $this->Html->link(__('View'), array('action' => 'view', $item['Item']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $item['ItemsLocation']['item_id'])); ?>
 			<?php echo $this->Html->link(__('Receive'), array('action' => 'receive', $item['ItemsLocation']['item_id'], $item['ItemsLocation']['location_id'])); ?>
 			<?php echo $this->Html->link(__('Transfer'), array('action' => 'transfer', $item['ItemsLocation']['id'])); ?>
 			<?php echo $this->Html->link(__('Issue'), array('action' => 'issue', $item['ItemsLocation']['id'])); ?>
+			<?php echo $this->Html->link(__('Set Stock Level'), array('controller'=>'stockLevels','action' => 'edit', $item['ItemsLocation']['item_id'], $item['ItemsLocation']['location_id'],'redirect'=>array('controller'=>'items','action'=>'bylocation'))); ?>
 			<?php // echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $item['Item']['id']), null, __('Are you sure you want to delete # %s?', $item['Item']['id'])); ?>
 		</td>
 	</tr>

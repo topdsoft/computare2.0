@@ -30,6 +30,7 @@ class ItemsController extends AppController {
 	public function bylocation() {
 		$this->set('formName','List Items By Location');
 		$this->set('add_menu',true);
+		$this->StockLevel=ClassRegistry::init('StockLevel');
 		//create new assoications
 		$this->Item->ItemsLocation->bindModel(
 			array('belongsTo' => array(
@@ -41,16 +42,24 @@ class ItemsController extends AppController {
 					'className'=>'Location',
 					'fields'=>array('name','lft')
 					)
-				)
-				
+				),
+// 				'StockLevel' => array(
+// 					'className'=>'StockLevel',
+// 					'fields'=>array('qty'),
+// 					'finderQuery'=>array('StockLevel.item_id=ItemsLocation.item_id and StockLevel.location_id=ItemsLocation.location_id and StockLevel.active')
+// 				),
 			)
 		);
 		$this->paginate = array('order'=>'lft');
 		$items=$this->paginate('ItemsLocation'); 
 //		$itemsList=$this->Item->find('list');
 //		$locationsList=$this->Item->Location->find('list');
-		//get path
-		foreach($items as $i=>$item) $items[$i]['path']=$this->Item->Location->getPath($item['ItemsLocation']['location_id'],array('id','name'));
+		//get path and stock qty
+		foreach($items as $i=>$item) {
+			//loop for all items
+			$items[$i]['path']=$this->Item->Location->getPath($item['ItemsLocation']['location_id'],array('id','name'));
+			$items[$i]['stockQty']=$this->StockLevel->field('qty',array('item_id'=>$item['ItemsLocation']['item_id'],'location_id'=>$item['ItemsLocation']['location_id'],'active'));
+		}//end foreach
 //  debug($items);exit;
 		$this->set(compact('items'));
 	}
