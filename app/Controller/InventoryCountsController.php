@@ -7,6 +7,7 @@ App::uses('AppController', 'Controller');
  */
 class InventoryCountsController extends AppController {
 
+	public $components=array('ComputareIC','ComputareGL');
 /**
  * index method
  *
@@ -241,6 +242,7 @@ class InventoryCountsController extends AppController {
  * will delete record and force recount of location
  */
 	public function recount($inventoryCountsLocation_id) {
+		$this->set('formName','Recount Inventory');
 		//validate
 		$icl=$this->InventoryCount->InventoryCountsLocation->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$inventoryCountsLocation_id)));
 		if(!$icl) {
@@ -261,6 +263,72 @@ class InventoryCountsController extends AppController {
 		$this->InventoryCount->ItemCount->deleteAll(array('inventoryCount_id'=>$icl['InventoryCountsLocation']['inventoryCount_id'],'location_id'=>$icl['InventoryCountsLocation']['location_id']));
 		$this->Session->setFlash(__('This location is marked for recount'));
 		$this->redirect(array('action' => 'view',$icl['InventoryCountsLocation']['inventoryCount_id']));
+	}
+	
+/**
+* adjust mehod
+* 
+* @param $inventoryCountsLocation_id to post adjustments for
+*/
+	public function adjust($inventoryCountsLocation_id) {
+		$this->set('formName','Post Adjustment');
+		//validate
+		$icl=$this->InventoryCount->InventoryCountsLocation->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$inventoryCountsLocation_id)));
+		if(!$icl) {
+			//invalid
+			$this->Session->setFlash(__('The count could not be found'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if(!$icl['InventoryCountsLocation']['finished']) {
+			//not finished
+			$this->Session->setFlash(__('This location is not marked as finished'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		//build item list
+		$items=array();
+		$itemCounts=$this->InventoryCount->ItemCount->find('all',array('recursive'=>-1,'conditions'=>array('inventoryCount_id'=>$icl['InventoryCountsLocation']['inventoryCount_id'],'location_id'=>$icl['InventoryCountsLocation']['location_id'])));
+		foreach($itemCounts as $itemCount) {
+			//loop for all items counted and add to array
+			$items[$itemCount['ItemCount']['item_id']]['cntQty']=$itemCount['ItemCount']['qty'];
+			$items[$itemCount['ItemCount']['item_id']]['curQty']=0;
+		}//end foreach itemCounts
+		$itemsLocations=$this->InventoryCount->Location->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$icl['InventoryCountsLocation']['location_id'])));
+		foreach($itemsLocations as $il) {
+			//loop for all existing qtys at location and add to item array
+			if(!isset($items[$il['ItemsLocation']['item_id']]['cntQty']))$items[$il['ItemsLocation']['item_id']]['cntQty']=0;
+			$items[$il['ItemsLocation']['item_id']]['curQty']=$il['ItemsLocation']['qty'];
+			$items[$il['ItemsLocation']['item_id']]['items_locations_id']=$il['ItemsLocation']['id'];
+		}//end foreach itemsLocations
+		//build array
+		foreach($items as $item_id=>$item) {
+			//loop for all items
+			if($item['cntQty']==$item['curQty']) {
+				//no need to procede if there is no difference
+				unset($items[$item_id]);
+			} else {
+				//qtys no not match
+				$items[$item_id]['difference']=intval($item['cntQty'])-intval($item['curQty']);
+				$items[$item_id]['name']=$this->InventoryCount->ItemCount->Item->field('name',array('id'=>$item_id));
+				$items[$item_id]['serialized']=$this->InventoryCount->ItemCount->Item->field('serialized',array('id'=>$item_id));
+				if($items[$item_id]['serialized'] && $items[$item_id]['difference']<0) {
+					//get serial numbers for items at location
+					$items[$item_id]['serialNumbers']=ClassRegistry::init('ItemSerialNumber')->find('list',array('fields'=>array('number'),'conditions'=>array('item_id'=>$item_id,'item_location_id'=>$item['items_locations_id'])));
+				}//endif
+				if($items[$item_id]['difference']<0) {
+					//get cost of item(s)
+					$items[$item_id]['cost']=$this->ComputareIC->getCost($item_id,$items[$item_id]['difference']*-1);
+				}//endif
+			}//endif qtys differ
+		}//end foreach items
+		$this->set('items',$items);
+// debug($items);exit;
+		//get basic data
+		$this->set('location_id',$icl['InventoryCountsLocation']['location_id']);
+		$this->set('locationName',$this->InventoryCount->Location->field('name',array('id'=>$icl['InventoryCountsLocation']['location_id'])));
+		$this->set('finished',$icl['InventoryCountsLocation']['finished']);
+		$this->set('by',ClassRegistry::init('User')->field('username',array('id'=>$icl['InventoryCountsLocation']['finished_id'])));
+		$this->set('vendors',ClassRegistry::init('Vendor')->find('list'));
+		$this->set('glAccounts',ClassRegistry::init('Glaccount')->find('list'));
 	}
 	
 /**

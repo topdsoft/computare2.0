@@ -81,11 +81,15 @@
 					echo '<td></td>';
 					$item['cntQty']=0;
 				}//endif
-				echo '<td>'.($item['curQty']-$item['cntQty']).'</td>';
+				echo '<td>'.($item['cntQty']-$item['curQty']).'</td>';
 				if($i==1) {
 					//only show actions on one line
 					echo '<td class="actions">';
-					if($location['InventoryCountsLocation']['finished'] && $countBad) echo $this->Html->link('Recount',array('action'=>'recount',$location['InventoryCountsLocation']['id']));
+					if($location['InventoryCountsLocation']['finished'] && $countBad) {
+						//show options for finsihed count
+						echo $this->Html->link('Recount',array('action'=>'recount',$location['InventoryCountsLocation']['id']));
+						echo $this->Html->link('Post Adjustment',array('action'=>'adjust',$location['InventoryCountsLocation']['id']));
+					}
 					echo '</td>';
 				} else {
 					//blanks
