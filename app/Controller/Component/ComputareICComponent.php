@@ -517,6 +517,7 @@ class ComputareICComponent extends Component{
 		$trans['location_id']=$data['location_id'];
 		$trans['qty']=$data['qty'];
 		$trans['type']='A';
+		if($ok) $this->Item->ItemTransaction->create();
 		if($ok) $ok=$this->Item->ItemTransaction->save($trans);
 		unset($trans);
 		//items_locations data
@@ -534,40 +535,50 @@ class ComputareICComponent extends Component{
 		} else {
 			//item at location
 			$il['ItemsLocation']['qty']+=$data['qty'];
-			if($ok) $ok=$this->Location->ItemsLocation->save($il);
+			if($ok){
+				//save qty or delete if qty==0
+				if($il['ItemsLocation']['qty']==0) $ok=$this->Location->ItemsLocation->delete($il['ItemsLocation']['id']);
+				else $ok=$this->Location->ItemsLocation->save($il);
+			}//endif
 		}//endif
+// debug($data);debug($ok==true);exit;
 		//serial numbers
-		if($data['qty']>0) {
-			//qty+
-			foreach($data['serialNumbers'] as $num) {
-				//loop for all serial numbers and add
-				if($ok) $this->Item->ItemSerialNumber->create();
-				if($ok) $ok=$this->Item->ItemSerialNumber->save(array(
-					'number'=>$num,
-					'created_id'=>$this->Auth->user('id'),
-					'item_id'=>$data['item_id'],
-					'item_location_id'=>$il['ItemsLocation']['id']
-				));
-			}//end foreach
-		} else {
-			//qty-
-			foreach($data['serialNumbers'] as $serial_id) {
-				//loop for all serial numbers and update location to 0
-				if($ok) $ok=$this->Item->ItemSerialNumber->save(array('id'=>$serial_id,'item_location_id'=>0));
-			}//end foreach
+		if(isset($data['serialNumbers'])) {
+			if($data['qty']>0) {
+				//qty+
+				foreach($data['serialNumbers'] as $num) {
+					//loop for all serial numbers and add
+					if($ok) $this->Item->ItemSerialNumber->create();
+					if($ok) $ok=$this->Item->ItemSerialNumber->save(array(
+						'number'=>$num,
+						'created_id'=>$this->Auth->user('id'),
+						'item_id'=>$data['item_id'],
+						'item_location_id'=>$il['ItemsLocation']['id']
+					));
+				}//end foreach
+			} else {
+				//qty-
+				foreach($data['serialNumbers'] as $serial_id) {
+					//loop for all serial numbers and update location to 0
+					if($ok) $ok=$this->Item->ItemSerialNumber->save(array('id'=>$serial_id,'item_location_id'=>0));
+				}//end foreach
+			}//endif
 		}//endif
 		//item cost update
 		if($data['qty']>0) {
 			//positive qty requires $data['cost'] passed in
-			if($ok) $this->Item->ItemCost->create();
-			if($ok) $ok=$this->Item->ItemCost->save(array(
-				'created_id'=>$this->Auth->user('id'),
-				'item_id'=>$data['item_id'],
-				'vendor_id'=>$data['vendor_id'],
-				'cost'=>$data['cost'],
-				'qty'=>$data['qty'],
-				'remain'=>$data['qty']
-			));
+			if($data['cost']>0) {
+				//ignore cost==0
+				if($ok) $this->Item->ItemCost->create();
+				if($ok) $ok=$this->Item->ItemCost->save(array(
+					'created_id'=>$this->Auth->user('id'),
+					'item_id'=>$data['item_id'],
+					'vendor_id'=>$data['vendor_id'],
+					'cost'=>$data['cost'],
+					'qty'=>$data['qty'],
+					'remain'=>$data['qty']
+				));
+			}//endif
 			//from now on use total cost of all qty
 			$totalCost=$data['cost']*$data['qty'];
 		} else {
@@ -596,7 +607,10 @@ class ComputareICComponent extends Component{
 			}//endif
 			if($ok) $ok=$this->ComputareGL->post($glPost);
 		}//endif
-	}//end public function afjust
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
+	}//end public function adjust
 	
 	/**
 	 * getCost method

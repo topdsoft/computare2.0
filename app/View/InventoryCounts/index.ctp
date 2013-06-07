@@ -17,8 +17,8 @@
 		<td><?php //echo h($inventoryCount['InventoryCount']['notes']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $inventoryCount['InventoryCount']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $inventoryCount['InventoryCount']['id'])); ?>
-			<?php echo $this->Html->link(__('Count'), array('action' => 'count', $inventoryCount['InventoryCount']['id'])); ?>
+			<?php if(!$inventoryCount['InventoryCount']['finished'])echo $this->Html->link(__('Edit'), array('action' => 'edit', $inventoryCount['InventoryCount']['id'])); ?>
+			<?php if(!$inventoryCount['InventoryCount']['finished'])echo $this->Html->link(__('Count'), array('action' => 'count', $inventoryCount['InventoryCount']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

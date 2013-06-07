@@ -9,8 +9,14 @@
 	<?php 
 		if(!isset($this->data['InventoryCount']['location_id'])) {
 			//get location to start counting
-			echo $this->Form->input('location_id',array('label'=>'Location to start counting'));
-			echo $this->Form->end(__('Select Location')); 
+			if(count($locations)) {
+				//more locations to be done
+				echo $this->Form->input('location_id',array('label'=>'Location to start counting'));
+				echo $this->Form->end(__('Select Location')); 
+			} else {
+				//count finsihed
+				echo '<strong>There are no more locations to count</strong>';
+			}//endif
 		} else {
 			//location id set
 			echo $this->Form->input('location_id',array('label'=>'Location to start counting','type'=>'hidden'));

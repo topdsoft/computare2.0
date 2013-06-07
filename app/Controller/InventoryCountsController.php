@@ -204,6 +204,33 @@ class InventoryCountsController extends AppController {
 	}//endif
 
 /**
+ * finishCount method
+ * 
+ * @param $id  inventoryCount_id
+ */
+	public function finishCount($id) {
+		//validate
+		$this->InventoryCount->id = $id;
+		$count=$this->InventoryCount->read();
+		if(!$count) {
+			//not found
+			$this->Session->setFlash(__('The count could not be found'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if($count['InventoryCount']['finished']) {
+			//count allrady completed
+			$this->Session->setFlash(__('The count is marked as completed'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		$count['InventoryCount']['finished']=date('Y-m-d h:m:s');
+		$count['InventoryCount']['active']=false;
+		$this->InventoryCount->save($count);
+#TODO unlock
+		$this->Session->setFlash(__('The count has been marked as finished'),'default',array('class'=>'success'));
+		$this->redirect(array('action'=>'index'));
+	}
+
+/**
  * finish method
  * 
  * @param $inventoryCountsLocation_id  to finish
@@ -226,7 +253,7 @@ class InventoryCountsController extends AppController {
 		$icl['InventoryCountsLocation']['finished_id']=$this->Auth->user('id');
 		if($this->InventoryCount->InventoryCountsLocation->save($icl)) {
 			//saved ok
-			$this->Session->setFlash(__('The location has been marked as finsihed'),'default',array('class'=>'success'));
+			$this->Session->setFlash(__('The location has been marked as finished'),'default',array('class'=>'success'));
 			$this->redirect(array('action'=>'count',$icl['InventoryCountsLocation']['inventoryCount_id']));
 		} else {
 			//not saved
@@ -321,7 +348,41 @@ class InventoryCountsController extends AppController {
 			}//endif qtys differ
 		}//end foreach items
 		$this->set('items',$items);
-// debug($items);exit;
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//process request
+			$ok=$fail=0;
+			foreach($items as $item_id=> $item) {
+				//loop for all items and post adjustments
+				$adjust=array();
+				if($this->request->data['InventoryCount']['notes']!='') $adjust['notes']=$this->request->data['InventoryCount']['notes'];
+				$adjust['item_id']=$item_id;
+				$adjust['qty']=$item['difference'];
+				$adjust['location_id']=$icl['InventoryCountsLocation']['location_id'];
+				$adjust['glAccount_id']=$this->request->data['InventoryCount']['glAccount_id'];
+				if($item['difference']>0) {
+					//+ qty
+					$adjust['cost']=$this->request->data['InventoryCount'][$item_id]['cost'];
+					$adjust['vendor_id']=$this->request->data['InventoryCount'][$item_id]['vendor_id'];
+				} else {
+					//- qty
+				}//endif
+				if($this->ComputareIC->adjust($adjust)) $ok++;
+				else $fail++;
+			}//end foreach
+			if($fail==0) {
+				//ok
+				$this->Session->setFlash(__($ok.' Adjustments have been posted'),'default',array('class'=>'success'));
+				$this->redirect(array('action'=>'view',$icl['InventoryCountsLocation']['inventoryCount_id']));
+			} else {
+				//problems
+				$this->Session->setFlash(__($ok.' Adjustments have been posted, '.$fail.' did not post.'));
+			}//endif
+			
+// debug($this->request->data);debug($items);exit;
+		} else {
+			//get defaults
+//			$this->request->data['InventoryCount']['glAccount_id']=$this->ComputareGL->getSlot('issuecredit');
+		}//endif
 		//get basic data
 		$this->set('location_id',$icl['InventoryCountsLocation']['location_id']);
 		$this->set('locationName',$this->InventoryCount->Location->field('name',array('id'=>$icl['InventoryCountsLocation']['location_id'])));

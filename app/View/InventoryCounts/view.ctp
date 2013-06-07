@@ -44,6 +44,7 @@
 		<th></th>
 	</tr>
 	<?php
+		$finished=true;
 		foreach ($inventoryCount['Location'] as $location) {
 			//loop for all locations in count
 			$i = 0; 
@@ -55,11 +56,14 @@
 					if(!isset($item['curQty']))$location['Item'][$item_id]['curQty']=0;
 					if(!isset($item['cntQty']))$location['Item'][$item_id]['cntQty']=0;
 					//if either qty is unset then the count is bad
-					if(!isset($item['curQty']) || !isset($item['cntQty'])) $countBad=true;
+// 					if(!isset($item['curQty']) || !isset($item['cntQty'])) $countBad=true;
 					//if qtys not equal then count is bad
-					if(!$countBad && $item['curQty']!=$item['cntQty']) $countBad=true;
+					if($location['Item'][$item_id]['curQty']!=$location['Item'][$item_id]['cntQty']) $countBad=true;
 				}//end foreach
-				
+				if($countBad)$finished=false;
+			} else {
+				//not finsished
+				$finished=false;
 			}//endif
 			//show location on first line only
 			echo '<tr><td>'.$this->Html->link($location['name'],array('controller'=>'locations','action'=>'view',$location['id'])).'</td>';
@@ -100,12 +104,17 @@
 		}//end foreach location
 	?>
 	</table>
-<?php endif; ?>
+	<?php endif; ?>
 </div>
+<?php if(!$inventoryCount['InventoryCount']['finished']): ?>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Inventory Count Locations'), array('action' => 'edit', $inventoryCount['InventoryCount']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Locations'), array('controller' => 'locations', 'action' => 'index')); ?> </li>
+		<li><?php if($finished)echo $this->Html->link(__('Finish Inventory Count'), array('action' => 'finishCount', $inventoryCount['InventoryCount']['id']));?></li>
 	</ul>
 </div>
+<?php endif; ?>
+
+

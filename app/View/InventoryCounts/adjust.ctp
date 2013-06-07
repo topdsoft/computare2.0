@@ -39,8 +39,10 @@
 			echo '</tr>';
 		}//end foreach
 		echo '</table>';
-		echo $this->Form->input('glAccount_id',array('label'=>'GL Inventory Account for Posting'));
+		echo $this->Form->input('glAccount_id',array('label'=>'GL Counting Account for Posting'));
+		echo $this->Form->end('Submit');
 	?>
+	</fieldset>
 </div>
 <?php
 // debug($inventoryCount);?>
