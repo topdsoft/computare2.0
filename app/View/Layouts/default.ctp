@@ -41,10 +41,6 @@ $companyName = $this->Session->read('CompanyName');
 <body>
 	<div id="container">
 		<div id="header">
-			<h1><?php echo $companyName; ?></h1>
-			<h2>computāre</h2>
-		</div>
-		<div id="navwrap">
 			<div id="helpblock">
 				<?php echo $this->element('helpblock') ?>
 			</div>
@@ -54,10 +50,14 @@ $companyName = $this->Session->read('CompanyName');
 					echo $this->Html->link('Logout', array('controller'=>'users','action'=>'logout'));
 				  ?>
 			</div>
+			<div id="titleblock">
+				<h1><?php echo $companyName; ?></h1>
+				<h2>computāre</h2>
+			</div>
+		</div>
 			<div id="navigation">
 				<?php echo $this->element('menu') ?>
 			</div>
-		</div>
 		<div id="content">
 
 			<?php echo $this->Session->flash(); ?>

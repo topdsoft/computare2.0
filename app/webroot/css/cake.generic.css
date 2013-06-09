@@ -96,7 +96,7 @@ p {
 /*	padding: 10px 20px;*/
 	height:80px;
 	margin:0 auto;
-	width:751px;
+/*	width:751px;*/
 }
 #header h1 {
 	color:#888;
@@ -104,6 +104,7 @@ p {
 	letter-spacing: -3px;
 	text-align: right;
 	padding: 5px;
+	margin-top: 0px;
 	margin-bottom: -20px;
 	font-weight: bold;
 }
@@ -148,29 +149,37 @@ p {
 	width:851px;
 }
 
-#navwrap {
-	position:relative;
-}
 #loginwrap {
 	margin:50px 0px; padding:0px;
 	text-align:center;
 }
 #helpblock {
 	position: absolute;
-	left: 0;
-	top: 0;
+/*	left: 0;
+	border:1px dashed #333;
+	top: 0;*/
 	width: 180px;
-/*	border:1px dashed #333;*/
+	margin-top:10px;
+	margin-left:10px;
+	display: inline-block;
 }
 #loginblock {
 /*	position: absolute;  */
 /*	left: 0;*/
 	float: right;
 /*	top: 0;*/
-	width: 250px;
+/*	width: 250px;*/
+	display: inline-block;
+	margin-top:10px;
+	margin-right:10px;
 /*	border:1px dashed #333;*/
 }
-
+#titleblock {
+	width: 600px;
+	display: inline-block;
+	float: right;
+	margin-right: 100px;
+}
 #navigation {
 	background:#fafafa;
 /*	border-right:1px solid #999;*/
@@ -179,8 +188,8 @@ p {
 	height:40px;
 	list-style:none;
 	display:block;
-	float:right;
-	padding-right: 100px;
+	float:left;
+	padding-left: 10px;
 /*	border:1px dashed #333;*/
 }
 #navigation li {
@@ -236,6 +245,7 @@ p {
 	background: #fff;
 	color: #333;
 	overflow-x: hidden;
+	-webkit-box-shadow: 1px 1px 5px 1px #555;
 }
 #navigation li ul li{
 	display: block;

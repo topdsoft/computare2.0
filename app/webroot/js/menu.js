@@ -7,10 +7,10 @@ $(function(){
 	
 	//show drop down
 	$("#navigation li").hover( function(){
-		$('ul', this).slideDown();
+		$('ul', this).slideDown(150);
 	},
 		function() {
-			$('ul', this).slideUp();
+			$('ul', this).slideUp(150);
 		}
 	);
 	
