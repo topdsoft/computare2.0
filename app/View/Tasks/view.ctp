@@ -21,7 +21,14 @@
 			<?php echo h($task['Task']['est_hours']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Id'); ?></dt>
+		<?php if($task['Task']['sumDuration']): ?>
+			<dt><?php echo __('Hours Worked'); ?></dt>
+			<dd>
+				<?php echo h($task['Task']['sumDuration']); ?>
+				&nbsp;
+			</dd>
+		<?php endif; ?>
+		<dt><?php echo __('Task Id'); ?></dt>
 		<dd>
 			<?php echo h($task['Task']['id']); ?>
 			&nbsp;

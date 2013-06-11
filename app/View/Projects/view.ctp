@@ -39,13 +39,13 @@
 			&nbsp;
 		</dd>
 	</dl>
-</div>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Project'), array('action' => 'edit', $project['Project']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('New Task'), array('controller' => 'tasks', 'action' => 'add', $project['Project']['id'],'redirect'=>array('controller'=>'projects','action'=>'view',$project['Project']['id']))); ?> </li>
 	</ul>
+</div>
 </div>
 
 <div class="related">
@@ -56,6 +56,7 @@
 		<th><?php echo __('Task'); ?></th>
 		<th><?php echo __('Deadline'); ?></th>
 		<th><?php echo __('Est Hours'); ?></th>
+		<th><?php echo __('Worked Hours'); ?></th>
 		<th><?php echo __('Created'); ?></th>
 		<th><?php echo __('By'); ?></th>
 		<th><?php echo __('Finished'); ?></th>
@@ -69,6 +70,7 @@
 			<td><?php echo $task['name']; ?></td>
 			<td><?php echo $task['deadline']; ?></td>
 			<td><?php echo $task['est_hours']; ?></td>
+			<td><?php echo $task['sumDuration']; ?></td>
 			<td><?php echo $task['created']; ?></td>
 			<td><?php echo $users[$task['created_id']]; ?></td>
 			<td><?php echo $task['finished']; ?></td>
@@ -92,6 +94,7 @@
 		<th><?php echo __('Task'); ?></th>
 		<th><?php echo __('Deadline'); ?></th>
 		<th><?php echo __('Est Hours'); ?></th>
+		<th><?php echo __('Worked Hours'); ?></th>
 		<th><?php echo __('Created'); ?></th>
 		<th><?php echo __('By'); ?></th>
 		<th><?php echo __('Finished'); ?></th>
@@ -107,6 +110,7 @@
 			<td><?php echo $task['name']; ?></td>
 			<td><?php echo $task['deadline']; ?></td>
 			<td><?php echo $task['est_hours']; ?></td>
+			<td><?php echo $task['sumDuration']; ?></td>
 			<td><?php echo $task['created']; ?></td>
 			<td><?php echo $users[$task['created_id']]; ?></td>
 			<td><?php echo $task['finished']; ?></td>

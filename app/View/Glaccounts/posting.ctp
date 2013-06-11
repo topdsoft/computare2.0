@@ -1,6 +1,7 @@
 <div class="glaccounts posting">
 <?php echo $this->Form->create('Glaccount'); ?>
-	<h2><?php echo __('General Ledger Posting'); ?></h2>
+	<fieldset>
+	<legend><?php echo __('General Ledger Posting'); ?></legend>
 	<table>
 	<tr><th>Debit</th><th>Credit</th></tr>
 	<tr>
@@ -76,6 +77,7 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
+	</fieldset>
 </div>
 <script type='text/javascript'>
 	function formatCurrency(num) {

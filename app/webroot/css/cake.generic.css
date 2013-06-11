@@ -299,13 +299,14 @@ div.index,
 div.view {
 /*	float:right;
 	width:76%;
-	border-left:1px solid #666;*/
-	padding:10px 2%;
+	border-left:1px solid #666;
+	padding:10px 2%;*/
+	padding:0px 0px;
 }
 div.actions {
-	float:left;
+	float:right;
 	width:16%;
-	padding:10px 1.5%;
+	padding:0px 0px 10px 0px;
 }
 div.actions h3 {
 	padding-top:0;
@@ -351,7 +352,8 @@ table tr:nth-child(even) {
 	background: #f9f9f9;
 }
 td.actions {
-	text-align: center;
+/*	text-align: center;*/
+	text-align: right;
 	white-space: nowrap;
 }
 table td.actions a {
@@ -417,8 +419,9 @@ table td.actions a {
 
 /** Scaffold View **/
 dl {
+	float: left;
 	line-height: 2em;
-	margin: 0em 0em;
+	margin: 0px 0px 10px 0px;
 	width: 60%;
 }
 dl dd:nth-child(4n+2),
@@ -441,9 +444,10 @@ dd {
 /** Forms **/
 form {
 	clear: both;
-	margin-right: 20px;
 	padding: 0;
-	width: 95%;
+	margin-top: 10px;
+/*	margin-right: 20px;
+	width: 95%;*/
 }
 fieldset {
 /*	border: none;*/
