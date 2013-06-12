@@ -86,11 +86,9 @@
 	<h3><?php echo __('Task Time Records'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('User'); ?></th>
 		<th><?php echo __('Created'); ?></th>
 		<th><?php echo __('Finished'); ?></th>
-		<th><?php echo __('User Id'); ?></th>
-		<th><?php echo __('Task Id'); ?></th>
 		<th><?php echo __('Duration'); ?></th>
 		<th></th>
 	</tr>
@@ -98,16 +96,14 @@
 		$i = 0;
 		foreach ($task['TimeRecord'] as $timeRecord): ?>
 		<tr>
-			<td><?php echo $timeRecord['id']; ?></td>
+			<td><?php echo $users[$timeRecord['user_id']]; ?></td>
 			<td><?php echo $timeRecord['created']; ?></td>
 			<td><?php echo $timeRecord['finished']; ?></td>
-			<td><?php echo $timeRecord['user_id']; ?></td>
-			<td><?php echo $timeRecord['task_id']; ?></td>
 			<td><?php echo $timeRecord['duration']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'time_records', 'action' => 'view', $timeRecord['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'time_records', 'action' => 'view', $timeRecord['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('controller' => 'time_records', 'action' => 'edit', $timeRecord['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'time_records', 'action' => 'delete', $timeRecord['id']), null, __('Are you sure you want to delete # %s?', $timeRecord['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'time_records', 'action' => 'delete', $timeRecord['id']), null, __('Are you sure you want to delete # %s?', $timeRecord['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>

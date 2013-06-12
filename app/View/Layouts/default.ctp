@@ -47,7 +47,8 @@ $companyName = $this->Session->read('CompanyName');
 			<div id="loginblock">
 				<?php
 					echo 'User Id= '.$this->Session->read('Auth.User.username').'<br>';
-					echo $this->Html->link('Logout', array('controller'=>'users','action'=>'logout'));
+					echo $this->Html->link('Logout', array('controller'=>'users','action'=>'logout')).'<br>';
+					echo $this->element('timeRecordPopUp');
 				  ?>
 			</div>
 			<div id="titleblock">

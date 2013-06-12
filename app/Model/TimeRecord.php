@@ -15,7 +15,7 @@ class TimeRecord extends AppModel {
  */
 	public $useTable = 'timeRecords';
 
-
+	public $order = 'TimeRecord.id desc';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
