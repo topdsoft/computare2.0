@@ -109,12 +109,6 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('New Time Record'), array('controller' => 'time_records', 'action' => 'add')); ?> </li>
-		</ul>
-	</div>
 </div>
 <div class="related">
 	<?php if (!empty($task['User'])): ?>

@@ -17,8 +17,9 @@
 			echo '<strong>Duration:</strong>'.$duration->format('%hh %im').'<br>';
 			echo '</p>';
 			echo $this->Form->button(__('Clock Out'),array('name'=>'out'));
+			echo '<br>';
 		}//endif
-		if(!empty($tasks)) echo '<br><br>'.$this->Form->input('task_id',array('label'=>'Start New Task:','after'=>$this->Form->end('Change Task')));
+		if(!empty($tasks)) echo '<br>'.$this->Form->input('task_id',array('label'=>'Start New Task:','after'=>$this->Form->end('Change Task')));
 	?>
 	</fieldset>
 	<h3>Time Today</h3>

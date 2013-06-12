@@ -25,7 +25,7 @@
 				echo '<td>'.$task['est_hours'],'</td>';
 				echo '<td>'.$task['sumDuration'].'</td>';
 				echo '<td class="actions">';
-				echo $this->Html->link(__('View'), array('action' => 'view', $task['id']));
+				echo $this->Html->link(__('View'), array('controller'=>'tasks','action' => 'view', $task['id']));
 				echo '</td>';
 				echo '</tr>';
 			}//end foreach

@@ -16,7 +16,7 @@ class TasksController extends AppController {
 		$this->set('formName','List Tasks');
 		$this->set('add_menu',true);
 		$this->Task->recursive = 0;
-		$this->set('tasks', $this->paginate());
+		$this->set('tasks', $this->paginate(array('Task.active')));
 		$this->set('users',array(null=>'')+ClassRegistry::init('User')->find('list'));
 	}
 
@@ -69,9 +69,18 @@ class TasksController extends AppController {
 			if($project_id) $this->request->data['Task']['project_id']=$project_id;
 			$this->request->data['Task']['active']=true;
 			$this->request->data['Task']['created_id']=$this->Auth->user('id');
-debug($this->request->data);exit;
+// debug($this->request->data);exit;
 			$this->Task->create();
 			if ($this->Task->save($this->request->data)) {
+				//saved ok so set users_tasks fields
+				$task=$this->Task->read();
+				foreach($task['User'] as $user) {
+					//loop for all added users
+					$user['UsersTask']['active']=true;
+					$user['UsersTask']['created']=date('Y-m-d H:i:s');
+					$user['UsersTask']['created_id']=$this->Auth->user('id');
+					$this->Task->UsersTask->save($user['UsersTask']);
+				}//end foreach
 				$this->Session->setFlash(__('The task has been saved'),'default',array('class'=>'success'));
 				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
@@ -176,5 +185,85 @@ debug($this->request->data);exit;
 		}
 		$this->Session->setFlash(__('Task was not deleted'));
 		$this->redirect(array('action' => 'index'));
+	}
+	
+/**
+ * addUser method
+ * @param $id  task id (required)
+ * @param $user_id  (optional)
+ */
+	public function adduser($id, $user_id=null) {
+		$this->set('formName','Add User to Task');
+		//validate
+		$this->Task->id = $id;
+		if (!$this->Task->exists()) {
+			throw new NotFoundException(__('Invalid task'));
+		}
+		//get task data
+		$task=$this->Task->read();
+		if($task['Task']['finished']) {
+			//allready finished
+			$this->Session->setFlash(__('Task allready Finished so it can not be edited'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//process submit
+// debug($this->request->data);exit;
+			if($this->Task->UsersTask->field('id',array('user_id'=>$this->request->data['Task']['user_id'],'task_id'=>$id,'active'))) {
+				//allready assigned
+				$this->Session->setFlash(__('This User is allready assigned to this Task. Please, try again.'));
+			} else {
+				//ok
+				$this->Task->UsersTask->create();
+				$this->Task->UsersTask->save(array(
+					'created_id'=>$this->Auth->user('id'),
+					'user_id'=>$this->request->data['Task']['user_id'],
+					'task_id'=>$id,
+					'active'=>true,
+				));
+				$this->Session->setFlash(__('The User has been added'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'edit',$id));
+			}//endif
+		} else {
+			//set default
+			$this->request->data['Task']['user_id'] = $user_id;
+		}//endif
+		//get list of users allready assigned to task
+		$allready=$this->Task->UsersTask->find('list',array('fields'=>'user_id','conditions'=>array('task_id'=>$id,'active')));
+		$users=$this->Task->User->find('list',array('conditions'=>array('User.active','not'=>array('User.id'=>$allready))));
+		$this->set(compact('users','task'));
+	}
+	
+/**
+ * removeUser method
+ * @param $id
+ * @param $user_id
+ */
+	public function removeuser($id, $user_id) {
+		$this->set('formName','Remove User from Task');
+		//validate
+		$this->Task->id = $id;
+		if (!$this->Task->exists()) {
+			throw new NotFoundException(__('Invalid task'));
+		}
+		//get task data
+		if($this->Task->field('finished')) {
+			//allready finished
+			$this->Session->setFlash(__('Task allready Finished so it can not be edited'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		$userTask=$this->Task->UsersTask->find('first',array('conditions'=>array('user_id'=>$user_id,'task_id'=>$id,'active')));
+		if($userTask) {
+			//found ok
+			$userTask['UsersTask']['removed']=date('Y-m-d H:i:s');
+			$userTask['UsersTask']['removed_id']=$this->Auth->user('id');
+			$userTask['UsersTask']['active']=false;
+			$this->Task->UsersTask->save($userTask);
+			$this->Session->setFlash(__('The User has been removed'),'default',array('class'=>'success'));
+		} else {
+			//not assigned
+			$this->Session->setFlash(__('Not assigned to task'));
+		}//endif
+		$this->redirect(array('action' => 'edit',$id));
 	}
 }

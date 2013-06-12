@@ -67,6 +67,7 @@ h3 {
 	font-size: 165%;
 	border-bottom: 3px solid #eee;
 	line-height: 85%;
+	margin-top: 20px;
 }
 h4 {
 	color: #993;
@@ -310,6 +311,7 @@ div.actions {
 }
 div.actions h3 {
 	padding-top:0;
+	margin-top:0px;
 	color:#777;
 }
 
