@@ -37,7 +37,7 @@ class ComputareAPComponent extends Component{
 				//found existing vendor ok
 				$oldVendorDetail=$this->Vendor->VendorDetail->find('first',array('conditions'=>array('VendorDetail.id'=>$vendorDetail_id),'recursive'=>-1));
 				$oldVendorDetail['VendorDetail']['active']=false;
-				$oldVendorDetail['VendorDetail']['removed']=date('Y-m-d h:m:s');
+				$oldVendorDetail['VendorDetail']['removed']=date('Y-m-d H:i:s');
 				$oldVendorDetail['VendorDetail']['removed_id']=$this->Auth->user('id');
 				if($ok) $ok=$this->Vendor->VendorDetail->save($oldVendorDetail);
 				unset($oldVendorDetail);
@@ -98,11 +98,11 @@ class ComputareAPComponent extends Component{
 				$rec=$this->PurchaseOrder->field('rec',array('PurchaseOrder.id'=>$data['PurchaseOrder']['id']));
 				if($rec>0) $ok=false;//can't void PO with qry received
 				unset($rec);
-				$data['PurchaseOrder']['voided']=date('Y-m-d h:m:s');
+				$data['PurchaseOrder']['voided']=date('Y-m-d H:i:s');
 				$data['PurchaseOrder']['voided_id']=$this->Auth->User('id');
 			} elseif ($data['PurchaseOrder']['status']=='C') {
 				//close
-				$data['PurchaseOrder']['closed']=date('Y-m-d h:m:s');
+				$data['PurchaseOrder']['closed']=date('Y-m-d H:i:s');
 				$data['PurchaseOrder']['closed_id']=$this->Auth->User('id');
 				//do GL posting
 				$credit=0;
@@ -219,7 +219,7 @@ class ComputareAPComponent extends Component{
 			//remove a line
 			$data['PurchaseOrderDetail']['id']=$data['removeLine'];
 			$data['PurchaseOrderDetail']['removed_id']=$this->Auth->User('id');
-			$data['PurchaseOrderDetail']['removed']=date('Y-m-d h:m:s');
+			$data['PurchaseOrderDetail']['removed']=date('Y-m-d H:i:s');
 			$data['PurchaseOrderDetail']['active']=false;
 			if($ok) $ok=$this->PurchaseOrder->PurchaseOrderDetail->save($data['PurchaseOrderDetail']);
 		}//endif
@@ -258,7 +258,7 @@ class ComputareAPComponent extends Component{
 				} else {
 					//line has not yet had any qty received so remove old detail
 					$oldDetail['PurchaseOrderDetail']['active']=false;
-					$oldDetail['PurchaseOrderDetail']['removed']=date('Y-m-d h:m:s');
+					$oldDetail['PurchaseOrderDetail']['removed']=date('Y-m-d H:i:s');
 					$oldDetail['PurchaseOrderDetail']['removed_id']=$this->Auth->user('id');
 					if($ok)$ok=$this->PurchaseOrder->PurchaseOrderDetail->save($oldDetail);
 					unset($oldDetail);
@@ -365,7 +365,7 @@ class ComputareAPComponent extends Component{
 			//mark as closed
 			if($ok) $ok=$this->Invoice->save(array(
 				'status'=>'C',
-				'closed'=>date('Y-m-d h:m:s'),
+				'closed'=>date('Y-m-d H:i:s'),
 				'closed_id'=>$this->Auth->user('id')
 			));
 		}//endif

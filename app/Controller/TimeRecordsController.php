@@ -67,7 +67,7 @@ class TimeRecordsController extends AppController {
 //  debug($this->request);exit;
 			if($currentTask) {
 				//clock out from current task
-				$currentTask['TimeRecord']['finished']=date('Y-m-d h:i:s');
+				$currentTask['TimeRecord']['finished']=date('Y-m-d H:i:s');
 				$currentTask['TimeRecord']['duration']=(time()-strtotime($currentTask['TimeRecord']['created']))/60/60;
 				$this->TimeRecord->save($currentTask['TimeRecord']);
 			}//endif

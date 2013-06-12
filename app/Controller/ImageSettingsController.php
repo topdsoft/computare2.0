@@ -68,7 +68,7 @@ class ImageSettingsController extends AppController {
 				$ok=true;
 				//remove old record
 				$old=$this->ImageSetting->read();
-				$old['ImageSetting']['removed']=date('Y-m-d h:m:s');
+				$old['ImageSetting']['removed']=date('Y-m-d H:i:s');
 				$old['ImageSetting']['removed_id']=$this->Auth->user('id');
 				$old['ImageSetting']['active']=false;
 				if($ok) $ok=$this->ImageSetting->save($old);
@@ -114,7 +114,7 @@ class ImageSettingsController extends AppController {
 		//remove setting
 		if(count($this->ImageSetting->find('all',array('conditions'=>array('active'))))>1) {
 			//must be at least one directory
-			if($this->ImageSetting->save(array('active'=>false,'removed_id'=>$this->Auth->user('id'),'removed'=>date('Y-m-d h:m:s')))) {
+			if($this->ImageSetting->save(array('active'=>false,'removed_id'=>$this->Auth->user('id'),'removed'=>date('Y-m-d H:i:s')))) {
 				//removed ok
 				$this->Session->setFlash(__('Image setting deleted'));
 				$this->redirect(array('action' => 'index'));

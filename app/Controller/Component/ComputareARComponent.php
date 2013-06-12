@@ -66,12 +66,12 @@ class ComputareARComponent extends Component{
 		if(isset($data['SalesOrder']['id'])) {
 			if($data['SalesOrder']['status']=='C') {
 				//clsoe sales order
-				$data['SalesOrder']['closed']=date('Y-m-d h:m:s');
+				$data['SalesOrder']['closed']=date('Y-m-d H:i:s');
 				$data['SalesOrder']['closed_id']=$this->Auth->user('id');
 			}//endif
 			if($data['SalesOrder']['status']=='V') {
 				//void sales order
-				$data['SalesOrder']['voided']=date('Y-m-d h:m:s');
+				$data['SalesOrder']['voided']=date('Y-m-d H:i:s');
 				$data['SalesOrder']['voided_id']=$this->Auth->user('id');
 			}//endif
 		}//endif
@@ -125,7 +125,7 @@ class ComputareARComponent extends Component{
 		//remove line
 		$saveData=array('id'=>$id);
 		$saveData['active']=false;
-		$saveData['removed']=date('Y-m-d h:m:s');
+		$saveData['removed']=date('Y-m-d H:i:s');
 		$saveData['removed_id']=$this->Auth->user('id');
 		return $this->SalesOrderDetail->save($saveData);
 	}
@@ -170,7 +170,7 @@ class ComputareARComponent extends Component{
 							if($p['qty']!=$record['CustomersItem']['qty']  || $p['price']!= $record['CustomersItem']['price']){
 								//need to remove old record and add new
 								$record['CustomersItem']['active']=false;
-								$record['CustomersItem']['deleted']=date('Y-m-d h:m:s');
+								$record['CustomersItem']['deleted']=date('Y-m-d H:i:s');
 								$record['CustomersItem']['deleted_id']=$this->Auth->user('id');
 								if($ok) $ok=$this->CustomersItem->save($record);
 								//create new record
@@ -209,7 +209,7 @@ class ComputareARComponent extends Component{
 							if($p['qty']!=$record['CustomerGroupsItem']['qty']  || $p['price']!= $record['CustomerGroupsItem']['price']){
 								//need to remove old record and add new
 								$record['CustomerGroupsItem']['active']=false;
-								$record['CustomerGroupsItem']['deleted']=date('Y-m-d h:m:s');
+								$record['CustomerGroupsItem']['deleted']=date('Y-m-d H:i:s');
 								$record['CustomerGroupsItem']['deleted_id']=$this->Auth->user('id');
 								if($ok) $ok=$this->CustomerGroupsItem->save($record);
 								//create new record
@@ -246,7 +246,7 @@ class ComputareARComponent extends Component{
 						if($p['qty']!=$record['CustomerGroupsItem']['qty']  || $p['price']!= $record['CustomerGroupsItem']['price']){
 							//need to remove old record and add new
 							$record['CustomerGroupsItem']['active']=false;
-							$record['CustomerGroupsItem']['deleted']=date('Y-m-d h:m:s');
+							$record['CustomerGroupsItem']['deleted']=date('Y-m-d H:i:s');
 							$record['CustomerGroupsItem']['deleted_id']=$this->Auth->user('id');
 							if($ok) $ok=$this->CustomerGroupsItem->save($record);
 							//create new record

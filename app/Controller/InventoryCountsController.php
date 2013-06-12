@@ -222,7 +222,7 @@ class InventoryCountsController extends AppController {
 			$this->Session->setFlash(__('The count is marked as completed'));
 			$this->redirect(array('action' => 'index'));
 		}//endif
-		$count['InventoryCount']['finished']=date('Y-m-d h:m:s');
+		$count['InventoryCount']['finished']=date('Y-m-d H:i:s');
 		$count['InventoryCount']['active']=false;
 		$this->InventoryCount->save($count);
 #TODO unlock
@@ -249,7 +249,7 @@ class InventoryCountsController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}//endif
 // debug($icl);exit;
-		$icl['InventoryCountsLocation']['finished']=date('Y-m-d h:m:s');
+		$icl['InventoryCountsLocation']['finished']=date('Y-m-d H:i:s');
 		$icl['InventoryCountsLocation']['finished_id']=$this->Auth->user('id');
 		if($this->InventoryCount->InventoryCountsLocation->save($icl)) {
 			//saved ok

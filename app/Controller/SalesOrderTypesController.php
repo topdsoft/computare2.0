@@ -60,7 +60,7 @@ class SalesOrderTypesController extends AppController {
 		}
 		$sotype=$this->SalesOrderType->read(null,$id);
 		$sotype['SalesOrderType']['active']=false;
-		$sotype['SalesOrderType']['removed']=date('Y-m-d h:m:s');
+		$sotype['SalesOrderType']['removed']=date('Y-m-d H:i:s');
 		$sotype['SalesOrderType']['active']=false;
 		if ($this->SalesOrderType->delete()) {
 			$this->Session->setFlash(__('Sales order type deleted'));

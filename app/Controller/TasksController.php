@@ -133,7 +133,7 @@ debug($this->request->data);exit;
 			$this->Session->setFlash(__('Task allready Finished'));
 			$this->redirect(array('action' => 'index'));
 		}//endif
-		$task['Task']['finished']=date('Y-m-d h:m:s');
+		$task['Task']['finished']=date('Y-m-d H:i:s');
 		$task['Task']['finished_id']=$this->Auth->user('id');
 		if ($this->Task->save($task)) {
 			$this->Session->setFlash(__('Task marked Finished'),'default',array('class'=>'success'));
@@ -167,7 +167,7 @@ debug($this->request->data);exit;
 			$this->Session->setFlash(__('Task allready Finished so it can not be Removed'));
 			$this->redirect(array('action' => 'index'));
 		}//endif
-		$task['Task']['removed']=date('Y-m-d h:m:s');
+		$task['Task']['removed']=date('Y-m-d H:i:s');
 		$task['Task']['removed_id']=$this->Auth->user('id');
 		$task['Task']['active']=false;
 		if ($this->Task->save($task)) {

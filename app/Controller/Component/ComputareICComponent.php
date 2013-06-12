@@ -718,7 +718,7 @@ class ComputareICComponent extends Component{
 			if($lock['InventoryLock']['created_id']!=$this->Auth->user('id') && $this->Auth->user('id')!=1) $ok=false;
 			if($ok) {
 				//close lock
-				$lock['InventoryLock']['removed']=date('Y-m-d h:m:s');
+				$lock['InventoryLock']['removed']=date('Y-m-d H:i:s');
 				$lock['InventoryLock']['removed_id']=$this->Auth->user('id');
 				$lock['InventoryLock']['active']=false;
 				if(isset($data['notes'])) $lock['InventoryLock']['notes']=$data['notes'];

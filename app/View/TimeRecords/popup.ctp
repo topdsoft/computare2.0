@@ -12,7 +12,7 @@
 			echo '<strong>Current Task:</strong>'.$currentTask['Task']['name'].'<br>';
 			echo '<strong>Clocked In:</strong>'.date($currentTask['User']['date_time_format'],strtotime($currentTask['TimeRecord']['created'])).'<br>';
 			$dt=new DateTime($currentTask['TimeRecord']['created']);
-			$dt2=new DateTime(date('Y-m-d h:i:s'));
+			$dt2=new DateTime(date('Y-m-d H:i:s'));
 			$duration=$dt->diff($dt2);
 			echo '<strong>Duration:</strong>'.$duration->format('%hh %im').'<br>';
 			echo '</p>';

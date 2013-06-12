@@ -57,7 +57,7 @@ class StockLevelsController extends AppController {
 			if($old) {
 				//allready a stock level here
 				$old['StockLevel']['active']=false;
-				$old['StockLevel']['removed']=date('Y-m-d h:m:s');
+				$old['StockLevel']['removed']=date('Y-m-d H:i:s');
 				$old['StockLevel']['removed_id']=$this->Auth->user('id');
 				$this->StockLevel->save($old);
 			}//endif
