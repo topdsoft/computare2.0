@@ -37,9 +37,39 @@ class SalesOrderTypesController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The sales order type could not be saved. Please, try again.'));
 			}
-		}
+		}//endif
+		//get lists
+		$locations=$this->SalesOrderType->Location->generateTreeList(null,null,null,' - ');
+		$glaccounts=$this->SalesOrderType->Glaccount->find('list');
+		$this->set(compact('locations','glaccounts'));
 	}
 
+/**
+ * edit method
+ * @param $id
+ */
+	public function edit($id=null) {
+		$this->set('formName','Edit Sales Order Type');
+		//validate
+		$this->SalesOrderType->id = $id;
+		if (!$this->SalesOrderType->exists()) {
+			throw new NotFoundException(__('Invalid sales order type'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+// debug($this->request->data);exit;
+			if ($this->SalesOrderType->save($this->request->data)) {
+				$this->Session->setFlash(__('The Sales Order Type has been saved'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The Sales Order Type could not be saved. Please, try again.'));
+			}
+		} else {
+			//get data
+			$this->request->data = $this->SalesOrderType->read(null, $id);
+		}//endif
+		//get locations
+		$this->set('locations',$this->SalesOrderType->Location->generateTreeList(null,null,null,' - '));
+	}
 
 /**
  * delete method

@@ -21,6 +21,22 @@ class SalesOrderType extends AppModel {
 	public $displayField = 'name';
 
 /**
+ * belongsTo associations
+ *
+ * @var array
+ */
+	public $belongsTo = array(
+		'Location' => array(
+			'className' => 'Location',
+			'foreignKey' => 'location_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
+		'Glaccount'
+	);
+
+/**
  * Validation rules
  *
  * @var array
@@ -29,14 +45,14 @@ class SalesOrderType extends AppModel {
 		'name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
-				//'message' => 'Your custom message here',
+				'message' => 'Please enter a name here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
-		'shipping' => array(
+/*		'shipping' => array(
 			'boolean' => array(
 				'rule' => array('boolean'),
 				//'message' => 'Your custom message here',
@@ -45,6 +61,6 @@ class SalesOrderType extends AppModel {
 				//'last' => false, // Stop validation after this rule
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
-		),
+		),*/
 	);
 }
