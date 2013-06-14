@@ -7,9 +7,9 @@
 		echo "<p>Customer: ".$this->Html->link($this->data['Customer']['name'],array('controller'=>'customers','action'=>'view',$this->data['Customer']['id'])).'</p>';
 		echo '<p>Sales Order Type: <strong title="'.$this->data['SalesOrderType']['description'].'">'.$this->data['SalesOrderType']['name'].'</strong></p>';
 		echo '<h3>Merchandise</h3>';
+		$productTotal=$qtyTotal=$taxTotal=$serviceTotal=0;
 		if($this->data['ItemDetail']){
 			//show items
-			$productTotal=$qtyTotal=$taxTotal=0;
 			echo '<table><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th>Tax</th><th></th></tr>';
 			foreach($this->data['ItemDetail'] as $detail) {
 			    //loop for all item details
@@ -33,7 +33,6 @@
 		echo '<h3>Services</h3>';
 		if($this->data['ServiceDetail']) {
 			//show services
-			$serviceTotal=0;
 			echo '<table><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Total</th><th>Tax</th><th></th></tr>';
 			foreach($this->data['ServiceDetail'] as $detail) {
 			    //loop for all service details

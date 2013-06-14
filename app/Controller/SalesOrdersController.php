@@ -99,12 +99,15 @@ class SalesOrdersController extends AppController {
 			$this->request->data['SalesOrder']['created_id']=$this->Auth->user('id');
 			$this->request->data['SalesOrder']['status']='O';
 			if ($this->ComputareAR->saveSO($this->request->data)) {
-				$this->Session->setFlash(__('The sales order has been saved'),'default',array('class'=>'success'));
-				$this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(__('The sales order has been started'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'edit',$this->SalesOrder->getInsertId()));
 			} else {
 				$this->Session->setFlash(__('The sales order could not be saved. Please, try again.'));
 			}
-		}
+		} else {
+			//check for defaults
+			if(isset($this->passedArgs['customer_id'])) $this->request->data['SalesOrder']['customer_id']=$this->passedArgs['customer_id'];
+		}//endif
 		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list',array('conditions'=>array('active')));
 		if(!$salesOrderTypes) {
 			//must first have SO types
@@ -201,8 +204,28 @@ class SalesOrdersController extends AppController {
 			}//endif
 		} else {
 			$this->request->data = $SO;
-		}
-		$items=ClassRegistry::init('Item')->find('list');
+		}//endif
+		//get list of items
+		$this->Item=ClassRegistry::init('Item');
+		if($SO['SalesOrderType']['stock_required']) {
+			//only show items that have stock
+			$this->Location=ClassRegistry::init('Location');
+			//get list of locations that item can come from
+			$rght=$this->Location->field('rght',array('Location.id'=>$SO['SalesOrderType']['location_id']));
+			$lft=$this->Location->field('lft',array('Location.id'=>$SO['SalesOrderType']['location_id']));
+			$locationsList=$this->Location->find('list',array('fields'=>'Location.id','conditions'=>array('Location.lft <='=>$rght,'Location.lft >='=>$lft)));
+			unset($rght);
+			unset($lft);
+			//find all items at these locations
+			$itemsList=$this->Item->ItemsLocation->find('list',array('fields'=>'item_id','conditions'=>array('location_id'=>$locationsList)));
+			$items=$this->Item->find('list',array('conditions'=>array('Item.id'=>$itemsList)));
+			unset($itemsList);
+			unset($locationsList);
+// debug($itemsList);
+		} else {
+			//can include any active item
+			$items=$this->Item->find('list',array('conditions'=>array('Item.active')));
+		}//endif
 		$this->set(compact('items'));
 	}
 

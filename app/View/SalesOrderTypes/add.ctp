@@ -7,6 +7,7 @@
 		echo $this->Form->input('shipping',array('label'=>'Use shipping'));
 		echo $this->Form->input('taxable');
 		echo $this->Form->input('on_account');
+		echo $this->Form->input('stock_required');
 		echo $this->Form->input('location_id');
 		echo $this->Form->input('action');
 		echo $this->Form->input('glaccount_id');

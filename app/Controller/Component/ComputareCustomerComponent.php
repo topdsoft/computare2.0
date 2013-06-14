@@ -16,7 +16,7 @@ class ComputareCustomerComponent extends Component {
 		//get models
 		$this->Customer=ClassRegistry::init('Customer');
 		$this->CustomerDetail=ClassRegistry::init('CustomerDetail');
-		$this->Address=ClassRegistry::init('Address');
+		$this->Addresses=ClassRegistry::init('Addresses');
 		$ok=true;
 		$dataSource=$this->Customer->getDataSource();
 		//start transaction
@@ -57,6 +57,13 @@ class ComputareCustomerComponent extends Component {
 			$toSave['customerDetail_id']=$customerDetail_id;
 			if(isset($data['CustomerDetail']['customerGroup_id'])) $toSave['customerGroup_id']=$data['CustomerDetail']['customerGroup_id'];
 			if($ok) $ok=$this->Customer->save($toSave);
+			if(isset($data['CustomerDetail']['address1']) && $data['CustomerDetail']['address1']!='') {
+				//save address
+				$data['CustomerDetail']['active']=true;
+				$data['CustomerDetail']['name']='Default';
+				if($ok) $this->Addresses->create();
+				if($ok) $ok=$this->Addresses->save($data['CustomerDetail']);
+			}//end if
 		}//endif
 		if($ok)$dataSource->commit();
 		else $dataSource->rollback();

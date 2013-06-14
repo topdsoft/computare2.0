@@ -63,34 +63,33 @@
 &nbsp;</dd>
 		<dt><?php echo __('Notes'); ?></dt>
 		<dd>
-	<?php echo $customer['CustomerDetail']['notes']; ?>
+	<?php echo nl2br($customer['CustomerDetail']['notes']); ?>
 &nbsp;</dd>
-	</dl>
 <?php
 	if($customer['Address']) {
 		//list addresses
-		echo '<h3>Adresses</h3>';
+		echo '<h3>Addresses</h3>';
 		foreach ($customer['Address'] as $address) {
 			//loop for all addresses
+// 			echo '<dl>';
 			echo '<h4>'.$address['name'].'</h4>';
-			echo '<dl>';
 			echo '<dt>'.__('Line1').'</dt>';
-			echo '<dd>'.$address['line1'].'</dd>';
+			echo '<dd>'.$address['line1'].'&nbsp;</dd>';
 			echo '<dt>'.__('Line2').'</dt>';
-			echo '<dd>'.$address['line2'].'</dd>';
+			echo '<dd>'.$address['line2'].'&nbsp;</dd>';
 			echo '<dt>'.__('City').'</dt>';
-			echo '<dd>'.$address['city'].'</dd>';
+			echo '<dd>'.$address['city'].'&nbsp;</dd>';
 			echo '<dt>'.__('State').'</dt>';
-			echo '<dd>'.$address['state'].'</dd>';
+			echo '<dd>'.$address['state'].'&nbsp;</dd>';
 			echo '<dt>'.__('Zip').'</dt>';
-			echo '<dd>'.$address['zip'].'</dd>';
-			echo '</dl>';
+			echo '<dd>'.$address['zip'].'&nbsp;</dd>';
+// 			echo '</dl>';
 		}//foreach
 	}//enidf
 ?>
 <?php //debug($customer);
 	echo $this->element('revisionblock',array('data'=>$customer,'ignore'=>array('id','created','created_id')));
-?>
+?></dl>
 </div><br>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>

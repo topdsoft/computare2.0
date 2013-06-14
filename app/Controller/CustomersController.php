@@ -101,6 +101,15 @@ class CustomersController extends AppController {
 			$this->request->data['CustomerDetail']['created_id']=$this->Auth->user('id');
 			if ($this->ComputareCustomer->save($this->request->data)){
 				$this->Session->setFlash(__('The customer has been saved'),'default',array('class'=>'success'));
+				//check for redirect
+				if(isset($this->passedArgs['redirect'])) {
+					//will redirect-check special cases
+					if($this->passedArgs['redirect']['controller']=='salesOrders' && $this->passedArgs['redirect']['action']=='add') {
+						//add new customer_id
+						$this->passedArgs['redirect']['customer_id']=$this->Customer->getInsertId();
+					}//endif
+					$this->redirect($this->passedArgs['redirect']);
+				}//endif
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The customer could not be saved. Please, try again.'));
@@ -108,9 +117,8 @@ class CustomersController extends AppController {
 		} else {
 			$this->request->data = $this->Customer->read(null, $id);
 		}
-		$customerGroups=$this->Customer->CustomerGroup->find('list');
-		$customerGroups[0]='(none)';
-		$this->set('customerGroups',$customerGroups);
+		$customerGroups=array(null=>'(none)')+$this->Customer->CustomerGroup->find('list');
+		$this->set(compact('customerGroups'));
 	}
 
 /**

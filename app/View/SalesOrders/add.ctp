@@ -10,4 +10,10 @@
 	</fieldset>
 <?php  ?>
 </div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('New Customer'), array('controller'=>'customers','action' => 'edit','redirect'=>array('controller'=>'salesOrders','action'=>'add'))); ?> </li>
+	</ul>
+</div>
 <script type='text/javascript'>document.getElementById('sc').focus();</script>

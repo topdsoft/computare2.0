@@ -29,6 +29,7 @@ class ComputareICComponent extends Component{
 			//editing existing item
 		} else {
 			//creating new item
+			$data['Item']['active']=true;
 			if($ok) $ok=$this->Item->save($data['Item']);
 			if($ok) $data['Item']['id']=$this->Item->getInsertId();
 		}//endif
