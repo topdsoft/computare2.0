@@ -135,6 +135,7 @@ class InventoryCountsController extends AppController {
  */
 	public function count($id) {
 		//validate id
+		$this->set('formName','Count Inventory');
 		$this->InventoryCount->id = $id;
 		$count=$this->InventoryCount->read();
 		if(!$count) {
@@ -210,6 +211,7 @@ class InventoryCountsController extends AppController {
  */
 	public function finishCount($id) {
 		//validate
+		$this->set('formName','Finish Count');
 		$this->InventoryCount->id = $id;
 		$count=$this->InventoryCount->read();
 		if(!$count) {
@@ -236,6 +238,7 @@ class InventoryCountsController extends AppController {
  * @param $inventoryCountsLocation_id  to finish
  */
 	public function finish($inventoryCountsLocation_id) {
+		$this->set('formName','Finish Counting Location');
 		//validate
 		$icl=$this->InventoryCount->InventoryCountsLocation->find('first',array('recursive'=>-1,'conditions'=>array('id'=>$inventoryCountsLocation_id)));
 		if(!$icl) {

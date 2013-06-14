@@ -4,6 +4,7 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
+			<th><?php echo $this->Paginator->sort('since'); ?></th>
 			<th><?php echo $this->Paginator->sort('filename'); ?></th>
 	</tr>
 	<?php
@@ -11,6 +12,7 @@
 	<tr>
 		<td><?php echo h($backup['Backup']['created']); ?>&nbsp;</td>
 		<td><?php echo $users[$backup['Backup']['created_id']]; ?>&nbsp;</td>
+		<td><?php echo h($backup['Backup']['since']); ?>&nbsp;</td>
 		<td><?php echo '<a href="'.$backup['Backup']['filename'].'" title="Click here to download backup file."
 			>'.$backup['Backup']['filename'].'</a>';?>&nbsp;</td> 
 	</tr>

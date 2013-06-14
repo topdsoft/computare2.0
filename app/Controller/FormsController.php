@@ -73,11 +73,12 @@ class FormsController extends AppController {
 		);
 		//submit filters
 		$this->_useFilter($filters);
-//debug($this->conditions);exit;
 		$this->Form->recursive = 0;
 		$this->set('forms', $this->paginate('Form',$this->conditions));
 		//get users list
 		$this->set('usersList',$this->Form->User->find('list'));
+		//set redirect
+		$this->set('redirect',array('controller'=>'forms','action'=>'index')+$this->request->params['named']);
 	}
 
 /**
@@ -137,6 +138,7 @@ class FormsController extends AppController {
 // debug($this->request->data);exit;
 			if ($this->Form->save($this->request->data)) {
 				$this->Session->setFlash(__('The form has been saved'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The form could not be saved. Please, try again.'));
