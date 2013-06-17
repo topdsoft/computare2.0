@@ -130,6 +130,29 @@ class ComputareARComponent extends Component{
 		return $this->SalesOrderDetail->save($saveData);
 	}
 	
+	/** method completeSale
+	 * used to invoice a sale and update AP and or inventory
+	 * @param $data array(
+		* ['SalesOrderType'] => array (
+			* 'on_account'  t/f
+			* 'shipping'   t/f
+		* )
+		* ['SalesOrder'] => array (
+			* 'id'
+			* 'shipping'  shipping amount  (optional)
+			* 'paymentType_id'
+			* 'expense'  payment expense amount (optional)
+			* 'identification'  payment identification  (optional  ex: check#)
+		* )
+	 * )
+	 * @returns t/f
+	 */
+	public function completeSale($data) {
+		$this->SalesOrder=ClassRegistry::init('SalesOrder');
+debug($data);exit;
+		
+	}
+	
 	/**
 	 * method setItemPrice
 	 * used to setup pricing on items to be sold

@@ -9,7 +9,8 @@
 		echo'<br><br>';
 		echo $this->Form->input('shipping');
 		echo $this->Form->input('tax');
-		if($this->data['PurchaseOrder']['onAccount']) echo $this->Form->input('number',array('label'=>'Vendor PO Number'));
+		echo $this->Form->input('due',array('label'=>'Payment Due (optional)','after'=>$this->element('calendarPopUp',array('inputId'=>'PurchaseOrderDue'))));
+		if($this->data['PurchaseOrder']['onAccount']) echo $this->Form->input('number',array('label'=>'Vendor PO Number (optional)'));
 	?>
 
 	<h3><?php echo __('Purchase Order Details'); ?></h3>

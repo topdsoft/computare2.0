@@ -31,6 +31,8 @@ class SalesOrderTypesController extends AppController {
 			$this->SalesOrderType->create();
 			$this->request->data['SalesOrderType']['active']=true;
 			$this->request->data['SalesOrderType']['created_id']=$this->Auth->user('id');
+			//due days is only set for an account types
+			if(!$this->request->data['SalesOrderType']['on_account']) unset($this->request->data['SalesOrderType']['due_days']);
 			if ($this->SalesOrderType->save($this->request->data)) {
 				$this->Session->setFlash(__('The sales order type has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));

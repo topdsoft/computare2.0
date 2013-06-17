@@ -6,6 +6,7 @@
 		echo $this->Form->input('name');
 		echo $this->Form->input('shipping',array('label'=>'Use shipping'));
 		echo $this->Form->input('taxable');
+		echo $this->Form->input('due_days',array('label'=>'Due Days (For sales on account)'));
 		echo $this->Form->input('on_account');
 		echo $this->Form->input('stock_required');
 		echo $this->Form->input('location_id');

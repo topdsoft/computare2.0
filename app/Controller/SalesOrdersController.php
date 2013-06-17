@@ -309,6 +309,52 @@ class SalesOrdersController extends AppController {
 		}
 	}
 
+/**
+ * complete method
+ * @param $id
+ * 
+ * used to close SO and invoice customer
+ */
+	public function complete($id=null) {
+		$this->set('formName','Complete Sale');
+		$this->SalesOrder->id = $id;
+		if (!$this->SalesOrder->exists()) {
+			throw new NotFoundException(__('Invalid sales order'));
+		}
+		$SO=$this->SalesOrder->read(null, $id);
+		if($SO['SalesOrder']['status']!='O') {
+			//only open SO can be completed
+			$this->Session->setFlash(__('Only Sales Orders with status of Open can be Completed.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//process return from form
+			if($this->request->data['SalesOrderType']['on_account']) {
+				//process sale on account
+			} else {
+				//process cash sale
+				if(isset($this->request->data['SalesOrder']['done'])) {
+					//finish transaction
+					$this->ComputareAR->completeSale($this->request->data);
+// debug($this->request->data);exit;
+				} else {
+					//get fee or identification data
+					$SO['SalesOrder']['paymentType_id']=$this->request->data['SalesOrder']['paymentType_id'];
+					if(isset($this->request->data['SalesOrder']['shipping']))$SO['SalesOrder']['shipping']=$this->request->data['SalesOrder']['shipping'];
+					$this->request->data = $SO;
+					//get parameters for payment type
+					$this->set('paymentType',ClassRegistry::init('PaymentType')->read(null,$SO['SalesOrder']['paymentType_id']));
+				}//endif
+			}//endif
+		} else {
+			$this->request->data = $SO;
+		}
+		$items=ClassRegistry::init('Item')->find('list');
+		$services=ClassRegistry::init('Service')->find('list');
+		$servicesPricing=ClassRegistry::init('Service')->find('list',array('fields'=>array('id','pricing')));
+		$paymentTypes=ClassRegistry::init('PaymentType')->find('list');
+		$this->set(compact('items','services','servicesPricing','paymentTypes'));
+	}
 
 /**
  * delete method

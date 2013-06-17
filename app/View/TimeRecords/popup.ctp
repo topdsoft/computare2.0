@@ -5,6 +5,7 @@
 		<legend><?php echo __('Time Record User: '.$user['User']['username']); ?></legend>
 	<?php 
 		echo '<p><strong>System Time: </strong>'.$currentTime.'</p>';
+		$submitLabel='Start Task';
 		if($currentTask) {
 			//show task user is working on
 			echo '<p>';
@@ -18,8 +19,9 @@
 			echo '</p>';
 			echo $this->Form->button(__('Clock Out'),array('name'=>'out'));
 			echo '<br>';
+			$submitLabel='Change Task';
 		}//endif
-		if(!empty($tasks)) echo '<br>'.$this->Form->input('task_id',array('label'=>'Start New Task:','after'=>$this->Form->end('Change Task')));
+		if(!empty($tasks)) echo '<br>'.$this->Form->input('task_id',array('label'=>'Start New Task:','after'=>$this->Form->end($submitLabel)));
 	?>
 	</fieldset>
 	<h3>Time Today</h3>

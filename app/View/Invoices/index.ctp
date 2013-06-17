@@ -9,6 +9,7 @@
 			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
 			<th><?php echo $this->Paginator->sort('closed'); ?></th>
 			<th><?php echo $this->Paginator->sort('closed_id','By'); ?></th>
+			<th><?php echo $this->Paginator->sort('due'); ?></th>
 			<th><?php echo $this->Paginator->sort('customer_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('salesOrder_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('vendor_id'); ?></th>
@@ -25,6 +26,7 @@
 		<td><?php echo $users[$invoice['Invoice']['created_id']]; ?>&nbsp;</td>
 		<td><?php echo h($invoice['Invoice']['closed']); ?>&nbsp;</td>
 		<td><?php echo $users[$invoice['Invoice']['closed_id']]; ?>&nbsp;</td>
+		<td><?php echo h($invoice['Invoice']['due']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($invoice['Customer']['name'], array('controller' => 'customers', 'action' => 'view', $invoice['Customer']['id'])); ?>
 		</td>
@@ -64,9 +66,9 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('List Customers'), array('controller' => 'customers', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
+		<li><?//php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Vendors'), array('controller' => 'vendors', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Vendor'), array('controller' => 'vendors', 'action' => 'add')); ?> </li>
+		<li><?//php echo $this->Html->link(__('New Vendor'), array('controller' => 'vendors', 'action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Purchase Orders'), array('controller' => 'purchase_orders', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Sales Orders'), array('controller' => 'sales_orders', 'action' => 'index')); ?> </li>
 	</ul>

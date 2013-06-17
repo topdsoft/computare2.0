@@ -175,6 +175,7 @@ class ComputareAPComponent extends Component{
 						if($ok) $this->Invoice->create();
 						if($ok) $ok=$this->Invoice->save(array(
 							'number'=>$data['PurchaseOrder']['number'],
+							'due'=>$data['PurchaseOrder']['due'],
 							'vendor_id'=>$vendor_id,
 							'purchaseOrder_id'=>$data['PurchaseOrder']['id'],
 							'created_id'=>$this->Auth->user('id'),

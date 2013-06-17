@@ -83,5 +83,7 @@ class TimeRecordsController extends AppController {
 		}//endif
  		$this->layout='popup';
 		$this->set(compact('user','currentTime','timeRecords','currentTask','tasks','projects'));
+		//find users last task and make default
+		$this->request->data['task_id']=$this->TimeRecord->field('task_id',array('user_id'=>$this->Auth->user('id')));
 	}
 }

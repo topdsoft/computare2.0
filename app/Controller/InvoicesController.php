@@ -18,7 +18,7 @@ class InvoicesController extends AppController {
 		$this->set('menu_add',true);
 		$this->Invoice->recursive = 0;
 		$this->set('invoices', $this->paginate());
-		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('users',array(null=>'')+ClassRegistry::init('User')->find('list'));
 	}
 
 /**

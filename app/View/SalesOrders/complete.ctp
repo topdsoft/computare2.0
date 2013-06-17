@@ -1,7 +1,7 @@
 <div class="salesOrders form">
 <?php echo $this->Form->create('SalesOrder'); ?>
 	<fieldset>
-		<legend><?php echo __('Edit Sales Order: ').$this->Form->value('SalesOrder.id'); ?></legend>
+		<legend><?php echo __('Complete Sales Order: ').$this->Form->value('SalesOrder.id'); ?></legend>
 	<?php
 // debug($this->data);
 		echo "<p>Customer: ".$this->Html->link($this->data['Customer']['name'],array('controller'=>'customers','action'=>'view',$this->data['Customer']['id'])).'</p>';
@@ -10,7 +10,7 @@
 		$productTotal=$qtyTotal=$taxTotal=$serviceTotal=0;
 		if($this->data['ItemDetail']){
 			//show items
-			echo '<table><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th>Tax</th><th></th></tr>';
+			echo '<table><tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th><th>Tax</th></tr>';
 			foreach($this->data['ItemDetail'] as $detail) {
 			    //loop for all item details
 			    echo '<tr>';
@@ -22,18 +22,15 @@
 			    echo '<td>'.number_format($detail['price']*$detail['qty'],2).'</td>';
 			    echo '<td>'.$detail['tax'].'</td>';
 			    $taxTotal+=$detail['tax'];
-				echo '<td class="actions">';
-					echo $this->Html->link(__('Remove'), array('action' => 'removeline', $detail['id']),null, 'Are you sure you want to remove product: '.$items[$detail['item_id']].' ?');
-				echo '</td>';
 			    echo '</tr>';
 			}//endiforeach
-			echo '<tr class="total"><th>Merchandise Total</th><th>'.$qtyTotal.'</th><th></th><th>'.number_format($productTotal,2).'</th><th></th><th></th></tr>';
+			echo '<tr class="total"><th>Merchandise Total</th><th>'.$qtyTotal.'</th><th></th><th>'.number_format($productTotal,2).'</th><th></th></tr>';
 			echo '</table>';
 		}//endif
 		echo '<h3>Services</h3>';
 		if($this->data['ServiceDetail']) {
 			//show services
-			echo '<table><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Total</th><th>Tax</th><th></th></tr>';
+			echo '<table><tr><th>Service</th><th>Qty</th><th>Rate</th><th>Total</th><th>Tax</th></tr>';
 			foreach($this->data['ServiceDetail'] as $detail) {
 			    //loop for all service details
 // debug($detail);
@@ -49,12 +46,9 @@
 			    $serviceTotal+=($detail['price']*$detail['qty']);
 			    echo '<td>'.$detail['tax'].'</td>';
 			    $taxTotal+=$detail['tax'];
-				echo '<td class="actions">';
-					echo $this->Html->link(__('Remove'), array('action' => 'removeline', $detail['id']),null, 'Are you sure you want to remove service: '.$services[$detail['service_id']].' ?');
-				echo '</td>';
 			    echo '</tr>';
 			}//endiforeach
-			echo '<tr class="total"><th>Service Total</th><th></th><th></th><th>'.number_format($serviceTotal,2).'</th><th></th><th></th></tr>';
+			echo '<tr class="total"><th>Service Total</th><th></th><th></th><th>'.number_format($serviceTotal,2).'</th><th></th></tr>';
 			
 			echo '</table>';
 		}//endif
@@ -66,14 +60,37 @@
 	<tr><td>Tax Sub total</td><td><?php echo number_format($taxTotal,2); ?></td></tr>
 	<tr class="total"><th>Grand Total</th><th><?php echo number_format($productTotal+$serviceTotal+$taxTotal,2); ?></th></tr>
 	</table>
-	<?php echo $this->Form->end(__('Done')); ?>
+	<?php 
+		echo $this->Form->input('SalesOrderType.on_account',array('type'=>'hidden'));
+		echo $this->Form->input('SalesOrderType.shipping',array('type'=>'hidden'));
+		echo $this->Form->input('id');
+		if($this->data['SalesOrderType']['shipping']) {
+			//get shipping
+			echo $this->Form->input('shipping');
+		}//endif
+		if($this->data['SalesOrderType']['on_account']) {
+			//sale is on account
+			echo '<p><strong>Sale will be on account.  Click Submit to invoice customer.</strong></p>';
+			echo $this->Form->end(__('Submit'));
+		} else {
+			//sale is not on account
+			if(isset($this->data['SalesOrder']['paymentType_id'])) {
+				//payment type selected
+				echo '<p>Payment Type:<strong>'.$paymentTypes[$this->data['SalesOrder']['paymentType_id']].'</strong></p>';
+				echo $this->Form->input('paymentType_id',array('type'=>'hidden'));
+				echo $this->Form->input('done',array('type'=>'hidden'));
+// debug($paymentType);
+				if($paymentType['PaymentType']['identification_label']) echo $this->Form->input('identification',array('label'=>$paymentType['PaymentType']['identification_label']));
+				if($paymentType['PaymentType']['gl_expense_account_id']) echo $this->Form->input('expense',array('label'=>'Payment Expense'));
+				echo $this->Form->end(__('Complete Sale')); 
+			} else {
+				//select payment type
+				echo $this->Form->input('paymentType_id');
+				echo $this->Form->end(__('Select Payment Type')); 
+			}//endif
+		}//ednif
+// debug($this->data);
+	?>
 	</fieldset>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Product Line'), array('action' => 'addproduct',$this->Form->value('SalesOrder.id'))); ?> </li>
-		<li><?php echo $this->Html->link(__('New Service Line'), array('action' => 'addservice',$this->Form->value('SalesOrder.id'))); ?> </li>
-		<li><?php echo $this->Html->link(__('Complete Sale'), array('action' => 'complete',$this->Form->value('SalesOrder.id'))); ?> </li>
-	</ul>
-</div>
+<script type='text/javascript'>document.getElementById('SalesOrderShipping').focus();</script>

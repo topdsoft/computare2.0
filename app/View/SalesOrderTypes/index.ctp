@@ -6,6 +6,7 @@
 			<th><?php echo $this->Paginator->sort('shipping'); ?></th>
 			<th><?php echo $this->Paginator->sort('taxable'); ?></th>
 			<th><?php echo $this->Paginator->sort('on_account'); ?></th>
+			<th><?php echo $this->Paginator->sort('due_days'); ?></th>
 			<th><?php echo $this->Paginator->sort('action'); ?></th>
 			<th><?php echo $this->Paginator->sort('location_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('glaccount_id','GL acct'); ?></th>
@@ -20,6 +21,7 @@
 		<td><?php if($salesOrderType['SalesOrderType']['shipping']) echo 'Y'; ?>&nbsp;</td>
 		<td><?php if($salesOrderType['SalesOrderType']['taxable']) echo 'Y'; ?>&nbsp;</td>
 		<td><?php if($salesOrderType['SalesOrderType']['on_account']) echo 'Y'; ?>&nbsp;</td>
+		<td><?php if($salesOrderType['SalesOrderType']['due_days']) echo 'Y'; ?>&nbsp;</td>
 		<td><?php echo $this->Html->link($salesOrderType['SalesOrderType']['action'],array('controller'=>'salesOrders','action'=>$salesOrderType['SalesOrderType']['action'])); ?>&nbsp;</td>
 		<td><?php echo $this->Html->link($salesOrderType['Location']['name'],array('controller'=>'locations','action'=>'view',$salesOrderType['SalesOrderType']['location_id'])); ?>&nbsp;</td>
 		<td><?php echo $this->Html->link($salesOrderType['Glaccount']['name'],array('controller'=>'glaccounts','action'=>'view',$salesOrderType['SalesOrderType']['glaccount_id'])); ?>&nbsp;</td>
@@ -51,6 +53,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Sales Order Type'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List Sales Orders'), array('controller'=>'salesOrders','action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List Locations'), array('controller'=>'locations','action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List GL Accounts'), array('controller'=>'glaccounts','action' => 'index')); ?></li>
 	</ul>
