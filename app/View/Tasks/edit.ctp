@@ -4,7 +4,7 @@
 		<legend><?php echo __('Edit Task: ').$this->data['Task']['name']; ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('deadline');
+		echo $this->Form->input('deadline',array('type'=>'text','after'=>$this->element('calendarPopUp',array('inputId'=>'TaskDeadline'))));
 		echo $this->Form->input('est_hours');
 		echo $this->Form->input('notes');
 //		echo $this->Form->input('User',array('label'=>'Users Assigned to Task','multiple'=>'checkbox'));

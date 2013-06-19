@@ -64,13 +64,13 @@
 		<th></th>
 	</tr>
 	<?php
-		$i = 0;
+		$estTotal=$workedTotal = 0;
 		foreach ($project['Task'] as $task): ?>
 		<tr>
 			<td><?php echo $task['name']; ?></td>
 			<td><?php echo $task['deadline']; ?></td>
-			<td><?php echo $task['est_hours']; ?></td>
-			<td><?php echo $task['sumDuration']; ?></td>
+			<td><?php echo $task['est_hours']; $estTotal+=$task['est_hours']; ?></td>
+			<td><?php echo $task['sumDuration']; $workedTotal+=$task['sumDuration']; ?></td>
 			<td><?php echo $task['created']; ?></td>
 			<td><?php echo $users[$task['created_id']]; ?></td>
 			<td><?php echo $task['finished']; ?></td>
@@ -82,6 +82,7 @@
 			</td>
 		</tr>
 	<?php endforeach; ?>
+	<tr class="total"><th>Total</th><th></th><th><?php echo $estTotal; ?></th><th><?php echo $workedTotal; ?></th></tr>
 	</table>
 <?php endif; ?>
 </div>

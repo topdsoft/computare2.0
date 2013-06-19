@@ -273,6 +273,10 @@ p {
 #filterTitle{
 	cursor: pointer;
 }
+#filters {
+	display: none;
+}
+
 #filters table tr td {
 	border-bottom:none;
 	background: none;

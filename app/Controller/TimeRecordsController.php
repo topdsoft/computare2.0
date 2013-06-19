@@ -17,6 +17,8 @@ class TimeRecordsController extends AppController {
 		$this->set('add_menu',true);
 		$this->TimeRecord->recursive = 0;
 		$this->set('timeRecords', $this->paginate());
+		//get project list
+		$this->set('projects',$this->TimeRecord->Task->Project->find('list'));
 	}
 
 /**

@@ -5,11 +5,12 @@
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('finished'); ?></th>
-			<th><?php echo $this->Paginator->sort('task_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('Task.project_id','Project'); ?></th>
+			<th><?php echo $this->Paginator->sort('Task.name','Task'); ?></th>
 			<th><?php echo $this->Paginator->sort('duration'); ?></th>
 			<th></th>
 	</tr>
-	<?php
+	<?php 
 	foreach ($timeRecords as $timeRecord): ?>
 	<tr>
 		<td>
@@ -17,6 +18,9 @@
 		</td>
 		<td><?php echo h($timeRecord['TimeRecord']['created']); ?>&nbsp;</td>
 		<td><?php echo h($timeRecord['TimeRecord']['finished']); ?>&nbsp;</td>
+		<td>
+			<?php echo $this->Html->link($projects[$timeRecord['Task']['project_id']], array('controller' => 'projects', 'action' => 'view', $timeRecord['Task']['project_id'])); ?>
+		</td>
 		<td>
 			<?php echo $this->Html->link($timeRecord['Task']['name'], array('controller' => 'tasks', 'action' => 'view', $timeRecord['Task']['id'])); ?>
 		</td>

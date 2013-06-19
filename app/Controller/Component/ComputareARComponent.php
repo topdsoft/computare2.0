@@ -149,7 +149,43 @@ class ComputareARComponent extends Component{
 	 */
 	public function completeSale($data) {
 		$this->SalesOrder=ClassRegistry::init('SalesOrder');
-debug($data);exit;
+		$this->Invoice=ClassRegistry::init('Invoice');
+		$this->Item=ClassRegistry::init('Item');
+		//get so
+		$SO=$this->SalesOrder->read(null,$data['SalesOrder']['id']);
+debug($data);debug($SO);exit;
+		$ok=true;
+		$dataSource=$this->SalesOrder->getDataSource();
+		//start transaction
+		$dataSource->begin();
+		##invoice
+		if($ok) $this->Invoice->create();
+		if($ok) $ok=$this->Invoice->save(array(
+			'created_id'=>$this->Auth->user('id'),
+			'status'=>'O',
+			'salesOrder_id'=>$data['SalesOrder']['id'],
+			'customer_id'=>$SO['SalesOrder']['customer_id']
+		));
+		$invoice_id=$this->Invoice->getInsertId();
+		foreach($SO['ItemDetail'] as $item) {
+			//loop for all items and add to invoice
+			if($ok) $this->Invoice->InvoiceDetail->create();
+			//build text
+			$text=$item['qty'].' '.$this->Item->field('name',array('item_id'=>$item['item_id']));
+			if($item['qty']>1) $text.='s';
+			$text.=' @ '.$item['price'].' each';
+			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+				'invoice_id'=>$invoice_id,
+				'created_id'=>$this->Auth->user('id'),
+				'active'=>true,
+				'text'=>$text,
+				'amount'=>$item['price']*$item['qty'],
+			));
+			unset($text);
+		}//end foreach
+		##payment
+		##gl posting
+		##issue stock
 		
 	}
 	
