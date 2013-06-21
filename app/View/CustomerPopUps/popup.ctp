@@ -23,7 +23,7 @@
 	foreach ($customers as $customer): ?>
 	<tr>
 		<td class="actions">
-			<?php echo $this->Html->link(__('Select'), '#', array('onclick' => 'select('.$customer['Customer']['id'].')')); ?>
+			<?php echo $this->Html->link(__('Select'), '#', array('onclick' => 'select("'.$customer['Customer']['id'].'")')); ?>
 		</td>
 		<td><?php echo h($customer['CustomerDetail']['companyName']); ?>&nbsp;</td>
 		<td><?php echo h($customer['CustomerDetail']['lastName']); ?>&nbsp;</td>
@@ -52,6 +52,7 @@
 		function select(id) {
 			//user has selected an customer, return to previous form
 			opener.document.getElementById('<?php echo $this->request->params['named']['inputId']; ?>').value=id;
+			alert(id);
 			self.close();
 		}
 		
