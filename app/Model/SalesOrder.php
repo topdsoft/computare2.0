@@ -14,7 +14,7 @@ class SalesOrder extends AppModel {
  * @var mixed False or table name
  */
 	public $useTable = 'salesOrders';
-
+	public $order='SalesOrder.id desc';
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 

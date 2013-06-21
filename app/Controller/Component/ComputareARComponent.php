@@ -152,8 +152,7 @@ class ComputareARComponent extends Component{
 		$this->Invoice=ClassRegistry::init('Invoice');
 		$this->Item=ClassRegistry::init('Item');
 		//get so
-		$SO=$this->SalesOrder->read(null,$data['SalesOrder']['id']);
-debug($data);debug($SO);exit;
+		$SO=$this->SalesOrder->find('first',array('recursive'=>2,'conditions'=>array('SalesOrder.id'=>$data['SalesOrder']['id'])));
 		$ok=true;
 		$dataSource=$this->SalesOrder->getDataSource();
 		//start transaction
@@ -167,11 +166,12 @@ debug($data);debug($SO);exit;
 			'customer_id'=>$SO['SalesOrder']['customer_id']
 		));
 		$invoice_id=$this->Invoice->getInsertId();
+		$tax=0;
 		foreach($SO['ItemDetail'] as $item) {
 			//loop for all items and add to invoice
 			if($ok) $this->Invoice->InvoiceDetail->create();
 			//build text
-			$text=$item['qty'].' '.$this->Item->field('name',array('item_id'=>$item['item_id']));
+			$text=$item['qty'].' '.$item['Item']['name'];
 			if($item['qty']>1) $text.='s';
 			$text.=' @ '.$item['price'].' each';
 			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
@@ -181,8 +181,35 @@ debug($data);debug($SO);exit;
 				'text'=>$text,
 				'amount'=>$item['price']*$item['qty'],
 			));
+			$tax+=$item['tax'];
 			unset($text);
 		}//end foreach
+		foreach($SO['ServiceDetail'] as $service) {
+			//loop for all service details and add to invoice
+			if($ok) $this->Invoice->InvoiceDetail->create();
+			//construct text
+			$text=$service['Service']['name'].' '.$service['qty'].' @ '.$service['price'];
+			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+				'invoice_id'=>$invoice_id,
+				'created_id'=>$this->Auth->user('id'),
+				'active'=>true,
+				'text'=>$text,
+				'amount'=>$service['price']*$service['qty'],
+			));
+			$tax+=$service['tax'];
+		}//end foreach
+		if($tax) {
+			//add a line for tax
+			if($ok) $this->Invoice->InvoiceDetail->create();
+			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+				'invoice_id'=>$invoice_id,
+				'created_id'=>$this->Auth->user('id'),
+				'active'=>true,
+				'text'=>'Taxes',
+				'amount'=>$tax,
+			));
+		}//endif
+debug($data);debug($SO);exit;
 		##payment
 		##gl posting
 		##issue stock
