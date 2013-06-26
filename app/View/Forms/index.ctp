@@ -30,7 +30,7 @@
 		<td><?php //echo h($form['Form']['link']); ?>&nbsp;</td>
 		<td><?php echo h($form['Form']['helplink']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('controller'=>$form['Form']['controller'],'action'=>$form['Form']['action'])); ?>
+			<?php if($form['Form']['add_menu']) echo $this->Html->link(__('View'), array('controller'=>$form['Form']['controller'],'action'=>$form['Form']['action'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $form['Form']['id'],'redirect'=>$redirect)); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $form['Form']['id']), null, __('Are you sure you want to delete # %s?', $form['Form']['id'])); ?>
 		</td>
@@ -43,6 +43,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('List Form Groups'), array('controller' => 'formGroups', 'action' => 'index'), array('class'=>'actions')); ?></li>
-		<li><?php echo $this->Html->link(__('New Form Group'), array('controller' => 'formGroups', 'action' => 'add'), array('class'=>'actions')); ?></li>
+		<li><?php //echo $this->Html->link(__('New Form Group'), array('controller' => 'formGroups', 'action' => 'add'), array('class'=>'actions')); ?></li>
 	</ul>
 </div>
