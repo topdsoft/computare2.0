@@ -1,5 +1,8 @@
 <div class="glaccounts index">
+<?php echo $this->Form->create('Glaccount'); ?>
 	<h2><?php echo __('GL Accounts'); ?></h2>
+	<?php echo $this->element('filterblock'); ?>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('group'); ?></th>
@@ -42,5 +45,6 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('New GL Account'), array('action' => 'add')); ?></li>
 		<li><?php echo $this->Html->link(__('GL Posting'), array('action' => 'posting')); ?></li>
+		<li><?php echo $this->Html->link(__('List GL Account Groups'), array('controller'=>'glgroups','action' => 'index')); ?></li>
 	</ul>
 </div>

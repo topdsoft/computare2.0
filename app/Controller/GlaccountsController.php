@@ -17,9 +17,19 @@ class GlaccountsController extends AppController {
 	public function index() {
 		$this->set('formName','List GL Accounts');
 		$this->set('add_menu',true);
+		//use filters
+		$filters=array();
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Group',
+			'passName'=>'grp',
+			'field'=>'Glaccount.glgroup_id',
+			'options'=>ClassRegistry::init('Glgroup')->find('list')
+		);
+		$this->_useFilter($filters);
 		$this->Glaccount->recursive = 0;
 		$this->Glaccount->order=array('group','name');
-		$this->set('glaccounts', $this->paginate());
+		$this->set('glaccounts', $this->paginate('Glaccount',$this->conditions));
 		//find lists
 //		$glgroups = $this->Glaccount->GlaccountDetail->Glgroup->find('list');
 		$users=ClassRegistry::init('User')->find('list');
