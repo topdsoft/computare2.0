@@ -45,4 +45,11 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
+<div class="actions">
+	<h3><?php echo __('Actions'); ?></h3>
+	<ul>
+		<li><?php echo $this->Html->link(__('GL Posting'), array('controller'=>'glaccounts','action' => 'posting')); ?></li>
+		<li><?php echo $this->Html->link(__('List GL Accounts'), array('controller'=>'glaccounts','action' => 'index')); ?></li>
+	</ul>
+</div>
 </div>
