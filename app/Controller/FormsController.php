@@ -14,6 +14,7 @@ class FormsController extends AppController {
  */
 	public function index() {
 		$this->set('formName','View Forms');
+		$this->set('add_menu',true);
 		//use filters
 		$filters=array();
 		//group filter

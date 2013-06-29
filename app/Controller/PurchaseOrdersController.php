@@ -15,8 +15,39 @@ class PurchaseOrdersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Purchase orders');
+		$this->set('add_menu',true);
+		//use filters
+		$filters=array();
+		//created filter
+		$filters[]=array('type'=>3,
+			'label'=>'Date',
+			'passName'=>'created',
+			'field'=>'PurchaseOrder.created');
+		//Created by filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'User',
+			'passName'=>'user',
+			'field'=>'PurchaseOrder.created_id',
+			'options'=>ClassRegistry::init('User')->find('list'));
+		//vendor filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Vendor',
+			'passName'=>'vendor',
+			'field'=>'PurchaseOrder.vendor_id',
+			'options'=>$this->PurchaseOrder->Vendor->find('list'));
+		//status filter
+		$filters[]=array(
+			'type'=>1,
+			'label'=>'Status',
+			'passName'=>'status',
+			'field'=>'PurchaseOrder.status',
+			'options'=>array('C'=>'Closed','O'=>'Open','V'=>'Void'));
+		//submit filters
+		$this->_useFilter($filters);
 		$this->PurchaseOrder->recursive = 0;
-		$this->set('purchaseOrders', $this->paginate());
+		$this->set('purchaseOrders', $this->paginate('PurchaseOrder',$this->conditions));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 

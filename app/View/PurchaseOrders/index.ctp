@@ -1,5 +1,8 @@
 <div class="purchaseOrders index">
+<?php echo $this->Form->create('PurchaseOrder') ?>
 	<h2><?php echo __('Purchase Orders'); ?></h2>
+	<?php echo $this->element('filterblock'); ?>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
