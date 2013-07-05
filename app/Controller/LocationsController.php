@@ -74,6 +74,8 @@ class LocationsController extends AppController {
 		$parents[0]='(none)';
 // 		$items = $this->Location->Item->find('list');
 		$this->set(compact('parents'));
+		//get list of location types
+		$this->set('locationTypes',array(null=>'(none)')+$this->Location->LocationType->find('list'));
 	}
 
 /**

@@ -1,25 +1,18 @@
 <?php
 App::uses('AppModel', 'Model');
 /**
- * LocationDetail Model
+ * LocationType Model
  *
  * @property Location $Location
  */
-class LocationDetail extends AppModel {
-
-/**
- * Use database config
- *
- * @var string
- */
-	public $useDbConfig = 'computare';
+class LocationType extends AppModel {
 
 /**
  * Use table
  *
  * @var mixed False or table name
  */
-	public $useTable = 'locationDetails';
+	public $useTable = 'locationTypes';
 
 /**
  * Display field
@@ -44,6 +37,29 @@ class LocationDetail extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+	);
+
+	//The Associations below have been created with all possible keys, those that are not needed can be removed
+
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Location' => array(
+			'className' => 'Location',
+			'foreignKey' => 'locationDetail_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
 	);
 
 }
