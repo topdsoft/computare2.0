@@ -61,21 +61,42 @@ class LocationsController extends AppController {
 		$this->set('formName','New Location');
 		if ($this->request->is('post')) {
 			$this->Location->create();
+			if(isset($this->params['named']['locationType_id'])) {
+				//location type has been passed in
+				$this->request->data['LocationDetail']['locationType_id']=$this->params['named']['locationType_id'];
+			}//endif
 			if ($this->ComputareIC->saveLocation($this->request->data)) {
 				$this->Session->setFlash(__('The location has been saved'),'default',array('class'=>'success'));
+				if(isset($this->params['named']['redirect'])) $this->redirect($this->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The location could not be saved. Please, try again.'));
 			}
 		} else $this->request->data['Location']['parent_id']=$defaultParent;
 // 		$locationDetails = $this->Location->LocationDetail->find('list');
-		$parents = $this->Location->ParentLocation->find('list');
+		$parents = array(0=>'(none)')+$this->Location->ParentLocation->find('list');
 // debug($parents);exit;
-		$parents[0]='(none)';
+//		$parents[0]='(none)';
 // 		$items = $this->Location->Item->find('list');
 		$this->set(compact('parents'));
 		//get list of location types
-		$this->set('locationTypes',array(null=>'(none)')+$this->Location->LocationType->find('list'));
+		$this->set('locationTypes',array(null=>'(none)')+$this->Location->LocationType->find('list',array('conditions'=>array('LocationType.active'))));
+		//check for passed type
+		if(isset($this->params['named']['locationType_id'])) {
+			//get defaults for location type
+			$locationType=$this->Location->LocationType->read(null,$this->params['named']['locationType_id']);
+// debug($locationType);
+			if($locationType['LocationType']['default_name']) {
+				//use a name
+				$this->request->data['LocationDetail']['name']=$locationType['LocationType']['default_name'];
+			}//endif
+			if($locationType['LocationType']['next_number']!=null) {
+				//use a name
+				$this->request->data['LocationDetail']['name'].=$locationType['LocationType']['next_number'];
+			}//endif
+			if($locationType['LocationType']['location_id']) $this->request->data['Location']['parent']=$locationType['LocationType']['location_id'];
+			$this->set('locationType',$locationType);
+		}//endif
 	}
 
 /**

@@ -19,7 +19,7 @@ class Location extends AppModel {
 
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
-		$this->virtualFields['name'] = 'select name from locationDetails as LocationDetail where LocationDetail.id='.$this->alias.'.locationDetail_id';
+//		$this->virtualFields['name'] = 'select name from locationDetails as LocationDetail where LocationDetail.id='.$this->alias.'.locationDetail_id';
 		$this->order = $this->alias.'.lft';
 	}
 
@@ -52,6 +52,9 @@ class Location extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'LocationType' => array(
+			'foreignKey' => 'locationType_id'
 		)
 	);
 

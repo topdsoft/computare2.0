@@ -20,7 +20,7 @@
 		<td><?php echo h($locationType['LocationType']['created']); ?>&nbsp;</td>
 		<td><?php echo $users[$locationType['LocationType']['created_id']]; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('New Location'), array('controller'=>'locations','action' => 'add','locationType_id'=>$locationType['LocationType']['id'])); ?>
+			<?php echo $this->Html->link(__('New Location'), array('controller'=>'locations','action' => 'add','locationType_id'=>$locationType['LocationType']['id'],'redirect'=>array('controller'=>'locationTypes'))); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $locationType['LocationType']['id']), null, __('Are you sure you want to delete Location Type %s?', $locationType['LocationType']['name'])); ?>
 		</td>
 	</tr>
@@ -46,6 +46,6 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('New Location Type'), array('action' => 'add')); ?></li>
 		<li><?php echo $this->Html->link(__('List Locations'), array('controller' => 'locations', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Location'), array('controller' => 'locations', 'action' => 'add')); ?> </li>
+		<li><?php //echo $this->Html->link(__('New Location'), array('controller' => 'locations', 'action' => 'add')); ?> </li>
 	</ul>
 </div>

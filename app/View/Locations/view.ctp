@@ -6,6 +6,13 @@
 			<?php echo h($location['Location']['id']); ?>
 			&nbsp;
 		</dd>
+		<?php if($location['LocationType']['name']): ?>
+			<dt><?php echo __('Location Type'); ?></dt>
+			<dd>
+				<?php echo $location['LocationType']['name']; ?>
+				&nbsp;
+			</dd>
+		<?php endif; ?>
 		<?php if($location['ParentLocation']['name']): ?>
 			<dt><?php echo __('Parent Location'); ?></dt>
 			<dd>

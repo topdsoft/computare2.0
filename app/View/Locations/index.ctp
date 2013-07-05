@@ -2,8 +2,9 @@
 	<h2><?php echo __('All Locations'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
-			<th><?php echo $this->Paginator->sort('LocationDetail.name','Name'); ?></th>
+			<th><?php echo $this->Paginator->sort('name'); ?></th>
 			<th><?php echo $this->Paginator->sort('parent_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('LocationType.name','Type'); ?></th>
 			<th></th>
 	</tr>
 	<?php 
@@ -14,6 +15,7 @@
 		<td>
 			<?php echo $this->Html->link($location['ParentLocation']['name'], array('controller' => 'locations', 'action' => 'view', $location['ParentLocation']['id'])); ?>
 		</td>
+		<td title='<?php echo $location['LocationType']['description']; ?>'><?php echo $location['LocationType']['name']; ?></td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $location['Location']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $location['Location']['id'])); ?>

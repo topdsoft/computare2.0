@@ -16,7 +16,7 @@ class LocationTypesController extends AppController {
 		$this->set('formName','List Location Types');
 		$this->set('menu_add',true);
 		$this->LocationType->recursive = 0;
-		$this->set('locationTypes', $this->paginate());
+		$this->set('locationTypes', $this->paginate(array('LocationType.active')));
 		//get users list
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 		//get locations list
@@ -63,7 +63,11 @@ class LocationTypesController extends AppController {
 		if (!$this->LocationType->exists()) {
 			throw new NotFoundException(__('Invalid location type'));
 		}
-		if ($this->LocationType->delete()) {
+		$locationType=$this->LocationType->read(null,$id);
+		$locationType['LocationType']['active']=false;
+		$locationType['LocationType']['removed']=date('Y-m-d H:i:s');
+		$locationType['LocationType']['removed_id']=$this->Auth->user('id');
+		if ($this->LocationType->save($locationType)) {
 			$this->Session->setFlash(__('Location type deleted'));
 			$this->redirect(array('action' => 'index'));
 		}

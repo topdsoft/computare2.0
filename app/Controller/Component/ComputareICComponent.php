@@ -74,6 +74,9 @@ class ComputareICComponent extends Component{
 		$this->LocationDetail=ClassRegistry::init('LocationDetail');
 		$ok=true;
 		$dataSource=$this->Location->getDataSource();
+		//copy name-type data to locations table for easier lookup
+		$data['Location']['name']=$data['LocationDetail']['name'];
+		$data['Location']['locationType_id']=$data['LocationDetail']['locationType_id'];
 		//start transaction
 		$dataSource->begin();
 // debug($data);exit;
@@ -83,6 +86,18 @@ class ComputareICComponent extends Component{
 			//creating new Location
 			if($ok) $ok=$this->Location->save($data['Location']);
 			if($ok) $data['Location']['id']=$this->Location->getInsertId();
+			if($data['Location']['locationType_id']) {
+				//get location type info
+				$locationType=$this->Location->LocationType->read(null,$data['Location']['locationType_id']);
+				if($locationType['LocationType']['next_number']!=null) {
+					//location type uses auto numbering
+					if($data['Location']['name']==$locationType['LocationType']['default_name'].$locationType['LocationType']['next_number']) {
+						//user did not modify name so increment to next auto number
+						$locationType['LocationType']['next_number']++;
+						if($ok) $ok=$this->Location->LocationType->save($locationType);
+					}//endif
+				}//endif
+			}//endif
 		}//endif
 		$data['LocationDetail']['location_id']=$data['Location']['id'];
 		$data['LocationDetail']['created_id']=$this->Auth->User('id');
