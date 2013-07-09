@@ -32,6 +32,10 @@ class GlentriesController extends AppController {
 		$this->set('glentries', $this->paginate('Glentry',$this->conditions));
 		$users=ClassRegistry::init('User')->find('list');
 		$this->set(compact('users'));
+		//get totals
+		$debitTotal=$this->Glentry->field('sum(debit)',array($this->conditions));
+		$creditTotal=$this->Glentry->field('sum(credit)',array($this->conditions));
+		$this->set(compact('debitTotal','creditTotal'));
 //$this->_filterRedirect();
 	}
 

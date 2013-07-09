@@ -2,6 +2,7 @@
 <?php echo $this->Form->create('Filter'); //debug($glentries);?>
 	<h2><?php echo __('General Ledger Entries'); ?></h2>
 	<?php echo $this->element('filterblock'); ?>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('Glaccount.group','GL Group'); ?></th>
@@ -15,14 +16,15 @@
 			<th><?php echo $this->Paginator->sort('glcheck_id','Check#'); ?></th>
 	</tr>
 	<?php 
+	$cTotal=$dTotal=0;
 	foreach ($glentries as $glentry): ?>
 	<tr>
 		<td><?php echo h($glentry['Glaccount']['group']); ?>&nbsp;</td>
 		<td>
 			<?php echo $this->Html->link($glentry['Glaccount']['name'], array('controller' => 'glaccounts', 'action' => 'view', $glentry['Glaccount']['id'])); ?>
 		</td>
-		<td><?php echo h($glentry['Glentry']['debit']); ?>&nbsp;</td>
-		<td><?php echo h($glentry['Glentry']['credit']); ?>&nbsp;</td>
+		<td><?php echo h($glentry['Glentry']['debit']); $dTotal+=$glentry['Glentry']['debit']; ?>&nbsp;</td>
+		<td><?php echo h($glentry['Glentry']['credit']); $cTotal+=$glentry['Glentry']['credit']; ?>&nbsp;</td>
 		<td><?php echo h($glentry['Glentry']['postDate']); ?>&nbsp;</td>
 		<td><?php echo h($glentry['Glentry']['created']); ?>&nbsp;</td>
 		<td><?php echo $users[$glentry['Glentry']['created_id']]; ?>&nbsp;</td>
@@ -30,6 +32,8 @@
 		<td><?php echo h($glentry['Glcheck']['checkNumber']); ?>&nbsp;</td>
 	</tr>
 <?php endforeach; ?>
+	<tr class="total"><th>Page Total</th><th></th><th><?php echo number_format($dTotal,2); ?></th><th><?php echo number_format($cTotal,2); ?></th><th></th><th></th><th></th><th></th><th></th></tr>
+	<tr><th>Full Total</th><th></th><th><?php echo number_format($debitTotal,2); ?></th><th><?php echo number_format($creditTotal,2); ?></th><th></th><th></th><th></th><th></th><th></th></tr>
 	</table>
 	<p>
 	<?php
