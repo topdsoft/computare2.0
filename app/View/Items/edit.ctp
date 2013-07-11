@@ -4,7 +4,7 @@
 		<legend><?php echo __('Edit Item'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('ItemDetail.name',array('id'=>'sc'));
+		echo $this->Form->input('ItemDetail.name');
 		echo $this->Form->input('ItemDetail.sku');
 		echo $this->Form->input('ItemDetail.upc');
 		if($itemGroups) echo $this->Form->input('ItemGroup',array('multiple'=>'checkbox','label'=>'Item Groups'));
@@ -28,6 +28,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Upload Image'), array('controller'=>'images','action' => 'add', 'item_id'=>$this->data['Item']['id'], 'redirect'=>array('controller'=>'items','action'=>'edit',$this->data['Item']['id']))); ?> </li>
+		<li><?php echo $this->Html->link(__('Set Scan Code'), array('controller'=>'scanCodes','action' => 'add', 'items', $this->data['Item']['id'], 'redirect'=>array('controller'=>'items','action'=>'edit',$this->data['Item']['id']))); ?> </li>
 	</ul>
 </div>
-<script type='text/javascript'>document.getElementById('sc').focus();</script>
+<script type='text/javascript'>document.getElementById('ItemDetailName').focus();</script>
