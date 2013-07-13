@@ -17,6 +17,8 @@ class ScanCodesController extends AppController {
 		$this->set('add_menu',true);
 		$this->ScanCode->recursive = 0;
 		$this->set('scanCodes', $this->paginate());
+		//get user list and send to index
+		$this->set('users',$this->ScanCode->User->find('list'));
 	}
 
 /**
@@ -49,25 +51,48 @@ class ScanCodesController extends AppController {
 			//validate item
 			$name=$this->ScanCode->Item->field('name',array('id'=>$id));
 			if(!$name) throw new NotFoundException(__('Invalid item'));
+			$this->request->data['ScanCode']['item_id']=$id;
 		} elseif($type=='locations') {
 			//validate location
 			$name=$this->ScanCode->Location->field('name',array('id'=>$id));
 			if(!$name) throw new NotFoundException(__('Invalid location'));
+			$this->request->data['ScanCode']['location_id']=$id;
 		} elseif($type=='users') {
 			//validate user
 			$name=$this->ScanCode->User->field('username',array('id'=>$id));
 			if(!$name) throw new NotFoundException(__('Invalid user'));
+			$this->request->data['ScanCode']['user_id']=$id;
 		} elseif($type=='itemSerialNumbers') {
 			//validate serial number
 			$sn=$this->ScanCode->ItemSerialNumber->find('first',array('conditions'=>array('ItemSerialNumber.id'=>$id),'fields'=>array('Item.name','ItemSerialNumber.number')));
 			if(!$sn) throw new NotFoundException(__('Invalid serial number'));
 			$name=$sn['Item']['name'].' SN:'.$sn['ItemSerialNumber']['number'];
 			unset($sn);
+			$this->request->data['ScanCode']['itemSerialNumber_id']=$id;
 		}//endif
 		if ($this->request->is('post')) {
+			//save scan code
+			if($this->request->data['ScanCode']['internal']) {
+				//create scan code
+				$last=$this->ScanCode->find('first',array('conditions'=>array('internal')));
+				if($last) {
+					//increment scan code
+					$code=intval($last['ScanCode']['code']);
+					$code++;
+					$this->request->data['ScanCode']['code']=str_pad($code,7,'0',STR_PAD_LEFT);
+					unset($code);
+				} else {
+					//initialize scan codes
+					$this->request->data['ScanCode']['code']='0000000';
+				}//endif
+				unset($last);
+			}//endif
+			$this->request->data['ScanCode']['created_id']=$this->Auth->user('id');
+// debug($this->request->data);exit;
 			$this->ScanCode->create();
 			if ($this->ScanCode->save($this->request->data)) {
 				$this->Session->setFlash(__('The scan code has been saved'),'default',array('class'=>'success'));
+				if(isset($this->params['named']['redirect'])) $this->redirect($this->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The scan code could not be saved. Please, try again.'));
@@ -83,26 +108,21 @@ class ScanCodesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function edit($id = null) {
-		$this->ScanCode->id = $id;
-		if (!$this->ScanCode->exists()) {
-			throw new NotFoundException(__('Invalid scan code'));
-		}
+	public function lookup() {
+		$this->set('formName','Scan Code Lookup');
 		if ($this->request->is('post') || $this->request->is('put')) {
-			if ($this->ScanCode->save($this->request->data)) {
-				$this->Session->setFlash(__('The scan code has been saved'));
-				$this->redirect(array('action' => 'index'));
-			} else {
-				$this->Session->setFlash(__('The scan code could not be saved. Please, try again.'));
-			}
-		} else {
-			$this->request->data = $this->ScanCode->read(null, $id);
+			//lookup code
+			$code=$this->ScanCode->find('first',array('conditions'=>array('ScanCode.code'=>$this->request->data['ScanCode']['code'])));
+			if($code) {
+				//loopup successfull
+				if($code['ScanCode']['item_id']) $this->redirect(array('controller'=>'items','action'=>'view',$code['ScanCode']['item_id']));
+				if($code['ScanCode']['location_id']) $this->redirect(array('controller'=>'locations','action'=>'view',$code['ScanCode']['location_id']));
+				if($code['ScanCode']['user_id']) $this->redirect(array('controller'=>'users','action'=>'view',$code['ScanCode']['user_id']));
+				if($code['ScanCode']['itemSerialNumber_id']) $this->redirect(array('controller'=>'itemSerialNumbers','action'=>'view',$code['ScanCode']['itemSerialNumber_id']));
+			}//endif
+// debug($code);exit;
+			$this->Session->setFlash(__('The scan code could not be found. Please, try again.'));
 		}
-		$items = $this->ScanCode->Item->find('list');
-		$locations = $this->ScanCode->Location->find('list');
-		$itemSerialNumbers = $this->ScanCode->ItemSerialNumber->find('list');
-		$users = $this->ScanCode->User->find('list');
-		$this->set(compact('items', 'locations', 'itemSerialNumbers', 'users'));
 	}
 
 /**

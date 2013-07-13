@@ -29,14 +29,14 @@
 		<td>
 			<?php echo $this->Html->link($scanCode['User']['username'], array('controller' => 'users', 'action' => 'view', $scanCode['User']['id'])); ?>
 		</td>
-		<td><?php echo h($scanCode['ScanCode']['print']); ?>&nbsp;</td>
-		<td><?php echo h($scanCode['ScanCode']['internal']); ?>&nbsp;</td>
+		<td><?php if($scanCode['ScanCode']['print']) echo 'Y'; ?>&nbsp;</td>
+		<td><?php if($scanCode['ScanCode']['internal']) echo 'Y'; ?>&nbsp;</td>
 		<td><?php echo h($scanCode['ScanCode']['created']); ?>&nbsp;</td>
-		<td><?php echo h($scanCode['ScanCode']['created_id']); ?>&nbsp;</td>
+		<td><?php echo $users[$scanCode['ScanCode']['created_id']]; ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Html->link(__('View'), array('action' => 'view', $scanCode['ScanCode']['id'])); ?>
-			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $scanCode['ScanCode']['id'])); ?>
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $scanCode['ScanCode']['id']), null, __('Are you sure you want to delete # %s?', $scanCode['ScanCode']['id'])); ?>
+			<?php //echo $this->Html->link(__('View'), array('action' => 'view', $scanCode['ScanCode']['id'])); ?>
+			<?php //echo $this->Html->link(__('Edit'), array('action' => 'edit', $scanCode['ScanCode']['id'])); ?>
+			<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $scanCode['ScanCode']['id']), null, __('Are you sure you want to delete # %s?', $scanCode['ScanCode']['id'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -59,7 +59,7 @@
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
-		<li><?php echo $this->Html->link(__('New Scan Code'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('Scan Code Lookup'), array('action' => 'lookup')); ?></li>
 		<li><?php echo $this->Html->link(__('List Items'), array('controller' => 'items', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Locations'), array('controller' => 'locations', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>

@@ -16,6 +16,7 @@ class ScanCode extends AppModel {
  * @var mixed False or table name
  */
 	public $useTable = 'scanCodes';
+	public $order = 'ScanCode.id desc';
 
 /**
  * Validation rules
