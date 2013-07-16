@@ -14,6 +14,7 @@ class CustomerGroupsController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Customer Groups');
+		$this->set('helplink','/pages/customerGroups#l');
 		$this->set('add_menu',true);
 		$this->CustomerGroup->recursive = 0;
 		$this->set('customerGroups', $this->paginate());
@@ -29,6 +30,7 @@ class CustomerGroupsController extends AppController {
  */
 	public function view($id = null) {
 		$this->set('formName','View Customer Group');
+		$this->set('helplink','/pages/customerGroups#v');
 		$this->CustomerGroup->id = $id;
 		if (!$this->CustomerGroup->exists()) {
 			throw new NotFoundException(__('Invalid customer group'));
@@ -44,6 +46,7 @@ class CustomerGroupsController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Add Customer Group');
+		$this->set('helplink','/pages/customerGroups#a');
 		$this->set('add_menu',true);
 		if ($this->request->is('post')) {
 			$this->CustomerGroup->create();
@@ -69,6 +72,7 @@ class CustomerGroupsController extends AppController {
  */
 	public function edit($id = null) {
 		$this->set('formName','Edit Customer Group');
+		$this->set('helplink','/pages/customerGroups#e');
 		$this->CustomerGroup->id = $id;
 		if (!$this->CustomerGroup->exists()) {
 			throw new NotFoundException(__('Invalid customer group'));

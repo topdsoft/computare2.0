@@ -175,9 +175,11 @@ class FormsController extends AppController {
 // debug($this);exit;
 		if ($this->Form->delete()) {
 			$this->Session->setFlash(__('Form deleted'));
+			if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 			$this->redirect(array('action'=>'index'));
 		}
 		$this->Session->setFlash(__('Form was not deleted'));
+		if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 		$this->redirect(array('action' => 'index'));
 	}
 }

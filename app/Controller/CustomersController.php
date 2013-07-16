@@ -16,7 +16,7 @@ class CustomersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Customers');
-		$this->set('helplink','/pages/customers');
+		$this->set('helplink','/pages/customers#lc');
 		$this->set('add_menu',true);
 		//get customerGroups
 		$groups=$this->Customer->CustomerGroup->find('list');
@@ -54,6 +54,7 @@ class CustomersController extends AppController {
  */
 	public function view($id = null) {
 		$this->set('formName','View Customer');
+		$this->set('helplink','/pages/customers#v');
 		$this->Customer->id = $id;
 		if (!$this->Customer->exists()) {
 			throw new NotFoundException(__('Invalid customer'));
@@ -88,6 +89,7 @@ class CustomersController extends AppController {
  */
 	public function edit($id = null) {
 		$this->set('formName','Edit Customer');
+		$this->set('helplink','/pages/customers#ec');
 		//if $id not set we are adding a new customer
 		if($id) {
 			//validate $id
@@ -127,6 +129,7 @@ class CustomersController extends AppController {
  */
 	public function editPricing($id=null) {
 		$this->set('formName','Edit Pricing');
+		$this->set('helplink','/pages/customers#lcp');
 		$this->Customer->id = $id;
 		if (!$this->Customer->exists()) {
 			throw new NotFoundException(__('Invalid customer'));
@@ -197,6 +200,8 @@ class CustomersController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+		$this->set('formName','Remove Customer');
+		$this->set('helplink','/pages/customers#dc');
 		if (!$this->request->is('post')) {
 			throw new MethodNotAllowedException();
 		}

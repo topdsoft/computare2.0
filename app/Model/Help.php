@@ -16,14 +16,21 @@ class Help extends AppModel{
 /**
  * $data stores the list of help pages in the following form
  * array(
- * 	'id'=>name of the help file (do not include .ctp)
+ * 	'id'=>name of the help file (do not include .ctp)  NOTE: try to keep same as controller
  * 	'name'=>The display name for the page
  * 	'anchors'=>array list of minor headings in page (may be empty)
  * )
+ * 
+ * anchor standard ordering:  list, add, view, edit, delete
+ * NOTE: anchor array offsets do not need to be defined, but if left undefined and the order changes, the anchor should be changed in both the controller help file definition and the forms table
  */
 	public $data= array(
 		array('id'=>'customers','name'=>'Customers','anchors'=>array(
-			'Adding a New Customer','Editing a Customer','Deleting a Customer')),
+			'lc'=>'Listing Customers','a'=>'Adding a New Customer','v'=>'Viewing a Customer','ec'=>'Editing a Customer','ecp'=>'Editing Customer Pricing','dc'=>'Deleting a Customer')),
+		
+		array('id'=>'customerGroups','name'=>'Customer Groups','anchors'=>array(
+			'l'=>'List Customer Groups','a'=>'Add Customer Group','v'=>'View Customer Group','e'=>'Edit Customer Group')),
+			
 		array('id'=>'glslots','name'=>'Edit GL Account Conections','anchors'=>array(
 			'Receive Inventory','Pay Invoice','Issue Inventory','Sale on Account','Cash Sale','All Sales')),
 	);

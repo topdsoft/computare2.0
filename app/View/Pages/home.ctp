@@ -9,7 +9,8 @@
 		echo '<p>';
 		echo $this->Html->link(__(($i+1).' '.$data['name']),array('action'=>'',$data['id']),array('style'=>'font-size: 120%;'));
 		//loop for all anchors
-		foreach ($data['anchors'] as $j=>$anchor) echo '<br>&nbsp'.$this->Html->link(__(($i+1).'.'.($j+1).' '.$anchor),array('#'=>$j,'action'=>'',$data['id']));
+		$j=1;
+		foreach ($data['anchors'] as $ai=>$anchor) echo '<br>&nbsp'.$this->Html->link(__(($i+1).'.'.($j++).' '.$anchor),array('#'=>$ai,'action'=>'',$data['id']));
 		echo '</p>';
 	}
 ?>
