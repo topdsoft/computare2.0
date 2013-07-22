@@ -14,6 +14,8 @@ class SalesOrderTypesController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List SO Types');
+		$this->set('helplink','/pages/salesOrderTypes#l');
+		$this->set('add_menu',true);
 		$this->SalesOrderType->recursive = 0;
 		$this->set('salesOrderTypes', $this->paginate(array('SalesOrderType.active')));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
@@ -27,6 +29,7 @@ class SalesOrderTypesController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Add SO Type');
+		$this->set('helplink','/pages/salesOrderTypes#a');
 		if ($this->request->is('post')) {
 			$this->SalesOrderType->create();
 			$this->request->data['SalesOrderType']['active']=true;
@@ -52,6 +55,7 @@ class SalesOrderTypesController extends AppController {
  */
 	public function edit($id=null) {
 		$this->set('formName','Edit Sales Order Type');
+		$this->set('helplink','/pages/salesOrderTypes#e');
 		//validate
 		$this->SalesOrderType->id = $id;
 		if (!$this->SalesOrderType->exists()) {

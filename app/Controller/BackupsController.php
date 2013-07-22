@@ -15,6 +15,7 @@ class BackupsController extends AppController {
 	public function index() {
 		$this->set('formName','List Backups');
 		$this->set('add_menu',true);
+		$this->set('helplink','/pages/backups#l');
 		$this->Backup->recursive = 0;
 		$this->set('backups', $this->paginate());
 		$this->set('users',ClassRegistry::init('User')->find('list'));
@@ -28,6 +29,7 @@ class BackupsController extends AppController {
 	public function add() {
 		$this->set('formName','Perform Backup');
 		$this->set('add_menu',true);
+		$this->set('helplink','/pages/backups#a');
 		if ($this->request->is('post')) {
 			//backup company DB
 			$dataSource=$this->Backup->getDataSource();

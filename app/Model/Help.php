@@ -25,6 +25,10 @@ class Help extends AppModel{
  * NOTE: anchor array offsets do not need to be defined, but if left undefined and the order changes, the anchor should be changed in both the controller help file definition and the forms table
  */
 	public $data= array(
+#SETUP--------------------------------------------------------------------------------------------------------------------
+		array('id'=>'backups','name'=>'Backups','anchors'=>array(
+			'l'=>'List Backups','a'=>'New Backup')),
+#AR-----------------------------------------------------------------------------------------------------------------------
 		array('id'=>'customers','name'=>'Customers','anchors'=>array(
 			'lc'=>'Listing Customers','a'=>'Adding a New Customer','v'=>'Viewing a Customer','ec'=>'Editing a Customer','ecp'=>'Editing Customer Pricing','dc'=>'Deleting a Customer')),
 		
@@ -34,7 +38,14 @@ class Help extends AppModel{
 		array('id'=>'salesOrders','name'=>'Sales Orders', 'anchors'=>array(
 			'l'=>'List Sales Orders','a'=>'New Sales Order','e'=>'Edit Sales Order','v'=>'Voiding a Sales Order','c'=>'Closing a Sales Order')),
 			
-		array('id'=>'glslots','name'=>'Edit GL Account Conections','anchors'=>array(
+		array('id'=>'salesOrderTypes','name'=>'Sales Order Types', 'anchors'=>array(
+			'l'=>'List Sales Order Types','a'=>'Add Sales Order Type','e'=>'Edit Sales Order Type')),
+			
+		array('id'=>'services','name'=>'Services','anchors'=>array(
+			'l'=>'List Services','a'=>'Add Service')),
+			
+#GL---------------------------------------------------------------------------------------------------------------------
+			array('id'=>'glslots','name'=>'Edit GL Account Conections','anchors'=>array(
 			'Receive Inventory','Pay Invoice','Issue Inventory','Sale on Account','Cash Sale','All Sales')),
 	);
 	
