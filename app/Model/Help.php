@@ -32,7 +32,7 @@ class Help extends AppModel{
 		array('id'=>'forms','name'=>'Forms','anchors'=>array(
 			'l'=>'List Forms','e'=>'Edit Form')),
 			
-		array('id'=>'formGroups','name'=>'Form Groups','anchor'=>array(
+		array('id'=>'formGroups','name'=>'Form Groups','anchors'=>array(
 			'l'=>'List Form Groups','a'=>'Add Form Group')),
 #AR-----------------------------------------------------------------------------------------------------------------------
 		array('id'=>'customers','name'=>'Customers','anchors'=>array(
