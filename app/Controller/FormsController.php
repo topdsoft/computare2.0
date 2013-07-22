@@ -15,6 +15,7 @@ class FormsController extends AppController {
 	public function index() {
 		$this->set('formName','View Forms');
 		$this->set('add_menu',true);
+		$this->set('helplink','/pages/forms#l');
 		//use filters
 		$filters=array();
 		//group filter
@@ -130,6 +131,7 @@ class FormsController extends AppController {
  */
 	public function edit($id = null) {
 		$this->set('formName','Edit Form');
+		$this->set('helplink','/pages/forms#e');
 		$this->Form->id = $id;
 		if (!$this->Form->exists()) {
 			throw new NotFoundException(__('Invalid form'));

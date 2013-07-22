@@ -28,6 +28,12 @@ class Help extends AppModel{
 #SETUP--------------------------------------------------------------------------------------------------------------------
 		array('id'=>'backups','name'=>'Backups','anchors'=>array(
 			'l'=>'List Backups','a'=>'New Backup')),
+			
+		array('id'=>'forms','name'=>'Forms','anchors'=>array(
+			'l'=>'List Forms','e'=>'Edit Form')),
+			
+		array('id'=>'formGroups','name'=>'Form Groups','anchor'=>array(
+			'l'=>'List Form Groups','a'=>'Add Form Group')),
 #AR-----------------------------------------------------------------------------------------------------------------------
 		array('id'=>'customers','name'=>'Customers','anchors'=>array(
 			'lc'=>'Listing Customers','a'=>'Adding a New Customer','v'=>'Viewing a Customer','ec'=>'Editing a Customer','ecp'=>'Editing Customer Pricing','dc'=>'Deleting a Customer')),

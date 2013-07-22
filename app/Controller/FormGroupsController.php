@@ -15,6 +15,7 @@ class FormGroupsController extends AppController {
 	public function index() {
 		$this->set('formName','List Form Groups');
 		$this->set('add_menu',true);
+		$this->set('helplink','/pages/formGroups#l');
 		$this->FormGroup->recursive = 0;
 		$this->set('formGroups', $this->paginate());
 		$this->set('users',ClassRegistry::init('User')->find('list'));
@@ -44,6 +45,7 @@ class FormGroupsController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Add Form Group');
+		$this->set('helplink','/pages/formGroups#e');
 		if ($this->request->is('post')) {
 			$this->FormGroup->create();
 			$this->request->data['FormGroup']['created_id']=$this->Auth->user('id');
