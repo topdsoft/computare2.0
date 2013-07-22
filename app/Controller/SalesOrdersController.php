@@ -16,6 +16,8 @@ class SalesOrdersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Sales Orders');
+		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',true);
 		//setup filters
 		$filters=array();
 		//id filter
@@ -78,6 +80,7 @@ class SalesOrdersController extends AppController {
  */
 	public function view($id = null) {
 		$this->set('formName','View Sales Order');
+		$this->set('helplink','/pages/salesOrders#v');
 		$this->SalesOrder->id = $id;
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));
@@ -94,6 +97,7 @@ class SalesOrdersController extends AppController {
  */
 	public function add() {
 		$this->set('formName','Add Sales Order');
+		$this->set('helplink','/pages/salesOrders#a');
 		if ($this->request->is('post')) {
 			$this->SalesOrder->create();
 			$this->request->data['SalesOrder']['created_id']=$this->Auth->user('id');
@@ -132,6 +136,7 @@ class SalesOrdersController extends AppController {
  */
 	public function edit($id = null) {
 		$this->set('formName','Edit Sales Order');
+		$this->set('helplink','/pages/salesOrders#e');
 		$this->SalesOrder->id = $id;
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));
@@ -163,6 +168,7 @@ class SalesOrdersController extends AppController {
  */
 	public function addproduct($id = null) {
 		$this->set('formName','Add Product SO Line');
+		$this->set('helplink','/pages/salesOrders#e');
 		$this->SalesOrder->id = $id;
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));
@@ -237,6 +243,7 @@ class SalesOrdersController extends AppController {
  */
 	public function addservice($id = null) {
 		$this->set('formName','Add Service SO Line');
+		$this->set('helplink','/pages/salesOrders#e');
 		$this->SalesOrder->id = $id;
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));
@@ -317,6 +324,7 @@ class SalesOrdersController extends AppController {
  */
 	public function complete($id=null) {
 		$this->set('formName','Complete Sale');
+		$this->set('helplink','/pages/salesOrders#c');
 		$this->SalesOrder->id = $id;
 		if (!$this->SalesOrder->exists()) {
 			throw new NotFoundException(__('Invalid sales order'));

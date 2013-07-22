@@ -31,6 +31,9 @@ class Help extends AppModel{
 		array('id'=>'customerGroups','name'=>'Customer Groups','anchors'=>array(
 			'l'=>'List Customer Groups','a'=>'Add Customer Group','v'=>'View Customer Group','e'=>'Edit Customer Group')),
 			
+		array('id'=>'salesOrders','name'=>'Sales Orders', 'anchors'=>array(
+			'l'=>'List Sales Orders','a'=>'New Sales Order','e'=>'Edit Sales Order','v'=>'Voiding a Sales Order','c'=>'Closing a Sales Order')),
+			
 		array('id'=>'glslots','name'=>'Edit GL Account Conections','anchors'=>array(
 			'Receive Inventory','Pay Invoice','Issue Inventory','Sale on Account','Cash Sale','All Sales')),
 	);
