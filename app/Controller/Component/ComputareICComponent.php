@@ -66,6 +66,9 @@ class ComputareICComponent extends Component{
 	/**
 	 * saveLocation method
 	 * @param $data
+		* ['Location']['id'] (required for existing location)
+		* ['Location']['parent_id'] (required)
+		* ['LocationDetail']['name'] (required new)
 	 * used to save location data
 	 */
 	public function saveLocation($data){
@@ -75,15 +78,22 @@ class ComputareICComponent extends Component{
 		$ok=true;
 		$dataSource=$this->Location->getDataSource();
 		//copy name-type data to locations table for easier lookup
-		$data['Location']['name']=$data['LocationDetail']['name'];
-		$data['Location']['locationType_id']=$data['LocationDetail']['locationType_id'];
+		if(isset($data['LocationDetail']['name'])) $data['Location']['name']=$data['LocationDetail']['name'];
+		if(isset($data['LocationDetail']['locationType_id'])) $data['Location']['locationType_id']=$data['LocationDetail']['locationType_id'];
 		//start transaction
 		$dataSource->begin();
-// debug($data);exit;
 		if(isset($data['Location']['id'])) {
 			//editing existing Location
+			$locationDetail_id=$this->Location->field('locationDetail_id',array('Location.id'=>$data['Location']['id']));
+			//copy existing location detail
+			$existingDetail=$this->Location->LocationDetail->find('first',array('recursive'=>0,'conditions'=>array('LocationDetail.id'=>$locationDetail_id)));
+			unset($existingDetail['LocationDetail']['id']);
+			if($ok) $this->Location->LocationDetail->create();
+			if($ok) $ok=$this->Location->LocationDetail->save($existingDetail);
+// debug($data);debug($locationDetail_id);debug($existingDetail); exit;
 		} else {
 			//creating new Location
+			if($ok) $this->Location->create();
 			if($ok) $ok=$this->Location->save($data['Location']);
 			if($ok) $data['Location']['id']=$this->Location->getInsertId();
 			if($data['Location']['locationType_id']) {
