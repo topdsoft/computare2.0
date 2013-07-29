@@ -43,5 +43,6 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Location'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('List Location Types'), array('controller'=>'locationTypes','action' => 'index')); ?></li>
 	</ul>
 </div>
