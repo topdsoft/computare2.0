@@ -39,8 +39,15 @@ class LocationsController extends AppController {
 		$this->set('location', $location);
 		//get items at location
 		$this->Location->ItemsLocation->bindModel(array('belongsTo'=>array('Location'=>array('foreignKey'=>'location_id','fields'=>array('id','name')),'Item'=>array('foreignKey'=>'item_id','fields'=>array('id','name')))));
-		$il=$this->Location->ItemsLocation->find('all',array('conditions'=>array('location_id >='=>$location['Location']['lft'],'location_id <='=>$location['Location']['rght'])));
-// debug($il);exit;
+		$childLocations=$this->Location->children($id,false,array('id'));
+		$allLocations=array($id);
+		//parse data from $childLocations
+		foreach($childLocations as $cl) $allLocations[]=$cl['Location']['id'];
+		unset($childLocations);
+		//find items
+//		$il=$this->Location->ItemsLocation->find('all',array('conditions'=>array('location_id >='=>$location['Location']['lft'],'location_id <='=>$location['Location']['rght'])));
+		$il=$this->Location->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$allLocations)));
+// debug($allLocations);debug($il);exit;
 		$this->set('items',$il);
 		//get path
 		$this->set('path',$this->Location->getPath());
