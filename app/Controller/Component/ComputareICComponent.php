@@ -237,6 +237,7 @@ class ComputareICComponent extends Component{
 			if($purchaseOrder['PurchaseOrder']['allowOpen']) {
 				//po is ok for adding new items
 				$data['PurchaseOrderDetails']['created_id']=$this->Auth->User('id');
+				$data['PurchaseOrderDetails']['active']=true;
 				$data['PurchaseOrderDetails']['purchaseOrder_id']=$data['purchaseOrder_id'];
 				$data['PurchaseOrderDetails']['item_id']=$data['item_id'];
 				$data['PurchaseOrderDetails']['rec']=$data['qty'];
