@@ -30,7 +30,7 @@
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $item['Item']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $item['Item']['id'])); ?>
 			<?php echo $this->Html->link(__('Pricing'), array('action' => 'editPricing', $item['Item']['id'])); ?>
-			<?php echo $this->Html->link(__('Receive'), array('action' => 'receive', $item['Item']['id'])); ?>
+			<?php echo $this->Html->link(__('Receive'), array('action' => 'receive', $item['Item']['id'],'redirect'=>$redirect)); ?>
 			<?php // echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $item['Item']['id']), null, __('Are you sure you want to delete # %s?', $item['Item']['id'])); ?>
 		</td>
 	</tr>

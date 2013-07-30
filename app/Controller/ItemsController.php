@@ -21,6 +21,7 @@ class ItemsController extends AppController {
 		foreach($items as $i=>$item) $items[$i]['path']=$this->Item->ItemCategory->getPath($item['Item']['category_id'],array('id','name'));
 //  debug($items);exit;
 		$this->set(compact('items'));
+		$this->set('redirect',array('controller'=>'items','action'=>'index')+$this->request->params['named']);
 	}
 //$this->Item->Location->reorder(array('order'=>'asc','field'=>'name','id'=>3));
 
@@ -290,6 +291,7 @@ class ItemsController extends AppController {
 					if($this->ComputareIC->receive($data)) {
 						//success
 						$this->Session->setFlash(__('The item has been received'),'default',array('class'=>'success'));
+						if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 						$this->redirect(array('action' => 'index'));
 					} else {
 						//fail
