@@ -55,5 +55,7 @@
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('New Item'), array('action' => 'add')); ?></li>
+		<li><?php echo $this->Html->link(__('Item Groups'), array('controller'=>'itemGroups','action' => 'index')); ?></li>
+		<li><?php echo $this->Html->link(__('Item Categories'), array('controller'=>'itemCategories','action' => 'index')); ?></li>
 	</ul>
 </div>
