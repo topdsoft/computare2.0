@@ -43,11 +43,12 @@ class ItemCategoriesController extends AppController {
 		$this->set('categories',$this->ItemCategory->find('list'));
 		//get path
 		$this->set('path',$this->ItemCategory->getPath());
-		//find all items in category
-		$this->set('items',$this->ItemCategory->Item->find('all',array('conditions'=>array(
-			'Item.category_id >='=>$itemCategory['ItemCategory']['lft'],
-			'Item.category_id <='=>$itemCategory['ItemCategory']['rght']
-		),'fields'=> array('Item.name','Item.id','Item.category_id'),'recursive'=>0)));
+		//find all items in category and sub categories
+		$cats=array($id);
+		$children=$this->ItemCategory->children($id);
+		foreach($children as $child) $cats[]=$child['ItemCategory']['id'];
+// debug($children);debug($cats);exit;
+		$this->set('items',$this->ItemCategory->Item->find('all',array('conditions'=>array('Item.category_id '=>$cats),'fields'=> array('Item.name','Item.id','Item.category_id'),'recursive'=>0)));
 	}
 
 /**
