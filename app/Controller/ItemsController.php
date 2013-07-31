@@ -100,6 +100,7 @@ class ItemsController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->ComputareIC->saveItem($this->request->data)) {
 				$this->Session->setFlash(__('The item has been saved'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']+array('new_id'=>$this->Item->getInsertId()));
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The item could not be saved. Please, try again.'));
