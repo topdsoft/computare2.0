@@ -53,6 +53,7 @@ class CustomerGroupsController extends AppController {
 			$this->request->data['CustomerGroup']['created_id']=$this->Auth->user('id');
 			if ($this->CustomerGroup->save($this->request->data)) {
 				$this->Session->setFlash(__('The customer group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The customer group could not be saved. Please, try again.'));
@@ -80,6 +81,7 @@ class CustomerGroupsController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->CustomerGroup->save($this->request->data)) {
 				$this->Session->setFlash(__('The customer group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The customer group could not be saved. Please, try again.'));

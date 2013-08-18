@@ -52,6 +52,7 @@ class BackupsController extends AppController {
 			$this->Backup->create();
 			if ($ok && $this->Backup->save($this->request->data)) {
 				$this->Session->setFlash(__('The backup has been saved'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The backup failed. Please, try again.'));
