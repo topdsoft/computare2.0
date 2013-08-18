@@ -83,6 +83,7 @@ class GlaccountsController extends AppController {
 			if($this->ComputareGL->post($this->request->data)) {
 				//saved ok
 				$this->Session->setFlash(__('The GL post has been completed.'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action'=>'index'));
 			} else {
 				//save failure
@@ -152,6 +153,7 @@ class GlaccountsController extends AppController {
 //debug($this->request->data);exit;
 			if ($this->ComputareGL->saveAccount($this->request->data)) {
 				$this->Session->setFlash(__('The GL account has been saved'),'default',array('class'=>'success'));
+				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The GL account could not be saved. Please, try again.'));
