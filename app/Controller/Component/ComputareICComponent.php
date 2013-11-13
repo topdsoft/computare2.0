@@ -170,6 +170,7 @@ class ComputareICComponent extends Component{
 		* $data['location_id']
 		* $data['purchaseOrder_id']
 		* $data[qty]
+		* $data[cost] (optional, if Item is already on PO that cost will be used, if not on PO this value will be used or, if not passed and not on PO 0 will be used)
 		* $data['receiptType_id']
 		* $data['serialNumbers'] (optional) array
 	 * @return t/f
@@ -183,6 +184,8 @@ class ComputareICComponent extends Component{
 		$this->PurchaseOrder=ClassRegistry::init('PurchaseOrder');
 		$this->VendorDetail=ClassRegistry::init('VendorDetail');
 		$this->ReceiptType=ClassRegistry::init('ReceiptType');
+		//check for empty cost
+		if(isset($data['cost']) && $data['cost']=='') unset($data['cost']);
 		//get purchase order
 		$purchaseOrder=$this->PurchaseOrder->read(null,$data['purchaseOrder_id']);
 // debug($data);exit;
@@ -241,8 +244,8 @@ class ComputareICComponent extends Component{
 				$data['PurchaseOrderDetails']['purchaseOrder_id']=$data['purchaseOrder_id'];
 				$data['PurchaseOrderDetails']['item_id']=$data['item_id'];
 				$data['PurchaseOrderDetails']['rec']=$data['qty'];
-				//??cost
-				if($data['cost']) $data['PurchaseOrderDetails']['cost']=$data['cost'];
+				//if cost passed then use it, otherwise use 0
+				if(isset($data['cost'])) $data['PurchaseOrderDetails']['cost']=$data['cost'];
 				else $data['PurchaseOrderDetails']['cost']=0;
 			} else $ok=false;
 		} else {
@@ -260,7 +263,7 @@ class ComputareICComponent extends Component{
 			$data['ItemCost']['cost']=$poDetail['PurchaseOrderDetail']['cost'];
 		} else {
 			//use entered cost
-			if($data['cost']) $data['ItemCost']['cost']=$data['cost'];
+			if(isset($data['cost'])) $data['ItemCost']['cost']=$data['cost'];
 			else $data['ItemCost']['cost']=0;
 		}//endif
 		$data['ItemCost']['qty']=$data['qty'];

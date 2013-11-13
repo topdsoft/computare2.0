@@ -266,13 +266,14 @@ class ItemsController extends AppController {
 					//item is on PO allready
 					$this->request->data['Item']['qty']=$purchaseOrderDetail['PurchaseOrderDetail']['qty'];
 					$this->request->data['Item']['cost']=$purchaseOrderDetail['PurchaseOrderDetail']['cost'];
+					$this->set('itemOnPO',true);
 				}//endif
 // debug($purchaseOrderDetail);exit;
 			}//endif
 			if($this->request->data['Item']['step']==2) {
 				//setp 2 get rest of data and save
 				$data['item_id']=$id;
-				$data['cost']=$this->request->data['Item']['cost'];
+				if(isset($this->request->data['Item']['cost']))$data['cost']=$this->request->data['Item']['cost'];
 				if(isset($this->request->data['Item']['qty'])) $data['qty']=$this->request->data['Item']['qty'];
 				else $data['qty']=1;
 				$data['location_id']=$this->request->data['Item']['location_id'];
