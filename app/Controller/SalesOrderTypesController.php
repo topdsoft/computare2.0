@@ -23,6 +23,25 @@ class SalesOrderTypesController extends AppController {
 
 
 /**
+ * view method
+ *
+ * @return void
+ */
+	public function view($id=null) {
+		$this->set('formName','View Sales Order Type');
+//		$this->set('helplink','/pages/salesOrderTypes#e');
+		//validate
+		$this->SalesOrderType->id = $id;
+		if (!$this->SalesOrderType->exists()) {
+			throw new NotFoundException(__('Invalid sales order type'));
+		}//endif
+		$this->set('salesOrderType',$this->SalesOrderType->read());
+		$this->set('glaccounts',array(null=>'(none)')+$this->SalesOrderType->Glaccount->find('list'));
+		$this->set('users',ClassRegistry::init('User')->find('list'));
+	}
+
+
+/**
  * add method
  *
  * @return void
@@ -45,7 +64,7 @@ class SalesOrderTypesController extends AppController {
 		}//endif
 		//get lists
 		$locations=$this->SalesOrderType->Location->generateTreeList(null,null,null,' - ');
-		$glaccounts=$this->SalesOrderType->Glaccount->find('list');
+		$glaccounts=array(null=>'(none)')+$this->SalesOrderType->Glaccount->find('list');
 		$this->set(compact('locations','glaccounts'));
 	}
 

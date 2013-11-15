@@ -11,7 +11,16 @@
 		echo $this->Form->input('stock_required');
 		echo $this->Form->input('location_id');
 		echo $this->Form->input('action');
-		echo $this->Form->input('glaccount_id');
+		echo $this->Form->input('itemTotalDebitAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('itemTotalCreditAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('serviceTotalDebitAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('serviceTotalCreditAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('shippingDebitAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('shippingCreditAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('taxDebitAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('taxCreditAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('grandTotalDebitAcct_id',array('options'=>$glaccounts));
+		echo $this->Form->input('grandTotalCreditAcct_id',array('options'=>$glaccounts));
 		echo $this->Form->input('description',array('label'=>'Description (optional)'));
 	?>
 	<?php echo $this->Form->end(__('Submit')); ?>

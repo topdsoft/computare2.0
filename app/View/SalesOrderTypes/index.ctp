@@ -9,7 +9,6 @@
 			<th><?php echo $this->Paginator->sort('due_days'); ?></th>
 			<th><?php echo $this->Paginator->sort('action'); ?></th>
 			<th><?php echo $this->Paginator->sort('location_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('glaccount_id','GL acct'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
 			<th></th>
@@ -24,10 +23,10 @@
 		<td><?php if($salesOrderType['SalesOrderType']['due_days']) echo 'Y'; ?>&nbsp;</td>
 		<td><?php echo $this->Html->link($salesOrderType['SalesOrderType']['action'],array('controller'=>'salesOrders','action'=>$salesOrderType['SalesOrderType']['action'])); ?>&nbsp;</td>
 		<td><?php echo $this->Html->link($salesOrderType['Location']['name'],array('controller'=>'locations','action'=>'view',$salesOrderType['SalesOrderType']['location_id'])); ?>&nbsp;</td>
-		<td><?php echo $this->Html->link($salesOrderType['Glaccount']['name'],array('controller'=>'glaccounts','action'=>'view',$salesOrderType['SalesOrderType']['glaccount_id'])); ?>&nbsp;</td>
 		<td><?php echo h($salesOrderType['SalesOrderType']['created']); ?>&nbsp;</td>
 		<td><?php echo $users[$salesOrderType['SalesOrderType']['created_id']]; ?>&nbsp;</td>
 		<td class="actions">
+			<?php echo $this->Html->link(__('View'),array('action'=>'view',$salesOrderType['SalesOrderType']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'),array('action'=>'edit',$salesOrderType['SalesOrderType']['id'])); ?>
 			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $salesOrderType['SalesOrderType']['id']), null, __('Are you sure you want to delete: %s?', $salesOrderType['SalesOrderType']['name'])); ?>
 		</td>
