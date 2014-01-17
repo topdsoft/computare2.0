@@ -5,12 +5,12 @@
 			<th><?php echo $this->Paginator->sort('code'); ?></th>
 			<th><?php echo $this->Paginator->sort('item_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('location_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('itemSerialNumber_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('itemSerialNumber_id','Item Serial Number'); ?></th>
 			<th><?php echo $this->Paginator->sort('user_id'); ?></th>
 			<th><?php echo $this->Paginator->sort('print'); ?></th>
 			<th><?php echo $this->Paginator->sort('internal'); ?></th>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
-			<th><?php echo $this->Paginator->sort('created_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
 			<th></th>
 	</tr>
 	<?php
