@@ -381,32 +381,28 @@
 	<h3><?php echo __('Related Sales Order Details'); ?></h3>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
+		<th><?php echo __('SO'); ?></th>
 		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
-		<th><?php echo __('PurchaseOrder Id'); ?></th>
-		<th><?php echo __('Item Id'); ?></th>
+		<th><?php echo __('By'); ?></th>
 		<th><?php echo __('Qty'); ?></th>
-		<th><?php echo __('Rec'); ?></th>
-		<th><?php echo __('Cost'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Shipped'); ?></th>
+		<th><?php echo __('Price'); ?></th>
+		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['SalesOrderDetail'] as $salesOrderDetail): ?>
 		<tr>
-			<td><?php echo $salesOrderDetail['id']; ?></td>
+			<td><?php echo $salesOrderDetail['salesOrder_id']; ?></td>
 			<td><?php echo $salesOrderDetail['created']; ?></td>
-			<td><?php echo $salesOrderDetail['created_id']; ?></td>
-			<td><?php echo $salesOrderDetail['purchaseOrder_id']; ?></td>
-			<td><?php echo $salesOrderDetail['item_id']; ?></td>
+			<td><?php echo $users[$salesOrderDetail['created_id']]; ?></td>
 			<td><?php echo $salesOrderDetail['qty']; ?></td>
-			<td><?php echo $salesOrderDetail['rec']; ?></td>
-			<td><?php echo $salesOrderDetail['cost']; ?></td>
+			<td><?php echo $salesOrderDetail['shipped']; ?></td>
+			<td><?php echo $salesOrderDetail['price']; ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'sales_order_details', 'action' => 'view', $salesOrderDetail['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'sales_order_details', 'action' => 'edit', $salesOrderDetail['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'sales_order_details', 'action' => 'delete', $salesOrderDetail['id']), null, __('Are you sure you want to delete # %s?', $salesOrderDetail['id'])); ?>
+				<?php echo $this->Html->link(__('View'), array('controller' => 'sales_orders', 'action' => 'view', $salesOrderDetail['salesOrder_id'])); ?>
+				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'sales_order_details', 'action' => 'edit', $salesOrderDetail['id'])); ?>
+				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'sales_order_details', 'action' => 'delete', $salesOrderDetail['id']), null, __('Are you sure you want to delete # %s?', $salesOrderDetail['id'])); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
