@@ -69,7 +69,7 @@
 		foreach($salesOrder['ItemDetail'] as $item){
 			//loop for all items in SO
 			echo '<tr>';
-			echo '<td>'.$item['Item']['name'].'</td>';
+			echo '<td>'.$this->Html->link($item['Item']['name'],array('controller'=>'items','action'=>'view',$item['Item']['id'])).'</td>';
 			echo '<td>'.$item['qty'].'</td>';
 			echo '<td>'.$item['shipped'].'</td>';
 			echo '<td>'.$item['price'].'</td>';
