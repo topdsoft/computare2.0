@@ -104,3 +104,4 @@
 </div>
 <?php 
 // debug($salesOrder);?>
+<?php echo $this->Html->script('sliderelated.js') ?>

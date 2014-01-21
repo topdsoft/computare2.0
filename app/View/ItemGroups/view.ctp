@@ -31,6 +31,8 @@
 </div>
 <?php
 // debug($itemGroup);?>
+	<?php echo $this->element('reportdetails'); ?>
+
 <div class="related">
 	<?php if (!empty($itemGroup['Item'])): ?>
 	<h3><?php echo __('Items in Group'); ?></h3>
@@ -54,3 +56,4 @@
 	</table>
 <?php endif; ?>
 </div>
+<?php echo $this->Html->script('sliderelated.js') ?>

@@ -58,6 +58,7 @@
 		<li><?php echo $this->Html->link(__('Receive Item'), array('action' => 'receive', $item['Item']['id'])); ?> </li>
 	</ul>
 </div>
+	<?php echo $this->element('reportdetails'); ?>
 
 <div class="related">
 	<?php if (!empty($item['ItemGroup'])): ?>
