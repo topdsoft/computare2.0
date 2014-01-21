@@ -308,6 +308,9 @@ div.view {
 	padding:10px 2%;*/
 	padding:0px 0px;
 }
+div.reportheader {
+	clear: both;
+}
 div.actions {
 	float:right;
 	width:16%;

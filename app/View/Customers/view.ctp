@@ -87,14 +87,19 @@
 		}//foreach
 	}//enidf
 ?>
-<?php //debug($customer);
-	echo $this->element('revisionblock',array('data'=>$customer,'ignore'=>array('id','created','created_id')));
-?></dl>
-</div><br>
+</div>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Customer'), array('action' => 'edit', $customer['Customer']['id'])); ?> </li>
 	</ul>
 </div>
+	<?php echo $this->element('reportdetails'); ?>
 	
+<div class="related">
+</div>
+<?php //debug($customer);
+	echo $this->element('revisionblock',array('data'=>$customer,'ignore'=>array('id','created','created_id')));
+?></dl>
+</div><br>
+<?php echo $this->Html->script('sliderelated.js') ?>
