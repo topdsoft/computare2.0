@@ -28,6 +28,7 @@
 		</dd>
 	</dl>
 </div>
+<?php echo $this->element('reportdetails'); ?>
 <?php
 // debug($inventoryCount);?>
 <div class="related">

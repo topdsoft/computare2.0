@@ -32,3 +32,4 @@
 		<li><?php echo $this->Html->link(__('New Glcheck'), array('action' => 'add')); ?> </li>
 	</ul>
 </div>
+<?php echo $this->element('reportdetails'); ?>

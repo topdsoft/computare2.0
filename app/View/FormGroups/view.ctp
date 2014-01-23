@@ -29,6 +29,7 @@
 		<li><?php echo $this->Html->link(__('Edit Form Group'), array('action' => 'edit', $formGroup['FormGroup']['id'])); ?> </li>
 	</ul>
 </div>
+<?php echo $this->element('reportdetails'); ?>
 <div class="related">
 	<h3><?php echo __('Related Forms'); ?></h3>
 	<?php if (!empty($formGroup['Form'])): ?>
@@ -67,3 +68,4 @@
 <?php endif; ?>
 
 </div>
+<?php echo $this->Html->script('sliderelated.js') ?>

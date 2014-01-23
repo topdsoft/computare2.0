@@ -43,3 +43,4 @@
 		<li><?php // echo $this->Html->link(__('List Locations'), array('controller' => 'locations', 'action' => 'index')); ?> </li>
 	</ul>
 </div>
+<?php echo $this->element('reportdetails'); ?>
