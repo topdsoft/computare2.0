@@ -7,7 +7,7 @@ The word "computāre" is latin for to calculate or to compute.
 
 The MIT License (MIT)
 
-Copyright (c) 2012 Top Drawer Software LLC.
+Copyright (c) 2014 Top Drawer Software LLC.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
