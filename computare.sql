@@ -1,95 +1,180 @@
--- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (x86_64)
+-- phpMyAdmin SQL Dump
+-- version 3.4.10.1deb1
+-- http://www.phpmyadmin.net
 --
--- Host: localhost    Database: computare
--- ------------------------------------------------------
--- Server version	5.5.29-0ubuntu0.12.04.1
+-- Host: localhost
+-- Generation Time: Feb 01, 2014 at 06:25 AM
+-- Server version: 5.5.35
+-- PHP Version: 5.3.10-1ubuntu3.9
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `categories`
+-- Database: `computare`
 --
 
-DROP TABLE IF EXISTS `categories`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `categories` (
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `addresses`
+--
+
+CREATE TABLE IF NOT EXISTS `addresses` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `parent_id` int(10) unsigned NOT NULL,
-  `lft` int(10) unsigned NOT NULL,
-  `rght` int(10) unsigned NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `vendor_id` int(10) unsigned zerofill DEFAULT NULL,
+  `customer_id` int(10) unsigned zerofill DEFAULT NULL,
+  `line1` varchar(50) NOT NULL,
+  `line2` varchar(50) NOT NULL,
+  `city` varchar(30) NOT NULL,
+  `state` varchar(2) NOT NULL,
+  `zip` varchar(10) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vendor_id` (`vendor_id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `backups`
+--
+
+CREATE TABLE IF NOT EXISTS `backups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `filename` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `categories`
+-- Table structure for table `calendarPopUps`
 --
 
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `calendarPopUps` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  `x_pos` int(11) NOT NULL,
+  `y_pos` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `customerDetails`
 --
 
-DROP TABLE IF EXISTS `customerDetails`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `customerDetails` (
+CREATE TABLE IF NOT EXISTS `customerDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `customer_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned zerofill NOT NULL,
+  `customerGroup_id` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `companyName` varchar(50) NOT NULL,
   `firstName` varchar(30) NOT NULL,
   `lastName` varchar(30) NOT NULL,
-  `address1` varchar(50) NOT NULL,
-  `address2` varchar(50) NOT NULL,
-  `city` varchar(50) NOT NULL,
-  `state` varchar(2) NOT NULL,
-  `zip` varchar(10) NOT NULL,
   `email` varchar(50) NOT NULL,
   `phone` varchar(15) NOT NULL,
   `notes` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `customerDetails`
+-- Table structure for table `customerGroups`
 --
 
-LOCK TABLES `customerDetails` WRITE;
-/*!40000 ALTER TABLE `customerDetails` DISABLE KEYS */;
-INSERT INTO `customerDetails` VALUES (1,1,'2012-10-31 17:43:18',1,'Top Drawer Software LLC','Kurt','Lakin','1705 56th st','unused','Des Moines','Io','50310','klakin2003@yahoo.com','5157701684','first attempt'),(2,1,'2012-10-31 18:00:03',1,'Top Drawer Software LLC','Kurt','Lakin','1705 56th st','unused','Des Moines','IA','50310','klakin2003@yahoo.com','5157701684','first attempt'),(3,2,'2012-10-31 18:09:58',1,'','Another','Customer','a1','a2','Des Moines','IA','50322','','',''),(4,3,'2012-10-31 18:13:36',1,'ABC Corp','','','','','','','','','',''),(5,4,'2012-10-31 18:26:11',1,'','New','Customer','','','','','','','',''),(6,2,'2012-11-01 13:36:15',1,'New Company','Another','Customer','a1','a2','Des Moines','IA','50322','','',''),(7,5,'2012-11-01 15:14:50',1,'new comp','Kurt','Lakin','2400 86th st Suite 14','','Des Moines','IA','50322','klakin2003@yahoo.com','5157701684',''),(8,5,'2012-11-01 16:15:35',1,'new comp','Kurt','Lakin','2400 86th st Suite 14','','Des Moines','IA','50322','klakin2003@yahoo.com','5157701684',''),(9,2,'2012-11-01 17:02:19',1,'New Company','Another','Customer','a1xxx','a2xxx','Des Moines','IA','50322','','','made some changes');
-/*!40000 ALTER TABLE `customerDetails` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `customerGroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customerGroups_items`
+--
+
+CREATE TABLE IF NOT EXISTS `customerGroups_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL,
+  `customerGroup_id` int(10) unsigned DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `deleted` datetime DEFAULT NULL,
+  `deleted_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `price` float(12,2) NOT NULL,
+  `qty` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qty` (`qty`),
+  KEY `item_id` (`item_id`),
+  KEY `customerGroup_id` (`customerGroup_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customerGroups_services`
+--
+
+CREATE TABLE IF NOT EXISTS `customerGroups_services` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `service_id` int(10) unsigned NOT NULL,
+  `customerGroup_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `price` float(12,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `customerGroup_id` (`customerGroup_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customerPopUps`
+--
+
+CREATE TABLE IF NOT EXISTS `customerPopUps` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `x_pos` int(11) NOT NULL,
+  `y_pos` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `customers`
 --
 
-DROP TABLE IF EXISTS `customers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `customers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `customers` (
+  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `customerDetail_id` int(10) unsigned NOT NULL,
+  `customerGroup_id` int(10) unsigned DEFAULT NULL,
   `active` tinyint(1) NOT NULL,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -97,81 +182,98 @@ CREATE TABLE `customers` (
   `deleted_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `customerDetail_id` (`customerDetail_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `customers`
+-- Table structure for table `customers_items`
 --
 
-LOCK TABLES `customers` WRITE;
-/*!40000 ALTER TABLE `customers` DISABLE KEYS */;
-INSERT INTO `customers` VALUES (1,2,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(2,9,1,'0000-00-00 00:00:00',1,'2012-11-01 17:02:20',NULL),(3,4,1,'0000-00-00 00:00:00',1,'0000-00-00 00:00:00',NULL),(4,5,0,'2012-10-31 18:26:11',1,'2012-10-31 18:26:11',1),(5,8,1,'2012-11-01 15:14:50',1,'2012-11-01 16:15:35',NULL);
-/*!40000 ALTER TABLE `customers` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `customers_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned zerofill NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `price` float(12,2) NOT NULL,
+  `qty` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `qty` (`qty`),
+  KEY `item_id` (`item_id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customers_services`
+--
+
+CREATE TABLE IF NOT EXISTS `customers_services` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `service_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `price` float(12,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `service_id` (`service_id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `errorevents`
 --
 
-DROP TABLE IF EXISTS `errorevents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `errorevents` (
+CREATE TABLE IF NOT EXISTS `errorevents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
-  `message` varchar(50) NOT NULL,
+  `message` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `errorevents`
---
-
-LOCK TABLES `errorevents` WRITE;
-/*!40000 ALTER TABLE `errorevents` DISABLE KEYS */;
-INSERT INTO `errorevents` VALUES (1,'2013-01-31 15:04:35','Login fail User:KURTa'),(2,'2013-01-31 15:20:55','Login fail User:KURT');
-/*!40000 ALTER TABLE `errorevents` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `formevents`
 --
 
-DROP TABLE IF EXISTS `formevents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `formevents` (
+CREATE TABLE IF NOT EXISTS `formevents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `controller` varchar(40) NOT NULL,
   `action` varchar(40) NOT NULL,
   `parameters` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `formevents`
+-- Table structure for table `formGroups`
 --
 
-LOCK TABLES `formevents` WRITE;
-/*!40000 ALTER TABLE `formevents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `formevents` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `formGroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `forms`
 --
 
-DROP TABLE IF EXISTS `forms`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `forms` (
+CREATE TABLE IF NOT EXISTS `forms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
+  `formGroup_id` int(10) unsigned DEFAULT NULL,
+  `add_menu` tinyint(1) NOT NULL,
   `name` varchar(30) NOT NULL,
   `link` varchar(50) NOT NULL,
   `type` varchar(2) NOT NULL,
@@ -182,53 +284,29 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`),
   KEY `action` (`action`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='1' AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `forms`
---
-
-LOCK TABLES `forms` WRITE;
-/*!40000 ALTER TABLE `forms` DISABLE KEYS */;
-INSERT INTO `forms` VALUES (1,'2012-10-26 11:50:49',1,'View Forms','/forms','S','','forms','index',''),(2,'2012-10-26 11:51:38',1,'View Users','/users','S','','users','index',''),(3,'2012-10-26 11:53:32',1,'View Menus','/menus','S','','menus','index',''),(4,'2012-10-29 13:42:42',1,'Add User','/users/add','S','','users','add',''),(5,'2012-10-29 17:05:04',1,'Add Form','/forms/add','S','','forms','add',''),(6,'2012-10-31 19:06:43',1,'List Customers','/customers','AR','/pages/customers','customers','index',''),(7,'2012-10-31 19:07:11',1,'Add Customer','/customers/add','AR','','customers','add',''),(11,'2012-11-14 17:03:21',1,'Edit Form','','S','','forms','edit',''),(12,'2012-11-14 17:06:04',1,'View Customer','','AR','','customers','view',''),(13,'2012-11-14 17:06:40',1,'Edit Customer','','AR','','customers','edit',''),(15,'2012-11-14 17:46:43',1,'Edit Menu','','S','','menus','edit',''),(16,'2012-11-14 18:06:07',1,'Edit Menu Users','','S','','menus','editusers',''),(18,'2012-11-20 13:46:55',1,'List GL Account Groups','','GL','','glgroups','index',''),(19,'2012-11-20 13:53:29',1,'Add GL Account Group','','GL','','glgroups','add',''),(20,'2012-11-20 13:54:49',1,'Add Menu','','S','','menus','add',''),(21,'2012-11-20 14:03:39',1,'List GL Accounts','','GL','','glaccounts','index',''),(22,'2012-11-20 14:14:34',1,'Edit GL Account','','GL','','glaccounts','edit',''),(24,'2012-11-23 11:05:46',1,'GL Posting','','GL','','glaccounts','posting',''),(26,'2012-11-24 15:19:00',1,'GL Entries List','','GL','','glentries','index',''),(27,'2012-12-03 15:30:21',1,'View GL Account','','GL','','glaccounts','view',''),(28,'2012-12-03 15:32:57',1,'List Menus','','S','','menus','view',''),(34,'2013-01-23 10:51:35',1,'Program Setting History','','','','programsettings','index',''),(35,'2013-01-31 14:13:24',1,'List System Events','','','','sysevents','index',''),(36,'2013-02-01 16:18:50',1,'View System Event','','','','sysevents','view','');
-/*!40000 ALTER TABLE `forms` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `forms_groups`
 --
 
-DROP TABLE IF EXISTS `forms_groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `forms_groups` (
+CREATE TABLE IF NOT EXISTS `forms_groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `form_id` (`form_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `forms_groups`
---
-
-LOCK TABLES `forms_groups` WRITE;
-/*!40000 ALTER TABLE `forms_groups` DISABLE KEYS */;
-INSERT INTO `forms_groups` VALUES (1,1,1),(2,2,1),(3,3,1),(4,4,1);
-/*!40000 ALTER TABLE `forms_groups` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `forms_menus`
 --
 
-DROP TABLE IF EXISTS `forms_menus`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `forms_menus` (
+CREATE TABLE IF NOT EXISTS `forms_menus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int(10) unsigned NOT NULL,
   `menu_id` int(10) unsigned NOT NULL,
@@ -237,52 +315,36 @@ CREATE TABLE `forms_menus` (
   `params` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `menu_id` (`menu_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `forms_menus`
---
-
-LOCK TABLES `forms_menus` WRITE;
-/*!40000 ALTER TABLE `forms_menus` DISABLE KEYS */;
-INSERT INTO `forms_menus` VALUES (50,6,1,1.0,'List Customers',''),(51,7,1,2.0,'Add Customer',''),(53,0,2,1.0,'Users',''),(54,2,2,2.0,'List Users',''),(55,4,2,3.0,'Add User',''),(56,0,2,4.0,'Forms',''),(57,1,2,5.0,'List Forms',''),(58,0,2,6.0,'Menus',''),(59,3,2,7.0,'List Menus',''),(60,18,5,1.0,'List GL Groups','');
-/*!40000 ALTER TABLE `forms_menus` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `forms_users`
 --
 
-DROP TABLE IF EXISTS `forms_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `forms_users` (
+CREATE TABLE IF NOT EXISTS `forms_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `form_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
+  `created` datetime NOT NULL,
+  `visits` int(10) unsigned NOT NULL,
+  `modified` datetime NOT NULL,
+  `last_url` varchar(256) NOT NULL,
+  `default_url` varchar(256) NOT NULL,
+  `last_click_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `form_id` (`form_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+  KEY `form_id` (`form_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `forms_users`
---
-
-LOCK TABLES `forms_users` WRITE;
-/*!40000 ALTER TABLE `forms_users` DISABLE KEYS */;
-/*!40000 ALTER TABLE `forms_users` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `glaccountDetails`
 --
 
-DROP TABLE IF EXISTS `glaccountDetails`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glaccountDetails` (
+CREATE TABLE IF NOT EXISTS `glaccountDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -290,27 +352,15 @@ CREATE TABLE `glaccountDetails` (
   `glgroup_id` int(10) unsigned NOT NULL,
   `name` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `glaccountDetails`
---
-
-LOCK TABLES `glaccountDetails` WRITE;
-/*!40000 ALTER TABLE `glaccountDetails` DISABLE KEYS */;
-INSERT INTO `glaccountDetails` VALUES (1,'2012-11-20 15:27:59',1,1,1,'test'),(2,'2012-11-20 15:56:54',1,4,1,'test2'),(4,'2012-11-20 16:05:03',1,4,3,'test2changed'),(5,'2012-11-20 16:52:57',1,1,1,'Cash'),(6,'2012-11-20 16:53:13',1,4,3,'Owner Equity'),(7,'2012-11-23 12:22:29',1,6,1,'Cash (savings)'),(8,'2012-11-23 12:23:23',1,7,1,'Inventory Assets'),(9,'2012-11-23 12:23:53',1,8,5,'Cost of Goods Sold'),(10,'2012-11-23 12:24:18',1,9,5,'Operating Expenses');
-/*!40000 ALTER TABLE `glaccountDetails` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `glaccounts`
 --
 
-DROP TABLE IF EXISTS `glaccounts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glaccounts` (
+CREATE TABLE IF NOT EXISTS `glaccounts` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -318,53 +368,29 @@ CREATE TABLE `glaccounts` (
   `glgroup_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `glgroup_id` (`glgroup_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `glaccounts`
---
-
-LOCK TABLES `glaccounts` WRITE;
-/*!40000 ALTER TABLE `glaccounts` DISABLE KEYS */;
-INSERT INTO `glaccounts` VALUES (1,'2012-11-20 15:27:59',1,5,1),(4,'2012-11-20 15:56:54',1,6,3),(6,'2012-11-23 12:22:29',1,7,1),(7,'2012-11-23 12:23:23',1,8,1),(8,'2012-11-23 12:23:53',1,9,5),(9,'2012-11-23 12:24:18',1,10,5);
-/*!40000 ALTER TABLE `glaccounts` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `glchecks`
 --
 
-DROP TABLE IF EXISTS `glchecks`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glchecks` (
+CREATE TABLE IF NOT EXISTS `glchecks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `checkNumber` int(10) unsigned zerofill NOT NULL,
   `amount` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `glchecks`
---
-
-LOCK TABLES `glchecks` WRITE;
-/*!40000 ALTER TABLE `glchecks` DISABLE KEYS */;
-INSERT INTO `glchecks` VALUES (1,'2012-11-23 14:57:20',0000001001,150.00);
-/*!40000 ALTER TABLE `glchecks` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `glentries`
 --
 
-DROP TABLE IF EXISTS `glentries`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glentries` (
+CREATE TABLE IF NOT EXISTS `glentries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -376,205 +402,322 @@ CREATE TABLE `glentries` (
   `credit` decimal(12,2) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `glaccount_id` (`glaccount_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `glentries`
---
-
-LOCK TABLES `glentries` WRITE;
-/*!40000 ALTER TABLE `glentries` DISABLE KEYS */;
-INSERT INTO `glentries` VALUES (1,'2012-11-23 14:57:20',1,'2012-11-23',4,1,1,150.00,0.00),(2,'2012-11-23 14:57:20',1,'2012-11-23',1,1,1,0.00,150.00),(3,'2012-11-23 16:49:33',1,'2012-11-23',9,0,0,1.00,0.00),(4,'2012-11-23 16:49:33',1,'2012-11-23',6,0,0,1.00,0.00),(5,'2012-11-23 16:49:33',1,'2012-11-23',4,0,0,0.00,1.00),(6,'2012-11-23 16:49:33',1,'2012-11-23',7,0,0,0.00,1.00),(7,'2012-11-24 15:24:37',1,'2012-11-24',1,0,2,20.00,0.00),(8,'2012-11-24 15:24:37',1,'2012-11-24',6,0,2,0.00,20.00);
-/*!40000 ALTER TABLE `glentries` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `glgroups`
 --
 
-DROP TABLE IF EXISTS `glgroups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glgroups` (
+CREATE TABLE IF NOT EXISTS `glgroups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `glgroups`
---
-
-LOCK TABLES `glgroups` WRITE;
-/*!40000 ALTER TABLE `glgroups` DISABLE KEYS */;
-INSERT INTO `glgroups` VALUES (1,'2012-11-08 15:53:57',1,'Assets'),(2,'2012-11-08 15:59:04',1,'Liabilities'),(3,'2012-11-20 13:53:42',1,'Owner Equity'),(4,'2012-11-20 13:53:51',1,'Revenue'),(5,'2012-11-20 13:53:59',1,'Expenses'),(6,'2012-11-20 13:54:05',1,'Gains'),(7,'2012-11-20 13:54:20',1,'Losses');
-/*!40000 ALTER TABLE `glgroups` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `glnotes`
 --
 
-DROP TABLE IF EXISTS `glnotes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `glnotes` (
+CREATE TABLE IF NOT EXISTS `glnotes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `text` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `glnotes`
+-- Table structure for table `glslots`
 --
 
-LOCK TABLES `glnotes` WRITE;
-/*!40000 ALTER TABLE `glnotes` DISABLE KEYS */;
-INSERT INTO `glnotes` VALUES (1,'owner draw'),(2,'move cash');
-/*!40000 ALTER TABLE `glnotes` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `groups`
---
-
-DROP TABLE IF EXISTS `groups`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `groups` (
+CREATE TABLE IF NOT EXISTS `glslots` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `name` varchar(30) NOT NULL,
-  `log_level` smallint(6) NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `slot` varchar(20) NOT NULL,
+  `glaccount_id` int(10) unsigned NOT NULL,
+  `debit` tinyint(1) NOT NULL,
+  `credit` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `groups`
+-- Table structure for table `groups_items`
 --
 
-LOCK TABLES `groups` WRITE;
-/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
-INSERT INTO `groups` VALUES (1,'2012-10-26 11:46:23',1,'Admin',0);
-/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `groups_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL,
+  `itemGroup_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `groups_users`
 --
 
-DROP TABLE IF EXISTS `groups_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `groups_users` (
+CREATE TABLE IF NOT EXISTS `groups_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `group_id` int(10) unsigned NOT NULL,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `groups_users`
---
-
-LOCK TABLES `groups_users` WRITE;
-/*!40000 ALTER TABLE `groups_users` DISABLE KEYS */;
-INSERT INTO `groups_users` VALUES (1,1,1,'0000-00-00 00:00:00',0);
-/*!40000 ALTER TABLE `groups_users` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `htmlevents`
 --
 
-DROP TABLE IF EXISTS `htmlevents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `htmlevents` (
+CREATE TABLE IF NOT EXISTS `htmlevents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `html` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `htmlevents`
---
-
-LOCK TABLES `htmlevents` WRITE;
-/*!40000 ALTER TABLE `htmlevents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `htmlevents` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `images`
 --
 
-DROP TABLE IF EXISTS `images`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `images` (
+CREATE TABLE IF NOT EXISTS `images` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `filename` varchar(30) NOT NULL,
+  `filename` varchar(100) NOT NULL,
+  `thumbnail` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `images`
+-- Table structure for table `imageSettings`
 --
 
-LOCK TABLES `images` WRITE;
-/*!40000 ALTER TABLE `images` DISABLE KEYS */;
-/*!40000 ALTER TABLE `images` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `imageSettings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `image_dir` varchar(100) NOT NULL,
+  `max_image_size` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `images_items`
 --
 
-DROP TABLE IF EXISTS `images_items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `images_items` (
+CREATE TABLE IF NOT EXISTS `images_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `image_id` int(10) unsigned NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `image_id` (`image_id`,`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `images_items`
+-- Table structure for table `inventoryCounts`
 --
 
-LOCK TABLES `images_items` WRITE;
-/*!40000 ALTER TABLE `images_items` DISABLE KEYS */;
-/*!40000 ALTER TABLE `images_items` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `inventoryCounts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `finished` datetime DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `notes` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventoryCounts_locations`
+--
+
+CREATE TABLE IF NOT EXISTS `inventoryCounts_locations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `inventoryCount_id` int(10) unsigned NOT NULL,
+  `location_id` int(10) unsigned NOT NULL,
+  `finished` datetime DEFAULT NULL,
+  `finished_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `inventoryCount_id` (`inventoryCount_id`),
+  KEY `location_id` (`location_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventoryLocks`
+--
+
+CREATE TABLE IF NOT EXISTS `inventoryLocks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `notes` text,
+  `location_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoiceDetails`
+--
+
+CREATE TABLE IF NOT EXISTS `invoiceDetails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `invoice_id` int(10) unsigned zerofill NOT NULL,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `text` varchar(100) NOT NULL,
+  `amount` float(12,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invoice_id` (`invoice_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `invoices`
+--
+
+CREATE TABLE IF NOT EXISTS `invoices` (
+  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `number` varchar(20) NOT NULL,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `closed` datetime DEFAULT NULL,
+  `closed_id` int(10) unsigned DEFAULT NULL,
+  `due` date DEFAULT NULL,
+  `status` varchar(1) NOT NULL,
+  `identification` varchar(64) DEFAULT NULL,
+  `customer_id` int(10) unsigned DEFAULT NULL,
+  `vendor_id` int(10) unsigned DEFAULT NULL,
+  `purchaseOrder_id` int(10) unsigned DEFAULT NULL,
+  `salesOrder_id` int(10) unsigned DEFAULT NULL,
+  `billing_address_id` int(10) unsigned DEFAULT NULL,
+  `shipping_address_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `vendor_id` (`vendor_id`),
+  KEY `purchaseOrder_id` (`purchaseOrder_id`),
+  KEY `salesOrder_id` (`salesOrder_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `issueTypes`
+--
+
+CREATE TABLE IF NOT EXISTS `issueTypes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(30) NOT NULL,
+  `glAccount_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemCategories`
+--
+
+CREATE TABLE IF NOT EXISTS `itemCategories` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `parent_id` int(10) unsigned NOT NULL,
+  `lft` int(10) unsigned NOT NULL,
+  `rght` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemCosts`
+--
+
+CREATE TABLE IF NOT EXISTS `itemCosts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned NOT NULL,
+  `cost` float(10,2) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `remain` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemCounts`
+--
+
+CREATE TABLE IF NOT EXISTS `itemCounts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `inventoryCount_id` int(10) unsigned NOT NULL,
+  `location_id` int(10) unsigned NOT NULL,
+  `qty` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  KEY `inventoryCount_id` (`inventoryCount_id`),
+  KEY `location_id` (`location_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `itemDetails`
 --
 
-DROP TABLE IF EXISTS `itemDetails`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `itemDetails` (
+CREATE TABLE IF NOT EXISTS `itemDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -584,27 +727,61 @@ CREATE TABLE `itemDetails` (
   `item_id` int(10) unsigned NOT NULL,
   `category_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `itemDetails`
+-- Table structure for table `itemGroups`
 --
 
-LOCK TABLES `itemDetails` WRITE;
-/*!40000 ALTER TABLE `itemDetails` DISABLE KEYS */;
-INSERT INTO `itemDetails` VALUES (1,'2012-10-24 14:41:36',0,'Test item 1','1','1234567890',1,0),(2,'2012-10-24 14:45:05',0,'test item 2','2','',2,0),(3,'2012-10-24 15:06:51',0,'Test item 1','1','',1,0),(4,'2012-10-24 15:15:11',0,'Test item 1 mod','1','',1,0),(5,'2012-10-25 11:49:24',0,'test item 2 changed','2','',2,0),(6,'2012-10-25 12:08:18',0,'test item 2 changed again','2','',2,0);
-/*!40000 ALTER TABLE `itemDetails` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `itemGroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `item_ser_numbers`
+-- Table structure for table `itemPopUps`
 --
 
-DROP TABLE IF EXISTS `item_ser_numbers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item_ser_numbers` (
+CREATE TABLE IF NOT EXISTS `itemPopUps` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `x_pos` int(11) NOT NULL,
+  `y_pos` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items`
+--
+
+CREATE TABLE IF NOT EXISTS `items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `itemDetail_id` int(10) unsigned NOT NULL,
+  `category_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `serialized` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemSerialNumbers`
+--
+
+CREATE TABLE IF NOT EXISTS `itemSerialNumbers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -612,80 +789,15 @@ CREATE TABLE `item_ser_numbers` (
   `item_id` int(10) unsigned NOT NULL,
   `number` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `item_ser_numbers`
---
-
-LOCK TABLES `item_ser_numbers` WRITE;
-/*!40000 ALTER TABLE `item_ser_numbers` DISABLE KEYS */;
-/*!40000 ALTER TABLE `item_ser_numbers` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `item_transactions`
---
-
-DROP TABLE IF EXISTS `item_transactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `item_transactions` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned NOT NULL,
-  `item_id` int(10) unsigned NOT NULL,
-  `location_id` int(10) unsigned NOT NULL,
-  `qty` int(11) NOT NULL,
-  `type` enum('I','R','T') NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `item_transactions`
---
-
-LOCK TABLES `item_transactions` WRITE;
-/*!40000 ALTER TABLE `item_transactions` DISABLE KEYS */;
-/*!40000 ALTER TABLE `item_transactions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `items`
---
-
-DROP TABLE IF EXISTS `items`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `itemDetail_id` int(10) unsigned NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  `searialized` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `items`
---
-
-LOCK TABLES `items` WRITE;
-/*!40000 ALTER TABLE `items` DISABLE KEYS */;
-INSERT INTO `items` VALUES (1,4,1,0),(2,6,1,0);
-/*!40000 ALTER TABLE `items` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `items_locations`
 --
 
-DROP TABLE IF EXISTS `items_locations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `items_locations` (
+CREATE TABLE IF NOT EXISTS `items_locations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -693,78 +805,135 @@ CREATE TABLE `items_locations` (
   `location_id` int(10) unsigned NOT NULL,
   `qty` int(11) NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items_vendors`
+--
+
+CREATE TABLE IF NOT EXISTS `items_vendors` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemTransactions`
+--
+
+CREATE TABLE IF NOT EXISTS `itemTransactions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `location_id` int(10) unsigned NOT NULL,
+  `sale_id` int(10) unsigned NOT NULL,
+  `receipt_id` int(10) unsigned NOT NULL,
+  `qty` int(11) NOT NULL,
+  `type` varchar(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `itemWorkRecords`
+--
+
+CREATE TABLE IF NOT EXISTS `itemWorkRecords` (
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `items_locations`
+-- Table structure for table `links`
 --
 
-LOCK TABLES `items_locations` WRITE;
-/*!40000 ALTER TABLE `items_locations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `items_locations` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `links` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `workflowChain_id` int(10) unsigned NOT NULL,
+  `ordr` int(11) NOT NULL,
+  `controller` varchar(32) NOT NULL,
+  `action` varchar(32) NOT NULL,
+  `params` varchar(128) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `workflowChain_id` (`workflowChain_id`),
+  KEY `active` (`active`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `locationDetails`
 --
 
-DROP TABLE IF EXISTS `locationDetails`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `locationDetails` (
+CREATE TABLE IF NOT EXISTS `locationDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `name` varchar(40) NOT NULL,
+  `name` varchar(64) NOT NULL,
   `parent_id` int(10) unsigned NOT NULL,
-  `lft` int(10) unsigned NOT NULL,
-  `rght` int(10) unsigned NOT NULL,
   `location_id` int(10) unsigned NOT NULL,
+  `locationType_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `locationDetails`
---
-
-LOCK TABLES `locationDetails` WRITE;
-/*!40000 ALTER TABLE `locationDetails` DISABLE KEYS */;
-/*!40000 ALTER TABLE `locationDetails` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `locations`
 --
 
-DROP TABLE IF EXISTS `locations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `locations` (
+CREATE TABLE IF NOT EXISTS `locations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `locationDetail_id` int(10) unsigned NOT NULL,
+  `lft` int(10) unsigned NOT NULL,
+  `rght` int(10) unsigned NOT NULL,
+  `parent_id` int(10) unsigned NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `locationType_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `locations`
+-- Table structure for table `locationTypes`
 --
 
-LOCK TABLES `locations` WRITE;
-/*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `locations` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `locationTypes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `name` varchar(64) NOT NULL,
+  `location_id` int(10) unsigned DEFAULT NULL,
+  `default_name` varchar(64) DEFAULT NULL,
+  `next_number` int(11) DEFAULT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `menus`
 --
 
-DROP TABLE IF EXISTS `menus`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `menus` (
+CREATE TABLE IF NOT EXISTS `menus` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime DEFAULT NULL,
   `created_id` int(10) unsigned DEFAULT NULL,
@@ -772,141 +941,443 @@ CREATE TABLE `menus` (
   `user_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
---
--- Dumping data for table `menus`
---
-
-LOCK TABLES `menus` WRITE;
-/*!40000 ALTER TABLE `menus` DISABLE KEYS */;
-INSERT INTO `menus` VALUES (1,'2012-10-26 12:00:34',1,'Customers',0),(2,'2012-10-26 12:02:48',1,'Setup',0),(3,'2012-10-26 12:04:20',1,'Menus',0),(4,'2012-10-26 15:59:51',1,'New Menu',1),(5,'2012-11-20 13:55:40',1,'General Ledger',0);
-/*!40000 ALTER TABLE `menus` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `menus_users`
 --
 
-DROP TABLE IF EXISTS `menus_users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `menus_users` (
+CREATE TABLE IF NOT EXISTS `menus_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `menu_id` int(10) unsigned NOT NULL,
   `user_id` int(10) unsigned NOT NULL,
   `ordr` float(4,1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `menus_users`
+-- Table structure for table `paymentTypes`
 --
 
-LOCK TABLES `menus_users` WRITE;
-/*!40000 ALTER TABLE `menus_users` DISABLE KEYS */;
-INSERT INTO `menus_users` VALUES (1,1,1,2.0),(2,2,1,1.0),(5,2,2,0.0),(6,4,1,3.0),(7,5,1,0.0);
-/*!40000 ALTER TABLE `menus_users` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `permissionevents`
---
-
-DROP TABLE IF EXISTS `permissionevents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `permissionevents` (
+CREATE TABLE IF NOT EXISTS `paymentTypes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `group_id` int(10) unsigned NOT NULL,
-  `controller` varchar(20) NOT NULL,
-  `form_id` int(10) unsigned NOT NULL,
-  `note` varchar(20) NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `identification_label` varchar(64) DEFAULT NULL,
+  `gl_expense_account_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `permissionevents`
+-- Table structure for table `permissionEvents`
 --
 
-LOCK TABLES `permissionevents` WRITE;
-/*!40000 ALTER TABLE `permissionevents` DISABLE KEYS */;
-/*!40000 ALTER TABLE `permissionevents` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `permissionEvents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `userGroup_id` int(10) unsigned DEFAULT NULL,
+  `form_id` int(10) unsigned DEFAULT NULL,
+  `formGroup_id` int(10) unsigned DEFAULT NULL,
+  `note` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permissionSets`
+--
+
+CREATE TABLE IF NOT EXISTS `permissionSets` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `userGroup_id` int(10) unsigned DEFAULT NULL,
+  `form_id` int(10) unsigned DEFAULT NULL,
+  `formGroup_id` int(10) unsigned DEFAULT NULL,
+  `view` tinyint(1) NOT NULL,
+  `submit` tinyint(1) NOT NULL,
+  `setDefault` tinyint(1) NOT NULL,
+  `setLogging` tinyint(1) NOT NULL,
+  `undoOwn` tinyint(1) NOT NULL,
+  `undoOthers` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `userGroup_id` (`userGroup_id`),
+  KEY `form_id` (`form_id`),
+  KEY `formGroup_id` (`formGroup_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `programsettings`
 --
 
-DROP TABLE IF EXISTS `programsettings`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `programsettings` (
+CREATE TABLE IF NOT EXISTS `programsettings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `dbschema` int(10) unsigned NOT NULL,
   `full_name` varchar(50) NOT NULL,
+  `cost_method` varchar(1) NOT NULL,
+  `backup_file_dir` varchar(128) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `programsettings`
+-- Table structure for table `projects`
 --
 
-LOCK TABLES `programsettings` WRITE;
-/*!40000 ALTER TABLE `programsettings` DISABLE KEYS */;
-INSERT INTO `programsettings` VALUES (1,'2013-01-22 16:34:58',0,0,'Top Drawer Software LLC'),(2,'2013-01-22 16:37:32',0,0,'Top Drawer Software LLC'),(3,'2013-01-22 16:37:57',1,0,'Top Drawer Software LLC');
-/*!40000 ALTER TABLE `programsettings` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `projects` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `finished` datetime DEFAULT NULL,
+  `finished_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(64) NOT NULL,
+  `deadline` datetime DEFAULT NULL,
+  `customer_id` int(10) unsigned DEFAULT NULL,
+  `notes` text,
+  PRIMARY KEY (`id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchaseOrderDetails`
+--
+
+CREATE TABLE IF NOT EXISTS `purchaseOrderDetails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime NOT NULL,
+  `removed_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `purchaseOrder_id` int(10) unsigned zerofill NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `qty` int(11) NOT NULL,
+  `rec` int(11) NOT NULL,
+  `cost` float(12,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchaseOrders`
+--
+
+CREATE TABLE IF NOT EXISTS `purchaseOrders` (
+  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `voided` datetime NOT NULL,
+  `voided_id` int(10) unsigned NOT NULL,
+  `closed` datetime NOT NULL,
+  `closed_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned NOT NULL,
+  `status` varchar(1) NOT NULL,
+  `allowOpen` tinyint(1) NOT NULL,
+  `onAccount` tinyint(1) NOT NULL,
+  `shipping` float(8,2) NOT NULL,
+  `tax` float(8,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receipts`
+--
+
+CREATE TABLE IF NOT EXISTS `receipts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `purchaseOrder_id` int(10) unsigned zerofill NOT NULL,
+  `vendor_id` int(10) unsigned NOT NULL,
+  `qty` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receiptTypes`
+--
+
+CREATE TABLE IF NOT EXISTS `receiptTypes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(30) NOT NULL,
+  `glAccount_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales`
+--
+
+CREATE TABLE IF NOT EXISTS `sales` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `salesOrder_id` int(10) unsigned zerofill NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salesOrderDetails`
+--
+
+CREATE TABLE IF NOT EXISTS `salesOrderDetails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime NOT NULL,
+  `removed_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `salesOrder_id` int(10) unsigned zerofill NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `service_id` int(10) unsigned NOT NULL,
+  `qty` float(8,2) NOT NULL,
+  `shipped` int(11) NOT NULL,
+  `price` float(12,2) NOT NULL,
+  `tax` float(8,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salesOrders`
+--
+
+CREATE TABLE IF NOT EXISTS `salesOrders` (
+  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `closed` datetime NOT NULL,
+  `closed_id` int(10) unsigned NOT NULL,
+  `voided` datetime NOT NULL,
+  `voided_id` int(10) unsigned NOT NULL,
+  `status` varchar(1) NOT NULL,
+  `salesOrderType_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `invoice_id` int(10) unsigned zerofill DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salesOrderTypes`
+--
+
+CREATE TABLE IF NOT EXISTS `salesOrderTypes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `action` varchar(64) NOT NULL,
+  `due_days` smallint(5) unsigned DEFAULT NULL,
+  `shipping` tinyint(1) NOT NULL,
+  `taxable` tinyint(1) NOT NULL,
+  `on_account` tinyint(1) NOT NULL,
+  `stock_required` tinyint(1) NOT NULL,
+  `location_id` int(10) unsigned NOT NULL,
+  `itemTotalDebitAcct_id` int(10) unsigned DEFAULT NULL,
+  `itemTotalCreditAcct_id` int(10) unsigned DEFAULT NULL,
+  `serviceTotalDebitAcct_id` int(10) unsigned DEFAULT NULL,
+  `serviceTotalCreditAcct_id` int(10) unsigned DEFAULT NULL,
+  `shippingDebitAcct_id` int(10) unsigned DEFAULT NULL,
+  `shippingCreditAcct_id` int(10) unsigned DEFAULT NULL,
+  `taxDebitAcct_id` int(10) unsigned DEFAULT NULL,
+  `taxCreditAcct_id` int(10) unsigned DEFAULT NULL,
+  `grandTotalDebitAcct_id` int(10) unsigned DEFAULT NULL,
+  `grandTotalCreditAcct_id` int(10) unsigned DEFAULT NULL,
+  `description` text NOT NULL,
+  `glaccount_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `scanCodes`
+--
+
+CREATE TABLE IF NOT EXISTS `scanCodes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `code` varchar(18) NOT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  `location_id` int(10) unsigned DEFAULT NULL,
+  `itemSerialNumber_id` int(10) unsigned DEFAULT NULL,
+  `user_id` int(10) unsigned DEFAULT NULL,
+  `print` tinyint(1) NOT NULL,
+  `internal` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `services`
+--
+
+CREATE TABLE IF NOT EXISTS `services` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `pricing` varchar(1) NOT NULL,
+  `rate` float(12,2) NOT NULL,
+  `fixedRate` tinyint(1) NOT NULL,
+  `description` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stockLevels`
+--
+
+CREATE TABLE IF NOT EXISTS `stockLevels` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `location_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  `qty` int(11) NOT NULL,
+  `priority` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `location_id` (`location_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `sysevents`
 --
 
-DROP TABLE IF EXISTS `sysevents`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `sysevents` (
+CREATE TABLE IF NOT EXISTS `sysevents` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned DEFAULT NULL,
   `remoteaddr` varchar(20) NOT NULL,
   `event_type` smallint(6) NOT NULL,
+  `title` varchar(15) NOT NULL,
   `permissionevent_id` int(10) unsigned DEFAULT NULL,
   `errorevent_id` int(10) unsigned DEFAULT NULL,
   `htmlevent_id` int(10) unsigned DEFAULT NULL,
   `formevent_id` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COMMENT='0';
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='1' AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `sysevents`
+-- Table structure for table `tasks`
 --
 
-LOCK TABLES `sysevents` WRITE;
-/*!40000 ALTER TABLE `sysevents` DISABLE KEYS */;
-INSERT INTO `sysevents` VALUES (1,'2013-01-31 15:04:35',NULL,'127.0.0.1',3,NULL,1,NULL,NULL),(2,'2013-01-31 15:20:55',NULL,'127.0.0.1',3,NULL,2,NULL,NULL);
-/*!40000 ALTER TABLE `sysevents` ENABLE KEYS */;
-UNLOCK TABLES;
+CREATE TABLE IF NOT EXISTS `tasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `finished` datetime DEFAULT NULL,
+  `finished_id` int(10) unsigned DEFAULT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `project_id` int(10) unsigned NOT NULL,
+  `name` varchar(128) NOT NULL,
+  `deadline` datetime DEFAULT NULL,
+  `est_hours` float(8,2) DEFAULT NULL,
+  `notes` text,
+  PRIMARY KEY (`id`),
+  KEY `project_id` (`project_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `timeRecords`
+--
+
+CREATE TABLE IF NOT EXISTS `timeRecords` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `finished` datetime DEFAULT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `task_id` int(10) unsigned NOT NULL,
+  `duration` float(8,2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `task_id` (`task_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userGroups`
+--
+
+CREATE TABLE IF NOT EXISTS `userGroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `log_level` smallint(6) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `username` varchar(20) NOT NULL,
@@ -915,27 +1386,83 @@ CREATE TABLE `users` (
   `homepage` varchar(100) NOT NULL,
   `active` tinyint(1) NOT NULL,
   `log_level` smallint(5) unsigned NOT NULL,
+  `date_time_format` varchar(30) NOT NULL DEFAULT 'Y-m-d h:m:s',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
 
 --
--- Dumping data for table `users`
+-- Table structure for table `users_tasks`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'2012-10-25 15:09:04','KURT','4205017a2d54144c1bb05f3ebbd2dd1a78862815','klakin2003@yahoo.com','',1,0),(2,'2012-10-26 15:08:07','JBOND','4205017a2d54144c1bb05f3ebbd2dd1a78862815','007@me.com','',1,0);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+CREATE TABLE IF NOT EXISTS `users_tasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `task_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `task_id` (`task_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendorDetails`
+--
+
+CREATE TABLE IF NOT EXISTS `vendorDetails` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `vendor_id` int(10) unsigned NOT NULL,
+  `glAccount_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vendor_id` (`vendor_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendors`
+--
+
+CREATE TABLE IF NOT EXISTS `vendors` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `vendorDetail_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workflowChains`
+--
+
+CREATE TABLE IF NOT EXISTS `workflowChains` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `return_form` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2013-02-06 19:16:06
