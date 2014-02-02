@@ -1462,6 +1462,27 @@ CREATE TABLE IF NOT EXISTS `workflowChains` (
   `return_form` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contacts`
+--
+
+CREATE TABLE IF NOT EXISTS `contacts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `field_name` varchar(32) NOT NULL,
+  `value` varchar(256) NOT NULL,
+  `customer_id` int(10) unsigned DEFAULT NULL,
+  `vendor_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vendor_id` (`vendor_id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

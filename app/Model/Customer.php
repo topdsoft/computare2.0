@@ -39,6 +39,9 @@ class Customer extends AppModel {
 		'Address' => array (
 			'className' => 'Address',
 			'conditions' => array('Address.active'),
+		),
+		'Contacts' => array(
+			'conditions'=>array('Contacts.active')
 		)
 	);
 }
