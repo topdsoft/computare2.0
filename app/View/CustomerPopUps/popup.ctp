@@ -52,7 +52,7 @@
 		function select(id) {
 			//user has selected an customer, return to previous form
 			opener.document.getElementById('<?php echo $this->request->params['named']['inputId']; ?>').value=id;
-			alert(id);
+// 			alert(id);
 			self.close();
 		}
 		
