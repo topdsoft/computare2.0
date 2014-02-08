@@ -1,8 +1,8 @@
 <div class="customers form">
 <?php 
 	echo $this->Form->create('Customer'); 
-	if($this->data) $action='Edit';
-	else $action='Add';
+/*	if($this->data) $action='Edit';
+	else $action='Add';//moved to controller*/
 ?>
 	<fieldset>
 		<legend><?php echo __($action.' Customer'); ?></legend>

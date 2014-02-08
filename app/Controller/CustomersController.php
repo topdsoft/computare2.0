@@ -77,7 +77,8 @@ class CustomersController extends AppController {
 		//adding customer uses the edit function with null id
 		$this->set('formName','Add New Customer');
 		$this->set('add_menu',true);
-		$this->redirect(array('action' => 'edit'));
+		$this->passedArgs+=array('action'=>'edit');
+		$this->redirect($this->passedArgs);
 	}
 
 /**
@@ -99,7 +100,7 @@ class CustomersController extends AppController {
 			}
 		}//endif
 		if ($this->request->is('post') || $this->request->is('put')) {
-			//save data
+		//save data
 			$this->request->data['CustomerDetail']['created_id']=$this->Auth->user('id');
 			if ($this->ComputareCustomer->save($this->request->data)){
 				$this->Session->setFlash(__('The customer has been saved'),'default',array('class'=>'success'));
@@ -117,7 +118,16 @@ class CustomersController extends AppController {
 				$this->Session->setFlash(__('The customer could not be saved. Please, try again.'));
 			}
 		} else {
-			$this->request->data = $this->Customer->read(null, $id);
+			//not saving
+			if($id) {
+				//editing
+				$this->request->data = $this->Customer->read(null, $id);
+				$this->set('action','Edit');
+			} else {
+				//new customer
+				$this->request->data['CustomerDetail'] = $this->passedArgs;
+				$this->set('action','Add');
+			}//endif
 		}
 		$customerGroups=array(null=>'(none)')+$this->Customer->CustomerGroup->find('list');
 		$this->set(compact('customerGroups'));
