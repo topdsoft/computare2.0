@@ -209,6 +209,7 @@ class PurchaseOrdersController extends AppController {
 		if($this->PurchaseOrder->field('status')!='O') {
 			//must be status => O
 			$this->Session->setFlash(__('The purchase order must be status of Open to edit.'));
+			if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 			$this->redirect(array('action' => 'index'));
 		}//endif
 		if ($this->request->is('post') || $this->request->is('put')) {
@@ -217,6 +218,7 @@ class PurchaseOrdersController extends AppController {
 // debug($this->request->data);exit;
 			if ($this->ComputareAP->savePO($this->request->data)) {
 				$this->Session->setFlash(__('The purchase order has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The purchase order could not be saved. Please, try again.'));

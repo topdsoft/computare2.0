@@ -141,11 +141,15 @@ class UsersController extends AppController {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//defaults
+			$this->request->data['User']=$this->passedArgs;
+		}//endif
 	}
 
 /**
@@ -166,6 +170,7 @@ class UsersController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->ComputareUser->saveUser($this->request->data,$this->Auth->User('id'))) {
 				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));

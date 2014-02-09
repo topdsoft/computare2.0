@@ -56,11 +56,15 @@ class UserGroupsController extends AppController {
 //debug($this->request->data);exit;
 			if ($this->ComputareUser->saveUserGroup($this->request->data)) {
 				$this->Session->setFlash(__('The group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The group could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//set defaults
+			$this->request->data['UserGroup']=$this->passedArgs;
+		}//endif
 //		$forms = $this->UserGroup->Form->find('list');
 //		$users = $this->UserGroup->User->find('list');
 //		$this->set(compact('forms', 'users'));
@@ -83,6 +87,7 @@ class UserGroupsController extends AppController {
 			$this->request->data['UserGroup']['created_id']=$this->Auth->user('id');
 			if ($this->ComputareUser->saveUserGroup($this->request->data)) {
 				$this->Session->setFlash(__('The group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The group could not be saved. Please, try again.'));

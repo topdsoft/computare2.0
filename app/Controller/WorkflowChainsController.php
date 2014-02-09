@@ -105,6 +105,7 @@ class WorkflowChainsController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->WorkflowChain->save($this->request->data)) {
 				$this->Session->setFlash(__('The workflow chain has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The workflow chain could not be saved. Please, try again.'));

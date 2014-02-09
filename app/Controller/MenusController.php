@@ -83,11 +83,15 @@ class MenusController extends AppController {
 					$this->Menu->addMenuToUser($menu_id,$user_id);
 				}//endif
 				$this->Session->setFlash(__('The menu has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The menu could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get default
+			$this->request->data['Menu']=$this->passedArgs;
+		}//endif
 		$forms = $this->Menu->Form->find('list');
 		$users = $this->Menu->User->find('list');
 		array_unshift($users,'Public');
@@ -129,6 +133,7 @@ class MenusController extends AppController {
 					}//end foreach
 				}//endif
 				$this->Session->setFlash(__('Your menu changes have been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The menu could not be saved. Please, try again.'));
@@ -245,6 +250,7 @@ class MenusController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Menu->save($this->request->data)) {
 				$this->Session->setFlash(__('The menu has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The menu could not be saved. Please, try again.'));

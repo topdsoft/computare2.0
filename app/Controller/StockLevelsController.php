@@ -64,11 +64,15 @@ class StockLevelsController extends AppController {
 			$this->StockLevel->create();
 			if ($this->StockLevel->save($this->request->data)) {
 				$this->Session->setFlash(__('The stock level has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The stock level could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//set defaults
+			$this->request->data['StockLevel']=$this->passedArgs;
+		}//endif
 		$locations = $this->StockLevel->Location->find('list');
 		$items = $this->StockLevel->Item->find('list');
 		$this->set(compact('locations', 'items'));

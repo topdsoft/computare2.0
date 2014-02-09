@@ -68,7 +68,10 @@ class VendorsController extends AppController {
 			} else {
 				$this->Session->setFlash(__('The vendor could not be saved. Please, try again.'));
 			}
-		}
+		} else {
+			//default
+			$this->request->data['VendorDetail']=$this->passedArgs;
+		}//endif
 		$glAccounts=array(null=>'(none, use default)')+ClassRegistry::init('Glaccount')->find('list');
 		$this->set(compact('glAccounts'));
 	}
@@ -90,6 +93,7 @@ class VendorsController extends AppController {
 // debug($this->request->data);exit;
 			if ($this->ComputareAR->saveVendor($this->request->data)) {
 				$this->Session->setFlash(__('The vendor has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The vendor could not be saved. Please, try again.'));

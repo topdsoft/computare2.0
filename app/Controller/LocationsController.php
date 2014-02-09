@@ -67,19 +67,26 @@ class LocationsController extends AppController {
 	public function add($defaultParent=0) {
 		$this->set('formName','New Location');
 		if ($this->request->is('post')) {
+			//save location
 			$this->Location->create();
 			if(isset($this->params['named']['locationType_id'])) {
 				//location type has been passed in
 				$this->request->data['LocationDetail']['locationType_id']=$this->params['named']['locationType_id'];
 			}//endif
 			if ($this->ComputareIC->saveLocation($this->request->data)) {
+				//vallidation success
 				$this->Session->setFlash(__('The location has been saved'),'default',array('class'=>'success'));
 				if(isset($this->params['named']['redirect'])) $this->redirect($this->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//vallidation fail
 				$this->Session->setFlash(__('The location could not be saved. Please, try again.'));
-			}
-		} else $this->request->data['Location']['parent_id']=$defaultParent;
+			}//endif
+		} else {
+			//default
+			$this->request->data['LocationDetail']=$this->passedArgs;
+			if($defaultParent)$this->request->data['Location']['parent_id']=$defaultParent;
+		}//endif
 // 		$locationDetails = $this->Location->LocationDetail->find('list');
 		$parents = array(0=>'(none)')+$this->Location->ParentLocation->find('list');
 // debug($parents);exit;
@@ -122,6 +129,7 @@ class LocationsController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->ComputareIC->saveLocation($this->request->data)) {
 				$this->Session->setFlash(__('The location has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The location could not be saved. Please, try again.'));
