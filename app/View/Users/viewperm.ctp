@@ -1,6 +1,7 @@
 <div class="users view">
 <h2><?php  echo __('User').': '.$user['User']['username']; ?></h2>
 </div>
+	<?php echo $this->element('reportdetails'); ?>
 
 <?php 
 // debug($user); ?>
