@@ -98,19 +98,25 @@ class ItemsController extends AppController {
 		$this->set('add_menu',true);
 		//editing item
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//save data
+// debug($this->request);exit;
 			if ($this->ComputareIC->saveItem($this->request->data)) {
+				//validated ok
 				$this->Session->setFlash(__('The item has been saved'),'default',array('class'=>'success'));
 				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']+array('new_id'=>$this->Item->getInsertId()));
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation fail
 				$this->Session->setFlash(__('The item could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
 			//default
-			$this->request->data['Item']['category_id']=0;
+			$this->request->data['ItemDetail']=$this->passedArgs;
+			if(isset($this->passedArgs['category_id']))$this->request->data['Item']['category_id']=$this->passedArgs['category_id'];
+			if(isset($this->passedArgs['serialized']))$this->request->data['Item']['serialized']=$this->passedArgs['serialized'];
 		}
 		$categories = $this->Item->ItemCategory->generateTreeList(null,null,null,' - ');
-		if($categories) $categories[0]='(none)';
+		if($categories) $categories=array(0=>'(none)')+$categories;
 		$itemGroups = $this->Item->ItemGroup->find('list');
 // 		$images = $this->Item->Image->find('list');
 // 		$locations = $this->Item->Location->find('list');
