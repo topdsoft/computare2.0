@@ -1,7 +1,7 @@
 <div class="glchecks form">
 <?php echo $this->Form->create('Glcheck'); ?>
 	<fieldset>
-		<legend><?php echo __('Add Glcheck'); ?></legend>
+		<legend><?php echo __('Add Check'); ?></legend>
 	<?php
 		echo $this->Form->input('checkNumber');
 		echo $this->Form->input('amount');
@@ -16,3 +16,4 @@
 		<li><?php echo $this->Html->link(__('List Glchecks'), array('action' => 'index')); ?></li>
 	</ul>
 </div>
+<script type='text/javascript'>document.getElementById('GlcheckCheckNumber').focus();</script>
