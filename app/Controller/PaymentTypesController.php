@@ -35,11 +35,16 @@ class PaymentTypesController extends AppController {
 			if ($this->PaymentType->save($this->request->data)) {
 				//saved ok
 				$this->Session->setFlash(__('The payment type has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//failed validation
 				$this->Session->setFlash(__('The payment type could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['PaymentType']=$this->passedArgs;
+		}//endif
 		$glExpenseAccounts = array(null=>'')+$this->PaymentType->Glaccount->find('list');
 		$this->set(compact('glExpenseAccounts'));
 	}

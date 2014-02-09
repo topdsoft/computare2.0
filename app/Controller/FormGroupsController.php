@@ -47,16 +47,23 @@ class FormGroupsController extends AppController {
 		$this->set('formName','Add Form Group');
 		$this->set('helplink','/pages/formGroups#e');
 		if ($this->request->is('post')) {
+			//save
 			$this->FormGroup->create();
 			$this->request->data['FormGroup']['created_id']=$this->Auth->user('id');
 // debug($this->request->data);exit;
 			if ($this->FormGroup->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The form group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The form group could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//set defaults
+			$this->request->data['FormGroup']=$this->passedArgs;
+		}//endif
 	}
 
 /**
@@ -73,16 +80,20 @@ class FormGroupsController extends AppController {
 			throw new NotFoundException(__('Invalid form group'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//save
 			if ($this->FormGroup->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The form group has been saved'));
 				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The form group could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//read record
 			$this->request->data = $this->FormGroup->read(null, $id);
-		}
+		}//endif
 	}
 
 /**

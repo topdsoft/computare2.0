@@ -49,14 +49,18 @@ class ProjectsController extends AppController {
 			$this->request->data['Project']['created_id']=$this->Auth->user('id');
 			$this->Project->create();
 			if ($this->Project->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The project has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The project could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
 			//set defaults
-		}
+			$this->request->data['Project']=$this->passedArgs;
+		}//endif
 		$customers = array(null=>'(none)')+$this->Project->Customer->find('list');
 		$this->set(compact('customers'));
 	}
@@ -77,6 +81,7 @@ class ProjectsController extends AppController {
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Project->save($this->request->data)) {
 				$this->Session->setFlash(__('The project has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The project could not be saved. Please, try again.'));

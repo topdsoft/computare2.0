@@ -13,6 +13,7 @@ class GlslotsController extends AppController {
  * edit method
  * 
  * used to edit what glaccounts connect to what glslots
+ * normally only used when system is first being set up
  */
 
 	public function edit(){

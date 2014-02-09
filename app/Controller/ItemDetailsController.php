@@ -55,6 +55,7 @@ class ItemDetailsController extends AppController {
 				if($emptySKU) $this->request->data['ItemDetail']['sku']=$item_id;
 				$this->ItemDetail->save($this->request->data);
 				$this->Session->setFlash(__('The item has been saved'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				//clear empty SKU before returning
@@ -90,6 +91,7 @@ class ItemDetailsController extends AppController {
 				$item['Item']['itemDetail_id']=$this->ItemDetail->getLastInsertId();
 				$this->ItemDetail->Item->save($item);
 				$this->Session->setFlash(__('The item has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The item could not be saved. Please, try again.'),'default',array('class'=>'message'));

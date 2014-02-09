@@ -85,9 +85,13 @@ class TasksController extends AppController {
 				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The task could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//load defaults
+			$this->request->data['Task']=$this->passedArgs;
+		}//endif
 		$projects = $this->Task->Project->find('list',array('conditions'=>array('Project.finished'=>null)));
 		$users = $this->Task->User->find('list');
 		$this->set(compact('projects', 'users'));

@@ -99,18 +99,23 @@ class SalesOrdersController extends AppController {
 		$this->set('formName','Add Sales Order');
 		$this->set('helplink','/pages/salesOrders#a');
 		if ($this->request->is('post')) {
+			//saving
 			$this->SalesOrder->create();
 			$this->request->data['SalesOrder']['created_id']=$this->Auth->user('id');
 			$this->request->data['SalesOrder']['status']='O';
 			if ($this->ComputareAR->saveSO($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The sales order has been started'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'edit',$this->SalesOrder->getInsertId()));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The sales order could not be saved. Please, try again.'));
 			}
 		} else {
 			//check for defaults
-			if(isset($this->passedArgs['customer_id'])) $this->request->data['SalesOrder']['customer_id']=$this->passedArgs['customer_id'];
+			$this->request->data['SalesOrder']=$this->passedArgs;
+// 			if(isset($this->passedArgs['customer_id'])) $this->request->data['SalesOrder']['customer_id']=$this->passedArgs['customer_id'];
 		}//endif
 		$salesOrderTypes = $this->SalesOrder->SalesOrderType->find('list',array('conditions'=>array('active')));
 		if(!$salesOrderTypes) {
@@ -148,6 +153,7 @@ class SalesOrdersController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}//endif
 		if ($this->request->is('post') || $this->request->is('put')) {
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 			$this->redirect(array('action' => 'index'));
 		} else {
 			$this->request->data = $SO;

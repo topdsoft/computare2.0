@@ -46,14 +46,21 @@ class ItemGroupsController extends AppController {
 	public function add() {
 		$this->set('formName','Add Item Group');
 		if ($this->request->is('post')) {
+			//save data
 			$this->ItemGroup->create();
 			if ($this->ComputareIC->saveItemGroup($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The item group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation fail
 				$this->Session->setFlash(__('The item group could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//load defaults
+			$this->request->data['ItemGroup']=$this->passedArgs;
+		}//endif
 	}
 
 /**
@@ -70,15 +77,20 @@ class ItemGroupsController extends AppController {
 			throw new NotFoundException(__('Invalid item group'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//save data
 			if ($this->ComputareIC->saveItemGroup($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The item group has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation fail
 				$this->Session->setFlash(__('The item group could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//read record
 			$this->request->data = $this->ItemGroup->read(null, $id);
-		}
+		}//endif
 	}
 
 /**

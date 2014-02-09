@@ -152,15 +152,18 @@ class GlaccountsController extends AppController {
 			$this->request->data['GlaccountDetail']['created_id']=$this->Auth->user('id');
 //debug($this->request->data);exit;
 			if ($this->ComputareGL->saveAccount($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The GL account has been saved'),'default',array('class'=>'success'));
 				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The GL account could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//read record
 			$this->request->data = $this->Glaccount->read(null, $id);
-		}
+		}//endif
 		//get list of GL account groups
 		$glgroups = $this->Glaccount->GlaccountDetail->Glgroup->find('list');
 		if(count($glgroups)<1) {

@@ -35,12 +35,18 @@ class ImageSettingsController extends AppController {
 #TODO
 			$this->ImageSetting->create();
 			if ($this->ImageSetting->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The image directory has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The image directory could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//load defaults
+			$this->request->data['ImageSetting']=$this->passedArgs;
+		}//endif
 	}
 
 /**
@@ -82,6 +88,7 @@ class ImageSettingsController extends AppController {
 					//saved ok
 					$dataSource->commit();
 					$this->Session->setFlash(__('The image directory has been saved'),'default',array('class'=>'success'));
+					if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 					$this->redirect(array('action' => 'index'));
 				} else {
 					//failed ???
@@ -90,6 +97,7 @@ class ImageSettingsController extends AppController {
 				}//endif
 			} else $this->redirect(array('action' => 'index'));
 		} else {
+			//read record
 			$this->request->data = $this->ImageSetting->read(null, $id);
 		}
 	}

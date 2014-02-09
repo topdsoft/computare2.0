@@ -30,16 +30,23 @@ class IssueTypesController extends AppController {
 		$this->set('formName','New Issue type');
 		$this->set('menu_add',true);
 		if ($this->request->is('post')) {
+			//save data
 			$this->IssueType->create();
 			$this->request->data['IssueType']['created_id']=$this->Auth->user('id');
 			$this->request->data['IssueType']['active']=true;
 			if ($this->IssueType->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The issue type has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The issue type could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['IssueType']=$this->passedArgs;
+		}//endif
 		$glAccounts = $this->IssueType->Glaccount->find('list');
 		$this->set(compact('glAccounts'));
 	}

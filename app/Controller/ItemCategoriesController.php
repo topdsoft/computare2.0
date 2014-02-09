@@ -54,19 +54,28 @@ class ItemCategoriesController extends AppController {
 /**
  * add method
  *
+ * @param string $parent_id use to set default parent_id
  * @return void
  */
 	public function add($parent_id=0) {
 		$this->set('formName','New Item Category');
 		if ($this->request->is('post')) {
+			//save data
 			$this->ItemCategory->create();
 			if ($this->ComputareIC->saveItemCategory($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The item category has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The item category could not be saved. Please, try again.'));
-			}
-		} else $this->request->data['ItemCategory']['parent_id']=$parent_id;
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['ItemCategory']=$this->passedArgs;
+			$this->request->data['ItemCategory']['parent_id']=$parent_id;
+		}//endif
 		$parents = $this->ItemCategory->ParentItemCategory->find('list');
 		$parents[0]='(none)';
 		$this->set(compact('parents'));
@@ -86,15 +95,20 @@ class ItemCategoriesController extends AppController {
 			throw new NotFoundException(__('Invalid item category'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//save data
 			if ($this->ComputareIC->saveItemCategory($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The item category has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation fail
 				$this->Session->setFlash(__('The item category could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//read record
 			$this->request->data = $this->ItemCategory->read(null, $id);
-		}
+		}//endif
 		$parents = $this->ItemCategory->ParentItemCategory->find('list');
 		$parents[0]='(none)';
 		$this->set(compact('parents'));

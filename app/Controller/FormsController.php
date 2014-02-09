@@ -137,19 +137,23 @@ class FormsController extends AppController {
 			throw new NotFoundException(__('Invalid form'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//save data
 			if($this->request->data['Form']['formGroup_id']==0) unset($this->request->data['Form']['formGroup_id']);
+				//vallidation ok
 // debug($this->request->data);exit;
 			if ($this->Form->save($this->request->data)) {
 				$this->Session->setFlash(__('The form has been saved'),'default',array('class'=>'success'));
 				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The form could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//read record
 			$this->request->data = $this->Form->read(null, $id);
 			if(!$this->request->data['Form']['formGroup_id']) $this->request->data['Form']['formGroup_id']=0;
-		}
+		}//endif
 		$formGroups = $this->Form->FormGroup->find('list');
 		$formGroups[0]='(none)';
 // 		$menus = $this->Form->Menu->find('list');

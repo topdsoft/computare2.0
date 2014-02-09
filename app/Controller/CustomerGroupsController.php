@@ -49,16 +49,22 @@ class CustomerGroupsController extends AppController {
 		$this->set('helplink','/pages/customerGroups#a');
 		$this->set('add_menu',true);
 		if ($this->request->is('post')) {
+			//saving
 			$this->CustomerGroup->create();
 			$this->request->data['CustomerGroup']['created_id']=$this->Auth->user('id');
 			if ($this->CustomerGroup->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The customer group has been saved'),'default',array('class'=>'success'));
 				if(isset($this->request->params['named']['redirect'])) $this->redirect($this->request->params['named']['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The customer group could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['CustomerGroup']=$this->passedArgs;
+		}//endif
 		$items = $this->CustomerGroup->Item->find('list');
 		$services = $this->CustomerGroup->Service->find('list');
 		$this->set(compact('items', 'services'));

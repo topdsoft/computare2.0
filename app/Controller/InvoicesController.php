@@ -57,6 +57,7 @@ class InvoicesController extends AppController {
 				$this->request->data['Invoice']['invoice_id']=$this->request->data['Invoice']['id'];
 				if($this->ComputareAP->invoicePayment($this->request->data['Invoice'])) {
 					$this->Session->setFlash(__('Payment on Invoice saved'),'default',array('class'=>'success'));
+					if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 					$this->redirect(array('action' => 'index'));
 				} else {
 					$this->Session->setFlash(__('Payment could not be saved.'));

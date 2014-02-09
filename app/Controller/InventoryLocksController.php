@@ -55,12 +55,16 @@ class InventoryLocksController extends AppController {
 			if ($this->ComputareIC->lockLocation($this->request->data['InventoryLock'])) {
 				//saved ok
 				$this->Session->setFlash(__('The inventory lock has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				//not saved
 				$this->Session->setFlash(__('The inventory lock could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['InventoryLock']=$this->passedArgs;
+		}//endif
 		$locations = $this->InventoryLock->Location->generateTreeList(null,null,null,'-');
 		$this->set(compact('locations'));
 	}
@@ -80,9 +84,11 @@ class InventoryLocksController extends AppController {
 		}
 		if ($this->ComputareIC->unlockLocation(array('inventoryLock_id'=>$id))) {
 			$this->Session->setFlash(__('Inventory lock released'));
+			if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->Session->setFlash(__('Inventory lock was not released'));
+		if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 		$this->redirect(array('action' => 'index'));
 	}
 }

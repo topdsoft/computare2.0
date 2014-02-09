@@ -39,14 +39,21 @@ class GlchecksController extends AppController {
  */
 	public function add() {
 		if ($this->request->is('post')) {
+			//save data
 			$this->Glcheck->create();
 			if ($this->Glcheck->save($this->request->data)) {
-				$this->Session->setFlash(__('The glcheck has been saved'));
+				//validation ok
+				$this->Session->setFlash(__('The check has been saved'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The glcheck could not be saved. Please, try again.'));
-			}
-		}
+				//validation failed
+				$this->Session->setFlash(__('The check could not be saved. Please, try again.'));
+			}//endif
+		} else {
+			//read default data
+			$this->request->data['Glcheck']=$this->passedArgs;
+		}//endif
 	}
 
 /**
@@ -62,15 +69,19 @@ class GlchecksController extends AppController {
 			throw new NotFoundException(__('Invalid glcheck'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//save data
 			if ($this->Glcheck->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The glcheck has been saved'));
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The glcheck could not be saved. Please, try again.'));
-			}
+			}//endif
 		} else {
+			//read record
 			$this->request->data = $this->Glcheck->read(null, $id);
-		}
+		}//endif
 	}
 
 /**

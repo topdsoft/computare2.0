@@ -50,17 +50,24 @@ class SalesOrderTypesController extends AppController {
 		$this->set('formName','Add SO Type');
 		$this->set('helplink','/pages/salesOrderTypes#a');
 		if ($this->request->is('post')) {
+			//save
 			$this->SalesOrderType->create();
 			$this->request->data['SalesOrderType']['active']=true;
 			$this->request->data['SalesOrderType']['created_id']=$this->Auth->user('id');
 			//due days is only set for an account types
 			if(!$this->request->data['SalesOrderType']['on_account']) unset($this->request->data['SalesOrderType']['due_days']);
 			if ($this->SalesOrderType->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The sales order type has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validatio faled
 				$this->Session->setFlash(__('The sales order type could not be saved. Please, try again.'));
-			}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['SalesOrderType']=$this->passedArgs;
 		}//endif
 		//get lists
 		$locations=$this->SalesOrderType->Location->generateTreeList(null,null,null,' - ');
@@ -84,6 +91,7 @@ class SalesOrderTypesController extends AppController {
 // debug($this->request->data);exit;
 			if ($this->SalesOrderType->save($this->request->data)) {
 				$this->Session->setFlash(__('The Sales Order Type has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The Sales Order Type could not be saved. Please, try again.'));

@@ -45,16 +45,22 @@ class WorkflowChainsController extends AppController {
 	public function add() {
 		$this->set('formName','New Workflow Chain');
 		if ($this->request->is('post')) {
+			//saving
 			$this->WorkflowChain->create();
 			$this->request->data['WorkflowChain']['created_id']=$this->Auth->user('id');
 			$this->request->data['WorkflowChain']['active']=true;
 			if ($this->WorkflowChain->save($this->request->data)) {
+				//validation ok
 				$this->Session->setFlash(__('The workflow chain has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'edit',$this->WorkflowChain->getInsertId()));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The workflow chain could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['WorkflowChain']=$this->passedArgs;
+		}//endif
 	}
 
 /**

@@ -34,16 +34,22 @@ class ServicesController extends AppController {
 		$this->set('add_menu',true);
 		$this->set('helplink','/pages/services#a');
 		if ($this->request->is('post')) {
+			//saving
 			$this->Service->create();
 			$this->request->data['Service']['created_id']=$this->Auth->user('id');
 			$this->request->data['Service']['active']=true;
 			if ($this->Service->save($this->request->data)) {
+				//validatio ok
 				$this->Session->setFlash(__('The service has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
+				//validation failed
 				$this->Session->setFlash(__('The service could not be saved. Please, try again.'));
-			}
-		}
+			}//endif
+		} else {
+			//get defaults
+			$this->request->data['Service']=$this->passedArgs;
+		}//endif
 		$this->set('pricingOptions',$this->Service->getPricingOptions());
 	}
 
