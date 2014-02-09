@@ -18,7 +18,7 @@
 		<td><?php echo h($user['User']['username']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['email']); ?>&nbsp;</td>
 		<td><?php echo h($user['User']['homepage']); ?>&nbsp;</td>
-		<td><?php echo h($user['User']['active']); ?>&nbsp;</td>
+		<td><?php if($user['User']['active']) echo'T'; ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $user['User']['id'])); ?>
 			<?php echo $this->Html->link(__('View Perms'), array('action' => 'viewperm', $user['User']['id'])); ?>
