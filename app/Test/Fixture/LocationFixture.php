@@ -16,6 +16,7 @@ class LocationFixture extends CakeTestFixture {
 		'lft' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'rght' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
 		'parent_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 10),
+		'locationType_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'length' => 10),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),

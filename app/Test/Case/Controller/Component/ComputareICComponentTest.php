@@ -6,7 +6,7 @@ App::uses('ComponentCollection', 'Controller');
 App::uses('ComputareICComponent', 'Controller/Component');
 
 class ComputareICComponentTest extends CakeTestCase {
-	public $fixtures=array('app.item','app.itemDetail','app.location','app.locationDetail','app.inventoryLock');
+	public $fixtures=array('app.item','app.itemDetail','app.location','app.locationType','app.locationDetail','app.inventoryLock');
 	
 	public function setUp() {
 		parent::setUp();
