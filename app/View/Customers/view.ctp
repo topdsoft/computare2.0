@@ -88,6 +88,17 @@
 		}//foreach
 	}//enidf
 ?>
+<?php
+	if($customer['Contacts']) {
+		//list contacts
+		echo '<h3>Contact Information</h3>';
+		foreach ($customer['Contacts'] as $contact) {
+			//loop for all contacts
+			echo '<dt>'.$contact['field_name'].'</dt>';
+			echo '<dd>'.$contact['value'].'&nbsp;</dd>';
+		}//end foreach
+	}//endif
+?>
 </div>
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>
