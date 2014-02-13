@@ -1,5 +1,6 @@
 <div class="customers view">
 <h2><?php  echo __('Customer: '.$customer['Customer']['name']); ?></h2>
+	<?php echo $this->element('reportdetails'); ?>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
@@ -94,7 +95,6 @@
 		<li><?php echo $this->Html->link(__('Edit Customer'), array('action' => 'edit', $customer['Customer']['id'])); ?> </li>
 	</ul>
 </div>
-	<?php echo $this->element('reportdetails'); ?>
 	
 <div class="related">
 </div>
