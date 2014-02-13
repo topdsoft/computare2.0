@@ -44,10 +44,14 @@
 		echo $this->Form->input('CustomerDetail.phone');
 		//show block for additional contacts
 		echo '<fieldset><legend>Additional Contact Information</legend>';
-		foreach($this->data['Contacts'] as $contact) {
+		foreach($this->data['Contact'] as $contact) {
 			//loop for all contacts
 			echo '<p><strong>'.$contact['field_name'].':</strong>';
-			echo $contact['value'].'</p>';
+			echo $contact['value'].' ';
+			echo $this->Html->link(__('Edit'),array('controller'=>'contacts','action'=>'edit',$contact['id']));
+			echo '&nbsp;&nbsp;&nbsp;';
+			echo $this->Html->link(__('Delete'),array('controller'=>'contacts','action'=>'delete',$contact['id']),array(),__('Are you sure you want to delete this contact: '.$contact['field_name']));
+			echo '</p>';
 		}//endif oreach
 		echo $this->Html->link(__('Add Contact'), array('controller'=>'contacts','action' => 'add','customers', $this->data['Customer']['id']));
 		echo '</fieldset>';

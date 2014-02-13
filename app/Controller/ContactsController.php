@@ -54,11 +54,11 @@ class ContactsController extends AppController {
  */
 	public function edit($id = null) {
 		$this->set('formName','Edit Contact');
-		$this->Contacts->id = $id;
-		if (!$this->Contacts->exists()) {
+		$this->Contact->id = $id;
+		if (!$this->Contact->exists()) {
 			throw new NotFoundException(__('Invalid contact'));
 		}
-		$contact=$this->Contacts->read(null, $id);
+		$contact=$this->Contact->read(null, $id);
 		if($contact['Customer']['name']) {
 			//contact id for a customer
 			$this->set('name','Customer: '.$contact['Customer']['name']);
@@ -85,7 +85,7 @@ class ContactsController extends AppController {
 			}//endif
 			$this->request->data['Contact']['id']=$id;
 		} else {
-			$this->request->data = $address;
+			$this->request->data = $contact;
 		}
 	}
 
@@ -101,7 +101,7 @@ class ContactsController extends AppController {
 		$this->set('formName','Edit Contact');
 		$this->Contact->id = $id;
 		if (!$this->Contact->exists()) {
-			throw new NotFoundException(__('Invalid address'));
+			throw new NotFoundException(__('Invalid contact'));
 		}
 		$contact=$this->Contact->read(null, $id);
 		if($contact['Customer']['id']) {
@@ -115,7 +115,7 @@ class ContactsController extends AppController {
 			$return_id=$contact['Vendor']['id'];
 		}//endif
 
-		if ($this->Contact->save(array('active'=>false))) {
+		if ($this->Contact->save(array('active'=>false,'removed_id'=>$this->Auth->user('id'),'removed'=>date('Y-m-d H:i:s')))) {
 			$this->Session->setFlash(__('Contact deleted'));
 			$this->redirect(array('controller'=>$controller,'action' => 'edit',$return_id));
 		}
