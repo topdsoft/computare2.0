@@ -1477,8 +1477,8 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   `active` tinyint(1) NOT NULL,
   `field_name` varchar(32) NOT NULL,
   `value` varchar(256) NOT NULL,
-  `customer_id` int(10) unsigned DEFAULT NULL,
-  `vendor_id` int(10) unsigned DEFAULT NULL,
+  `customer_id` int(10) unsigned zerofill DEFAULT NULL,
+  `vendor_id` int(10) unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `vendor_id` (`vendor_id`),
   KEY `customer_id` (`customer_id`)

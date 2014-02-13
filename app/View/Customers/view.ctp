@@ -89,13 +89,17 @@
 	}//enidf
 ?>
 <?php
-	if($customer['Contacts']) {
+	if($customer['Contact']) {
 		//list contacts
 		echo '<h3>Contact Information</h3>';
-		foreach ($customer['Contacts'] as $contact) {
+		foreach ($customer['Contact'] as $contact) {
 			//loop for all contacts
 			echo '<dt>'.$contact['field_name'].'</dt>';
-			echo '<dd>'.$contact['value'].'&nbsp;</dd>';
+			if($contact['field_name']=='Website') {
+				//if website show as link
+				if(!strpos($contact['value'],'http://')) echo '<dd><a href="http://'.$contact['value'].'">'.$contact['value'].'</a>&nbsp;</dd>';
+				else echo '<dd><a href="'.$contact['value'].'">'.$contact['value'].'</a>&nbsp;</dd>';
+			} else echo '<dd>'.$contact['value'].'&nbsp;</dd>';
 		}//end foreach
 	}//endif
 ?>

@@ -42,6 +42,15 @@
 		}//endif
 		echo $this->Form->input('CustomerDetail.email');
 		echo $this->Form->input('CustomerDetail.phone');
+		//show block for additional contacts
+		echo '<fieldset><legend>Additional Contact Information</legend>';
+		foreach($this->data['Contacts'] as $contact) {
+			//loop for all contacts
+			echo '<p><strong>'.$contact['field_name'].':</strong>';
+			echo $contact['value'].'</p>';
+		}//endif oreach
+		echo $this->Html->link(__('Add Contact'), array('controller'=>'contacts','action' => 'add','customers', $this->data['Customer']['id']));
+		echo '</fieldset>';
 		echo $this->Form->input('CustomerDetail.notes');
 //		echo $this->Form->input('customerDetail_id');
 	?>

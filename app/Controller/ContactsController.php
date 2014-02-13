@@ -18,13 +18,13 @@ class ContactsController extends AppController {
 	public function add($controller, $id) {
 		$this->set('formName','Add Contact');
 		if ($this->request->is('post')) {
-			$this->request->data['Contacts']['created_id']=$this->Auth->user('id');
-			$this->request->data['Contacts']['active']=true;
-			if($controller=='customers')$this->request->data['Contacts']['customer_id']=$id;
-			if($controller=='vendors')$this->request->data['Contacts']['vendor_id']=$id;
+			$this->request->data['Contact']['created_id']=$this->Auth->user('id');
+			$this->request->data['Contact']['active']=true;
+			if($controller=='customers')$this->request->data['Contact']['customer_id']=$id;
+			if($controller=='vendors')$this->request->data['Contact']['vendor_id']=$id;
 // debug($this->request->data);exit;
-			$this->Contacts->create();
-			if ($this->Contacts->save($this->request->data)) {
+			$this->Contact->create();
+			if ($this->Contact->save($this->request->data)) {
 				$this->Session->setFlash(__('The contact has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('controller'=>$controller,'action' => 'edit',$id));
 			} else {
@@ -34,12 +34,12 @@ class ContactsController extends AppController {
 		//get customer or vendor name
 		if($controller=='customers') {
 			//lookup customer name
-			$cust=$this->Contacts->Customer->field('name',array('Customer.id'=>$id));
+			$cust=$this->Contact->Customer->field('name',array('Customer.id'=>$id));
 			if(!$cust) throw new NotFoundException(__('Invalid customer'));
 			$this->set('name','Customer: '.$cust);
 		} else {
 			//lookup vendor name
-			$vendor=$this->Contacts->Vendor->field('name',array('Vendor.id'=>$id));
+			$vendor=$this->Contact->Vendor->field('name',array('Vendor.id'=>$id));
 			if(!$vendor) throw new NotFoundException(__('Invalid vendor'));
 			$this->set('name','Vendor: '.$vendor);
 		}//endif

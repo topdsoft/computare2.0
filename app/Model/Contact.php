@@ -4,7 +4,7 @@ App::uses('AppModel', 'Model');
  * Contacts Model
  *
  */
-class Contacts extends AppModel {
+class Contact extends AppModel {
 
 /**
  * Display field

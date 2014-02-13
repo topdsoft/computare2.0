@@ -40,8 +40,8 @@ class Customer extends AppModel {
 			'className' => 'Address',
 			'conditions' => array('Address.active'),
 		),
-		'Contacts' => array(
-			'conditions'=>array('Contacts.active')
+		'Contact' => array(
+			'conditions'=>array('Contact.active')
 		)
 	);
 }
