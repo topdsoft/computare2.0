@@ -2,8 +2,9 @@
 <?php
 // debug($vendor);  ?>
 <h2><?php  echo __('Vendor: ').$vendor['VendorDetail']['name']; ?></h2>
+	<?php echo $this->element('reportdetails'); ?>
 	<dl>
-		<dt><?php echo __('Id'); ?></dt>
+		<dt><?php echo __('Vendor Id'); ?></dt>
 		<dd>
 			<?php echo h($vendor['Vendor']['id']); ?>
 			&nbsp;
@@ -20,7 +21,7 @@
 		</dd>
 		<dt><?php echo __('Active'); ?></dt>
 		<dd>
-			<?php echo h($vendor['Vendor']['active']); ?>
+			<?php if($vendor['Vendor']['active']) echo 'Y'; ?>
 			&nbsp;
 		</dd>
 	</dl>
@@ -61,6 +62,22 @@
 	<?php endforeach; ?>
 	</table>
 <?php endif; ?>
+</div>
+
+<div class="related">
+	<?php
+		if(!empty($vendor['Contact'])) {
+			//list vendor contact info
+			echo '<h3>'.__('Vendor Contact Information').'</h3>';
+			echo '<dl>';
+			foreach ($vendor['Contact'] as $contact) {
+				//list all vendors contacts
+				echo '<dt>'.$contact['field_name'].'</dt>';
+				echo '<dd>'.$contact['value'].'</dd>&nbsp;';
+			}//end foreach
+			echo '</dl>';
+		}//endif
+	?>
 </div>
 
 <div class="related">

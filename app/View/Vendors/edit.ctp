@@ -23,6 +23,18 @@
 		}//end foreach
 		echo $this->Html->link(__('Add Address'), array('controller'=>'addresses','action' => 'add','vendors', $this->data['Vendor']['id']));
 		echo '</fieldset>';
+		echo '<fieldset><legend>Contact Information</legend>';
+		foreach ($this->data['Contact'] as $contact) {
+			//loop for all contact info
+			echo '<p><strong>'.$contact['field_name'].':</strong>';
+			echo $contact['value'].' ';
+			echo $this->Html->link(__('Edit'),array('controller'=>'contacts','action'=>'edit',$contact['id']));
+			echo '&nbsp;&nbsp;&nbsp;';
+			echo $this->Html->link(__('Delete'),array('controller'=>'contacts','action'=>'delete',$contact['id']),array(),__('Are you sure you want to delete this contact: '.$contact['field_name']));
+			echo '</p>';
+		}//end foreach
+		echo $this->Html->link(__('Add Contact'), array('controller'=>'contacts','action' => 'add','vendors', $this->data['Vendor']['id']));
+		echo '</fieldset>';
 // 		echo $this->Form->input('active');
 // 		echo $this->Form->input('Item');
 	?>

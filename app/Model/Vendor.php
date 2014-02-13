@@ -47,6 +47,19 @@ class Vendor extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
+		'Contact' => array(
+			'className' => 'Contact',
+			'foreignKey' => 'vendor_id',
+			'dependent' => false,
+			'conditions' => 'Contact.active',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
 		'ItemCost' => array(
 			'className' => 'ItemCost',
 			'foreignKey' => 'vendor_id',
