@@ -625,8 +625,8 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `due` date DEFAULT NULL,
   `status` varchar(1) NOT NULL,
   `identification` varchar(64) DEFAULT NULL,
-  `customer_id` int(10) unsigned DEFAULT NULL,
-  `vendor_id` int(10) unsigned DEFAULT NULL,
+  `customer_id` int(10) unsigned zerofill DEFAULT NULL,
+  `vendor_id` int(10) unsigned zerofill DEFAULT NULL,
   `purchaseOrder_id` int(10) unsigned DEFAULT NULL,
   `salesOrder_id` int(10) unsigned DEFAULT NULL,
   `billing_address_id` int(10) unsigned DEFAULT NULL,
@@ -684,7 +684,7 @@ CREATE TABLE IF NOT EXISTS `itemCosts` (
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
-  `vendor_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned zerofill NOT NULL,
   `cost` float(10,2) NOT NULL,
   `qty` int(11) NOT NULL,
   `remain` int(11) NOT NULL,
@@ -816,7 +816,7 @@ CREATE TABLE IF NOT EXISTS `items_locations` (
 CREATE TABLE IF NOT EXISTS `items_vendors` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(10) unsigned NOT NULL,
-  `vendor_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned zerofill NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -1092,7 +1092,7 @@ CREATE TABLE IF NOT EXISTS `purchaseOrders` (
   `voided_id` int(10) unsigned NOT NULL,
   `closed` datetime NOT NULL,
   `closed_id` int(10) unsigned NOT NULL,
-  `vendor_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned zerofill NOT NULL,
   `status` varchar(1) NOT NULL,
   `allowOpen` tinyint(1) NOT NULL,
   `onAccount` tinyint(1) NOT NULL,
@@ -1113,7 +1113,7 @@ CREATE TABLE IF NOT EXISTS `receipts` (
   `created_id` int(10) unsigned NOT NULL,
   `item_id` int(10) unsigned NOT NULL,
   `purchaseOrder_id` int(10) unsigned zerofill NOT NULL,
-  `vendor_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned zerofill NOT NULL,
   `qty` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -1423,7 +1423,7 @@ CREATE TABLE IF NOT EXISTS `vendorDetails` (
   `removed` datetime DEFAULT NULL,
   `removed_id` int(10) unsigned DEFAULT NULL,
   `active` tinyint(1) NOT NULL,
-  `vendor_id` int(10) unsigned NOT NULL,
+  `vendor_id` int(10) unsigned zerofill NOT NULL,
   `glAccount_id` int(10) unsigned DEFAULT NULL,
   `name` varchar(40) NOT NULL,
   PRIMARY KEY (`id`),
@@ -1437,7 +1437,7 @@ CREATE TABLE IF NOT EXISTS `vendorDetails` (
 --
 
 CREATE TABLE IF NOT EXISTS `vendors` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `active` tinyint(1) NOT NULL,
