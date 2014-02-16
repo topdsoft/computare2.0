@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `calendarPopUps` (
 CREATE TABLE IF NOT EXISTS `customerDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(10) unsigned zerofill NOT NULL,
-  `customerGroup_id` int(10) unsigned NOT NULL,
+  `customerGroup_id` int(10) unsigned NULL,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `companyName` varchar(50) NOT NULL,
