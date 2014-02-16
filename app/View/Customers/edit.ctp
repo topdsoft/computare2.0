@@ -42,19 +42,21 @@
 		}//endif
 		echo $this->Form->input('CustomerDetail.email');
 		echo $this->Form->input('CustomerDetail.phone');
-		//show block for additional contacts
-		echo '<fieldset><legend>Additional Contact Information</legend>';
-		foreach($this->data['Contact'] as $contact) {
-			//loop for all contacts
-			echo '<p><strong>'.$contact['field_name'].':</strong>';
-			echo $contact['value'].' ';
-			echo $this->Html->link(__('Edit'),array('controller'=>'contacts','action'=>'edit',$contact['id']));
-			echo '&nbsp;&nbsp;&nbsp;';
-			echo $this->Html->link(__('Delete'),array('controller'=>'contacts','action'=>'delete',$contact['id']),array(),__('Are you sure you want to delete this contact: '.$contact['field_name']));
-			echo '</p>';
-		}//endif oreach
-		echo $this->Html->link(__('Add Contact'), array('controller'=>'contacts','action' => 'add','customers', $this->data['Customer']['id']));
-		echo '</fieldset>';
+		if($action=='Edit') {
+			//show block for additional contacts
+			echo '<fieldset><legend>Additional Contact Information</legend>';
+			foreach($this->data['Contact'] as $contact) {
+				//loop for all contacts
+				echo '<p><strong>'.$contact['field_name'].':</strong>';
+				echo $contact['value'].' ';
+				echo $this->Html->link(__('Edit'),array('controller'=>'contacts','action'=>'edit',$contact['id']));
+				echo '&nbsp;&nbsp;&nbsp;';
+				echo $this->Html->link(__('Delete'),array('controller'=>'contacts','action'=>'delete',$contact['id']),array(),__('Are you sure you want to delete this contact: '.$contact['field_name']));
+				echo '</p>';
+			}//end foreach
+			echo $this->Html->link(__('Add Contact'), array('controller'=>'contacts','action' => 'add','customers', $this->data['Customer']['id']));
+			echo '</fieldset>';
+		}//endif
 		echo $this->Form->input('CustomerDetail.notes');
 //		echo $this->Form->input('customerDetail_id');
 	?>
