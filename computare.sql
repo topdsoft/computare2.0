@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 01, 2014 at 06:25 AM
+-- Generation Time: Feb 17, 2014 at 06:11 PM
 -- Server version: 5.5.35
 -- PHP Version: 5.3.10-1ubuntu3.9
 
@@ -77,13 +77,35 @@ CREATE TABLE IF NOT EXISTS `calendarPopUps` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `contacts`
+--
+
+CREATE TABLE IF NOT EXISTS `contacts` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `field_name` varchar(32) NOT NULL,
+  `value` varchar(256) NOT NULL,
+  `customer_id` int(10) unsigned zerofill DEFAULT NULL,
+  `vendor_id` int(10) unsigned zerofill DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vendor_id` (`vendor_id`),
+  KEY `customer_id` (`customer_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `customerDetails`
 --
 
 CREATE TABLE IF NOT EXISTS `customerDetails` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `customer_id` int(10) unsigned zerofill NOT NULL,
-  `customerGroup_id` int(10) unsigned NULL,
+  `customerGroup_id` int(10) unsigned DEFAULT NULL,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `companyName` varchar(50) NOT NULL,
@@ -902,7 +924,7 @@ CREATE TABLE IF NOT EXISTS `locations` (
   `rght` int(10) unsigned NOT NULL,
   `parent_id` int(10) unsigned NOT NULL,
   `name` varchar(64) NOT NULL,
-  `locationType_id` int(10) unsigned DEFAULT NULL,
+  `locationType_id` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
@@ -1146,8 +1168,9 @@ CREATE TABLE IF NOT EXISTS `sales` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `item_id` int(10) unsigned NOT NULL,
-  `salesOrder_id` int(10) unsigned zerofill NOT NULL,
+  `item_id` int(10) unsigned DEFAULT NULL,
+  `service_id` int(10) unsigned DEFAULT NULL,
+  `salesOrderDetail_id` int(10) unsigned zerofill NOT NULL,
   `customer_id` int(10) unsigned zerofill NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -1174,6 +1197,40 @@ CREATE TABLE IF NOT EXISTS `salesOrderDetails` (
   `tax` float(8,2) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salesOrderFees`
+--
+
+CREATE TABLE IF NOT EXISTS `salesOrderFees` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `salesOrderType_id` int(10) unsigned NOT NULL,
+  `label` varchar(64) NOT NULL,
+  `debitAccount_id` int(10) unsigned NOT NULL,
+  `creditAccount_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `salesOrderMods`
+--
+
+CREATE TABLE IF NOT EXISTS `salesOrderMods` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `salesOrder_id` int(10) unsigned NOT NULL,
+  `invoiced` tinyint(1) NOT NULL,
+  `label` varchar(64) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1216,7 +1273,7 @@ CREATE TABLE IF NOT EXISTS `salesOrderTypes` (
   `taxable` tinyint(1) NOT NULL,
   `on_account` tinyint(1) NOT NULL,
   `stock_required` tinyint(1) NOT NULL,
-  `location_id` int(10) unsigned NOT NULL,
+  `location_id` int(10) unsigned DEFAULT NULL,
   `itemTotalDebitAcct_id` int(10) unsigned DEFAULT NULL,
   `itemTotalCreditAcct_id` int(10) unsigned DEFAULT NULL,
   `serviceTotalDebitAcct_id` int(10) unsigned DEFAULT NULL,
@@ -1462,27 +1519,6 @@ CREATE TABLE IF NOT EXISTS `workflowChains` (
   `return_form` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
--- --------------------------------------------------------
-
---
--- Table structure for table `contacts`
---
-
-CREATE TABLE IF NOT EXISTS `contacts` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned NOT NULL,
-  `removed` datetime DEFAULT NULL,
-  `removed_id` int(10) unsigned DEFAULT NULL,
-  `active` tinyint(1) NOT NULL,
-  `field_name` varchar(32) NOT NULL,
-  `value` varchar(256) NOT NULL,
-  `customer_id` int(10) unsigned zerofill DEFAULT NULL,
-  `vendor_id` int(10) unsigned zerofill DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `vendor_id` (`vendor_id`),
-  KEY `customer_id` (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

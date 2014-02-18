@@ -42,6 +42,9 @@ class Customer extends AppModel {
 		),
 		'Contact' => array(
 			'conditions'=>array('Contact.active')
+		),
+		'Sales' => array(
+			'className'=>'Sale',
 		)
 	);
 }
