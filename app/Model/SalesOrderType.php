@@ -37,6 +37,16 @@ class SalesOrderType extends AppModel {
 	);
 
 /**
+ * hasMany associations
+ */
+	public $hasMany = array(
+		'SalesOrderFee' => array(
+			'className' => 'SalesOrderFee',
+			
+		),
+	);
+
+/**
  * Validation rules
  *
  * @var array

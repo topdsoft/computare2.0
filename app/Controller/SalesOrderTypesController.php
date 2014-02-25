@@ -102,6 +102,8 @@ class SalesOrderTypesController extends AppController {
 		}//endif
 		//get locations
 		$this->set('locations',$this->SalesOrderType->Location->generateTreeList(null,null,null,' - '));
+		$this->set('glaccounts',array(null=>'(none)')+$this->SalesOrderType->Glaccount->find('list'));
+		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
 
 /**

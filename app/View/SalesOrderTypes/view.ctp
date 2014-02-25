@@ -101,6 +101,27 @@
 	</tr>
 	</table>
 </div>
+<div class="related">
+	<?php if($salesOrderType['SalesOrderFee']): ?>
+		<h3><?php echo __('Sales Order Fees') ?></h3>
+		<table>
+			<tr><th>Label</th><th>Debit Account</th><th>Credit Account</th><th>Created</th><th>By</th></tr>
+			<?php
+			foreach($salesOrderType['SalesOrderFee'] as $fee) {
+				//loop to display all fees for this dales order type
+				echo '<tr>';
+				echo '<td>'.$fee['label'].'</td>';
+				echo '<td>'.$this->Html->link($glaccounts[$fee['debitAccount_id']],array('controller'=>'glaccounts','action'=>'view',$fee['debitAccount_id'])).'</td>';
+				echo '<td>'.$this->Html->link($glaccounts[$fee['creditAccount_id']],array('controller'=>'glaccounts','action'=>'view',$fee['creditAccount_id'])).'</td>';
+				echo '<td>'.$fee['created'].'</td>';
+				echo '<td>'.$users[$fee['created_id']].'</td>';
+				echo '</tr>';
+			}//end foreach
+			?>
+		</table>
+	<?php endif; ?>
+
+</div>
 </div>
 <?php 
 // debug($salesOrder);?>
