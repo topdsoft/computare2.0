@@ -8,7 +8,7 @@
 App::uses('Component','Controller');
 class ComputareARComponent extends Component{
 	
-	public $components = array('Auth', 'Session', 'Cookie');
+	public $components = array('Auth', 'Session', 'Cookie','ComputareGL');
 	
 	/**
 	 * method saveSO
@@ -151,6 +151,7 @@ class ComputareARComponent extends Component{
 		$this->SalesOrder=ClassRegistry::init('SalesOrder');
 		$this->Invoice=ClassRegistry::init('Invoice');
 		$this->Item=ClassRegistry::init('Item');
+		$this->Sale=ClassRegistry::init('Sale');
 		//get so
 		$SO=$this->SalesOrder->find('first',array('recursive'=>2,'conditions'=>array('SalesOrder.id'=>$data['SalesOrder']['id'])));
 		$ok=true;
@@ -213,13 +214,117 @@ class ComputareARComponent extends Component{
 				'amount'=>$tax,
 			));
 		}//endif
-		$totalPaid=$itemTotal+$serviceTotal+$tax;
-		if(isset($data['SalesOrder']['shipping'])) $totalPaid+=$data['SalesOrder']['shipping'];
-debug($data);debug($SO);debug($totalPaid);exit;
+		$shippingPaid=0;
+		if(isset($data['SalesOrder']['shipping'])) $shippingPaid=$data['SalesOrder']['shipping'];
+		$totalPaid=$itemTotal+$serviceTotal+$tax+$shippingPaid;
+// debug($data);debug($SO);debug($totalPaid);//exit;
 		##payment
 		##gl posting
+		$glPost=array('debit'=>array(),'credit'=>array());
+		//set user id
+		$glPost['Glentry']['created_id']=$this->Auth->user('id');
+		//add each gl entry defined in SOtype
+		if($itemTotal!=0) {
+			//don't post if zero
+			if($SO['SalesOrderType']['itemTotalDebitAcct_id']) {
+				//post to item total debit acct
+				$glPost['debit'][$SO['SalesOrderType']['itemTotalDebitAcct_id']]+=$itemTotal;
+			}//endif
+			if($SO['SalesOrderType']['itemTotalCreditAcct_id']) {
+				//post to item total credit acct
+				$glPost['credit'][$SO['SalesOrderType']['itemTotalCreditAcct_id']]+=$itemTotal;
+			}//endif
+		}//endif
+		if($serviceTotal!=0) {
+			//no zero posting
+			if($SO['SalesOrderType']['serviceTotalDebitAcct_id']) {
+				//post to service total debit acct
+				$glPost['debit'][$SO['SalesOrderType']['serviceTotalDebitAcct_id']]+=$serviceTotal;
+			}//endif
+			if($SO['SalesOrderType']['serviceTotalCreditAcct_id']) {
+				//post to service total credit acct
+				$glPost['credit'][$SO['SalesOrderType']['serviceTotalCreditAcct_id']]+=$serviceTotal;
+			}//endif
+		}//endif
+		if($shippingPaid!=0) {
+			//no zero posting
+			if($SO['SalesOrderType']['shippingDebitAcct_id']) {
+				//post to shipping total debit acct
+				$glPost['debit'][$SO['SalesOrderType']['shippingDebitAcct_id']]+=$shippingPaid;
+			}//endif
+			if($SO['SalesOrderType']['shippingCreditAcct_id']) {
+				//post to shipping total credit acct
+				$glPost['credit'][$SO['SalesOrderType']['shippingCreditAcct_id']]+=$shippingPaid;
+			}//endif
+		}//endif
+		if($tax!=0) {
+			//no zero posting
+			if($SO['SalesOrderType']['taxDebitAcct_id']) {
+				//post to tax total debit acct
+				$glPost['debit'][$SO['SalesOrderType']['taxDebitAcct_id']]+=$tax;
+			}//endif
+			if($SO['SalesOrderType']['taxCreditAcct_id']) {
+				//post to tax total credit acct
+				$glPost['credit'][$SO['SalesOrderType']['taxCreditAcct_id']]+=$tax;
+			}//endif
+		}//endif
+		if($totalPaid!=0) {
+			//no zero posting (but should never be zero)
+			if($SO['SalesOrderType']['grandTotalDebitAcct_id']) {
+				//post to grand total debit acct
+				$glPost['debit'][$SO['SalesOrderType']['grandTotalDebitAcct_id']]+=$totalPaid;
+			}//endif
+			if($SO['SalesOrderType']['grandTotalCreditAcct_id']) {
+				//post to grand total credit acct
+				$glPost['credit'][$SO['SalesOrderType']['grandTotalCreditAcct_id']]+=$totalPaid;
+			}//endif
+		}//enidf
+		//get soType
+		$soType=$this->SalesOrder->SalesOrderType->read(null,$SO['SalesOrderType']['id'] );
+		foreach($soType['SalesOrderFee'] as $fee) {
+			//loop for all fees
+			if(isset($data['SalesOrderFee'][$fee['id']]) && $data['SalesOrderFee'][$fee['id']]!=0) {
+				//be sure fee was passed and is not zero
+				$feeAmount=$data['SalesOrderFee'][$fee['id']];
+				//post to debit and credit accounts
+				$glPost['debit'][$fee['debitAccount_id']]+=$feeAmount;
+				$glPost['credit'][$fee['creditAccount_id']]+=$feeAmount;
+				//add salesOrderMod to sales order
+				if($ok)$this->SalesOrder->SalesOrderMod->create();
+				if($ok)$ok=$this->SalesOrder->SalesOrderMod->save(array(
+					'created_id'=>$this->Auth->user('id'),
+					'salesOrder_id'=>$SO['SalesOrder']['id'],
+					'label'=>$fee['label'],
+					'amount'=>$feeAmount
+				));
+				unset($feeAmount);
+			}//endif
+		}//end foreach
+		//do gl posting
+		if($ok) $ok=$this->ComputareGL->post($glPost);
+		##create sale entries
+		foreach($SO['ItemDetail'] as $item) {
+			//loop for all items on SO and create a sale record for it
+			if($ok) $this->Sale->create();
+			if($ok) $ok=$this->Sale->save(array(
+				'created_id'=>$this->Auth->user('id'),
+				'item_id'=>$item['Item']['id'],
+				'salesOrderDetail_id'=>$item['id'],
+				'customer_id'=>$SO['SalesOrder']['customer_id']
+			));
+		}//endif
 		##issue stock
 		
+		//save changes to SO
+		if($ok) $ok=$this->SalesOrder->save(array(
+			'id'=>$SO['SalesOrder']['id'],
+			'status'=>'I',
+			'invoice_id'=>$invoice_id,
+		));
+		
+		if($ok) $dataSource->commit();
+		else $dataSource->rollback();
+		return ($ok==true);
 	}
 	
 	/**

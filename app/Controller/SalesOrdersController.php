@@ -153,7 +153,7 @@ class SalesOrdersController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}//endif
 		if ($this->request->is('post') || $this->request->is('put')) {
-				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
+			if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 			$this->redirect(array('action' => 'index'));
 		} else {
 			$this->request->data = $SO;
@@ -350,6 +350,9 @@ class SalesOrdersController extends AppController {
 				if(isset($this->request->data['SalesOrder']['done'])) {
 					//finish transaction
 					$this->ComputareAR->completeSale($this->request->data);
+					$this->Session->setFlash(__("Sales Order Closed"),'default',array('class'=>'success'));
+					if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
+					$this->redirect(array('action' => 'index'));
 // debug($this->request->data);exit;
 				} else {
 					//get fee or identification data
