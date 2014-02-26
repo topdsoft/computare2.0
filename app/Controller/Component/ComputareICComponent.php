@@ -33,7 +33,7 @@ class ComputareICComponent extends Component{
 			if($ok) $ok=$this->Item->save($data['Item']);
 			if($ok) $data['Item']['id']=$this->Item->getInsertId();
 		}//endif
-		$data['ItemDetail']['category_id']=$data['Item']['category_id'];
+		if(isset($data['Item']['category_id']))$data['ItemDetail']['category_id']=$data['Item']['category_id'];
 		$data['ItemDetail']['item_id']=$data['Item']['id'];
 		$data['ItemDetail']['created_id']=$this->Auth->User('id');
 		//save itemDetails
