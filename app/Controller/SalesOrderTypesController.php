@@ -70,7 +70,7 @@ class SalesOrderTypesController extends AppController {
 			$this->request->data['SalesOrderType']=$this->passedArgs;
 		}//endif
 		//get lists
-		$locations=$this->SalesOrderType->Location->generateTreeList(null,null,null,' - ');
+		$locations=array(null=>'(none)')+$this->SalesOrderType->Location->generateTreeList(null,null,null,' - ');
 		$glaccounts=array(null=>'(none)')+$this->SalesOrderType->Glaccount->find('list');
 		$this->set(compact('locations','glaccounts'));
 	}
@@ -101,7 +101,7 @@ class SalesOrderTypesController extends AppController {
 			$this->request->data = $this->SalesOrderType->read(null, $id);
 		}//endif
 		//get locations
-		$this->set('locations',$this->SalesOrderType->Location->generateTreeList(null,null,null,' - '));
+		$this->set('locations',array(null=>'(none)')+$this->SalesOrderType->Location->generateTreeList(null,null,null,' - '));
 		$this->set('glaccounts',array(null=>'(none)')+$this->SalesOrderType->Glaccount->find('list'));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
 	}
