@@ -167,6 +167,8 @@ class ComputareARComponent extends Component{
 		));
 		$invoice_id=$this->Invoice->getInsertId();
 		$tax=0;
+		$itemTotal=0;
+		$serviceTotal=0;
 		foreach($SO['ItemDetail'] as $item) {
 			//loop for all items and add to invoice
 			if($ok) $this->Invoice->InvoiceDetail->create();
@@ -182,6 +184,7 @@ class ComputareARComponent extends Component{
 				'amount'=>$item['price']*$item['qty'],
 			));
 			$tax+=$item['tax'];
+			$itemTotal+=$item['price']*$item['qty'];
 			unset($text);
 		}//end foreach
 		foreach($SO['ServiceDetail'] as $service) {
@@ -197,6 +200,7 @@ class ComputareARComponent extends Component{
 				'amount'=>$service['price']*$service['qty'],
 			));
 			$tax+=$service['tax'];
+			$serviceTotal+=$service['price']*$service['qty'];
 		}//end foreach
 		if($tax) {
 			//add a line for tax
@@ -209,7 +213,9 @@ class ComputareARComponent extends Component{
 				'amount'=>$tax,
 			));
 		}//endif
-debug($data);debug($SO);exit;
+		$totalPaid=$itemTotal+$serviceTotal+$tax;
+		if(isset($data['SalesOrder']['shipping'])) $totalPaid+=$data['SalesOrder']['shipping'];
+debug($data);debug($SO);debug($totalPaid);exit;
 		##payment
 		##gl posting
 		##issue stock

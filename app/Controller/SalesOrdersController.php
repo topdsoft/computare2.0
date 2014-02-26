@@ -358,6 +358,8 @@ class SalesOrdersController extends AppController {
 					$this->request->data = $SO;
 					//get parameters for payment type
 					$this->set('paymentType',ClassRegistry::init('PaymentType')->read(null,$SO['SalesOrder']['paymentType_id']));
+					//get parameters for soType
+					$this->set('soType',$this->SalesOrder->SalesOrderType->read(null,$SO['SalesOrder']['salesOrderType_id']));
 				}//endif
 			}//endif
 		} else {

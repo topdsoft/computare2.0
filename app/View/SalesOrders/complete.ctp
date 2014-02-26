@@ -79,7 +79,13 @@
 				echo '<p>Payment Type:<strong>'.$paymentTypes[$this->data['SalesOrder']['paymentType_id']].'</strong></p>';
 				echo $this->Form->input('paymentType_id',array('type'=>'hidden'));
 				echo $this->Form->input('done',array('type'=>'hidden'));
-// debug($paymentType);
+// debug($paymentType);debug($soType);
+				//show fees for this sales order type
+				foreach($soType['SalesOrderFee'] as $fee) {
+					//loop for each fee
+					echo $this->Form->input('SalesOrderFee.'.$fee['id'],array('label'=>$fee['label']));
+				}//end foreach
+				//show fee for this payment type
 				if($paymentType['PaymentType']['identification_label']) echo $this->Form->input('identification',array('label'=>$paymentType['PaymentType']['identification_label']));
 				if($paymentType['PaymentType']['gl_expense_account_id']) echo $this->Form->input('expense',array('label'=>'Payment Expense'));
 				echo $this->Form->end(__('Complete Sale')); 
