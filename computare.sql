@@ -1225,7 +1225,7 @@ CREATE TABLE IF NOT EXISTS `salesOrderMods` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
-  `salesOrder_id` int(10) unsigned NOT NULL,
+  `salesOrder_id` int(10) unsigned zerofill NOT NULL,
   `invoiced` tinyint(1) NOT NULL,
   `label` varchar(64) NOT NULL,
   `amount` decimal(12,2) NOT NULL,

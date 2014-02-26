@@ -93,6 +93,19 @@
 		}//end foreach
 		echo '<tr class="total"><th>Total</th><th></th><th></th><th></th><th></th><th>'.number_format($productTotal,2).'</th><th>'.number_format($serviceTotal,2).'</th><th>'.number_format($taxTotal,2).'</th></tr>';
 		echo '<tr class="total"><th></th><th></th><th></th><th></th><th></th><th></th><th>Grand Total</th><th>'.number_format($productTotal+$serviceTotal+$taxTotal,2).'</th></tr>';
+		//show fees
+		$feeTotal=0;
+		foreach($salesOrder['SalesOrderMod'] as $soMod) {
+			//loop for all so mods and list them
+			echo '<tr>';
+			echo '<td>'.$soMod['label'].'</td>';
+			echo '<td></td><td></td><td></td><td></td><td></td>';
+			echo '<td>'.$soMod['amount'].'</td><td></td>';
+			$feeTotal+=$soMod['amount'];
+			echo '</tr>';
+		}//end foreach
+		echo '<tr class="total"><th>Fee Total</th><th></th><th></th><th></th><th></th><th></th><th>'.number_format($feeTotal,2).'</th><th></th></tr>';
+		echo '<tr class="total"><th></th><th></th><th></th><th></th><th></th><th></th><th>Total After Fees</th><th>'.number_format($productTotal+$serviceTotal+$taxTotal-$feeTotal,2).'</th></tr>';
 	?>
 	</table>
 </div>
