@@ -63,8 +63,8 @@ class AppController extends Controller {
 // debug($this);exit;
 			$this->ComputareSysevent->save($errorData);
 		}//endif
-		//no ACL on login, popup or help pages
-		$ignore=array('display','login','popup');
+		//no ACL on login, popup, addFirstUser or help pages
+		$ignore=array('display','login','popup','addFirstUser');
 		if(!$error && !in_array($this->params['action'],$ignore)) {
 			$formOBJ=ClassRegistry::init('Form');
 			//look for controller/action combo in forms table

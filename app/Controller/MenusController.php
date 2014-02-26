@@ -14,6 +14,7 @@ class MenusController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Menus');
+		$this->set('add_menu',true);
 		$this->Menu->recursive = 0;
 		$this->set('menus', $this->paginate());
 		$users = $this->Menu->User->find('list');

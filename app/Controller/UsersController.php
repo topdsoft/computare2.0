@@ -9,6 +9,35 @@ class UsersController extends AppController {
 
 	public $components=array('ComputareSysevent','ComputareUser');
 
+	public function beforeFilter() {
+		$this->Auth->allow('addFirstUser');
+		parent::beforeFilter();
+	}
+
+/** addFirstUser method
+ * 
+ * @return void
+ * 
+ * used the first time system is started to set up user_id=1
+ */
+	public function addFirstUser() {
+		$this->set('formName','Add First User');
+		//validate first time use
+		if($this->User->read(null,1)) $this->redirect(array('action'=>'index'));
+		if ($this->request->is('post')) {
+			//save first user
+			$this->request->data['User']['active']=true;
+			$this->User->create();
+			if ($this->User->save($this->request->data)) {
+				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'logout'));
+			} else {
+				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+			}//endif
+		}//endif
+	}
+
+
 /**
  * index method
  *
@@ -16,6 +45,7 @@ class UsersController extends AppController {
  */
 	public function index() {
 		$this->set('formName','List Users');
+		$this->set('add_menu',true);
 		$this->User->recursive = 0;
 		$this->set('users', $this->paginate());
 	}
@@ -237,6 +267,8 @@ class UsersController extends AppController {
 					$this->loadMenu();
 					return $this->redirect($this->Auth->redirect());
 				} else {
+					//login failed check if first time use
+					if(!$this->User->read(null,1)) $this->redirect(array('action'=>'addFirstUser'));
 					$this->Session->setFlash(__('Your Credentials are incorrect'), 'default', array(), 'auth');
 					//log failure
 					$logdata=array('event_type'=>3,
