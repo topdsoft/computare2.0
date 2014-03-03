@@ -79,11 +79,14 @@ class ComputareGLComponent extends Component{
 // debug($data);exit;
 		//validate created_id
 		if(!isset($data['Glentry']['created_id'])) return false;
+		//round all entries to 2 decimal points (not sure why this is needed)
+		foreach($data['debit'] as $i=>$debit) $data['debit'][$i]=number_format($debit,2);
+		foreach($data['credit'] as $i=>$credit) $data['credit'][$i]=number_format($credit,2);
 		//total debits and credits
-		$dtotal=$ctotal=0;
+		$dtotal=$ctotal=0.00;
 		foreach($data['debit'] as $debit) $dtotal+=$debit;
 		foreach($data['credit'] as $credit) $ctotal+=$credit;
-		if($dtotal!=$ctotal) return false;//debits must equal credits
+		if(number_format($dtotal,2)!=number_format($ctotal,2)) return false;//debits must equal credits
 		if($dtotal==0) return false;//can't be 0
 		//if post date not set use current
 		if(!isset($data['Glentry']['postDate'])) $data['Glentry']['postDate']=date('Y-m-d');

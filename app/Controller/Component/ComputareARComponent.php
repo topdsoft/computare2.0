@@ -228,55 +228,65 @@ class ComputareARComponent extends Component{
 			//don't post if zero
 			if($SO['SalesOrderType']['itemTotalDebitAcct_id']) {
 				//post to item total debit acct
-				$glPost['debit'][$SO['SalesOrderType']['itemTotalDebitAcct_id']]+=$itemTotal;
+				if(!isset($glPost['debit'][$SO['SalesOrderType']['itemTotalDebitAcct_id']])) $glPost['debit'][$SO['SalesOrderType']['itemTotalDebitAcct_id']]=(float)$itemTotal;
+				else $glPost['debit'][$SO['SalesOrderType']['itemTotalDebitAcct_id']]+=$itemTotal;
 			}//endif
 			if($SO['SalesOrderType']['itemTotalCreditAcct_id']) {
 				//post to item total credit acct
-				$glPost['credit'][$SO['SalesOrderType']['itemTotalCreditAcct_id']]+=$itemTotal;
+				if(!isset($glPost['credit'][$SO['SalesOrderType']['itemTotalCreditAcct_id']])) $glPost['credit'][$SO['SalesOrderType']['itemTotalCreditAcct_id']]=(float)$itemTotal;
+				else $glPost['credit'][$SO['SalesOrderType']['itemTotalCreditAcct_id']]+=$itemTotal;
 			}//endif
 		}//endif
 		if($serviceTotal!=0) {
 			//no zero posting
 			if($SO['SalesOrderType']['serviceTotalDebitAcct_id']) {
 				//post to service total debit acct
-				$glPost['debit'][$SO['SalesOrderType']['serviceTotalDebitAcct_id']]+=$serviceTotal;
+				if(!isset($glPost['debit'][$SO['SalesOrderType']['serviceTotalDebitAcct_id']])) $glPost['debit'][$SO['SalesOrderType']['serviceTotalDebitAcct_id']]=(float)$serviceTotal;
+				else $glPost['debit'][$SO['SalesOrderType']['serviceTotalDebitAcct_id']]+=$serviceTotal;
 			}//endif
 			if($SO['SalesOrderType']['serviceTotalCreditAcct_id']) {
 				//post to service total credit acct
-				$glPost['credit'][$SO['SalesOrderType']['serviceTotalCreditAcct_id']]+=$serviceTotal;
+				if(!isset($glPost['credit'][$SO['SalesOrderType']['serviceTotalCreditAcct_id']])) $glPost['credit'][$SO['SalesOrderType']['serviceTotalCreditAcct_id']]=(float)$serviceTotal;
+				else $glPost['credit'][$SO['SalesOrderType']['serviceTotalCreditAcct_id']]+=$serviceTotal;
 			}//endif
 		}//endif
 		if($shippingPaid!=0) {
 			//no zero posting
 			if($SO['SalesOrderType']['shippingDebitAcct_id']) {
 				//post to shipping total debit acct
-				$glPost['debit'][$SO['SalesOrderType']['shippingDebitAcct_id']]+=$shippingPaid;
+				if(!isset($glPost['debit'][$SO['SalesOrderType']['shippingDebitAcct_id']])) $glPost['debit'][$SO['SalesOrderType']['shippingDebitAcct_id']]=(float)$shippingPaid;
+				else $glPost['debit'][$SO['SalesOrderType']['shippingDebitAcct_id']]+=$shippingPaid;
 			}//endif
 			if($SO['SalesOrderType']['shippingCreditAcct_id']) {
 				//post to shipping total credit acct
-				$glPost['credit'][$SO['SalesOrderType']['shippingCreditAcct_id']]+=$shippingPaid;
+				if(!isset($glPost['credit'][$SO['SalesOrderType']['shippingCreditAcct_id']])) $glPost['credit'][$SO['SalesOrderType']['shippingCreditAcct_id']]=(float)$shippingPaid;
+				else $glPost['credit'][$SO['SalesOrderType']['shippingCreditAcct_id']]+=$shippingPaid;
 			}//endif
 		}//endif
 		if($tax!=0) {
 			//no zero posting
 			if($SO['SalesOrderType']['taxDebitAcct_id']) {
 				//post to tax total debit acct
-				$glPost['debit'][$SO['SalesOrderType']['taxDebitAcct_id']]+=$tax;
+				if(!isset($glPost['debit'][$SO['SalesOrderType']['taxDebitAcct_id']])) $glPost['debit'][$SO['SalesOrderType']['taxDebitAcct_id']]=(float)$tax;
+				else $glPost['debit'][$SO['SalesOrderType']['taxDebitAcct_id']]+=$tax;
 			}//endif
 			if($SO['SalesOrderType']['taxCreditAcct_id']) {
 				//post to tax total credit acct
-				$glPost['credit'][$SO['SalesOrderType']['taxCreditAcct_id']]+=$tax;
+				if(!isset($glPost['credit'][$SO['SalesOrderType']['taxCreditAcct_id']])) $glPost['credit'][$SO['SalesOrderType']['taxCreditAcct_id']]=(float)$tax;
+				else $glPost['credit'][$SO['SalesOrderType']['taxCreditAcct_id']]+=$tax;
 			}//endif
 		}//endif
 		if($totalPaid!=0) {
 			//no zero posting (but should never be zero)
 			if($SO['SalesOrderType']['grandTotalDebitAcct_id']) {
 				//post to grand total debit acct
-				$glPost['debit'][$SO['SalesOrderType']['grandTotalDebitAcct_id']]+=$totalPaid;
+				if(!isset($glPost['debit'][$SO['SalesOrderType']['grandTotalDebitAcct_id']])) $glPost['debit'][$SO['SalesOrderType']['grandTotalDebitAcct_id']]=(float)$totalPaid;
+				else $glPost['debit'][$SO['SalesOrderType']['grandTotalDebitAcct_id']]+=$totalPaid;
 			}//endif
 			if($SO['SalesOrderType']['grandTotalCreditAcct_id']) {
 				//post to grand total credit acct
-				$glPost['credit'][$SO['SalesOrderType']['grandTotalCreditAcct_id']]+=$totalPaid;
+				if(!isset($glPost['credit'][$SO['SalesOrderType']['grandTotalCreditAcct_id']])) $glPost['credit'][$SO['SalesOrderType']['grandTotalCreditAcct_id']]=(float)$totalPaid;
+				else $glPost['credit'][$SO['SalesOrderType']['grandTotalCreditAcct_id']]+=$totalPaid;
 			}//endif
 		}//enidf
 		//get soType
@@ -287,8 +297,10 @@ class ComputareARComponent extends Component{
 				//be sure fee was passed and is not zero
 				$feeAmount=$data['SalesOrderFee'][$fee['id']];
 				//post to debit and credit accounts
-				$glPost['debit'][$fee['debitAccount_id']]+=$feeAmount;
-				$glPost['credit'][$fee['creditAccount_id']]+=$feeAmount;
+				if(!isset($glPost['debit'][$fee['debitAccount_id']])) $glPost['debit'][$fee['debitAccount_id']]=(float)$feeAmount;
+				else $glPost['debit'][$fee['debitAccount_id']]+=$feeAmount;
+				if(!isset($glPost['credit'][$fee['creditAccount_id']])) $glPost['credit'][$fee['creditAccount_id']]=(float)$feeAmount;
+				else $glPost['credit'][$fee['creditAccount_id']]+=$feeAmount;
 				//add salesOrderMod to sales order
 				if($ok)$this->SalesOrder->SalesOrderMod->create();
 				if($ok)$ok=$this->SalesOrder->SalesOrderMod->save(array(

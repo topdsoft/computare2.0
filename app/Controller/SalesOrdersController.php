@@ -349,10 +349,15 @@ class SalesOrdersController extends AppController {
 				//process cash sale
 				if(isset($this->request->data['SalesOrder']['done'])) {
 					//finish transaction
-					$this->ComputareAR->completeSale($this->request->data);
-					$this->Session->setFlash(__("Sales Order Closed"),'default',array('class'=>'success'));
-					if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
-					$this->redirect(array('action' => 'index'));
+					if($this->ComputareAR->completeSale($this->request->data)) {
+						//SO closed ok
+						$this->Session->setFlash(__("Sales Order Closed"),'default',array('class'=>'success'));
+						if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
+						$this->redirect(array('action' => 'index'));
+					} else {
+						//failed to close SO
+						$this->Session->setFlash(__("Sales Order Could Not be Closed"));
+					}//endif
 // debug($this->request->data);exit;
 				} else {
 					//get fee or identification data
