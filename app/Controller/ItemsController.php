@@ -78,12 +78,13 @@ class ItemsController extends AppController {
 		if (!$this->Item->exists()) {
 			throw new NotFoundException(__('Invalid item'));
 		}
+		$this->Item->recursive = 2;
 		$this->set('item', $this->Item->read(null, $id));
 		$this->set('users', ClassRegistry::init('User')->find('list'));
 		$this->set('locations', $this->Item->Location->find('list'));
 		$this->set('vendors', $this->Item->Vendor->find('list'));
 		$cats=$this->Item->ItemCategory->find('list');
-		$cats[0]='';
+		$cats[null]='';
 		$this->set('categories', $cats);
 		$this->set('itemlocations',$this->Item->ItemsLocation->find('list',array('fields'=>array('location_id'))));
 	}
