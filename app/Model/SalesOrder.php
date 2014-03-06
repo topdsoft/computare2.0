@@ -18,6 +18,20 @@ class SalesOrder extends AppModel {
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
+	function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		#check table schema and make adjustments if necessary
+		$dbs=$this->getSechema();
+		$ok=true;
+		if($ok && $dbs<1) {
+			//add shipping_paid field
+			try {$this->query('ALTER TABLE  `salesOrders` ADD  `shipping_paid` FLOAT( 12, 2 ) NULL');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(1);
+			else $this->logDBFailure($e);
+		}//endif dbs<1
+	}
+
 /**
  * belongsTo associations
  *

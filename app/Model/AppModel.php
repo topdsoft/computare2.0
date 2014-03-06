@@ -59,6 +59,7 @@ class AppModel extends Model {
 		if($schema==='') {
 			//schema not set
 			$this->setSchema(0);
+			$schema=0;
 		}//endif
 		return $schema;
 	}
@@ -73,4 +74,22 @@ class AppModel extends Model {
 		//set table comment to correct schema
 		return $this->query('alter table '.$this->table.' COMMENT="'.$schema.'"');
 	}
+	
+	/**
+	 * protected function logDBFailure($e)
+	 * @param $e exception data
+	 * @return null
+	 */
+	protected function logDBFailure($e) {
+		//log db failure
+		App::import('Component','ComputareSysevent');
+		$this->comp=new ComputareSyseventComponent(null);
+//debug($this->comp);exit;
+		$this->comp->save(array(
+			'event_type'=>1,
+			'title'=>'DB Update Error',
+			'errorEvent'=>array('message'=>$e->xdebug_message),
+		));
+// debug($e->xdebug_message);exit;
+	}//endif
 }

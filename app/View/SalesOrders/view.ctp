@@ -79,6 +79,13 @@
 			$taxTotal+=$item['tax'];
 			echo '</tr>';
 		}//end foreach items
+		//add line for shipping
+		if($salesOrder['SalesOrder']['shipping_paid']) {
+			//only show line if an amount is entered
+			echo '<tr>';
+			echo '<td>Shipping Paid</td><td></td><td></td><td></td><td>'.$salesOrder['SalesOrder']['shipping_paid'].'</td><td></td><td></td><td></td>';
+			echo '</tr>';
+		}//endif
 		foreach($salesOrder['ServiceDetail'] as $service){
 			//loop for all services in SO
 			echo '<tr>';
@@ -92,7 +99,7 @@
 			echo '</tr>';
 		}//end foreach
 		echo '<tr class="total"><th>Total</th><th></th><th></th><th></th><th></th><th>'.number_format($productTotal,2).'</th><th>'.number_format($serviceTotal,2).'</th><th>'.number_format($taxTotal,2).'</th></tr>';
-		echo '<tr class="total"><th></th><th></th><th></th><th></th><th></th><th></th><th>Grand Total</th><th>'.number_format($productTotal+$serviceTotal+$taxTotal,2).'</th></tr>';
+		echo '<tr class="total"><th></th><th></th><th></th><th></th><th></th><th></th><th>Grand Total</th><th>'.number_format($productTotal+$serviceTotal+$taxTotal+$salesOrder['SalesOrder']['shipping_paid'],2).'</th></tr>';
 		//show fees
 		$feeTotal=0;
 		foreach($salesOrder['SalesOrderMod'] as $soMod) {
@@ -105,7 +112,7 @@
 			echo '</tr>';
 		}//end foreach
 		echo '<tr class="total"><th>Fee Total</th><th></th><th></th><th></th><th></th><th></th><th>'.number_format($feeTotal,2).'</th><th></th></tr>';
-		echo '<tr class="total"><th></th><th></th><th></th><th></th><th></th><th></th><th>Total After Fees</th><th>'.number_format($productTotal+$serviceTotal+$taxTotal-$feeTotal,2).'</th></tr>';
+		echo '<tr class="total"><th></th><th></th><th></th><th></th><th></th><th></th><th>Total After Fees</th><th>'.number_format($productTotal+$serviceTotal+$taxTotal+$salesOrder['SalesOrder']['shipping_paid']-$feeTotal,2).'</th></tr>';
 	?>
 	</table>
 </div>

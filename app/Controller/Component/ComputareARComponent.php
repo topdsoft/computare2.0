@@ -332,6 +332,7 @@ class ComputareARComponent extends Component{
 			'id'=>$SO['SalesOrder']['id'],
 			'status'=>'I',
 			'invoice_id'=>$invoice_id,
+			'shipping_paid'=>$shippingPaid,
 		));
 		
 		if($ok) $dataSource->commit();
