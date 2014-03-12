@@ -12,7 +12,9 @@ class ComputareARComponentTest extends CakeTestCase {
 		'app.address',
 		'app.salesOrder',
 		'app.salesOrderDetail',
-		'app.salesOrderType'
+		'app.salesOrderType',
+		'app.salesOrderMod',
+		'app.sale'
 	);
 	
 	public function setUp() {
