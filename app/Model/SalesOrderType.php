@@ -6,6 +6,19 @@ App::uses('AppModel', 'Model');
  */
 class SalesOrderType extends AppModel {
 
+	function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		#check table schema and make adjustments if necessary
+		$dbs=$this->getSechema();
+		$ok=true;
+		if($ok && $dbs<1) {
+			//add field for issueType_id
+			try {$this->query('ALTER TABLE  `salesOrderTypes` ADD  `issueType_id` INT UNSIGNED NOT NULL');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(1);
+			else $this->logDBFailure($e);
+		}//endif
+	}
 /**
  * Use table
  *
@@ -33,7 +46,10 @@ class SalesOrderType extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Glaccount'
+		'Glaccount',
+		'IssueType' => array(
+			'foreignKey' => 'issueType_id'
+		)
 	);
 
 /**

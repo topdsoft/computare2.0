@@ -326,6 +326,40 @@ class ComputareARComponent extends Component{
 			));
 		}//endif
 		##issue stock
+// debug($data);debug($SO);debug($totalPaid);//exit;
+		//get array of locations where item could be found
+		$saleLocation=$this->Item->Location->find('first',array(
+			'conditions'=>array('Location.id'=>$SO['SalesOrderType']['location_id']),
+			'fields'=>array('Location.lft','Location.rght'),
+			'recursive'=>0,
+		));
+		$saleLocations=$this->Item->Location->find('list',array(
+			'conditions'=>array('Location.lft >= '.$saleLocation['Location']['lft'],'Location.lft <= '.$saleLocation['Location']['rght']),
+			'fields'=>array('Location.id'),
+		));
+		unset($saleLocation);
+debug($saleLocations);
+		//for now just decrement qty
+		foreach($SO['ItemDetail'] as $item) {
+			//loop for all items
+			$loc=$this->Item->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$saleLocations,'item_id'=>$item['item_id'])));
+debug($loc);debug($item);exit;
+			if($loc) {
+				//item found at primary location
+				if($loc['ItemsLocation']['qty']>=$item['qty']) {
+					//there is sufficient qty
+##issue stock
+					//mod SOdetail line
+					if($ok) $ok=$this->SalesOrder->SalesOrderDetail->save(array(
+						'id'=>$item['id'],
+						'shipped'=>$item['qty']
+					));
+					
+				}//endif
+			}//endif
+		}//end foreach
+debug('here');exit;
+		
 		
 		//save changes to SO
 		if($ok) $ok=$this->SalesOrder->save(array(

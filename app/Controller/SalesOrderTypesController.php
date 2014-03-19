@@ -72,7 +72,13 @@ class SalesOrderTypesController extends AppController {
 		//get lists
 		$locations=array(null=>'(none)')+$this->SalesOrderType->Location->generateTreeList(null,null,null,' - ');
 		$glaccounts=array(null=>'(none)')+$this->SalesOrderType->Glaccount->find('list');
-		$this->set(compact('locations','glaccounts'));
+		$issueTypes=$this->SalesOrderType->IssueType->find('list');
+		if(!$issueTypes) {
+			//there must be at least one issue type defined to continue
+			$this->Session->setFlash(__('There must be at least one Issue Type defined before you can add a Sales Order Type'));
+			$this->redirect(array('controller'=>'issueTypes'));
+		}//endif
+		$this->set(compact('locations','glaccounts','issueTypes'));
 	}
 
 /**
