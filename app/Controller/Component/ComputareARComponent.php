@@ -214,6 +214,8 @@ class ComputareARComponent extends Component{
 				'amount'=>$tax,
 			));
 		}//endif
+		//set status to invoiced
+		$status='I';
 		$shippingPaid=0;
 		if(isset($data['SalesOrder']['shipping'])) $shippingPaid=$data['SalesOrder']['shipping'];
 		$totalPaid=$itemTotal+$serviceTotal+$tax+$shippingPaid;
@@ -339,32 +341,36 @@ class ComputareARComponent extends Component{
 		));
 		unset($saleLocation);
 debug($saleLocations);
-		//for now just decrement qty
-		foreach($SO['ItemDetail'] as $item) {
-			//loop for all items
-			$loc=$this->Item->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$saleLocations,'item_id'=>$item['item_id'])));
-debug($loc);debug($item);exit;
-			if($loc) {
-				//item found at primary location
-				if($loc['ItemsLocation']['qty']>=$item['qty']) {
-					//there is sufficient qty
 ##issue stock
-					//mod SOdetail line
-					if($ok) $ok=$this->SalesOrder->SalesOrderDetail->save(array(
-						'id'=>$item['id'],
-						'shipped'=>$item['qty']
-					));
-					
+		if($SO['SalesOrderType']['shipping']==false) {
+			//decrement qty if direct dale (not using shipping)
+			foreach($SO['ItemDetail'] as $item) {
+				//loop for all items
+				$loc=$this->Item->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$saleLocations,'item_id'=>$item['item_id'])));
+debug($loc);debug($item);exit;
+				if($loc) {
+					//item found at primary location
+					if($loc['ItemsLocation']['qty']>=$item['qty']) {
+						//there is sufficient qty
+						//mod SOdetail line
+						if($ok) $ok=$this->SalesOrder->SalesOrderDetail->save(array(
+							'id'=>$item['id'],
+							'shipped'=>$item['qty']
+						));
+						
+					}//endif
 				}//endif
-			}//endif
-		}//end foreach
+			}//end foreach
+			//set status to closed
+			$status='C';
+		}//endif
 debug('here');exit;
 		
 		
 		//save changes to SO
 		if($ok) $ok=$this->SalesOrder->save(array(
 			'id'=>$SO['SalesOrder']['id'],
-			'status'=>'I',
+			'status'=>$status,
 			'invoice_id'=>$invoice_id,
 			'shipping_paid'=>$shippingPaid,
 		));
