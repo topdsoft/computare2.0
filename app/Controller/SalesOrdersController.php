@@ -357,6 +357,7 @@ class SalesOrdersController extends AppController {
 					} else {
 						//failed to close SO
 						$this->Session->setFlash(__("Sales Order Could Not be Closed"));
+						$this->redirect(array('action' => 'index'));
 					}//endif
 // debug($this->request->data);exit;
 				} else {

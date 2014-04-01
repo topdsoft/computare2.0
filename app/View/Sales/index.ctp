@@ -1,19 +1,23 @@
 <div class="sales index">
+<?php echo $this->Form->create('Filter'); ?>
 	<h2><?php echo __('Sales'); ?></h2>
+	<?php echo $this->element('filterblock'); ?>
 	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
 			<th><?php echo $this->Paginator->sort('created_id','By'); ?></th>
-			<th><?php echo $this->Paginator->sort('item_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('service_id'); ?></th>
-			<th><?php echo $this->Paginator->sort('salesOrderDetail.qty','Qty'); ?></th>
-			<th><?php echo $this->Paginator->sort('salesOrderDetail.price','Price'); ?></th>
-			<th><?php echo $this->Paginator->sort('salesOrderDetail.salesOrder_id','Sales Order'); ?></th>
-			<th><?php echo $this->Paginator->sort('customer_id'); ?></th>
+			<th><?php echo $this->Paginator->sort('Item.name','Item'); ?></th>
+			<th><?php echo $this->Paginator->sort('Service.name','Service'); ?></th>
+			<th><?php echo $this->Paginator->sort('SalesOrderDetail.qty','Qty'); ?></th>
+			<th><?php echo $this->Paginator->sort('SalesOrderDetail.price','Price'); ?></th>
+			<th>Total</th>
+			<th><?php echo $this->Paginator->sort('SalesOrderDetail.salesOrder_id','Sales Order'); ?></th>
+			<th><?php echo $this->Paginator->sort('Customer.name','Customer'); ?></th>
 			<th></th>
 	</tr>
 	<?php
+	$total=$tQty=0;
 	foreach ($sales as $sale): ?>
 	<tr>
 		<td><?php echo h($sale['Sale']['created']); ?>&nbsp;</td>
@@ -24,8 +28,9 @@
 		<td>
 			<?php echo $this->Html->link($sale['Service']['name'], array('controller' => 'services', 'action' => 'view', $sale['Service']['id'])); ?>
 		</td>
-		<td><?php echo $sale['SalesOrderDetail']['qty']; ?></td>
-		<td><?php echo $sale['SalesOrderDetail']['price']; ?></td>
+		<td><?php echo $sale['SalesOrderDetail']['qty']; $tQty+=$sale['SalesOrderDetail']['qty']; ?></td>
+		<td><?php echo $sale['SalesOrderDetail']['price']; $total+=$sale['SalesOrderDetail']['qty']*$sale['SalesOrderDetail']['price']; ?></td>
+		<td><?php echo number_format($sale['SalesOrderDetail']['qty']*$sale['SalesOrderDetail']['price'],2); ?></td>
 		<td>
 			<?php echo $this->Html->link($sale['SalesOrderDetail']['salesOrder_id'], array('controller' => 'sales_orders', 'action' => 'view', $sale['SalesOrderDetail']['salesOrder_id'])); ?>
 		</td>
@@ -37,6 +42,8 @@
 		</td>
 	</tr>
 <?php endforeach; ?>
+	<tr class="total"><th>Page Total</th><th></th><th></th><th></th><th><?php echo number_format($tQty,2); ?></th><th></th><th><?php echo number_format($total,2); ?></th><th></th><th></th><th></th></tr>
+	<tr><th>Full Total</th><th></th><th></th><th></th><th><?php echo number_format($fullQtyTotal,2); ?></th><th></th><th><?php echo number_format($fullTotal,2); ?></th><th></th><th></th><th></th></tr>
 	</table>
 	<p>
 	<?php
