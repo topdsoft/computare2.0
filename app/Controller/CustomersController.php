@@ -62,6 +62,7 @@ class CustomersController extends AppController {
 		$this->Customer->bindModel(array('hasMany'=>array('Revisions'=>array(
 			'className'=>'CustomerDetail',
 			'order'=>'Revisions.id desc'))));
+		$this->Customer->recursive = 2;
 		$this->set('customer', $this->Customer->read(null, $id));
 		//get users list for showing created and deleted id
 		$users=ClassRegistry::init('User')->find('list');

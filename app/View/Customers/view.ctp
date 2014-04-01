@@ -112,6 +112,37 @@
 </div>
 	
 <div class="related">
+	<?php if(!empty($customer['Sales'])): ?>
+	<h3><?php echo __('Sales'); ?></h3>
+	<table cellpadding = "0" cellspacing = "0">
+	<tr>
+		<th><?php echo __('Item'); ?></th>
+		<th><?php echo __('Service'); ?></th>
+		<th><?php echo __('Created'); ?></th>
+		<th><?php echo __('By'); ?></th>
+		<th><?php echo __('Qty'); ?></th>
+		<th><?php echo __('Shipped'); ?></th>
+		<th><?php echo __('Price'); ?></th>
+		<th><?php echo __('SO'); ?></th>
+		<th></th>
+	</tr>
+	<?php
+		$i = 0;
+		foreach ($customer['Sales'] as $sale): ?>
+		<tr>
+			<td><?php if($sale['Item']) echo $this->Html->link($sale['Item']['name'],array('controller'=>'items','action'=>'view',$sale['item_id'])) ; ?></td>
+			<td><?php if($sale['Service']) echo $this->Html->link($sale['Service']['name'],array('controller'=>'services','action'=>'view',$sale['service_id'])) ; ?></td>
+			<td><?php echo $sale['created']; ?></td>
+			<td><?php echo $users[$sale['created_id']]; ?></td>
+			<td><?php echo $sale['SalesOrderDetail']['qty']; ?></td>
+			<td><?php echo $sale['SalesOrderDetail']['shipped']; ?></td>
+			<td><?php echo $sale['SalesOrderDetail']['price']; ?></td>
+			<td><?php echo $this->Html->link($sale['SalesOrderDetail']['salesOrder_id'],array('controller'=>'salesOrders','action'=>'view',$sale['SalesOrderDetail']['salesOrder_id'])); ?></td>
+		</tr>
+	<?php endforeach; ?>
+	</table>
+		
+	<?php endif; ?>
 </div>
 <?php //debug($customer);
 	echo $this->element('revisionblock',array('data'=>$customer,'ignore'=>array('id','created','created_id')));

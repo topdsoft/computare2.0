@@ -161,7 +161,7 @@ class Item extends AppModel {
 			'className' => 'SalesOrderDetail',
 			'foreignKey' => 'item_id',
 			'dependent' => false,
-			'conditions' => '',
+			'conditions' => 'SalesOrderDetail.active',
 			'fields' => '',
 			'order' => '',
 			'limit' => '',

@@ -382,23 +382,17 @@
 		<th><?php echo __('Qty'); ?></th>
 		<th><?php echo __('Shipped'); ?></th>
 		<th><?php echo __('Price'); ?></th>
-		<th></th>
 	</tr>
 	<?php
 		$i = 0;
 		foreach ($item['SalesOrderDetail'] as $salesOrderDetail): ?>
 		<tr>
-			<td><?php echo $salesOrderDetail['salesOrder_id']; ?></td>
+			<td><?php echo $this->Html->link($salesOrderDetail['salesOrder_id'],array('controller'=>'salesOrders','action'=>'view',$salesOrderDetail['salesOrder_id'])); ?></td>
 			<td><?php echo $salesOrderDetail['created']; ?></td>
 			<td><?php echo $users[$salesOrderDetail['created_id']]; ?></td>
 			<td><?php echo $salesOrderDetail['qty']; ?></td>
 			<td><?php echo $salesOrderDetail['shipped']; ?></td>
 			<td><?php echo $salesOrderDetail['price']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'sales_orders', 'action' => 'view', $salesOrderDetail['salesOrder_id'])); ?>
-				<?php //echo $this->Html->link(__('Edit'), array('controller' => 'sales_order_details', 'action' => 'edit', $salesOrderDetail['id'])); ?>
-				<?php //echo $this->Form->postLink(__('Delete'), array('controller' => 'sales_order_details', 'action' => 'delete', $salesOrderDetail['id']), null, __('Are you sure you want to delete # %s?', $salesOrderDetail['id'])); ?>
-			</td>
 		</tr>
 	<?php endforeach; ?>
 	</table>
