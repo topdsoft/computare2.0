@@ -428,7 +428,7 @@ class ComputareICComponent extends Component{
 	 * @param $data
 		* 'item_location_id' => where issued from  (REQUIRED)
 		* 'issueType_id' => type of issue (REQUIRED)
-		* 'note' not to add to GL posting (optional)
+		* 'note' note to add to GL posting (optional)
 		* 'serialNumbners'=>array of SN being issued
 		*    (OR)
 		* 'Item'=>'qty'
