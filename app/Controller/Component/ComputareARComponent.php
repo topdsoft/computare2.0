@@ -214,6 +214,8 @@ class ComputareARComponent extends Component{
 				'amount'=>$tax,
 			));
 		}//endif
+		//set status to invoiced
+		$status='I';
 		$shippingPaid=0;
 		if(isset($data['SalesOrder']['shipping'])) $shippingPaid=$data['SalesOrder']['shipping'];
 		$totalPaid=$itemTotal+$serviceTotal+$tax+$shippingPaid;
@@ -325,8 +327,9 @@ class ComputareARComponent extends Component{
 				'customer_id'=>$SO['SalesOrder']['customer_id']
 			));
 		}//endif
-		##issue stock
+		##issue stock if a direct sale (not using shipping option)
 // debug($data);debug($SO);debug($totalPaid);//exit;
+		if($SO['SalesOrderType']['shipping']==false) {
 			//get array of locations where item could be found
 			$saleLocation=$this->Item->Location->find('first',array(
 				'conditions'=>array('Location.id'=>$SO['SalesOrderType']['location_id']),
@@ -394,13 +397,16 @@ class ComputareARComponent extends Component{
 							'message'=>'SO: '.$item['SalesOrder']['id'].' Item: '.$item['Item']['name'].' Qty: '.$item['qty']));
 				}//endif
 			}//end foreach
+			//set status to closed
+			$status='C';
+		}//endif not using shipping
 debug('here');exit;
 		
 		
 		//save changes to SO
 		if($ok) $ok=$this->SalesOrder->save(array(
 			'id'=>$SO['SalesOrder']['id'],
-			'status'=>'I',
+			'status'=>$status,
 			'invoice_id'=>$invoice_id,
 			'shipping_paid'=>$shippingPaid,
 		));
