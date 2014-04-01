@@ -149,6 +149,7 @@ class ComputareARComponent extends Component{
 	 */
 	public function completeSale($data) {
 		$this->SalesOrder=ClassRegistry::init('SalesOrder');
+		$this->SalesOrderDetail=ClassRegistry::init('SalesOrderDetail');
 		$this->Invoice=ClassRegistry::init('Invoice');
 		$this->Item=ClassRegistry::init('Item');
 		$this->Sale=ClassRegistry::init('Sale');
@@ -159,61 +160,64 @@ class ComputareARComponent extends Component{
 		//start transaction
 		$dataSource->begin();
 		##invoice
-		if($ok) $this->Invoice->create();
-		if($ok) $ok=$this->Invoice->save(array(
-			'created_id'=>$this->Auth->user('id'),
-			'status'=>'O',
-			'salesOrder_id'=>$data['SalesOrder']['id'],
-			'customer_id'=>$SO['SalesOrder']['customer_id']
-		));
-		$invoice_id=$this->Invoice->getInsertId();
-		$tax=0;
-		$itemTotal=0;
-		$serviceTotal=0;
-		foreach($SO['ItemDetail'] as $item) {
-			//loop for all items and add to invoice
-			if($ok) $this->Invoice->InvoiceDetail->create();
-			//build text
-			$text=$item['qty'].' '.$item['Item']['name'];
-			if($item['qty']>1) $text.='s';
-			$text.=' @ '.$item['price'].' each';
-			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
-				'invoice_id'=>$invoice_id,
+		if($SO['SalesOrderType']['shipping']) {
+			//only create invoice if so will be shipped
+			if($ok) $this->Invoice->create();
+			if($ok) $ok=$this->Invoice->save(array(
 				'created_id'=>$this->Auth->user('id'),
-				'active'=>true,
-				'text'=>$text,
-				'amount'=>$item['price']*$item['qty'],
+				'status'=>'O',
+				'salesOrder_id'=>$data['SalesOrder']['id'],
+				'customer_id'=>$SO['SalesOrder']['customer_id']
 			));
-			$tax+=$item['tax'];
-			$itemTotal+=$item['price']*$item['qty'];
-			unset($text);
-		}//end foreach
-		foreach($SO['ServiceDetail'] as $service) {
-			//loop for all service details and add to invoice
-			if($ok) $this->Invoice->InvoiceDetail->create();
-			//construct text
-			$text=$service['Service']['name'].' '.$service['qty'].' @ '.$service['price'];
-			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
-				'invoice_id'=>$invoice_id,
-				'created_id'=>$this->Auth->user('id'),
-				'active'=>true,
-				'text'=>$text,
-				'amount'=>$service['price']*$service['qty'],
-			));
-			$tax+=$service['tax'];
-			$serviceTotal+=$service['price']*$service['qty'];
-		}//end foreach
-		if($tax) {
-			//add a line for tax
-			if($ok) $this->Invoice->InvoiceDetail->create();
-			if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
-				'invoice_id'=>$invoice_id,
-				'created_id'=>$this->Auth->user('id'),
-				'active'=>true,
-				'text'=>'Taxes',
-				'amount'=>$tax,
-			));
-		}//endif
+			$invoice_id=$this->Invoice->getInsertId();
+			$tax=0;
+			$itemTotal=0;
+			$serviceTotal=0;
+			foreach($SO['ItemDetail'] as $item) {
+				//loop for all items and add to invoice
+				if($ok) $this->Invoice->InvoiceDetail->create();
+				//build text
+				$text=$item['qty'].' '.$item['Item']['name'];
+				if($item['qty']>1) $text.='s';
+				$text.=' @ '.$item['price'].' each';
+				if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+					'invoice_id'=>$invoice_id,
+					'created_id'=>$this->Auth->user('id'),
+					'active'=>true,
+					'text'=>$text,
+					'amount'=>$item['price']*$item['qty'],
+				));
+				$tax+=$item['tax'];
+				$itemTotal+=$item['price']*$item['qty'];
+				unset($text);
+			}//end foreach
+			foreach($SO['ServiceDetail'] as $service) {
+				//loop for all service details and add to invoice
+				if($ok) $this->Invoice->InvoiceDetail->create();
+				//construct text
+				$text=$service['Service']['name'].' '.$service['qty'].' @ '.$service['price'];
+				if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+					'invoice_id'=>$invoice_id,
+					'created_id'=>$this->Auth->user('id'),
+					'active'=>true,
+					'text'=>$text,
+					'amount'=>$service['price']*$service['qty'],
+				));
+				$tax+=$service['tax'];
+				$serviceTotal+=$service['price']*$service['qty'];
+			}//end foreach
+			if($tax) {
+				//add a line for tax
+				if($ok) $this->Invoice->InvoiceDetail->create();
+				if($ok) $ok=$this->Invoice->InvoiceDetail->save(array(
+					'invoice_id'=>$invoice_id,
+					'created_id'=>$this->Auth->user('id'),
+					'active'=>true,
+					'text'=>'Taxes',
+					'amount'=>$tax,
+				));
+			}//endif
+		}//endif shipping==true
 		//set status to invoiced
 		$status='I';
 		$shippingPaid=0;
@@ -341,11 +345,11 @@ class ComputareARComponent extends Component{
 				'fields'=>array('Location.id'),
 			));
 			unset($saleLocation);
-	debug($saleLocations);
+// debug($saleLocations);
 			foreach($SO['ItemDetail'] as $item) {
 				//loop for all items
 				$loc=$this->Item->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$saleLocations,'item_id'=>$item['item_id'])));
-	debug($loc);debug($item);exit;
+// debug($loc);debug($item);exit;
 				if($loc) {
 					//item found at sale location
 					$qtyAval=0;
@@ -368,12 +372,11 @@ class ComputareARComponent extends Component{
 								if($ok) $ok=$this->ComputareIC->issue(array(
 									'item_location_id'=>$il['ItemsLocation']['id'],
 									'issueType_id'=>$SO['SalesOrderType']['issueType_id'],
-									'Item'=>array(
-										'qty'=>$issueQty)));
+									'qty'=>$issueQty));
 							}//endif
 						}//end foreach $loc
 						//mod SOdetail line
-						if($ok) $ok=$this->SalesOrder->SalesOrderDetail->save(array(
+						if($ok) $ok=$this->SalesOrderDetail->save(array(
 							'id'=>$item['id'],
 							'shipped'=>$item['qty']
 						));
@@ -385,7 +388,7 @@ class ComputareARComponent extends Component{
 							'title'=>'Item on SO insufficient qty',
 							'errorEvent'=>array(
 								'message'=>'SO: '.$item['SalesOrder']['id'].' Item: '.$item['Item']['name'].' Qty: '.$item['qty']));
-	#####TODO change this later for oversale
+#####TODO change this later for oversale
 					}//endif
 				} else {
 					//item not found at sale location
@@ -400,7 +403,7 @@ class ComputareARComponent extends Component{
 			//set status to closed
 			$status='C';
 		}//endif not using shipping
-debug('here');exit;
+// debug('here');exit;
 		
 		
 		//save changes to SO

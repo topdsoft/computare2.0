@@ -431,7 +431,7 @@ class ComputareICComponent extends Component{
 		* 'note' note to add to GL posting (optional)
 		* 'serialNumbners'=>array of SN being issued
 		*    (OR)
-		* 'Item'=>'qty'
+		* 'qty' => qty to issue
 	* @return t/f
 	*/
 	public function issue($data) {
