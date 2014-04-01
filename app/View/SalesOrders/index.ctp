@@ -27,6 +27,7 @@
 		<td class="actions">
 			<?php echo $this->Html->link(__('View'), array('action' => 'view', $salesOrder['SalesOrder']['id'])); ?>
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $salesOrder['SalesOrder']['id'])); ?>
+			<?php if($salesOrder['SalesOrder']['status']=='O')echo $this->Html->link(__('Complete'), array('action' => 'complete', $salesOrder['SalesOrder']['id'])); ?>
 			<?php //echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $salesOrder['SalesOrder']['id']), null, __('Are you sure you want to delete # %s?', $salesOrder['SalesOrder']['id'])); ?>
 		</td>
 	</tr>

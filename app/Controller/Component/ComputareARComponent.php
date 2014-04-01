@@ -327,73 +327,73 @@ class ComputareARComponent extends Component{
 		}//endif
 		##issue stock
 // debug($data);debug($SO);debug($totalPaid);//exit;
-		//get array of locations where item could be found
-		$saleLocation=$this->Item->Location->find('first',array(
-			'conditions'=>array('Location.id'=>$SO['SalesOrderType']['location_id']),
-			'fields'=>array('Location.lft','Location.rght'),
-			'recursive'=>0,
-		));
-		$saleLocations=$this->Item->Location->find('list',array(
-			'conditions'=>array('Location.lft >= '.$saleLocation['Location']['lft'],'Location.lft <= '.$saleLocation['Location']['rght']),
-			'fields'=>array('Location.id'),
-		));
-		unset($saleLocation);
-debug($saleLocations);
-		foreach($SO['ItemDetail'] as $item) {
-			//loop for all items
-			$loc=$this->Item->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$saleLocations,'item_id'=>$item['item_id'])));
-debug($loc);debug($item);exit;
-			if($loc) {
-				//item found at sale location
-				$qtyAval=0;
-				//get total qty available
-				foreach($loc as $il) $qtyAval+=$il['ItemsLocation']['qty'];
-				if($qtyAval>=$item['qty']) {
-					//there is sufficient qty
-					$qtyRemaining=$item['qty'];
-					foreach($loc as $il) {
-						//loop for each location where this item is at
-						if($qtyRemaining>0) {
-							//more stock to issue
-							if($il['ItemsLocation']['qty']>=$qtyRemaining) {
-								//enough here to fulfill
-								$issueQty=$qtyRemaining;
-							} else {
-								//not enough here so take all
-								$issueQty=$il['ItemsLocation']['qty'];
+			//get array of locations where item could be found
+			$saleLocation=$this->Item->Location->find('first',array(
+				'conditions'=>array('Location.id'=>$SO['SalesOrderType']['location_id']),
+				'fields'=>array('Location.lft','Location.rght'),
+				'recursive'=>0,
+			));
+			$saleLocations=$this->Item->Location->find('list',array(
+				'conditions'=>array('Location.lft >= '.$saleLocation['Location']['lft'],'Location.lft <= '.$saleLocation['Location']['rght']),
+				'fields'=>array('Location.id'),
+			));
+			unset($saleLocation);
+	debug($saleLocations);
+			foreach($SO['ItemDetail'] as $item) {
+				//loop for all items
+				$loc=$this->Item->ItemsLocation->find('all',array('conditions'=>array('location_id'=>$saleLocations,'item_id'=>$item['item_id'])));
+	debug($loc);debug($item);exit;
+				if($loc) {
+					//item found at sale location
+					$qtyAval=0;
+					//get total qty available
+					foreach($loc as $il) $qtyAval+=$il['ItemsLocation']['qty'];
+					if($qtyAval>=$item['qty']) {
+						//there is sufficient qty
+						$qtyRemaining=$item['qty'];
+						foreach($loc as $il) {
+							//loop for each location where this item is at
+							if($qtyRemaining>0) {
+								//more stock to issue
+								if($il['ItemsLocation']['qty']>=$qtyRemaining) {
+									//enough here to fulfill
+									$issueQty=$qtyRemaining;
+								} else {
+									//not enough here so take all
+									$issueQty=$il['ItemsLocation']['qty'];
+								}//endif
+								if($ok) $ok=$this->ComputareIC->issue(array(
+									'item_location_id'=>$il['ItemsLocation']['id'],
+									'issueType_id'=>$SO['SalesOrderType']['issueType_id'],
+									'Item'=>array(
+										'qty'=>$issueQty)));
 							}//endif
-							if($ok) $ok=$this->ComputareIC->issue(array(
-								'item_location_id'=>$il['ItemsLocation']['id'],
-								'issueType_id'=>$SO['SalesOrderType']['issueType_id'],
-								'Item'=>array(
-									'qty'=>$issueQty)));
-						}//endif
-					}//end foreach $loc
-					//mod SOdetail line
-					if($ok) $ok=$this->SalesOrder->SalesOrderDetail->save(array(
-						'id'=>$item['id'],
-						'shipped'=>$item['qty']
-					));
+						}//end foreach $loc
+						//mod SOdetail line
+						if($ok) $ok=$this->SalesOrder->SalesOrderDetail->save(array(
+							'id'=>$item['id'],
+							'shipped'=>$item['qty']
+						));
+					} else {
+						//there is NOT sufficient qty
+						$ok=false;
+						$error=array(
+							'event_type'=>1,
+							'title'=>'Item on SO insufficient qty',
+							'errorEvent'=>array(
+								'message'=>'SO: '.$item['SalesOrder']['id'].' Item: '.$item['Item']['name'].' Qty: '.$item['qty']));
+	#####TODO change this later for oversale
+					}//endif
 				} else {
-					//there is NOT sufficient qty
+					//item not found at sale location
 					$ok=false;
 					$error=array(
 						'event_type'=>1,
-						'title'=>'Item on SO insufficient qty',
+						'title'=>'Item on SO not found at location',
 						'errorEvent'=>array(
 							'message'=>'SO: '.$item['SalesOrder']['id'].' Item: '.$item['Item']['name'].' Qty: '.$item['qty']));
-#####TODO change this later for oversale
 				}//endif
-			} else {
-				//item not found at sale location
-				$ok=false;
-				$error=array(
-					'event_type'=>1,
-					'title'=>'Item on SO not found at location',
-					'errorEvent'=>array(
-						'message'=>'SO: '.$item['SalesOrder']['id'].' Item: '.$item['Item']['name'].' Qty: '.$item['qty']));
-			}//endif
-		}//end foreach
+			}//end foreach
 debug('here');exit;
 		
 		
