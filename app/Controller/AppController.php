@@ -33,6 +33,7 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller {
 	public $components = array('Auth', 'Session', 'Cookie','ComputareUser');
+	private $actionsArray;
 
 	public function beforeFilter() {
 		//set which database to use
@@ -333,15 +334,19 @@ class AppController extends Controller {
 		}//endif
 	}//end protected function _useFilter
 	
-	protected function _startActionsBlock() {
-		//setup action block
-	}//end protected function _startActionsBlock
-	
-	protected function _endActionsBlock() {
-		//end actions block
-	}//end protected function _endActionsBlock
-	
-	protected function _addActionsLink() {
+	/**
+	 * _addActionsLink
+	 * 
+	 * Used to add a link to the actions element
+	 * will check if current user has this permission
+	 * pass $actions array to element
+	 * 
+	 * @param $label label for link
+	 * @param $action array with 'action','controller', etc  
+	 */
+	protected function _addActionsLink($label, $action) {
 		//add a link to actions menu
+		$this->actionsArray[]=array($label, $action);
+		$this->set('actions',$this->actionsArray);
 	}//end protected function _addActionsLink
 }

@@ -46,6 +46,10 @@ class PurchaseOrdersController extends AppController {
 			'options'=>array('C'=>'Closed','O'=>'Open','V'=>'Void'));
 		//submit filters
 		$this->_useFilter($filters);
+		//setup actions
+		$this->_addActionsLink(__('New Purchase Order'), array('action' => 'add'));
+		$this->_addActionsLink(__('List Vendors'), array('controller' => 'vendors', 'action' => 'index'));
+		$this->_addActionsLink(__('New Vendor'), array('controller' => 'vendors', 'action' => 'add'));
 		$this->PurchaseOrder->recursive = 0;
 		$this->set('purchaseOrders', $this->paginate('PurchaseOrder',$this->conditions));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
