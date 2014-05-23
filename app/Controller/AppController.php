@@ -332,4 +332,16 @@ class AppController extends Controller {
 			$this->_setData();
 		}//endif
 	}//end protected function _useFilter
+	
+	protected function _startActionsBlock() {
+		//setup action block
+	}//end protected function _startActionsBlock
+	
+	protected function _endActionsBlock() {
+		//end actions block
+	}//end protected function _endActionsBlock
+	
+	protected function _addActionsLink() {
+		//add a link to actions menu
+	}//end protected function _addActionsLink
 }
