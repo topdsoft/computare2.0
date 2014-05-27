@@ -65,12 +65,8 @@
 	</dl>
 </div>
 <?php //debug($purchaseOrder); ?>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php if($purchaseOrder['PurchaseOrder']['status']=='O') echo $this->Html->link(__('Edit Purchase Order'), array('action' => 'edit', $purchaseOrder['PurchaseOrder']['id'])); ?> </li>
-	</ul>
-</div>
+<?php echo $this->element('actionsblock'); ?>
+
 <div class="related">
 	<?php if (!empty($purchaseOrder['PurchaseOrderDetail'])): ?>
 	<h3><?php echo __('Purchase Order Details'); ?></h3>

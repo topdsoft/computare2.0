@@ -10,10 +10,7 @@
 <?php echo $this->Form->end(__('Submit')); ?>
 	</fieldset>
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Vendor'), array('controller'=>'vendors','action' => 'add','redirect'=>array('controller'=>'purchaseOrders','action'=>'add','id'=>'NEW'))); ?></li>
-	</ul>
-</div>
+
+<?php echo $this->element('actionsblock'); ?>
+
 <script type='text/javascript'>document.getElementById('sc').focus();</script>

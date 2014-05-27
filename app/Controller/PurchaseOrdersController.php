@@ -86,6 +86,8 @@ class PurchaseOrdersController extends AppController {
 			//get invoice
 			$this->set('invoice',ClassRegistry::init('Invoice')->find('first',array('conditions'=>array('Invoice.purchaseOrder_id'=>$id))));
 		}//endif
+		//setup actions block
+		if($po['PurchaseOrder']['status']=='O') $this->_addActionsLink(__('Edit Purchase Order'), array('action' => 'edit', $po['PurchaseOrder']['id']));
 	}
 
 /**
@@ -111,6 +113,8 @@ class PurchaseOrdersController extends AppController {
 		}//endif
 		$vendors = $this->PurchaseOrder->Vendor->find('list');
 		$this->set(compact('vendors'));
+		//setup actions block
+		$this->_addActionsLink(__('New Vendor'), array('controller'=>'vendors','action' => 'add','redirect'=>array('controller'=>'purchaseOrders','action'=>'add','id'=>'NEW')));
 	}
 
 /**
