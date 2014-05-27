@@ -316,8 +316,8 @@ class AppController extends Controller {
 	 * type==4: T/F checkbox (checkbox with conditions for t or f):
 	 * 	trueCondition=>sql logic when box is checked (1 condition can be empty)
 	 * 	falseCondition=>sql logic when box is not checked (1 condition can be empty)
-	 * 	trueMessage=>text shwon to user at top of report (can be empty or null, null will default)
-	 * 	falseMessage=>text shwon to user at top of report (can be empty or null, null will default)
+	 * 	trueMessage=>text shown to user at top of report (can be empty or null, null will default)
+	 * 	falseMessage=>text shown to user at top of report (can be empty or null, null will default)
 	 */
 	protected function _useFilter($filterData) {
 		//setup filters
@@ -338,15 +338,42 @@ class AppController extends Controller {
 	 * _addActionsLink
 	 * 
 	 * Used to add a link to the actions element
-	 * will check if current user has this permission
+	 * will check if current user has this permission and only show if permission is valid
+	 * ALSO if the form has not been visited it will show once until the link is clicked and form is added to table
 	 * pass $actions array to element
 	 * 
 	 * @param $label label for link
-	 * @param $action array with 'action','controller', etc  
+	 * @param $action array with 'action','controller', etc  (controller is optional)
 	 */
 	protected function _addActionsLink($label, $action) {
 		//add a link to actions menu
-		$this->actionsArray[]=array($label, $action);
-		$this->set('actions',$this->actionsArray);
+		$formOBJ=ClassRegistry::init('Form');
+		$ret=false;
+		if(isset($action['action'])) {
+			//action must be set
+			if(!isset($action['controller'])) $action['controller']=$this->params['controller'];
+			//look for controller/action combo in forms table
+			$form=$formOBJ->find('first',array(
+				'conditions'=>array('controller'=>$action['controller'],'action'=>$action['action']),
+				'fields'=>array('Form.id'),
+				'recursive'=>0
+				));
+			if($form) {
+				//form has been visited before, check permissions
+				if($this->ComputareUser->authenticate($form['Form']['id'],$this->Auth->user('id'),'view')) {
+					//user has permission
+					$ret=true;
+				}//endif
+			} else {
+				//form is not in table, show link
+				$ret=true;
+			}//endif
+			if($ret ){
+				//add link to form
+				$this->actionsArray[]=array($label, $action);
+				$this->set('actions',$this->actionsArray);
+			}//endif
+//debug($form);exit;
+		}//endif action is set
 	}//end protected function _addActionsLink
 }
