@@ -19,6 +19,11 @@ class CustomerGroupsController extends AppController {
 		$this->CustomerGroup->recursive = 0;
 		$this->set('customerGroups', $this->paginate());
 		$this->set('users',ClassRegistry::init('User')->find('list'));
+		//setup actions block
+		$this->_addActionsLink(__('New Customer Group'), array('action' => 'add'));
+		$this->_addActionsLink(__('List Customers'), array('controller' => 'customers', 'action' => 'index'));
+		$this->_addActionsLink(__('List Items'), array('controller' => 'items', 'action' => 'index'));
+		$this->_addActionsLink(__('List Services'), array('controller' => 'services', 'action' => 'index'));
 	}
 
 /**
