@@ -19,6 +19,7 @@ class BackupsController extends AppController {
 		$this->Backup->recursive = 0;
 		$this->set('backups', $this->paginate());
 		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->_addActionsLink(__('New Backup'), array('action' => 'add'));
 	}
 
 /**

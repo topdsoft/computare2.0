@@ -1,5 +1,7 @@
 <div class="backups index">
 	<h2><?php echo __('Backups'); ?></h2>
+<?php echo $this->element('actionsblock'); ?>
+	<?php echo $this->element('reportdetails'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('created'); ?></th>
@@ -32,10 +34,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Backup'), array('action' => 'add')); ?></li>
-	</ul>
 </div>
