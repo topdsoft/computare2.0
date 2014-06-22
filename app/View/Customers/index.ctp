@@ -3,6 +3,7 @@
 	<h2><?php echo __('Customers'); ?></h2>
 	<?php echo $this->element('filterblock'); ?>
 	<?php echo $this->element('reportdetails'); ?>
+	<?php echo $this->element('actionsblock'); ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('id'); ?></th>
@@ -43,12 +44,4 @@
 		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
-</div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-		<li><?php echo $this->Html->link(__('New Customer'), array('action' => 'add')); ?></li>
-		<li><?php echo $this->Html->link(__('List Customer Groups'), array('controller' => 'customerGroups', 'action' => 'index')); ?> </li>
-		<li><?php //echo $this->Html->link(__('New Customer Detail'), array('controller' => 'customer_details', 'action' => 'add')); ?> </li>
-	</ul>
 </div>

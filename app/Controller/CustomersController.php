@@ -43,6 +43,9 @@ class CustomersController extends AppController {
 		$this->_useFilter($filters);
 		$this->Customer->recursive = 0;
 		$this->set('customers', $this->paginate('Customer',$this->conditions));
+		//setup actions block
+		$this->_addActionsLink(__('New Customer'), array('action' => 'add'));
+		$this->_addActionsLink(__('List Customer Groups'), array('controller' => 'customerGroups', 'action' => 'index'));
 	}
 
 /**
