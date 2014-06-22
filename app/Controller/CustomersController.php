@@ -70,6 +70,8 @@ class CustomersController extends AppController {
 		//get users list for showing created and deleted id
 		$users=ClassRegistry::init('User')->find('list');
 		$this->set(compact('users'));
+		//setup actions block
+		$this->_addActionsLink(__('Edit Customer'), array('action' => 'edit', $id));
 	}
 
 /**
