@@ -72,6 +72,8 @@ class CustomersController extends AppController {
 		$this->set(compact('users'));
 		//setup actions block
 		$this->_addActionsLink(__('Edit Customer'), array('action' => 'edit', $id));
+		$this->_addActionsLink(__('New SO'), array('controller'=>'salesOrders','action' => 'add','customer_id' => $id));
+		$this->_addActionsLink(__('View Pricing'),array('controller'=>'customers','action'=>'viewPricing',$id));
 	}
 
 /**
@@ -206,6 +208,35 @@ class CustomersController extends AppController {
 		$this->Session->setFlash(__('Changes made on this form are not saved until you click Submit'),'default',array('class'=>'notice'));
 		$this->set('items',ClassRegistry::init('Item')->find('list',array('conditions'=>array('NOT'=>array('Item.id'=>$activeItems)))));
 	}
+
+/** viewPricng method
+ * @param int $id
+ */
+	public function viewPricing($id = null) {
+		$this->set('formName','View Customer Pricing');
+		$this->Customer->id = $id;
+		if (!$this->Customer->exists()) {
+			throw new NotFoundException(__('Invalid customer'));
+		}
+		$this->request->data = $this->Customer->read(null, $id);
+		//get pricing data
+		$this->CustomersItem=ClassRegistry::init('CustomersItem');
+		$this->CustomersItem->bindModel(array('belongsTo'=>array('Item'=>array('fields'=>array('name','id')))));
+		$pricingData=$this->CustomersItem->find('all',array('conditions'=>array('CustomersItem.active','customer_id'=>$id),'order'=>'item_id,qty'));
+		$this->request->data['Item']=array();
+		$activeItems=array();
+		foreach($pricingData as $p){
+			//loop for all price points
+			$this->request->data['Item'][$p['Item']['id']][]=array(
+				'name'=>$p['Item']['name'],
+				'id'=>$p['CustomersItem']['id'],
+				'qty'=>$p['CustomersItem']['qty'],
+				'price'=>$p['CustomersItem']['price']
+			);
+			$activeItems[$p['Item']['id']]=$p['Item']['id'];
+		}//end foreach
+	}
+
 
 /**
  * delete method
