@@ -11,3 +11,4 @@
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
 </div>
+<script type='text/javascript'>document.getElementById('MenuName').focus();</script>
