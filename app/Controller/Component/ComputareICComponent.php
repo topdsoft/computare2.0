@@ -24,7 +24,6 @@ class ComputareICComponent extends Component{
 		$dataSource=$this->Item->getDataSource();
 		//start transaction
 		$dataSource->begin();
-// debug($data['Item']['id']);exit;
 		if(isset($data['Item']['id'])) {
 			//editing existing item
 		} else {
@@ -42,7 +41,6 @@ class ComputareICComponent extends Component{
 		$data['Item']['itemDetail_id']=$this->ItemDetail->getInsertId();
 		//save just Item and ItemGroup data (itemDetail allready saved)
 		unset($data['ItemDetail']);
-// 		if($ok) $ok=$this->Item->save($data['Item']);
 		if($ok) $ok=$this->Item->save($data);
 		//check for removed images
 		if($ok && isset($data['removeImage'])) {
@@ -57,7 +55,6 @@ class ComputareICComponent extends Component{
 				}//endif
 			}//end foreach
 		}//endif
-// debug($data);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);
@@ -90,7 +87,6 @@ class ComputareICComponent extends Component{
 			unset($existingDetail['LocationDetail']['id']);
 			if($ok) $this->Location->LocationDetail->create();
 			if($ok) $ok=$this->Location->LocationDetail->save($existingDetail);
-// debug($data);debug($locationDetail_id);debug($existingDetail); exit;
 		} else {
 			//creating new Location
 			if($ok) $this->Location->create();
@@ -117,7 +113,6 @@ class ComputareICComponent extends Component{
 		//update locationDetail_id
 		$data['Location']['locationDetail_id']=$this->LocationDetail->getInsertId();
 		if($ok) $ok=$this->Location->save($data['Location']);
-// debug($data);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);
@@ -135,7 +130,6 @@ class ComputareICComponent extends Component{
 		$dataSource=$this->ItemGroup->getDataSource();
 		//start transaction
 		$dataSource->begin();
-// debug($data); exit;
 		$data['ItemGroup']['created_id']=$this->Auth->User('id');
 		if($ok) $ok=$this->ItemGroup->save($data['ItemGroup']);
 		if($ok) $dataSource->commit();
@@ -155,7 +149,6 @@ class ComputareICComponent extends Component{
 		$dataSource=$this->ItemCategory->getDataSource();
 		//start transaction
 		$dataSource->begin();
-// debug($data); exit;
 		$data['ItemCategory']['created_id']=$this->Auth->User('id');
 		if($ok) $ok=$this->ItemCategory->save($data['ItemCategory']);
 		if($ok) $dataSource->commit();
@@ -188,7 +181,6 @@ class ComputareICComponent extends Component{
 		if(isset($data['cost']) && $data['cost']=='') unset($data['cost']);
 		//get purchase order
 		$purchaseOrder=$this->PurchaseOrder->read(null,$data['purchaseOrder_id']);
-// debug($data);exit;
 		if(!$purchaseOrder) return false;
 		$item=$this->Item->read(null,$data['item_id']);
 		if(!$item) return false;
@@ -216,8 +208,7 @@ class ComputareICComponent extends Component{
 		if($ok) $ok=$this->Item->ItemTransaction->save($data['ItemTransaction']);
 		//create entry in items_locations table
 		$il=$this->Item->ItemsLocation->find('first',array('conditions'=>array('item_id'=>$data['item_id'],'location_id'=>$data['location_id'])));
-// debug($il);exit;
-		if($il) {
+/		if($il) {
 			//item_location exists
 			$data['ItemsLocation']['id']=$item_location_id=$il['ItemsLocation']['id'];
 			$data['ItemsLocation']['item_id']=$il['ItemsLocation']['item_id'];
@@ -284,7 +275,6 @@ class ComputareICComponent extends Component{
 						$ok=false;
 						$dataSource->rollback();
 						throw new NotFoundException(__('The credit slot is not set for Accounts Payable in Recieve Inventory group.'));
-	// 					$this->Session->setFlash(__('The credit slot is not set forAccounts Payable in Recieve Inventory group.'));
 					}//endif
 				}//endif
 			} else {
@@ -308,13 +298,11 @@ class ComputareICComponent extends Component{
 				}//endif
 			}//endif
 			//do GL posting
-// debug($ok==true);
 			if($ok) $ok=$this->ComputareGL->post(array(
 				'Glentry'=>array('created_id'=>$this->Auth->user('id')),
 				'debit'=>array($assetGL_id=>$data['ItemCost']['cost']*$data['ItemCost']['qty']),
 				'credit'=>array($vendorGL_id=>$data['ItemCost']['cost']*$data['ItemCost']['qty']),
 			));
-// debug($assetGL_id);debug($ok);exit;
 		}//endif
 		//serialNumbers
 		if($item['Item']['serialized']) {
@@ -330,7 +318,6 @@ class ComputareICComponent extends Component{
 				if($ok) $ok=$this->Item->ItemSerialNumber->save($data['ItemSerialNumber']);
 			}//end foreach
 		}//endif
-// debug($data['ItemSerialNumber']);exit;
 		if($ok) $dataSource->commit();
 		else $dataSource->rollback();
 		return ($ok==true);
