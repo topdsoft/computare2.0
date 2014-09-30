@@ -208,7 +208,7 @@ class ComputareICComponent extends Component{
 		if($ok) $ok=$this->Item->ItemTransaction->save($data['ItemTransaction']);
 		//create entry in items_locations table
 		$il=$this->Item->ItemsLocation->find('first',array('conditions'=>array('item_id'=>$data['item_id'],'location_id'=>$data['location_id'])));
-/		if($il) {
+		if($il) {
 			//item_location exists
 			$data['ItemsLocation']['id']=$item_location_id=$il['ItemsLocation']['id'];
 			$data['ItemsLocation']['item_id']=$il['ItemsLocation']['item_id'];
