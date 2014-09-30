@@ -38,7 +38,7 @@ class ComputareProgramsettingComponent extends Component{
 	 */
 	public function updatedb($uid) {
 		//latest schema
-		$latest=3;
+		$latest=4;
 		//get models
 		$this->Programsetting=ClassRegistry::init('Programsetting');
 		$settings=$this->Programsetting->find('first', array('order'=>array('Programsetting.created'=>'desc')));
@@ -110,6 +110,110 @@ CREATE TABLE IF NOT EXISTS `permissionEvents` (
 			if($ok) $settings['Programsetting']['dbschema']=3;
 //NEED LOGGING HERE
 		}//endif 3
+		
+		#dbschema==4
+		if($settings['Programsetting']['dbschema']<4) {
+			//add tables for lists
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `listTemplates` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(1) NOT NULL,
+  `removed` datetime DEFAULT NULL,
+  `removed_id` int(10) unsigned DEFAULT NULL,
+  `newList_id` int(10) unsigned DEFAULT NULL,
+  `name` varchar(32) NOT NULL,
+  `linkedTo_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `listQuestions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `rank` smallint(6) NOT NULL,
+  `label` varchar(64) NOT NULL,
+  `type` smallint(6) NOT NULL,
+  `listTemplate_id` int(10) unsigned NOT NULL,
+  `required` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `listTemplate_id` (`listTemplate_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `lists` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `modified` datetime DEFAULT NULL,
+  `modified_id` int(10) unsigned DEFAULT NULL,
+  `listTemplate_id` int(10) unsigned NOT NULL,
+  `customer_id` int(10) unsigned NOT NULL,
+  `purchaseOrder_id` int(10) unsigned NOT NULL,
+  `salesOrder_id` int(10) unsigned NOT NULL,
+  `item_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `listTemplate_id` (`listTemplate_id`),
+  KEY `customer_id` (`customer_id`),
+  KEY `purchaseOrder_id` (`purchaseOrder_id`),
+  KEY `salesOrder_id` (`salesOrder_id`),
+  KEY `item_id` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `listIntAnswers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `list_id` int(10) unsigned NOT NULL,
+  `answer` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `list_id` (`list_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `listFloatAnswers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `list_id` int(10) unsigned NOT NULL,
+  `answer` float(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `list_id` (`list_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `listVarcharAnswers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `list_id` int(10) unsigned NOT NULL,
+  `answer` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `list_id` (`list_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `listTextAnswers` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `list_id` int(10) unsigned NOT NULL,
+  `answer` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `list_id` (`list_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+//NEED ERROR CATCH HERE
+			if($ok) $settings['Programsetting']['dbschema']=4;
+//NEED LOGGING HERE
+		}//endif dbschema==4
 		
 		$settings['Programsetting']['created_id']=$uid;
 		if($ok) $ok=$this->save($settings);
