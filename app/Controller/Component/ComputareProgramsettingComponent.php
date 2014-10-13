@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `listQuestions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 			");
 			$this->Programsetting->query("
-CREATE TABLE IF NOT EXISTS `lists` (
+CREATE TABLE IF NOT EXISTS `completedLists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
@@ -163,51 +163,19 @@ CREATE TABLE IF NOT EXISTS `lists` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 			");
 			$this->Programsetting->query("
-CREATE TABLE IF NOT EXISTS `listIntAnswers` (
+CREATE TABLE IF NOT EXISTS `listAnswers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL,
   `created_id` int(10) unsigned NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `list_id` int(10) unsigned NOT NULL,
-  `answer` int(11) NOT NULL,
+  `completedList_id` int(10) unsigned NOT NULL,
+  `text_answer` text NULL,
+  `int_answer` int(10) NULL, 
+  `float_answer` float(12,2),
+  `char_answer` varchar(128),
+  `listQuestion_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `list_id` (`list_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-			");
-			$this->Programsetting->query("
-CREATE TABLE IF NOT EXISTS `listFloatAnswers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  `list_id` int(10) unsigned NOT NULL,
-  `answer` float(10,2) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `list_id` (`list_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-			");
-			$this->Programsetting->query("
-CREATE TABLE IF NOT EXISTS `listVarcharAnswers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  `list_id` int(10) unsigned NOT NULL,
-  `answer` varchar(64) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `list_id` (`list_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-			");
-			$this->Programsetting->query("
-CREATE TABLE IF NOT EXISTS `listTextAnswers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `created` datetime NOT NULL,
-  `created_id` int(10) unsigned NOT NULL,
-  `active` tinyint(1) NOT NULL,
-  `list_id` int(10) unsigned NOT NULL,
-  `answer` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `list_id` (`list_id`)
+  KEY `completedList_id` (`completedList_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 			");
 //NEED ERROR CATCH HERE
