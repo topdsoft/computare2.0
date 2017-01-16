@@ -62,7 +62,10 @@ class TimeRecordsController extends AppController {
 		if($currentTask) $currentTask['Project']['name']=$this->TimeRecord->Task->Project->field('name',array('Project.id'=>$currentTask['Task']['project_id']));
 		//find all tasks for this user
 		$allTasks=$this->TimeRecord->Task->UsersTask->find('list',array('fields'=>'task_id','conditions'=>array('user_id'=>$this->Auth->user('id'))));
-		$tasks=$this->TimeRecord->Task->find('list',array('conditions'=>array('Task.id'=>$allTasks,'Task.finished'=>null,'Task.active')));
+		$fields=array('Task.id','Task.name','Project.name');
+		$activeUserTasks=$this->TimeRecord->Task->find('all',array('conditions'=>array('Task.id'=>$allTasks,'Task.finished'=>null,'Task.active'),'fields'=>$fields,'recursive'=>0));
+		$tasks=array();
+		foreach($activeUserTasks as $task) $tasks[$task['Task']['id']]='['.$task['Project']['name'].']'.$task['Task']['name'];
 		$projects=$this->TimeRecord->Task->Project->find('list');
 		if ($this->request->is('post') || $this->request->is('put')) {
 			//process task change
