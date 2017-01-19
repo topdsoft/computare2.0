@@ -84,12 +84,17 @@ class AppModel extends Model {
 		//log db failure
 		App::import('Component','ComputareSysevent');
 		$this->comp=new ComputareSyseventComponent(null);
-//debug($this->comp);exit;
+// debug($this->comp);debug($e);//exit;
+		//create error message text
+		$errMsg='Query String:'.$e->queryString."\r\n";
+		$errMsg.='Error:';
+		foreach($e->errorInfo as $msg) $errMsg.=$msg.' ';
+// debug($errMsg);exit;
 		$this->comp->save(array(
 			'event_type'=>1,
 			'title'=>'DB Update Error',
 			'errorEvent'=>array('message'=>$e->xdebug_message),
 		));
-// debug($e->xdebug_message);exit;
+debug($e->xdebug_message);exit;
 	}//endif
 }
