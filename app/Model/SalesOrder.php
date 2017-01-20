@@ -65,6 +65,6 @@ class SalesOrder extends AppModel {
 			'foreignKey' => 'salesOrder_id',
 			'conditions' => array('ServiceDetail.active','ServiceDetail.service_id')
 		),
-		'SalesOrderMod',
+		/*'SalesOrderMod',*/
 	);
 }
