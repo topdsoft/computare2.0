@@ -45,9 +45,43 @@ class TimeRecordsController extends AppController {
 			$this->request->data = $this->TimeRecord->read(null, $id);
 		}
 		$users = $this->TimeRecord->User->find('list');
-		$tasks = $this->TimeRecord->Task->find('list');
+		$allTasks=$this->TimeRecord->Task->UsersTask->find('list',array('fields'=>'task_id','conditions'=>array('user_id'=>$this->Auth->user('id'))));
+		$fields=array('Task.id','Task.name','Project.name');
+		$activeUserTasks=$this->TimeRecord->Task->find('all',array('conditions'=>array('Task.id'=>$allTasks,'Task.finished'=>null,'Task.active'),'fields'=>$fields,'recursive'=>0));
+		//build task array with project name and task name
+		$tasks=array();
+		foreach($activeUserTasks as $task) $tasks[$task['Task']['id']]='['.$task['Project']['name'].']'.$task['Task']['name'];
 		$this->set(compact('users', 'tasks'));
 	}
+
+	
+/**
+ * add method
+ */
+	public function add(){
+		//manual entry for time records
+		$this->set('formName','Add Time Record');
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if ($this->TimeRecord->save($this->request->data)) {
+				$this->Session->setFlash(__('The time record has been saved'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The time record could not be saved. Please, try again.'));
+			}
+		} else {
+			//default
+		}
+		$users = $this->TimeRecord->User->find('list');
+		$allTasks=$this->TimeRecord->Task->UsersTask->find('list',array('fields'=>'task_id','conditions'=>array('user_id'=>$this->Auth->user('id'))));
+		$fields=array('Task.id','Task.name','Project.name');
+		$activeUserTasks=$this->TimeRecord->Task->find('all',array('conditions'=>array('Task.id'=>$allTasks,'Task.finished'=>null,'Task.active'),'fields'=>$fields,'recursive'=>0));
+		//build task array with project name and task name
+		$tasks=array();
+		foreach($activeUserTasks as $task) $tasks[$task['Task']['id']]='['.$task['Project']['name'].']'.$task['Task']['name'];
+		$this->set(compact('users', 'tasks'));
+	}
+	
+	
 	
 /**
  * popUp method
@@ -64,6 +98,7 @@ class TimeRecordsController extends AppController {
 		$allTasks=$this->TimeRecord->Task->UsersTask->find('list',array('fields'=>'task_id','conditions'=>array('user_id'=>$this->Auth->user('id'))));
 		$fields=array('Task.id','Task.name','Project.name');
 		$activeUserTasks=$this->TimeRecord->Task->find('all',array('conditions'=>array('Task.id'=>$allTasks,'Task.finished'=>null,'Task.active'),'fields'=>$fields,'recursive'=>0));
+		//build task array with project name and task name
 		$tasks=array();
 		foreach($activeUserTasks as $task) $tasks[$task['Task']['id']]='['.$task['Project']['name'].']'.$task['Task']['name'];
 		$projects=$this->TimeRecord->Task->Project->find('list');

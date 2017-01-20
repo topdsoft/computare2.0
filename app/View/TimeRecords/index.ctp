@@ -8,6 +8,7 @@
 			<th><?php echo $this->Paginator->sort('Task.project_id','Project'); ?></th>
 			<th><?php echo $this->Paginator->sort('Task.name','Task'); ?></th>
 			<th><?php echo $this->Paginator->sort('duration'); ?></th>
+			<th><?php echo $this->Paginator->sort('notes'); ?></th>
 			<th></th>
 	</tr>
 	<?php 
@@ -25,6 +26,7 @@
 			<?php echo $this->Html->link($timeRecord['Task']['name'], array('controller' => 'tasks', 'action' => 'view', $timeRecord['Task']['id'])); ?>
 		</td>
 		<td><?php echo h($timeRecord['TimeRecord']['duration']); ?>&nbsp;</td>
+		<td><?php if($timeRecord['TimeRecord']['notes']) echo '<span title="'.$timeRecord['TimeRecord']['notes'].'">NOTES</span'; ?></td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $timeRecord['TimeRecord']['id'])); ?>
 		</td>
@@ -51,5 +53,6 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('List Users'), array('controller' => 'users', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Tasks'), array('controller' => 'tasks', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('Manual Time Entry'), array('action' => 'add')); ?> </li>
 	</ul>
 </div>
