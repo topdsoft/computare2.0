@@ -36,7 +36,8 @@ class TimeRecordsController extends AppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->TimeRecord->save($this->request->data)) {
-				$this->Session->setFlash(__('The time record has been saved'));
+				$this->Session->setFlash(__('The time record has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The time record could not be saved. Please, try again.'));
@@ -63,7 +64,8 @@ class TimeRecordsController extends AppController {
 		$this->set('formName','Add Time Record');
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->TimeRecord->save($this->request->data)) {
-				$this->Session->setFlash(__('The time record has been saved'));
+				$this->Session->setFlash(__('The time record has been saved'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				$this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('The time record could not be saved. Please, try again.'));
