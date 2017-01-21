@@ -44,13 +44,13 @@
 		<?php if($balance[0][0]['debit']>$balance[0][0]['credit']): ?>
 		<dt><?php echo __('Debit Balance'); ?></dt>
 		<dd>
-			<?php echo number_format($balance[0][0]['debit']-$balance[0][0]['credit'],2); ?>
+			<strong><?php echo number_format($balance[0][0]['debit']-$balance[0][0]['credit'],2); ?></strong>
 			&nbsp;
 		</dd>
 		<?php else: ?>
 		<dt><?php echo __('Credit Balance'); ?></dt>
 		<dd>
-			<?php echo number_format($balance[0][0]['credit']-$balance[0][0]['debit'],2); ?>
+			<strong><?php echo number_format($balance[0][0]['credit']-$balance[0][0]['debit'],2); ?></strong>
 			&nbsp;
 		</dd>
 		<?php endif; ?>
