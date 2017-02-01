@@ -16,6 +16,19 @@ class SalesOrderDetail extends AppModel {
  */
 	public $useTable = 'salesOrderDetails';
 
+	function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		#check table schema and make adjustments if necessary
+		$dbs=$this->getSechema();
+		$ok=true;
+		if($ok && $dbs<1) {
+			try {$this->query('ALTER TABLE  `salesOrderDetails` ADD  `timeRecord_id` INT UNSIGNED NULL AFTER  `service_id` ;');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(1);
+			else $this->logDBFailure($e);
+		}
+	}
+
 /**
  * Validation rules
  *
@@ -58,6 +71,10 @@ class SalesOrderDetail extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'TimeRecord' => array(
+			'className' => 'TimeRecord',
+			'foreignKey' => 'timeRecord_id',
 		)
 	);
 }
