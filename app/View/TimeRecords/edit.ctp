@@ -7,7 +7,8 @@
 		echo $this->Form->input('finished');
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('task_id');
-		echo $this->Form->input('duration');
+		echo $this->Form->input('duration',array('label'=>'Duration (hrs)'));
+		echo $this->Form->input('notes');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>
