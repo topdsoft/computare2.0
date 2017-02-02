@@ -292,6 +292,68 @@ class SalesOrdersController extends AppController {
 		$this->set(compact('services'));
 	}
 
+/**
+ * addservicepm method
+ * Adds service hours from project managment for this customer
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function addservicepm($id = null) {
+		$this->set('formName','Add Service SO Line');
+		$this->SalesOrder->id = $id;
+		if (!$this->SalesOrder->exists()) {
+			throw new NotFoundException(__('Invalid sales order'));
+		}
+		$SO=$this->SalesOrder->read(null, $id);
+		if($SO['SalesOrder']['status']!='O') {
+			//only open SO can be edited
+			$this->Session->setFlash(__('Only Sales Orders with status of Open can be edited.'));
+			$this->redirect(array('action' => 'index'));
+		}//endif
+// debug($SO);
+		//get projects for selected customer
+		$this->loadModel('Project');
+		$projects=$this->Project->find('all',array('recursive'=>1,'conditions'=>array('customer_id'=>$SO['Customer']['id'])));
+		$tasks=array();
+		foreach($projects as $p) {
+			//loop for all projects
+			foreach($p['Task'] as $t) {
+				//loop for all tasks
+				$tasks[]=$t['id'];
+			}//end foreach $tasks
+		}//end foreach $projects
+		unset($projects);
+		$this->loadModel('TimeRecord');
+		$timeRecords=$this->TimeRecord->find('all',array('recursive'=>1,'conditions'=>array(
+			'TimeRecord.task_id'=>$tasks,
+			'TimeRecord.SalesOrderDetail_id'=>null)));
+		unset($tasks);
+		if ($this->request->is('post') || $this->request->is('put')) {
+			//change later
+			foreach($timeRecords as $timeRecord) {
+				//loop for all time records and add them to the SO
+				debug($timeRecord);
+				$this->request->data['SalesOrderDetail']['created_id']=$this->Auth->user('id');
+				$this->request->data['SalesOrderDetail']['active']=true;
+				$this->request->data['SalesOrderDetail']['salesOrder_id']=$id;
+				$this->request->data['SalesOrderDetail']['qty']=$timeRecord['TimeRecord']['duration'];
+				$this->request->data['SalesOrderDetail']['timeRecord_id']=$timeRecord['TimeRecord']['id'];
+				$service=ClassRegistry::init('Service')->find('first',array('conditions'=>array('id'=>$this->request->data['SalesOrderDetail']['service_id'])));
+				$this->request->data['SalesOrderDetail']['price']=$service['Service']['rate'];
+debug($this->request->data);exit;
+				
+			}//end foreach
+		} else {
+			$this->request->data = $SO;
+		}//endif
+// debug($tasks);
+// debug($timeRecords);
+		$projects=ClassRegistry::init('Project')->find('list');
+		$services=ClassRegistry::init('Service')->find('list',array('conditions'=>array('active')));
+		$this->set(compact('timeRecords','projects','services'));
+	}
+	
 /**removeLine method
  * 
  * @param string $id

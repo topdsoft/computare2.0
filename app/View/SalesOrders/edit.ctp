@@ -74,6 +74,7 @@
 	<ul>
 		<li><?php echo $this->Html->link(__('New Product Line'), array('action' => 'addproduct',$this->Form->value('SalesOrder.id'))); ?> </li>
 		<li><?php echo $this->Html->link(__('New Service Line'), array('action' => 'addservice',$this->Form->value('SalesOrder.id'))); ?> </li>
+		<li><?php echo $this->Html->link(__('Import Service Hours'), array('action' => 'addservicepm',$this->Form->value('SalesOrder.id'))); ?> </li>
 		<li><?php echo $this->Html->link(__('Complete Sale'), array('action' => 'complete',$this->Form->value('SalesOrder.id'))); ?> </li>
 	</ul>
 </div>

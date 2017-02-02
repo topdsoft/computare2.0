@@ -29,6 +29,12 @@ class TimeRecord extends AppModel {
 			if($ok) $this->setSchema(1);
 			else $this->logDBFailure($e);
 		}
+		if($ok && $dbs<2) {
+			try {$this->query('ALTER TABLE  `timeRecords` ADD  `salesOrderDetail_id` INT UNSIGNED NULL AFTER  `duration` ;');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(2);
+			else $this->logDBFailure($e);
+		}
 	}
 
 /**
@@ -50,6 +56,10 @@ class TimeRecord extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
-		)
+		),
+		'SalesOrderDetail' => array(
+			'className' => 'SalesOrderDetail',
+			'foreignKey' => 'salesOrderDetail_id'
+		),
 	);
 }
