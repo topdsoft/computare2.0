@@ -90,7 +90,15 @@
 			//loop for all services in SO
 			echo '<tr>';
 			echo '<td>'.$service['Service']['name'];
-			echo '<td>'.$service['qty'];
+			//check for details of time record
+			if(isset($service['timeRecord_id'])){
+				//show time record details
+				echo ':<br><i>'.$service['TimeRecord']['created'].'</i><br>' .$service['TimeRecord']['notes'].'</td>';
+			} else {
+				//no time record
+				echo '</td>';
+			}//endif
+			echo '<td>'.$service['qty'].'</td>';
 			echo '<td></td><td></td><td>'.$service['price'];
 			echo '<td></td><td>'.number_format($service['qty']*$service['price'],2).'</td>';
 			$serviceTotal+=$service['qty']*$service['price'];
@@ -119,7 +127,7 @@
 	</table>
 </div>
 <?php 
-debug($salesOrder);?>
+//debug($salesOrder);?>
 
 <div class="actions">
 	<h3><?php echo __('Actions'); ?></h3>

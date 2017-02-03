@@ -294,9 +294,10 @@ class SalesOrdersController extends AppController {
 
 /**
  * addservicepm method
- * Adds service hours from project managment for this customer
+ * Shows service hours from project managment for this customer
+ * Gives the option to add them to the SO
  * @throws NotFoundException
- * @param string $id
+ * @param string $id   sales order number
  * @return void
  */
 	public function addservicepm($id = null) {
@@ -330,27 +331,57 @@ class SalesOrdersController extends AppController {
 			'TimeRecord.SalesOrderDetail_id'=>null)));
 		unset($tasks);
 		if ($this->request->is('post') || $this->request->is('put')) {
-			//change later
-			foreach($timeRecords as $timeRecord) {
-				//loop for all time records and add them to the SO
-				debug($timeRecord);
-				$this->request->data['SalesOrderDetail']['created_id']=$this->Auth->user('id');
-				$this->request->data['SalesOrderDetail']['active']=true;
-				$this->request->data['SalesOrderDetail']['salesOrder_id']=$id;
-				$this->request->data['SalesOrderDetail']['qty']=$timeRecord['TimeRecord']['duration'];
-				$this->request->data['SalesOrderDetail']['timeRecord_id']=$timeRecord['TimeRecord']['id'];
-				$service=ClassRegistry::init('Service')->find('first',array('conditions'=>array('id'=>$this->request->data['SalesOrderDetail']['service_id'])));
-				$this->request->data['SalesOrderDetail']['price']=$service['Service']['rate'];
-debug($this->request->data);exit;
-				
+			//user has selected a time record
+// debug($this->request->data);//exit;
+			$ok=true;
+			$lineCount=0;
+			$this->SalesOrderDetail=ClassRegistry::init('SalesOrderDetail');
+			foreach($this->data['timeRecord'] as $timeRecord_id) {
+				//loop for all checkboxes
+				if($timeRecord_id > 0) {
+					//record selected
+					$timeRecord=$this->TimeRecord->find('first',array('recursive'=>0,'conditions'=>array('TimeRecord.id'=>$timeRecord_id)));
+// debug($timeRecord);//exit;
+					if($timeRecord['TimeRecord']['salesOrderDetail_id']) {
+						//time record is allready assigned to an so
+						$ok=false;
+						$this->Session->setFlash(__('This time record has allready been assigned to an SO.'));
+					}//endif
+					if($ok) {
+						//add time record to the SO
+// debug($timeRecord);
+						$this->request->data['SalesOrderDetail']['created_id']=$this->Auth->user('id');
+						$this->request->data['SalesOrderDetail']['active']=true;
+						$this->request->data['SalesOrderDetail']['salesOrder_id']=$id;
+						$this->request->data['SalesOrderDetail']['qty']=$timeRecord['TimeRecord']['duration'];
+						$this->request->data['SalesOrderDetail']['timeRecord_id']=$timeRecord['TimeRecord']['id'];
+						$service=ClassRegistry::init('Service')->find('first',array('conditions'=>array('id'=>$this->request->data['SalesOrderDetail']['service_id'])));
+						$this->request->data['SalesOrderDetail']['price']=$service['Service']['rate'];
+						//save salesorder line
+						$ok=$this->ComputareAR->saveLine(array('SalesOrderDetail'=>$this->request->data['SalesOrderDetail']));
+						//set time record to match so line
+						$timeRecord['TimeRecord']['salesOrderDetail_id']=$this->SalesOrderDetail->getLastInsertID();
+						if($ok) $this->TimeRecord->Save($timeRecord);
+						if($ok) $lineCount++;
+					}//endif ok
+// debug($ok);debug($timeRecord);exit();
+				}//endif
 			}//end foreach
+			if ($ok) {
+				$this->Session->setFlash(__($lineCount.' service record(s) have been added to your Sales order'),'default',array('class'=>'success'));
+				$this->redirect(array('action' => 'edit',$id));
+			} else {
+				$this->Session->setFlash(__('The Service could not be added. Please, try again.'));
+				$service=ClassRegistry::init('Service')->find('first',array('conditions'=>array('id'=>$this->request->data['SalesOrderDetail']['service_id'])));
+				$this->set('service',$service);
+			}//endif
 		} else {
 			$this->request->data = $SO;
 		}//endif
 // debug($tasks);
 // debug($timeRecords);
 		$projects=ClassRegistry::init('Project')->find('list');
-		$services=ClassRegistry::init('Service')->find('list',array('conditions'=>array('active')));
+		$services=ClassRegistry::init('Service')->find('list',array('conditions'=>array('active','Service.pricing'=>'H')));
 		$this->set(compact('timeRecords','projects','services'));
 	}
 	

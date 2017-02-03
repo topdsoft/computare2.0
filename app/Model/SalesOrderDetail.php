@@ -27,6 +27,18 @@ class SalesOrderDetail extends AppModel {
 			if($ok) $this->setSchema(1);
 			else $this->logDBFailure($e);
 		}
+		if($ok && $dbs<2) {
+			try {$this->query('ALTER TABLE  `salesOrderDetails` CHANGE `removed` `removed` DATETIME NULL DEFAULT NULL ;');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(2);
+			else $this->logDBFailure($e);
+		}
+		if($ok && $dbs<3) {
+			try {$this->query('ALTER TABLE  `salesOrderDetails` CHANGE `removed_id` `removed_id` INT( 10 ) UNSIGNED NULL DEFAULT NULL ;');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(3);
+			else $this->logDBFailure($e);
+		}
 	}
 
 /**

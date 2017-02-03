@@ -25,7 +25,7 @@
 		}//endif
 	?>
 	<table>
-	<tr><th>Project</th><th>Task</th><th>User</th><th>Created</th><th>Duration</th><th>Notes</th></tr>
+	<tr><th>Project</th><th>Task</th><th>User</th><th>Created</th><th>Duration</th><th>Notes</th><th>Add</th></tr>
 	<?php
 		foreach($timeRecords as $timeRecord) {
 			//loop for all time records and add to table
@@ -36,6 +36,7 @@
 			echo '<td>'.$timeRecord['TimeRecord']['created'].'</td>';
 			echo '<td>'.$timeRecord['TimeRecord']['duration'].'</td>';
 			echo '<td>'.$timeRecord['TimeRecord']['notes'].'</td>';
+			echo '<td class="actions">'.$this->Form->checkbox('timeRecord',array('name'=>'timeRecord[]','value'=>$timeRecord['TimeRecord']['id'])).'</td>';
 			echo '</tr>';
 		}//end foreach $timerecord
 	?>

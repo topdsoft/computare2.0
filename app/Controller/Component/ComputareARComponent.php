@@ -101,6 +101,7 @@ class ComputareARComponent extends Component{
 		if(!$so) return false;
 		if($so['SalesOrder']['status']!='O') return false;
 		//save line
+		$this->SalesOrderDetail->create();
 		$ok=$this->SalesOrderDetail->save($data);
 		return ($ok==true);
 // debug($data);exit;
