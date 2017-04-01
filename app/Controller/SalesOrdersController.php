@@ -88,6 +88,7 @@ class SalesOrdersController extends AppController {
 		$this->SalesOrder->recursive=2;
 		$this->set('salesOrder', $this->SalesOrder->read(null, $id));
 		$this->set('users',ClassRegistry::init('User')->find('list'));
+		$this->set('tasks',ClassRegistry::init('Task')->find('list'));
 	}
 
 /**

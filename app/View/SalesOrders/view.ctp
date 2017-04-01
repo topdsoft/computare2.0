@@ -89,10 +89,11 @@
 		foreach($salesOrder['ServiceDetail'] as $service){
 			//loop for all services in SO
 			echo '<tr>';
-			echo '<td>'.$service['Service']['name'];
+			echo '<td><strong>'.$tasks[$service['TimeRecord']['task_id']].'</strong> '.$service['Service']['name'];
 			//check for details of time record
 			if(isset($service['timeRecord_id'])){
 				//show time record details
+// debug($service['TimeRecord']);
 				echo ':<br><i>'.$service['TimeRecord']['created'].'</i><br>' .$service['TimeRecord']['notes'].'</td>';
 			} else {
 				//no time record
