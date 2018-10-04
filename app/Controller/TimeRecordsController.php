@@ -64,6 +64,10 @@ class TimeRecordsController extends AppController {
 		//manual entry for time records
 		$this->set('formName','Add Time Record');
 		if ($this->request->is('post') || $this->request->is('put')) {
+			//time picked by user is used for the created time, calculate finished time from duration
+			$this->request->data['TimeRecord']['finished']=$this->request->data['TimeRecord']['created'];
+//			$this->request->data['TimeRecord']['finished']['hour']+=$this->request->data['TimeRecord']['duration'];
+//debug($this->request->data); exit();
 			if ($this->TimeRecord->save($this->request->data)) {
 				$this->Session->setFlash(__('The time record has been saved'),'default',array('class'=>'success'));
 				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);

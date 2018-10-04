@@ -3,7 +3,7 @@
 	<fieldset>
 		<legend><?php echo __('Edit Time Record'); ?></legend>
 	<?php
-		echo $this->Form->input('finished');
+		echo $this->Form->input('created');
 		echo $this->Form->input('user_id');
 		echo $this->Form->input('task_id');
 		echo $this->Form->input('duration',array('label'=>'Duration (hrs)'));
