@@ -1,16 +1,17 @@
 <?php
 /**
- * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <https://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.TestSuite.Fixture
  * @since         CakePHP(tm) v 1.2.0.4667
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('CakeSchema', 'Model');
@@ -31,7 +32,7 @@ class CakeTestFixture {
 	public $name = null;
 
 /**
- * Cake's DBO driver (e.g: DboMysql).
+ * CakePHP's DBO driver (e.g: DboMysql).
  *
  * @var object
  */
@@ -57,6 +58,37 @@ class CakeTestFixture {
  * @var array
  */
 	public $created = array();
+
+/**
+ * Fields / Schema for the fixture.
+ * This array should match the output of Model::schema()
+ *
+ * @var array
+ */
+	public $fields = array();
+
+/**
+ * Fixture records to be inserted.
+ *
+ * @var array
+ */
+	public $records = array();
+
+/**
+ * The primary key for the table this fixture represents.
+ *
+ * @var string
+ */
+	public $primaryKey = null;
+
+/**
+ * Fixture data can be stored in memory by default.
+ * When table is created for a fixture the MEMORY engine is used
+ * where possible. Set $canUseMemory to false if you don't want this.
+ *
+ * @var bool
+ */
+	public $canUseMemory = true;
 
 /**
  * Instantiate the fixture.
@@ -116,6 +148,7 @@ class CakeTestFixture {
 				$this->fields = $model->schema(true);
 				$this->fields[$model->primaryKey]['key'] = 'primary';
 				$this->table = $db->fullTableName($model, false, false);
+				$this->primaryKey = $model->primaryKey;
 				ClassRegistry::config(array('ds' => 'test'));
 				ClassRegistry::flush();
 			} elseif (isset($import['table'])) {
@@ -127,6 +160,7 @@ class CakeTestFixture {
 				$model->table = $import['table'];
 				$model->tablePrefix = $db->config['prefix'];
 				$this->fields = $model->schema(true);
+				$this->primaryKey = $model->primaryKey;
 				ClassRegistry::flush();
 			}
 
@@ -165,8 +199,8 @@ class CakeTestFixture {
 /**
  * Run before all tests execute, should return SQL statement to create table for this fixture could be executed successfully.
  *
- * @param object	$db	An instance of the database object used to create the fixture table
- * @return boolean True on success, false on failure
+ * @param DboSource $db An instance of the database object used to create the fixture table
+ * @return bool True on success, false on failure
  */
 	public function create($db) {
 		if (!isset($this->fields) || empty($this->fields)) {
@@ -174,8 +208,8 @@ class CakeTestFixture {
 		}
 
 		if (empty($this->fields['tableParameters']['engine'])) {
-			$canUseMemory = true;
-			foreach ($this->fields as $field => $args) {
+			$canUseMemory = $this->canUseMemory;
+			foreach ($this->fields as $args) {
 
 				if (is_string($args)) {
 					$type = $args;
@@ -216,8 +250,8 @@ class CakeTestFixture {
 /**
  * Run after all tests executed, should return SQL statement to drop table for this fixture.
  *
- * @param object	$db	An instance of the database object used to create the fixture table
- * @return boolean True on success, false on failure
+ * @param DboSource $db An instance of the database object used to create the fixture table
+ * @return bool True on success, false on failure
  */
 	public function drop($db) {
 		if (empty($this->fields)) {
@@ -238,8 +272,9 @@ class CakeTestFixture {
  * Run before each tests is executed, should return a set of SQL statements to insert records for the table
  * of this fixture could be executed successfully.
  *
- * @param object $db An instance of the database into which the records will be inserted
- * @return boolean on success or if there are no records to insert, or false on failure
+ * @param DboSource $db An instance of the database into which the records will be inserted
+ * @return bool on success or if there are no records to insert, or false on failure
+ * @throws CakeException if counts of values and fields do not match.
  */
 	public function insert($db) {
 		if (!isset($this->_insert)) {
@@ -252,12 +287,30 @@ class CakeTestFixture {
 				$fields = array_unique($fields);
 				$default = array_fill_keys($fields, null);
 				foreach ($this->records as $record) {
-					$fields = array_keys($record);
-					$values[] = array_values(array_merge($default, $record));
+					$mergeData = array_merge($default, $record);
+					$merge = array_values($mergeData);
+					if (count($fields) !== count($merge)) {
+
+						$mergeFields = array_diff_key(array_keys($mergeData), $fields);
+
+						$message = 'Fixture invalid: Count of fields does not match count of values in ' . get_class($this) . "\n";
+						foreach ($mergeFields as $field) {
+							$message .= "The field '" . $field . "' is in the data fixture but not in the schema." . "\n";
+						}
+
+						throw new CakeException($message);
+					}
+					$values[] = $merge;
 				}
 				$nested = $db->useNestedTransactions;
 				$db->useNestedTransactions = false;
 				$result = $db->insertMulti($this->table, $fields, $values);
+				if ($this->primaryKey &&
+					isset($this->fields[$this->primaryKey]['type']) &&
+					in_array($this->fields[$this->primaryKey]['type'], array('integer', 'biginteger'))
+				) {
+					$db->resetSequence($this->table, $this->primaryKey);
+				}
 				$db->useNestedTransactions = $nested;
 				return $result;
 			}
@@ -266,11 +319,11 @@ class CakeTestFixture {
 	}
 
 /**
- * Truncates the current fixture. Can be overwritten by classes extending CakeFixture to trigger other events before / after
- * truncate.
+ * Truncates the current fixture. Can be overwritten by classes extending
+ * CakeFixture to trigger other events before / after truncate.
  *
- * @param object $db A reference to a db instance
- * @return boolean
+ * @param DboSource $db A reference to a db instance
+ * @return bool
  */
 	public function truncate($db) {
 		$fullDebug = $db->fullDebug;

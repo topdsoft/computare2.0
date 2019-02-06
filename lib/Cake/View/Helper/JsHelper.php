@@ -2,19 +2,18 @@
 /**
  * Javascript Generator class file.
  *
- * PHP 5
- *
- * CakePHP :  Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc.
+ * CakePHP :  Rapid Development Framework (https://cakephp.org)
+ * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
+ * @link          https://cakephp.org CakePHP(tm) Project
  * @package       Cake.View.Helper
  * @since         CakePHP(tm) v 1.2
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('AppHelper', 'View/Helper');
@@ -36,7 +35,7 @@ class JsHelper extends AppHelper {
 /**
  * Whether or not you want scripts to be buffered or output.
  *
- * @var boolean
+ * @var bool
  */
 	public $bufferScripts = true;
 
@@ -81,7 +80,7 @@ class JsHelper extends AppHelper {
  * Constructor - determines engine helper
  *
  * @param View $View the view object the helper is attached to.
- * @param array $settings Settings array contains name of engine helper.
+ * @param string|array $settings Settings array contains name of engine helper.
  */
 	public function __construct(View $View, $settings = array()) {
 		$className = 'Jquery';
@@ -91,7 +90,7 @@ class JsHelper extends AppHelper {
 			$className = $settings;
 		}
 		$engineName = $className;
-		list($plugin, $className) = pluginSplit($className);
+		list(, $className) = pluginSplit($className);
 
 		$this->_engineName = $className . 'Engine';
 		$engineClass = $engineName . 'Engine';
@@ -158,10 +157,11 @@ class JsHelper extends AppHelper {
  * See JsBaseEngineHelper::value() for more information on this method.
  *
  * @param mixed $val A PHP variable to be converted to JSON
- * @param boolean $quoteString If false, leaves string values unquoted
+ * @param bool $quoteString If false, leaves string values unquoted
+ * @param string $key Key name.
  * @return string a JavaScript-safe/JSON representation of $val
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::value
- **/
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::value
+ */
 	public function value($val = array(), $quoteString = null, $key = 'value') {
 		if ($quoteString === null) {
 			$quoteString = true;
@@ -171,8 +171,8 @@ class JsHelper extends AppHelper {
 
 /**
  * Writes all Javascript generated so far to a code block or
- * caches them to a file and returns a linked script.  If no scripts have been
- * buffered this method will return null.  If the request is an XHR(ajax) request
+ * caches them to a file and returns a linked script. If no scripts have been
+ * buffered this method will return null. If the request is an XHR(ajax) request
  * onDomReady will be set to false. As the dom is already 'ready'.
  *
  * ### Options
@@ -187,7 +187,7 @@ class JsHelper extends AppHelper {
  * @param array $options options for the code block
  * @return mixed Completed javascript tag if there are scripts, if there are no buffered
  *   scripts null will be returned.
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::writeBuffer
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::writeBuffer
  */
 	public function writeBuffer($options = array()) {
 		$domReady = !$this->request->is('ajax');
@@ -195,7 +195,7 @@ class JsHelper extends AppHelper {
 			'onDomReady' => $domReady, 'inline' => true,
 			'cache' => false, 'clear' => true, 'safe' => true
 		);
-		$options = array_merge($defaults, $options);
+		$options += $defaults;
 		$script = implode("\n", $this->getBuffer($options['clear']));
 
 		if (empty($script)) {
@@ -210,8 +210,9 @@ class JsHelper extends AppHelper {
 
 		if ($options['cache'] && $options['inline']) {
 			$filename = md5($script);
-			if (file_exists(JS . $filename . '.js')
-				|| cache(str_replace(WWW_ROOT, '', JS) . $filename . '.js', $script, '+999 days', 'public')
+			$path = WWW_ROOT . Configure::read('App.jsBaseUrl');
+			if (file_exists($path . $filename . '.js')
+				|| cache(str_replace(WWW_ROOT, '', $path) . $filename . '.js', $script, '+999 days', 'public')
 				) {
 				return $this->Html->script($filename);
 			}
@@ -228,10 +229,10 @@ class JsHelper extends AppHelper {
  * Write a script to the buffered scripts.
  *
  * @param string $script Script string to add to the buffer.
- * @param boolean $top If true the script will be added to the top of the
- *   buffered scripts array.  If false the bottom.
+ * @param bool $top If true the script will be added to the top of the
+ *   buffered scripts array. If false the bottom.
  * @return void
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::buffer
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::buffer
  */
 	public function buffer($script, $top = false) {
 		if ($top) {
@@ -244,9 +245,9 @@ class JsHelper extends AppHelper {
 /**
  * Get all the buffered scripts
  *
- * @param boolean $clear Whether or not to clear the script caches (default true)
+ * @param bool $clear Whether or not to clear the script caches (default true)
  * @return array Array of scripts added to the request.
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::getBuffer
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::getBuffer
  */
 	public function getBuffer($clear = true) {
 		$this->_createVars();
@@ -259,9 +260,9 @@ class JsHelper extends AppHelper {
 	}
 
 /**
- * Generates the object string for variables passed to javascript.
+ * Generates the object string for variables passed to javascript and adds to buffer
  *
- * @return string Generated JSON object of all set vars
+ * @return void
  */
 	protected function _createVars() {
 		if (!empty($this->_jsVars)) {
@@ -271,27 +272,27 @@ class JsHelper extends AppHelper {
 	}
 
 /**
- * Generate an 'Ajax' link.  Uses the selected JS engine to create a link
- * element that is enhanced with Javascript.  Options can include
+ * Generate an 'Ajax' link. Uses the selected JS engine to create a link
+ * element that is enhanced with Javascript. Options can include
  * both those for HtmlHelper::link() and JsBaseEngine::request(), JsBaseEngine::event();
  *
  * ### Options
  *
  * - `confirm` - Generate a confirm() dialog before sending the event.
  * - `id` - use a custom id.
- * - `htmlAttributes` - additional non-standard htmlAttributes.  Standard attributes are class, id,
+ * - `htmlAttributes` - additional non-standard htmlAttributes. Standard attributes are class, id,
  *    rel, title, escape, onblur and onfocus.
  * - `buffer` - Disable the buffering and return a script tag in addition to the link.
  *
  * @param string $title Title for the link.
- * @param string|array $url Mixed either a string URL or an cake url array.
+ * @param string|array $url Mixed either a string URL or a CakePHP URL array.
  * @param array $options Options for both the HTML element and Js::request()
  * @return string Completed link. If buffering is disabled a script tag will be returned as well.
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::link
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::link
  */
 	public function link($title, $url = null, $options = array()) {
 		if (!isset($options['id'])) {
-			$options['id'] = 'link-' . intval(mt_rand());
+			$options['id'] = 'link-' . (int)mt_rand();
 		}
 		list($options, $htmlOptions) = $this->_getHtmlOptions($options);
 		$out = $this->Html->link($title, $url, $htmlOptions);
@@ -318,14 +319,14 @@ class JsHelper extends AppHelper {
 	}
 
 /**
- * Pass variables into Javascript.  Allows you to set variables that will be
+ * Pass variables into Javascript. Allows you to set variables that will be
  * output when the buffer is fetched with `JsHelper::getBuffer()` or `JsHelper::writeBuffer()`
  * The Javascript variable used to output set variables can be controlled with `JsHelper::$setVariable`
  *
  * @param string|array $one Either an array of variables to set, or the name of the variable to set.
  * @param string|array $two If $one is a string, $two is the value for that key.
  * @return void
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::set
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::set
  */
 	public function set($one, $two = null) {
 		$data = null;
@@ -338,7 +339,7 @@ class JsHelper extends AppHelper {
 		} else {
 			$data = array($one => $two);
 		}
-		if ($data == null) {
+		if (!$data) {
 			return false;
 		}
 		$this->_jsVars = array_merge($this->_jsVars, $data);
@@ -346,7 +347,7 @@ class JsHelper extends AppHelper {
 
 /**
  * Uses the selected JS engine to create a submit input
- * element that is enhanced with Javascript.  Options can include
+ * element that is enhanced with Javascript. Options can include
  * both those for FormHelper::submit() and JsBaseEngine::request(), JsBaseEngine::event();
  *
  * Forms submitting with this method, cannot send files. Files do not transfer over XmlHttpRequest
@@ -363,11 +364,11 @@ class JsHelper extends AppHelper {
  * @param string $caption The display text of the submit button.
  * @param array $options Array of options to use. See the options for the above mentioned methods.
  * @return string Completed submit button.
- * @link http://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::submit
+ * @link https://book.cakephp.org/2.0/en/core-libraries/helpers/js.html#JsHelper::submit
  */
 	public function submit($caption = null, $options = array()) {
 		if (!isset($options['id'])) {
-			$options['id'] = 'submit-' . intval(mt_rand());
+			$options['id'] = 'submit-' . (int)mt_rand();
 		}
 		$formOptions = array('div');
 		list($options, $htmlOptions) = $this->_getHtmlOptions($options, $formOptions);
