@@ -34,8 +34,8 @@ class Address extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notblank' => array(
+				'rule' => array('notblank'),
 				'message' => 'Please enter a description here (EX: Shipping Address)',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -44,8 +44,8 @@ class Address extends AppModel {
 			),
 		),
 		'line1' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notblank' => array(
+				'rule' => array('notblank'),
 				'message' => 'Please enter address here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -54,8 +54,8 @@ class Address extends AppModel {
 			),
 		),
 		'city' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notblank' => array(
+				'rule' => array('notblank'),
 				'message' => 'Please enter city here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -64,8 +64,8 @@ class Address extends AppModel {
 			),
 		),
 		'state' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notblank' => array(
+				'rule' => array('notblank'),
 				'message' => 'Please enter state here',
 				//'allowEmpty' => false,
 				//'required' => false,
@@ -74,8 +74,8 @@ class Address extends AppModel {
 			),
 		),
 		'zip' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notblank' => array(
+				'rule' => array('notblank'),
 				'message' => 'Please enter zip code here',
 				//'allowEmpty' => false,
 				//'required' => false,
