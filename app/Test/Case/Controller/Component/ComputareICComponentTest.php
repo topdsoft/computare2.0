@@ -76,7 +76,7 @@ class ComputareICComponentTest extends CakeTestCase {
 		$this->assertTrue($this->ComputareICComponent->checkLock(6),'* location_id==6 should be locked');
 		$this->assertTrue($this->ComputareICComponent->checkLock(7),'* location_id==7 should be locked');
 		//unlock parent
-		$this->assertTrue($this->ComputareICComponent->unlockLocation($lock_id),'* unlock failed');
+		$this->assertTrue($this->ComputareICComponent->unlockLocation(array('inventoryLock_id'=>$lock_id)),'* unlock failed');
 		//check locks
 		$this->assertFalse($this->ComputareICComponent->checkLock(5),'* location_id==5 should not be locked');
 		$this->assertFalse($this->ComputareICComponent->checkLock(6),'* location_id==6 should not be locked');

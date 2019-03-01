@@ -30,8 +30,8 @@ class GlaccountDetail extends AppModel {
  */
 	public $validate = array(
 		'name' => array(
-			'notempty' => array(
-				'rule' => array('notempty'),
+			'notblank' => array(
+				'rule' => array('notblank'),
 				'message' => 'Enter an account name here',
 				//'allowEmpty' => false,
 				//'required' => false,
