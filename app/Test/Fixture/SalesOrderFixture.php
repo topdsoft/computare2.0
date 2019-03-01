@@ -49,7 +49,7 @@ class SalesOrderFixture extends CakeTestFixture {
 			'voided' => '2013-04-13 15:38:45',
 			'voided_id' => 1,
 			'status' => 'Lorem ipsum dolor sit ame',
-			'SalesOrderType_id' => 1,
+			'salesOrderType_id' => 1,
 			'customer_id' => 1
 		),
 	);
