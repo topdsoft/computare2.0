@@ -38,7 +38,7 @@ class ComputareProgramsettingComponent extends Component{
 	 */
 	public function updatedb($uid) {
 		//latest schema
-		$latest=4;
+		$latest=5;
 		//get models
 		$this->Programsetting=ClassRegistry::init('Programsetting');
 		$settings=$this->Programsetting->find('first', array('order'=>array('Programsetting.created'=>'desc')));
@@ -182,6 +182,24 @@ CREATE TABLE IF NOT EXISTS `listAnswers` (
 			if($ok) $settings['Programsetting']['dbschema']=4;
 //NEED LOGGING HERE
 		}//endif dbschema==4
+		
+		#dbschema==5
+		if($settings['Programsetting']['dbschema']<5) {
+			//add salesOrderFees table
+			$this->Programsetting->query("
+CREATE TABLE IF NOT EXISTS `salesOrderFees` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `created` datetime NOT NULL,
+  `created_id` int(10) unsigned NOT NULL,
+  `label` varchar(10) NOT NULL,
+  `salesOrderType_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+			");
+//NEED ERROR CATCH HERE
+			if($ok) $settings['Programsetting']['dbschema']=5;
+//NEED LOGGING HERE
+		}//endif 5
 		
 		$settings['Programsetting']['created_id']=$uid;
 		if($ok) $ok=$this->save($settings);
