@@ -23,12 +23,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function index() {
-<<<<<<< HEAD
 		$this->set('formName','List Vehicles');
 //		$this->set('helplink','/pages/salesOrders#l');
 		$this->set('add_menu',true);
-=======
->>>>>>> 44d296b63133d3d505eb6f2f10a5717a5030ee88
 		$this->Vehicle->recursive = 0;
 		$this->set('vehicles', $this->Paginator->paginate());
 	}
@@ -41,12 +38,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
-<<<<<<< HEAD
 		$this->set('formName','View Vehicle');
 //		$this->set('helplink','/pages/salesOrders#l');
 		$this->set('add_menu',false);
-=======
->>>>>>> 44d296b63133d3d505eb6f2f10a5717a5030ee88
 		if (!$this->Vehicle->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
@@ -60,7 +54,6 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function add() {
-<<<<<<< HEAD
 		$this->set('formName','New Vehicle');
 //		$this->set('helplink','/pages/salesOrders#l');
 		$this->set('add_menu',true);
@@ -70,22 +63,12 @@ class VehiclesController extends AppController {
 			if ($this->Vehicle->save($this->request->data)) {
 				$this->Flash->success(__('The vehicle has been saved.'),'default',array('class'=>'success'));
 				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
-=======
-		if ($this->request->is('post')) {
-			$this->Vehicle->create();
-			if ($this->Vehicle->save($this->request->data)) {
-				$this->Flash->success(__('The vehicle has been saved.'));
->>>>>>> 44d296b63133d3d505eb6f2f10a5717a5030ee88
-				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Flash->error(__('The vehicle could not be saved. Please, try again.'));
 			}
-<<<<<<< HEAD
 		} else {
 			//check for default values
 			$this->request->data['Vehicle']=$this->passedArgs;
-=======
->>>>>>> 44d296b63133d3d505eb6f2f10a5717a5030ee88
 		}
 		$customers = $this->Vehicle->Customer->find('list');
 		$images = $this->Vehicle->Image->find('list');
@@ -100,12 +83,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
-<<<<<<< HEAD
 		$this->set('formName','Edit Vehicle');
 //		$this->set('helplink','/pages/salesOrders#l');
 		$this->set('add_menu',false);
-=======
->>>>>>> 44d296b63133d3d505eb6f2f10a5717a5030ee88
 		if (!$this->Vehicle->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
@@ -133,12 +113,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
-<<<<<<< HEAD
 		$this->set('formName','Delete Vehicle');
 //		$this->set('helplink','/pages/salesOrders#l');
 		$this->set('add_menu',false);
-=======
->>>>>>> 44d296b63133d3d505eb6f2f10a5717a5030ee88
 		if (!$this->Vehicle->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
