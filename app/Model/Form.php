@@ -28,6 +28,25 @@ class Form extends AppModel {
 			$this->query("ALTER TABLE  `".$this->table."` ADD  `formGroup_id` INT UNSIGNED NULL AFTER  `created_id`");
 			if($ok) $this->setSchema(1);
 		}//endif
+		if($ok && $dbs<2) {
+			//mod table to have several fields null capable  mar 21, 2019
+			try {$this->query("ALTER TABLE `forms` CHANGE `link` `link` VARCHAR(50) NULL;");}
+			catch (Exception $e) {$ok=false;}
+			if($ok) {
+				try {$this->query("ALTER TABLE `forms` CHANGE `type` `type` VARCHAR(2) NULL;");}
+				catch (Exception $e) {$ok=false;}
+			}//endif
+			if($ok) {
+				try {$this->query("ALTER TABLE `forms` CHANGE `helplink` `helplink` VARCHAR(50) NULL;");}
+				catch (Exception $e) {$ok=false;}
+			}//endif
+			if($ok) {
+				try {$this->query("ALTER TABLE `forms` CHANGE `helplink` `helplink` VARCHAR(50) NULL;");}
+				catch (Exception $e) {$ok=false;}
+			}//endif
+			if($ok) $this->setSchema(2);
+			else $this->logDBFailure($e);
+		}//endif
 	}
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
