@@ -122,6 +122,7 @@ class AppController extends Controller {
 				$click['FormsUser']['user_id']=$this->Auth->user('id');
 				$click['FormsUser']['form_id']=$this->viewVars['form_id'];
 				$click['FormsUser']['visits']=1;
+				$click['FormsUser']['default_url']='';
 				$clickObj->create();
 			}//endif
 			$click['FormsUser']['last_url']=$this->request->url;
