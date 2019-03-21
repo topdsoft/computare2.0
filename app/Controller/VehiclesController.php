@@ -23,6 +23,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function index() {
+		$this->set('formName','List Vehicles');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',true);
 		$this->Vehicle->recursive = 0;
 		$this->set('vehicles', $this->Paginator->paginate());
 	}
@@ -35,6 +38,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function view($id = null) {
+		$this->set('formName','View Vehicle');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',false);
 		if (!$this->Vehicle->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
@@ -48,6 +54,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function add() {
+		$this->set('formName','New Vehicle');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',true);
 		if ($this->request->is('post')) {
 			$this->Vehicle->create();
 			if ($this->Vehicle->save($this->request->data)) {
@@ -70,6 +79,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit Vehicle');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',false);
 		if (!$this->Vehicle->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
@@ -97,6 +109,9 @@ class VehiclesController extends AppController {
  * @return void
  */
 	public function delete($id = null) {
+		$this->set('formName','Delete Vehicle');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',false);
 		if (!$this->Vehicle->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
