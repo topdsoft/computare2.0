@@ -119,6 +119,10 @@ class CustomersController extends AppController {
 						//add new customer_id
 						$this->passedArgs['redirect']['customer_id']=$this->Customer->getInsertId();
 					}//endif
+					if($this->passedArgs['redirect']['controller']=='vehicles' && $this->passedArgs['redirect']['action']=='add') {
+						//add new customer_id
+						$this->passedArgs['redirect']['customer_id']=$this->Customer->getInsertId();
+					}//endif
 					$this->redirect($this->passedArgs['redirect']);
 				}//endif
 				$this->redirect(array('action' => 'index'));

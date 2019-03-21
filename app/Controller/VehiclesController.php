@@ -59,12 +59,17 @@ class VehiclesController extends AppController {
 		$this->set('add_menu',true);
 		if ($this->request->is('post')) {
 			$this->Vehicle->create();
+			$this->request->data['Vehicle']['created_id']=$this->Auth->user('id');
 			if ($this->Vehicle->save($this->request->data)) {
-				$this->Flash->success(__('The vehicle has been saved.'));
+				$this->Flash->success(__('The vehicle has been saved.'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Flash->error(__('The vehicle could not be saved. Please, try again.'));
 			}
+		} else {
+			//check for default values
+			$this->request->data['Vehicle']=$this->passedArgs;
 		}
 		$customers = $this->Vehicle->Customer->find('list');
 		$images = $this->Vehicle->Image->find('list');
