@@ -41,7 +41,7 @@ class Form extends AppModel {
 				catch (Exception $e) {$ok=false;}
 			}//endif
 			if($ok) {
-				try {$this->query("ALTER TABLE `forms` CHANGE `helplink` `helplink` VARCHAR(50) NULL;");}
+				try {$this->query("ALTER TABLE `forms` CHANGE `description` `description` TEXT NULL;");}
 				catch (Exception $e) {$ok=false;}
 			}//endif
 			if($ok) $this->setSchema(2);
