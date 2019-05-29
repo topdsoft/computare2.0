@@ -1439,10 +1439,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created` datetime NOT NULL,
   `username` varchar(20) NOT NULL,
   `password` varchar(40) NOT NULL,
-  `email` varchar(60) NOT NULL,
-  `homepage` varchar(100) NOT NULL,
+  `email` varchar(60) NULL,
+  `homepage` varchar(100) NULL,
   `active` tinyint(1) NOT NULL,
-  `log_level` smallint(5) unsigned NOT NULL,
+  `log_level` smallint(5) unsigned NOT NULL DEFAULT '0',
   `date_time_format` varchar(30) NOT NULL DEFAULT 'Y-m-d h:m:s',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

@@ -28,6 +28,7 @@ class UsersController extends AppController {
 			//save first user
 			$this->request->data['User']['active']=true;
 			$this->User->create();
+debug($this->request->data);
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(__('The user has been saved'),'default',array('class'=>'success'));
 				$this->redirect(array('action' => 'logout'));
