@@ -63,6 +63,7 @@ class VehiclesController extends AppController {
 			if ($this->Vehicle->save($this->request->data)) {
 				$this->Flash->success(__('The vehicle has been saved.'),'default',array('class'=>'success'));
 				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
+				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Flash->error(__('The vehicle could not be saved. Please, try again.'));
 			}
