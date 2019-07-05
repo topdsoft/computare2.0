@@ -126,12 +126,15 @@ class AppController extends Controller {
 				$clickObj->create();
 			}//endif
 			$click['FormsUser']['last_url']=$this->request->url;
-			$click['FormsUser']['last_click_id']=$lastclick['FormsUser']['id'];
+			if($lastclick) $click['FormsUser']['last_click_id']=$lastclick['FormsUser']['id'];
 // debug($lastclick);exit;
 			$clickObj->save($click);
 			//store previous URL for use in links
-			$this->viewVars['previousURL']=$lastclick['FormsUser']['last_url'];
-			$this->viewVars['previousFormName']=$lastclick['Form']['name'];
+			if($lastclick) {
+				//make sure it isn't the first time opening
+				$this->viewVars['previousURL']=$lastclick['FormsUser']['last_url'];
+				$this->viewVars['previousFormName']=$lastclick['Form']['name'];
+			}//endif
 			unset($clickObj);
 			unset($click);
 			unset($lastclick);
