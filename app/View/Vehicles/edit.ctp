@@ -4,11 +4,11 @@
 		<legend><?php echo __('Edit Vehicle'); ?></legend>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('created_id');
+//		echo $this->Form->input('created_id');
 		echo $this->Form->input('customer_id');
 		echo $this->Form->input('vin');
 		echo $this->Form->input('description');
-		echo $this->Form->input('Image');
+//		echo $this->Form->input('Image');
 	?>
 	</fieldset>
 <?php echo $this->Form->end(__('Submit')); ?>

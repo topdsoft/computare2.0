@@ -42,12 +42,6 @@
 		<li><?php echo $this->Html->link(__('New Vehicle'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Customers'), array('controller' => 'customers', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Customer'), array('controller' => 'customers', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Vehicle Notes'), array('controller' => 'vehicle_notes', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Vehicle Note'), array('controller' => 'vehicle_notes', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Vehicle Visits'), array('controller' => 'vehicle_visits', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Vehicle Visit'), array('controller' => 'vehicle_visits', 'action' => 'add')); ?> </li>
-		<li><?php echo $this->Html->link(__('List Images'), array('controller' => 'images', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Image'), array('controller' => 'images', 'action' => 'add')); ?> </li>
 	</ul>
 </div>
 <div class="related">
@@ -81,7 +75,7 @@
 
 	<div class="actions">
 		<ul>
-			<li><?php echo $this->Html->link(__('New Vehicle Note'), array('controller' => 'vehicle_notes', 'action' => 'add')); ?> </li>
+			<li><?php echo $this->Html->link(__('New Vehicle Note'), array('controller' => 'vehicle_notes', 'action' => 'add', $vehicle['Vehicle']['id'])); ?> </li>
 		</ul>
 	</div>
 </div>

@@ -22,11 +22,11 @@ class VehicleNotesController extends AppController {
  *
  * @return void
  */
-	public function index() {
+/*	public function index() {
 		$this->VehicleNote->recursive = 0;
 		$this->set('vehicleNotes', $this->Paginator->paginate());
 	}
-
+*/
 /**
  * view method
  *
@@ -47,18 +47,30 @@ class VehicleNotesController extends AppController {
  *
  * @return void
  */
-	public function add() {
+	public function add($vehicle_id= null) {
+		if (!$this->VehicleNote->Vehicle->exists($vehicle_id)) {
+			throw new NotFoundException(__('Invalid vehicle'));
+		}
+		$this->set('formName','New Vehicle Note');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',false);
 		if ($this->request->is('post')) {
 			$this->VehicleNote->create();
+			$this->request->data['VehicleNote']['created_id']=$this->Auth->user('id');
+			$this->request->data['VehicleNote']['vehicle_id']=$vehicle_id;
+//debug($this->data);exit;
 			if ($this->VehicleNote->save($this->request->data)) {
-				$this->Flash->success(__('The vehicle note has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Flash->success(__('The note has been saved.'),'default',array('class'=>'success'));
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
+				//if no passed args then retun to vehicle view
+				return $this->redirect(array('controller'=>'vehicles','action' => 'view',$vehicle_id));
 			} else {
 				$this->Flash->error(__('The vehicle note could not be saved. Please, try again.'));
 			}
 		}
 		$vehicles = $this->VehicleNote->Vehicle->find('list');
 		$this->set(compact('vehicles'));
+		$this->set('vehicle_id',$vehicle_id);
 	}
 
 /**
