@@ -17,6 +17,19 @@ class Vehicle extends AppModel {
  * @var string
  */
 	public $displayField = 'description';
+	
+	function __construct($id = false, $table = null, $ds = null) {
+		parent::__construct($id, $table, $ds);
+		#check table schema and make adjustments if necessary
+		$dbs=$this->getSechema();
+		$ok=true;
+		if($ok && $dbs<1) {
+			try {$this->query('ALTER TABLE `vehicles` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;');}
+			catch (Exception $e) {$ok=false;}
+			if($ok) $this->setSchema(1);
+			else $this->logDBFailure($e);
+		}
+	}
 
 /**
  * Validation rules
