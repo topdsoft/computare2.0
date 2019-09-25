@@ -34,14 +34,17 @@ class VehicleNotesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function view($id = null) {
+/*	public function view($id = null) {
+		$this->set('formName','View Vehicle Note');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',false);
 		if (!$this->VehicleNote->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle note'));
 		}
 		$options = array('conditions' => array('VehicleNote.' . $this->VehicleNote->primaryKey => $id));
 		$this->set('vehicleNote', $this->VehicleNote->find('first', $options));
 	}
-
+*/
 /**
  * add method
  *
@@ -81,13 +84,19 @@ class VehicleNotesController extends AppController {
  * @return void
  */
 	public function edit($id = null) {
+		$this->set('formName','Edit Vehicle Note');
+//		$this->set('helplink','/pages/salesOrders#l');
+		$this->set('add_menu',false);
 		if (!$this->VehicleNote->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle note'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->VehicleNote->save($this->request->data)) {
-				$this->Flash->success(__('The vehicle note has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Flash->success(__('The note has been saved.'),'default',array('class'=>'success'));
+//debug($this->data);exit;
+				if(isset($this->passedArgs['redirect'])) $this->redirect($this->passedArgs['redirect']);
+				//if no passed args then retun to vehicle view
+				return $this->redirect(array('controller'=>'vehicles','action' => 'view',$this->request->data['VehicleNote']['vehicle_id']));
 			} else {
 				$this->Flash->error(__('The vehicle note could not be saved. Please, try again.'));
 			}
@@ -106,9 +115,12 @@ class VehicleNotesController extends AppController {
  * @param string $id
  * @return void
  */
-	public function delete($id = null) {
+	public function delete($id = null,$vehicle_id = null) {
 		if (!$this->VehicleNote->exists($id)) {
 			throw new NotFoundException(__('Invalid vehicle note'));
+		}
+		if (!$this->VehicleNote->Vehicle->exists($vehicle_id)) {
+			throw new NotFoundException(__('Invalid vehicle'));
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->VehicleNote->delete($id)) {
@@ -116,6 +128,6 @@ class VehicleNotesController extends AppController {
 		} else {
 			$this->Flash->error(__('The vehicle note could not be deleted. Please, try again.'));
 		}
-		return $this->redirect(array('action' => 'index'));
+		return $this->redirect(array('controller'=>'vehicles','action' => 'view',$vehicle_id));
 	}
 }

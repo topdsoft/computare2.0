@@ -46,6 +46,8 @@ class VehiclesController extends AppController {
 		}
 		$options = array('conditions' => array('Vehicle.' . $this->Vehicle->primaryKey => $id));
 		$this->set('vehicle', $this->Vehicle->find('first', $options));
+		$users=ClassRegistry::init('User')->find('list');
+		$this->set(compact('users'));
 	}
 
 /**

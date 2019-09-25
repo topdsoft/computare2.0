@@ -11,9 +11,9 @@
 			<?php echo h($vehicle['Vehicle']['created']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Created Id'); ?></dt>
+		<dt><?php echo __('Created By'); ?></dt>
 		<dd>
-			<?php echo h($vehicle['Vehicle']['created_id']); ?>
+			<?php echo h($users[$vehicle['Vehicle']['created_id']]); ?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Customer'); ?></dt>
@@ -49,24 +49,20 @@
 	<?php if (!empty($vehicle['VehicleNote'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Vehicle Id'); ?></th>
 		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
+		<th><?php echo __('Created By'); ?></th>
 		<th><?php echo __('Note'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th></th>
 	</tr>
 	<?php foreach ($vehicle['VehicleNote'] as $vehicleNote): ?>
 		<tr>
-			<td><?php echo $vehicleNote['id']; ?></td>
-			<td><?php echo $vehicleNote['vehicle_id']; ?></td>
 			<td><?php echo $vehicleNote['created']; ?></td>
-			<td><?php echo $vehicleNote['created_id']; ?></td>
-			<td><?php echo $vehicleNote['note']; ?></td>
+			<td><?php echo $users[$vehicleNote['created_id']]; ?></td>
+			<td><?php echo nl2br($vehicleNote['note']); ?></td>
 			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'vehicle_notes', 'action' => 'view', $vehicleNote['id'])); ?>
+				<?php //echo $this->Html->link(__('View'), array('controller' => 'vehicle_notes', 'action' => 'view', $vehicleNote['id'])); ?>
 				<?php echo $this->Html->link(__('Edit'), array('controller' => 'vehicle_notes', 'action' => 'edit', $vehicleNote['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'vehicle_notes', 'action' => 'delete', $vehicleNote['id']), array('confirm' => __('Are you sure you want to delete # %s?', $vehicleNote['id']))); ?>
+				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'vehicle_notes', 'action' => 'delete', $vehicleNote['id'], $vehicle['Vehicle']['id']), array('confirm' => __('Are you sure you want to delete this note?'))); ?>
 			</td>
 		</tr>
 	<?php endforeach; ?>
