@@ -1,9 +1,22 @@
 <div class="vehicles view">
-<h2><?php echo __('Vehicle'); ?></h2>
+<h2><?php echo __('Vehicle: ').h($vehicle['Vehicle']['description']); ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
 		<dd>
 			<?php echo h($vehicle['Vehicle']['id']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Current Status'); ?></dt>
+		<dd>
+			<?php 
+				if($isInShop) {
+					//is in shop curretnly
+					echo h("Currently in Shop Since: ").$vehicle['VehicleVisit'][0]['created']; 
+				} else {
+					//not in shop currently
+					echo h("Not Currently in Shop"); 
+				}//endif
+			?>
 			&nbsp;
 		</dd>
 		<dt><?php echo __('Created'); ?></dt>
@@ -45,7 +58,7 @@
 	</ul>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Vehicle Notes'); ?></h3>
+	<h3><?php echo __('Vehicle Notes'); ?></h3>
 	<?php if (!empty($vehicle['VehicleNote'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
@@ -76,31 +89,21 @@
 	</div>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Vehicle Visits'); ?></h3>
+	<h3><?php echo __('Vehicle Visits'); ?></h3>
 	<?php if (!empty($vehicle['VehicleVisit'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Created'); ?></th>
-		<th><?php echo __('Created Id'); ?></th>
+		<th><?php echo __('Enters'); ?></th>
+		<th><?php echo __('Entered By'); ?></th>
 		<th><?php echo __('Exits'); ?></th>
-		<th><?php echo __('Exit Id'); ?></th>
-		<th><?php echo __('Vehicle Id'); ?></th>
-		<th class="actions"><?php echo __('Actions'); ?></th>
+		<th><?php echo __('Exited By'); ?></th>
 	</tr>
 	<?php foreach ($vehicle['VehicleVisit'] as $vehicleVisit): ?>
 		<tr>
-			<td><?php echo $vehicleVisit['id']; ?></td>
 			<td><?php echo $vehicleVisit['created']; ?></td>
-			<td><?php echo $vehicleVisit['created_id']; ?></td>
+			<td><?php echo $users[$vehicleVisit['created_id']]; ?></td>
 			<td><?php echo $vehicleVisit['exits']; ?></td>
-			<td><?php echo $vehicleVisit['exit_id']; ?></td>
-			<td><?php echo $vehicleVisit['vehicle_id']; ?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('View'), array('controller' => 'vehicle_visits', 'action' => 'view', $vehicleVisit['id'])); ?>
-				<?php echo $this->Html->link(__('Edit'), array('controller' => 'vehicle_visits', 'action' => 'edit', $vehicleVisit['id'])); ?>
-				<?php echo $this->Form->postLink(__('Delete'), array('controller' => 'vehicle_visits', 'action' => 'delete', $vehicleVisit['id']), array('confirm' => __('Are you sure you want to delete # %s?', $vehicleVisit['id']))); ?>
-			</td>
+			<td><?php if($vehicleVisit['exits']) echo $users[$vehicleVisit['exit_id']]; ?></td>
 		</tr>
 	<?php endforeach; ?>
 	</table>
@@ -108,12 +111,15 @@
 
 	<div class="actions">
 		<ul>
-			<li><?php echo $this->Html->link(__('New Vehicle Visit'), array('controller' => 'vehicle_visits', 'action' => 'add')); ?> </li>
+			<li><?php 
+				if($isInShop) echo $this->Html->link(__('Check Vehicle Out'), array('controller' => 'vehicle_visits', 'action' => 'edit', $vehicle['VehicleVisit'][0]['id']));
+				else echo $this->Html->link(__('Check Vehicle In'), array('controller' => 'vehicle_visits', 'action' => 'add',$vehicle['Vehicle']['id'])); 
+			?> </li>
 		</ul>
 	</div>
 </div>
 <div class="related">
-	<h3><?php echo __('Related Images'); ?></h3>
+	<h3><?php echo __('Images'); ?></h3>
 	<?php if (!empty($vehicle['Image'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>

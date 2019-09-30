@@ -45,9 +45,18 @@ class VehiclesController extends AppController {
 			throw new NotFoundException(__('Invalid vehicle'));
 		}
 		$options = array('conditions' => array('Vehicle.' . $this->Vehicle->primaryKey => $id));
-		$this->set('vehicle', $this->Vehicle->find('first', $options));
+		$vehicle=$this->Vehicle->find('first', $options);
+		$this->set('vehicle', $vehicle);
 		$users=ClassRegistry::init('User')->find('list');
 		$this->set(compact('users'));
+		//discover if vehlice is in the shop or not
+		$isInShop=false;
+		if($vehicle['VehicleVisit']) {
+			//vehicle has been in the shop before
+			if(!$vehicle['VehicleVisit'][0]['exits']) $isInShop=true;
+//debug($vehicle['VehicleVisit']);exit;
+		}//endif vehicle has been in the shop before
+		$this->set('isInShop',$isInShop);
 	}
 
 /**

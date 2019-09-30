@@ -24,6 +24,7 @@ class Vehicle extends AppModel {
 		$dbs=$this->getSechema();
 		$ok=true;
 		if($ok && $dbs<1) {
+			//change vehicle_id from zero filled to not ZF
 			try {$this->query('ALTER TABLE `vehicles` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;');}
 			catch (Exception $e) {$ok=false;}
 			if($ok) $this->setSchema(1);
@@ -50,7 +51,7 @@ class Vehicle extends AppModel {
 		'description' => array(
 			'notBlank' => array(
 				'rule' => array('notBlank'),
-				//'message' => 'Your custom message here',
+				'message' => 'Please enter a basic vehicle description here',
 				//'allowEmpty' => false,
 				//'required' => false,
 				//'last' => false, // Stop validation after this rule
@@ -114,7 +115,7 @@ class Vehicle extends AppModel {
 			'dependent' => false,
 			'conditions' => '',
 			'fields' => '',
-			'order' => '',
+			'order' => 'VehicleVisit.id DESC',
 			'limit' => '',
 			'offset' => '',
 			'exclusive' => '',
