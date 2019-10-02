@@ -97,6 +97,7 @@
 		<th><?php echo __('Entered By'); ?></th>
 		<th><?php echo __('Exits'); ?></th>
 		<th><?php echo __('Exited By'); ?></th>
+		<th><?php echo __('Duration'); ?></th>
 	</tr>
 	<?php foreach ($vehicle['VehicleVisit'] as $vehicleVisit): ?>
 		<tr>
@@ -104,6 +105,7 @@
 			<td><?php echo $users[$vehicleVisit['created_id']]; ?></td>
 			<td><?php echo $vehicleVisit['exits']; ?></td>
 			<td><?php if($vehicleVisit['exits']) echo $users[$vehicleVisit['exit_id']]; ?></td>
+			<td><?php echo $vehicleVisit['duration']; ?></td>
 		</tr>
 	<?php endforeach; ?>
 	</table>

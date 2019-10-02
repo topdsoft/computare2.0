@@ -14,7 +14,10 @@ class VehicleVisit extends AppModel {
  */
 	public $useTable = 'vehicleVisits';
 
-
+	public $virtualFields = array(
+		'duration' => 'TIMEDIFF(VehicleVisit.exits,VehicleVisit.created)',
+	);
+	
 	// The Associations below have been created with all possible keys, those that are not needed can be removed
 
 /**
