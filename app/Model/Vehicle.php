@@ -18,6 +18,11 @@ class Vehicle extends AppModel {
  */
 	public $displayField = 'description';
 	
+	public $virtualFields = array (
+		'visits' => 'select COUNT(*) from vehicleVisits where vehicleVisits.vehicle_id=Vehicle.id',
+		'hours' => 'select SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(vehicleVisits.exits,vehicleVisits.created)))) from vehicleVisits where vehicleVisits.vehicle_id=Vehicle.id',
+	);
+	
 	function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
 		#check table schema and make adjustments if necessary

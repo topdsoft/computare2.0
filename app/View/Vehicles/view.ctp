@@ -44,6 +44,16 @@
 			<?php echo h($vehicle['Vehicle']['description']); ?>
 			&nbsp;
 		</dd>
+		<dt><?php echo __('Total Visits'); ?></dt>
+		<dd>
+			<?php echo h($vehicle['Vehicle']['visits']); ?>
+			&nbsp;
+		</dd>
+		<dt><?php echo __('Total Hours in Shop'); ?></dt>
+		<dd>
+			<?php echo h($vehicle['Vehicle']['hours']); ?>
+			&nbsp;
+		</dd>
 	</dl>
 </div>
 <div class="actions">
